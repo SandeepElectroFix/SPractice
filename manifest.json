@@ -1,0 +1,55 @@
+{
+  "name": "Sandeep ElectroFix - Electrical Services",
+  "short_name": "ElectroFix",
+  "description": "Official Smart Digital Business Card and Electrical Services in Lucknow",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050816",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "categories": ["business", "utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Call Electrician",
+      "short_name": "Call",
+      "description": "Direct call to Sandeep ElectroFix",
+      "url": "tel:+919026036445",
+      "icons": [{ "src": "assets/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Book on WhatsApp",
+      "short_name": "WhatsApp",
+      "description": "Chat on WhatsApp for electrical work",
+      "url": "https://wa.me/919026036445",
+      "icons": [{ "src": "assets/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Our Services",
+      "short_name": "Services",
+      "description": "View Electrical Services and Rates",
+      "url": "./index.html#services",
+      "icons": [{ "src": "assets/logo.png", "sizes": "192x192" }]
+    }
+  ]
+}
