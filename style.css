@@ -700,3 +700,178 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
   body { padding-bottom: 20px; }
   .mobile-bottom-nav { display: none; }
 }
+
+/* =========================================
+   QUANTITY (+ / -) & ESTIMATE SUMMARY STYLES
+========================================= */
+
+/* Sub-service row layout */
+.sub-service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  transition: all 0.25s ease;
+}
+
+.sub-service-item.has-qty {
+  background: rgba(245, 197, 66, 0.08);
+  border-color: rgba(245, 197, 66, 0.3);
+}
+
+.sub-service-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sub-service-info .sub-name {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.sub-service-info .sub-rate {
+  color: var(--gold-light);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+/* + / - Button Controls */
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 3px 6px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+}
+
+.saved-light-theme .qty-control {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card);
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.qty-btn.plus-btn {
+  background: linear-gradient(135deg, var(--gold), #dcae25);
+  color: #111827;
+}
+
+.qty-btn.minus-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+.qty-btn:active {
+  transform: scale(0.9);
+}
+
+.qty-val {
+  min-width: 18px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Estimate Summary Box */
+.estimate-summary-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.saved-light-theme .estimate-summary-box {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.summary-heading {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 4px;
+}
+
+.selected-services-list {
+  max-height: 120px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  padding: 3px 0;
+  color: var(--text);
+}
+
+.no-selection-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 3px 0;
+}
+
+.discount-row {
+  color: var(--green);
+}
+
+.total-row {
+  border-top: 1px solid var(--card-border);
+  padding-top: 8px;
+  margin-top: 4px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* Action Buttons (WhatsApp & PDF) */
+.quote-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.whatsapp-quote-btn {
+  background: linear-gradient(135deg, #25d366, #16a34a);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+}
+
+.pdf-download-btn {
+  background: linear-gradient(135deg, #00bfff, #0072ff);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+}
