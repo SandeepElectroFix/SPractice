@@ -1,5 +1,6 @@
 /* =========================================
 SANDEEP ELECTROFIX - COMPLETE REFINED CSS
+Version 3.2 - With Dynamic Service Accordions
 ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
@@ -124,7 +125,7 @@ a { color: inherit; text-decoration: none; }
 .saved-light-theme .language-btn { color: #101827; }
 
 /* =========================================
-HERO & PROMINENT HOVER LOGO (NO BORDER CIRCLE)
+HERO & PROMINENT HOVER LOGO
 ========================================= */
 .hero {
   width: 100%;
@@ -135,11 +136,11 @@ HERO & PROMINENT HOVER LOGO (NO BORDER CIRCLE)
 }
 
 .hero-logo {
-  width: 160px; /* बड़ा आकार */
+  width: 160px;
   height: 160px;
   margin: 10px auto 14px auto;
-  background: transparent !important; /* कोई आउटर बैकग्राउंड नहीं */
-  border: none !important; /* कोई आउटर बॉर्डर/सर्कल नहीं */
+  background: transparent !important;
+  border: none !important;
   box-shadow: none !important;
   display: flex;
   align-items: center;
@@ -149,7 +150,7 @@ HERO & PROMINENT HOVER LOGO (NO BORDER CIRCLE)
 }
 
 .hero-logo:hover {
-  transform: scale(1.15) rotate(2deg); /* आकर्षक 3D होवर इफ़ेक्ट */
+  transform: scale(1.15) rotate(2deg);
   filter: drop-shadow(0 15px 25px rgba(0, 191, 255, 0.45));
 }
 
@@ -162,7 +163,7 @@ HERO & PROMINENT HOVER LOGO (NO BORDER CIRCLE)
 .hero-logo img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* लोगो का पूरा शेप बिना कटे दिखेगा */
+  object-fit: contain;
   display: block;
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
 }
@@ -307,9 +308,10 @@ section h2 {
   backdrop-filter: blur(15px);
   box-shadow: var(--shadow);
   transition: transform 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
 }
 
-.card:hover, .service-card:hover {
+.card:hover {
   transform: translateY(-3px);
   border-color: rgba(0, 191, 255, 0.5);
 }
@@ -328,17 +330,142 @@ section h2 {
   border-radius: 12px;
 }
 .icon svg { width: 32px; height: 32px; display: block; }
-.service-icon { font-size: 1.8rem; display: block; }
+.service-icon { font-size: 1.4rem; display: inline-block; }
 
+/* =========================================
+SERVICES ACCORDION & SUB-SERVICES STYLING
+========================================= */
+#serviceContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--card-border);
+}
+
+.service-card.open {
+  border-color: rgba(245, 197, 66, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.service-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.2s ease;
+}
+
+.service-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.service-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.service-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.toggle-arrow {
+  font-size: 0.8rem;
+  color: var(--gold);
+  transition: transform 0.3s ease;
+}
+
+.service-card.open .toggle-arrow {
+  transform: rotate(180deg);
+}
+
+/* Service Collapsible Body */
+.service-body {
+  display: none;
+  padding: 0 16px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  animation: fadeIn 0.3s ease;
+}
+
+.service-card.open .service-body {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.service-desc {
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin: 10px 0 12px;
+  line-height: 1.5;
+}
+
+.sub-services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.saved-light-theme .sub-services-list {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.sub-service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.84rem;
+  padding: 4px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.sub-service-item:last-child {
+  border-bottom: none;
+}
+
+.sub-name {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.sub-rate {
+  color: var(--gold-light);
+  font-weight: 700;
+  font-size: 0.82rem;
+  background: rgba(245, 197, 66, 0.1);
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(245, 197, 66, 0.2);
+  white-space: nowrap;
+}
+
+/* =========================================
+QUICK ACCESS LAYOUT SWITCHER STYLES
+========================================= */
 /* 1. LAYOUT: 2-COLUMN GRID (DEFAULT) */
-#quickGridContainer.layout-grid-2,
-#serviceContainer.layout-grid-2 {
+#quickGridContainer.layout-grid-2 {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 10px !important;
 }
-#quickGridContainer.layout-grid-2 .card,
-#serviceContainer.layout-grid-2 .service-card {
+#quickGridContainer.layout-grid-2 .card {
   min-height: 105px !important;
   padding: 14px 10px !important;
   display: flex !important;
@@ -350,8 +477,7 @@ section h2 {
 }
 
 /* 2. LAYOUT: HORIZONTAL CAROUSEL (SWIPE SLIDER) */
-#quickGridContainer.layout-carousel,
-#serviceContainer.layout-carousel {
+#quickGridContainer.layout-carousel {
   display: flex !important;
   flex-direction: row !important;
   overflow-x: auto !important;
@@ -360,13 +486,10 @@ section h2 {
   scroll-snap-type: x mandatory !important;
   -webkit-overflow-scrolling: touch !important;
 }
-#quickGridContainer.layout-carousel::-webkit-scrollbar,
-#serviceContainer.layout-carousel::-webkit-scrollbar { height: 4px; }
-#quickGridContainer.layout-carousel::-webkit-scrollbar-thumb,
-#serviceContainer.layout-carousel::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+#quickGridContainer.layout-carousel::-webkit-scrollbar { height: 4px; }
+#quickGridContainer.layout-carousel::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
-#quickGridContainer.layout-carousel .card,
-#serviceContainer.layout-carousel .service-card {
+#quickGridContainer.layout-carousel .card {
   min-width: 140px !important;
   max-width: 140px !important;
   flex: 0 0 auto !important;
@@ -380,14 +503,12 @@ section h2 {
 }
 
 /* 3. LAYOUT: HORIZONTAL LIST CARDS */
-#quickGridContainer.layout-list,
-#serviceContainer.layout-list {
+#quickGridContainer.layout-list {
   display: grid !important;
   grid-template-columns: 1fr !important;
   gap: 8px !important;
 }
-#quickGridContainer.layout-list .card,
-#serviceContainer.layout-list .service-card {
+#quickGridContainer.layout-list .card {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
@@ -399,14 +520,12 @@ section h2 {
 }
 
 /* 4. LAYOUT: 3-COLUMN COMPACT MINI GRID */
-#quickGridContainer.layout-grid-3,
-#serviceContainer.layout-grid-3 {
+#quickGridContainer.layout-grid-3 {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: 8px !important;
 }
-#quickGridContainer.layout-grid-3 .card,
-#serviceContainer.layout-grid-3 .service-card {
+#quickGridContainer.layout-grid-3 .card {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -415,8 +534,7 @@ section h2 {
   padding: 10px 4px !important;
   min-height: 85px !important;
 }
-#quickGridContainer.layout-grid-3 .card strong,
-#serviceContainer.layout-grid-3 .service-card strong {
+#quickGridContainer.layout-grid-3 .card strong {
   font-size: 0.72rem !important;
 }
 
@@ -490,13 +608,32 @@ section h2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
+.gallery-item {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
 .gallery-grid img {
   width: 100%;
   height: 150px;
   object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid var(--card-border);
+  display: block;
   cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.gallery-grid img:hover {
+  transform: scale(1.05);
+}
+.gallery-title {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.65);
+  font-size: 0.72rem;
+  color: #fff;
+  text-align: center;
+  backdrop-filter: blur(4px);
 }
 
 #lightbox {
