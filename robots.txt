@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sandeepelectrofix.github.io/SandeepElectroFix-Card/sitemap.xml
