@@ -1,7 +1,7 @@
-/* =========================================
-SANDEEP ELECTROFIX - COMPLETE APP.JS
-Version 4.0 - Multi-Language, Qty (+/-), Discount & PDF
-========================================= */
+/* =========================================================
+   SANDEEP ELECTROFIX - MASTER APP.JS
+   Fixed "undefined", Bilingual, Qty (+/-), Smart Discount & PDF
+========================================================= */
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
 let selectedItemsMap = {}; // Format: { [itemId]: { name_en, name_hi, price, rate_en, rate_hi, category_en, category_hi, qty } }
@@ -57,23 +57,17 @@ const UI_TEXT = {
   }
 };
 
-// Extract numeric price from rate string
-function extractPrice(rateString) {
-  if (!rateString) return 0;
-  if (typeof rateString === "number") return rateString;
-  const match = rateString.toString().match(/(\d+)/);
-  return match ? parseInt(match[0], 10) : 0;
-}
-
-// 1. DOM Initialization
+// 1. Single Clean DOM Initialization
 document.addEventListener("DOMContentLoaded", () => {
   applyVisibilityControls();
   setLanguage(currentLang);
 
+  // Language buttons event
   document.querySelectorAll(".language-btn").forEach(btn => {
     btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang")));
   });
 
+  // Theme toggle event
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
@@ -84,14 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Restore Theme
+  if (localStorage.getItem("sandeepTheme") === "light") {
+    document.documentElement.classList.add("saved-light-theme");
+  }
+  updateThemeButtonText();
+
   setupQuickAccessLayoutSwitcher();
   setupServiceLayoutSwitcher();
   setupQuoteActions();
 });
 
-// 2. Language Switcher
+// 2. Language Switcher Function
 function setLanguage(lang) {
-  currentLang = lang === "en" ? "en" : "hi";
+  currentLang = (lang === "en") ? "en" : "hi";
   localStorage.setItem("sandeepLang", currentLang);
 
   document.querySelectorAll(".language-btn").forEach(btn => {
@@ -99,7 +99,7 @@ function setLanguage(lang) {
   });
 
   const t = UI_TEXT[currentLang];
-  const cfg = window.CARD_CONFIG;
+  const cfg = window.CARD_CONFIG || {};
 
   const setElemText = (id, text) => {
     const el = document.getElementById(id);
@@ -110,8 +110,8 @@ function setLanguage(lang) {
     if (el && text) el.placeholder = text;
   };
 
-  setElemText("businessTagline", cfg?.business?.[`tagline_${currentLang}`] || cfg?.business?.tagline || t.tagline);
-  setElemText("businessLocation", cfg?.business?.[`location_${currentLang}`] || cfg?.business?.location || t.location);
+  setElemText("businessTagline", cfg.business?.[`tagline_${currentLang}`] || cfg.business?.tagline || t.tagline);
+  setElemText("businessLocation", cfg.business?.[`location_${currentLang}`] || cfg.business?.location || t.location);
   setElemText("callBtnText", t.callNow);
   setElemText("whatsappBtnText", t.whatsapp);
   setElemText("servicesHeading", t.ourServices);
@@ -123,7 +123,7 @@ function setLanguage(lang) {
   setElemPlaceholder("customerPhone", t.phonePlaceholder);
   setElemPlaceholder("customerMessage", t.notePlaceholder);
 
-  if (cfg?.discount) {
+  if (cfg.discount) {
     setElemText("discountTitle", cfg.discount[`title_${currentLang}`] || cfg.discount.title);
     setElemText("discountMessage", cfg.discount[`message_${currentLang}`] || cfg.discount.message);
     setElemText("discountValidity", cfg.discount[`validity_${currentLang}`] || cfg.discount.validityText);
@@ -191,7 +191,7 @@ function applyVisibilityControls() {
   }
 }
 
-// 4. Universal Services Loader (Fixes "undefined" across all schema formats)
+// 4. Services Loader (100% Fixed - No Undefined)
 function loadServices() {
   const container = document.getElementById("serviceContainer");
   if (!container || !window.CARD_CONFIG) return;
@@ -202,7 +202,8 @@ function loadServices() {
   services.forEach((service, sIndex) => {
     if (service.show === false) return;
 
-    const title = service[`title_${currentLang}`] || service.title || service.title_en || "Service";
+    // Direct language check with fallbacks
+    const title = service[`title_${currentLang}`] || service.title || service.title_en || service.name || "Electrical Service";
     const desc = service[`desc_${currentLang}`] || service.description || service.desc_en || "";
 
     const subList = service.subServices || service.items || [];
@@ -212,9 +213,9 @@ function loadServices() {
       const itemId = `item_${sIndex}_${subIndex}`;
       const savedQty = selectedItemsMap[itemId]?.qty || 0;
 
-      const subName = sub[`name_${currentLang}`] || sub.title || sub.name || sub.name_en || "Item";
-      const subRate = sub[`rate_${currentLang}`] || (sub.price && sub.unit ? `₹${sub.price} / ${sub.unit}` : sub.rate) || `₹${sub.price || 0}`;
-      const numPrice = sub.price || extractPrice(subRate);
+      const subName = sub[`name_${currentLang}`] || sub.name_en || sub.title || sub.name || "Service Item";
+      const subRate = sub[`rate_${currentLang}`] || sub.rate_en || (sub.price && sub.unit ? `₹${sub.price} / ${sub.unit}` : sub.rate) || `₹${sub.price || 0}`;
+      const numPrice = sub.price || (parseInt(subRate.toString().match(/\d+/)?.[0], 10) || 0);
 
       return `
         <div class="sub-service-item ${savedQty > 0 ? 'has-qty' : ''}" id="row_${itemId}">
@@ -223,9 +224,9 @@ function loadServices() {
             <span class="sub-rate">${subRate}</span>
           </div>
           <div class="qty-control">
-            <button type="button" class="qty-btn minus-btn" onclick="updateQty('${itemId}', -1, ${numPrice}, '${sIndex}', '${subIndex}')">−</button>
+            <button type="button" class="qty-btn minus-btn" onclick="updateQty('${itemId}', -1, ${numPrice}, ${sIndex}, ${subIndex})">−</button>
             <span class="qty-val" id="qty_${itemId}">${savedQty}</span>
-            <button type="button" class="qty-btn plus-btn" onclick="updateQty('${itemId}', 1, ${numPrice}, '${sIndex}', '${subIndex}')">+</button>
+            <button type="button" class="qty-btn plus-btn" onclick="updateQty('${itemId}', 1, ${numPrice}, ${sIndex}, ${subIndex})">+</button>
           </div>
         </div>
       `;
@@ -305,9 +306,9 @@ function updateCalculationUI() {
 
   if (items.length === 0) {
     listContainer.innerHTML = `<p class="no-selection-hint">${t.noSelection}</p>`;
-    subtotalEl.innerText = "₹0";
+    if (subtotalEl) subtotalEl.innerText = "₹0";
     if (discountRow) discountRow.style.display = "none";
-    grandTotalEl.innerText = "₹0";
+    if (grandTotalEl) grandTotalEl.innerText = "₹0";
     return;
   }
 
@@ -319,7 +320,7 @@ function updateCalculationUI() {
   `).join("");
 
   const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
-  subtotalEl.innerText = `₹${subtotal}`;
+  if (subtotalEl) subtotalEl.innerText = `₹${subtotal}`;
 
   const discountCfg = window.CARD_CONFIG?.discount || {};
   const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
@@ -329,154 +330,136 @@ function updateCalculationUI() {
     discountAmount = Math.round(subtotal * (discountCfg.percentage / 100));
     if (discountRow) {
       discountRow.style.display = "flex";
-      discountLabel.innerText = `${t.discount} (${discountCfg.percentage}% OFF):`;
-      discountEl.innerText = `-₹${discountAmount}`;
+      if (discountLabel) discountLabel.innerText = `${t.discount} (${discountCfg.percentage}% OFF):`;
+      if (discountEl) discountEl.innerText = `-₹${discountAmount}`;
     }
   } else {
     if (discountRow) discountRow.style.display = "none";
   }
 
   const grandTotal = subtotal - discountAmount;
-  grandTotalEl.innerText = `₹${grandTotal}`;
+  if (grandTotalEl) grandTotalEl.innerText = `₹${grandTotal}`;
 }
 
 // 7. Actions: WhatsApp & PDF
 function setupQuoteActions() {
-  document.getElementById("sendWhatsappBtn")?.addEventListener("click", sendWhatsappQuote);
-  document.getElementById("downloadPdfBtn")?.addEventListener("click", generateEstimatePDF);
-}
+  document.getElementById("sendWhatsappBtn")?.addEventListener("click", () => {
+    const t = UI_TEXT[currentLang];
+    const name = document.getElementById("customerName")?.value.trim();
+    const phone = document.getElementById("customerPhone")?.value.trim();
+    const note = document.getElementById("customerMessage")?.value.trim();
+    const items = Object.values(selectedItemsMap);
 
-function sendWhatsappQuote() {
-  const t = UI_TEXT[currentLang];
-  const name = document.getElementById("customerName")?.value.trim();
-  const phone = document.getElementById("customerPhone")?.value.trim();
-  const note = document.getElementById("customerMessage")?.value.trim();
-  const items = Object.values(selectedItemsMap);
+    if (!name || !phone) return alert(t.alertMissing);
+    if (items.length === 0) return alert(t.alertEmpty);
 
-  if (!name || !phone) {
-    alert(t.alertMissing);
-    return;
-  }
-  if (items.length === 0) {
-    alert(t.alertEmpty);
-    return;
-  }
+    const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
+    const discountCfg = window.CARD_CONFIG?.discount || {};
+    const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
+    const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
+    const grandTotal = subtotal - discountAmount;
 
-  const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
-  const discountCfg = window.CARD_CONFIG?.discount || {};
-  const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
-  const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
-  const grandTotal = subtotal - discountAmount;
+    let text = `⚡ *${window.CARD_CONFIG?.business?.name || "Sandeep ElectroFix"} - ${t.estimateFor}* ⚡\n\n`;
+    text += `👤 *Name:* ${name}\n`;
+    text += `📞 *Phone:* ${phone}\n`;
+    if (note) text += `📍 *Address/Note:* ${note}\n`;
+    text += `\n📋 *Selected Services:*\n`;
 
-  let text = `⚡ *${window.CARD_CONFIG?.business?.name || "Sandeep ElectroFix"} - ${t.estimateFor}* ⚡\n\n`;
-  text += `👤 *${currentLang === 'en' ? 'Customer' : 'ग्राहक'}:* ${name}\n`;
-  text += `📞 *${currentLang === 'en' ? 'Mobile' : 'मोबाइल'}:* ${phone}\n`;
-  if (note) text += `📍 *${currentLang === 'en' ? 'Site / Note' : 'पता / नोट'}:* ${note}\n`;
-  text += `\n📋 *${currentLang === 'en' ? 'Selected Services' : 'चुनी गई सेवाएँ'}:*\n`;
+    items.forEach((item, i) => {
+      const sName = item[`name_${currentLang}`] || item.name_en;
+      const sRate = item[`rate_${currentLang}`] || item.rate_en;
+      text += `${i + 1}. ${sName} [Qty: ${item.qty}] — ₹${item.price * item.qty} (${sRate})\n`;
+    });
 
-  items.forEach((item, i) => {
-    const sName = item[`name_${currentLang}`] || item.name_en;
-    const sRate = item[`rate_${currentLang}`] || item.rate_en;
-    text += `${i + 1}. ${sName} [Qty: ${item.qty}] — ₹${item.price * item.qty} (${sRate})\n`;
+    text += `\n💵 *Subtotal:* ₹${subtotal}\n`;
+    if (isDiscountActive) text += `🎁 *Discount (${discountCfg.percentage}%):* -₹${discountAmount}\n`;
+    text += `✅ *Grand Total:* ₹${grandTotal}\n\n`;
+    text += `_Please confirm my visit / booking._`;
+
+    const waNumber = window.CARD_CONFIG?.quote?.whatsappNumber || window.CARD_CONFIG?.business?.whatsapp || "919026036445";
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank");
   });
 
-  text += `\n💵 *${currentLang === 'en' ? 'Subtotal' : 'सबटोटल'}:* ₹${subtotal}\n`;
-  if (isDiscountActive) {
-    text += `🎁 *${currentLang === 'en' ? 'Discount' : 'छूट'} (${discountCfg.percentage}%):* -₹${discountAmount}\n`;
-  }
-  text += `✅ *${currentLang === 'en' ? 'Grand Total' : 'अंतिम राशि'}:* ₹${grandTotal}\n\n`;
-  text += `_Please confirm my visit / booking._`;
+  document.getElementById("downloadPdfBtn")?.addEventListener("click", () => {
+    const { jsPDF } = window.jspdf || {};
+    if (!jsPDF) return alert("PDF library loading. Please check internet connection.");
 
-  const waNumber = window.CARD_CONFIG?.quote?.whatsappNumber || window.CARD_CONFIG?.business?.whatsapp || "919026036445";
-  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank");
-}
+    const t = UI_TEXT[currentLang];
+    const name = document.getElementById("customerName")?.value.trim() || "Customer";
+    const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
+    const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
+    const items = Object.values(selectedItemsMap);
 
-function generateEstimatePDF() {
-  const { jsPDF } = window.jspdf || {};
-  if (!jsPDF) {
-    alert("PDF library error. Make sure jspdf script is included.");
-    return;
-  }
+    if (items.length === 0) return alert(t.alertEmpty);
 
-  const t = UI_TEXT[currentLang];
-  const name = document.getElementById("customerName")?.value.trim() || "Customer";
-  const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
-  const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
-  const items = Object.values(selectedItemsMap);
+    const doc = new jsPDF();
+    const biz = window.CARD_CONFIG?.business || {};
+    const discountCfg = window.CARD_CONFIG?.discount || {};
 
-  if (items.length === 0) {
-    alert(t.alertEmpty);
-    return;
-  }
+    doc.setFillColor(5, 8, 22);
+    doc.rect(0, 0, 210, 38, "F");
 
-  const doc = new jsPDF();
-  const biz = window.CARD_CONFIG?.business || {};
-  const discountCfg = window.CARD_CONFIG?.discount || {};
+    doc.setTextColor(245, 197, 66);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text(biz.name || "Sandeep ElectroFix", 14, 18);
 
-  doc.setFillColor(5, 8, 22);
-  doc.rect(0, 0, 210, 40, "F");
+    doc.setFontSize(10);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Phone: ${biz.phone || "+91 9026036445"} | Lucknow, UP`, 14, 26);
+    doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 160, 26);
 
-  doc.setTextColor(245, 197, 66);
-  doc.setFontSize(20);
-  doc.setFont("helvetica", "bold");
-  doc.text(biz.name || "Sandeep ElectroFix", 14, 20);
+    doc.setTextColor(16, 24, 39);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("CUSTOMER & ESTIMATE DETAILS", 14, 48);
 
-  doc.setFontSize(10);
-  doc.setTextColor(255, 255, 255);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Phone: ${biz.phone || "+91 9026036445"} | Lucknow, UP`, 14, 28);
-  doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 160, 28);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Name: ${name}  |  Phone: ${phone}`, 14, 55);
+    doc.text(`Note / Address: ${note}`, 14, 61);
 
-  doc.setTextColor(16, 24, 39);
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("ESTIMATE SUMMARY", 14, 52);
+    const tableRows = items.map((item, index) => [
+      index + 1,
+      item.name_en || item.name_hi,
+      `Rs. ${item.price}`,
+      item.qty,
+      `Rs. ${item.price * item.qty}`
+    ]);
 
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Client: ${name}`, 14, 60);
-  doc.text(`Phone: ${phone}`, 14, 66);
-  doc.text(`Address / Note: ${note}`, 14, 72);
+    const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
+    const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
+    const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
+    const grandTotal = subtotal - discountAmount;
 
-  const tableRows = items.map((item, index) => [
-    index + 1,
-    item.name_en || item.name_hi,
-    `Rs. ${item.price}`,
-    item.qty,
-    `Rs. ${item.price * item.qty}`
-  ]);
+    doc.autoTable({
+      startY: 68,
+      head: [["#", "Service Item", "Rate", "Qty", "Total Amount"]],
+      body: tableRows,
+      theme: "grid",
+      headStyles: { fillColor: [5, 8, 22], textColor: [245, 197, 66], fontStyle: "bold" },
+      styles: { fontSize: 8.5, cellPadding: 3.5 }
+    });
 
-  const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
-  const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
-  const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
-  const grandTotal = subtotal - discountAmount;
+    const finalY = doc.lastAutoTable.finalY + 8;
+    doc.setFontSize(9.5);
+    doc.text(`Subtotal: Rs. ${subtotal}`, 140, finalY);
+    let nextY = finalY + 5;
 
-  doc.autoTable({
-    startY: 80,
-    head: [["#", "Service Item", "Rate", "Qty", "Total Amount"]],
-    body: tableRows,
-    theme: "grid",
-    headStyles: { fillColor: [5, 8, 22], textColor: [245, 197, 66], fontStyle: "bold" },
-    styles: { fontSize: 9, cellPadding: 4 }
+    if (isDiscountActive) {
+      doc.setTextColor(37, 211, 102);
+      doc.text(`Discount (${discountCfg.percentage}%): -Rs. ${discountAmount}`, 140, nextY);
+      nextY += 5;
+    }
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(16, 24, 39);
+    doc.text(`Grand Total: Rs. ${grandTotal}`, 140, nextY);
+
+    doc.save(`Estimate_${name.replace(/\s+/g, "_")}.pdf`);
   });
-
-  const finalY = doc.lastAutoTable.finalY + 10;
-  doc.setFontSize(10);
-  doc.text(`Subtotal: Rs. ${subtotal}`, 140, finalY);
-  let nextY = finalY + 6;
-
-  if (isDiscountActive) {
-    doc.setTextColor(37, 211, 102);
-    doc.text(`Discount (${discountCfg.percentage}%): -Rs. ${discountAmount}`, 140, nextY);
-    nextY += 6;
-  }
-
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(16, 24, 39);
-  doc.text(`Grand Total: Rs. ${grandTotal}`, 140, nextY);
-
-  doc.save(`Estimate_${name.replace(/\s+/g, "_")}.pdf`);
 }
 
 // 8. Layout Switchers
@@ -526,13 +509,13 @@ function setupServiceLayoutSwitcher() {
   applyServiceLayout(savedLayout);
 }
 
-// 9. Loaders: Gallery, Reviews & FAQ
+// 9. Gallery, Reviews & FAQ Loaders
 function loadGallery() {
   const container = document.getElementById("galleryContainer");
   if (!container || !window.CARD_CONFIG) return;
   const galleryItems = (window.CARD_CONFIG.gallery || []).filter(item => item.show !== false);
   container.innerHTML = galleryItems.map(g => {
-    const title = g[`title_${currentLang}`] || g.title || "";
+    const title = g[`title_${currentLang}`] || g.title_en || g.title || "";
     return `
       <div class="gallery-item">
         <img src="${g.image}" alt="${title}" onclick="openLightbox('${g.image}')" onerror="this.parentElement.style.display='none'">
@@ -560,7 +543,7 @@ function loadReviews() {
   if (!container || !window.CARD_CONFIG) return;
   const reviewItems = (window.CARD_CONFIG.reviews || []).filter(item => item.show !== false);
   container.innerHTML = reviewItems.map(r => {
-    const text = r[`text_${currentLang}`] || r.text || "";
+    const text = r[`text_${currentLang}`] || r.text_en || r.text || "";
     return `
       <div class="card review-card" style="padding:12px; margin-bottom:8px;">
         <div style="color:#f59e0b;">${"★".repeat(r.rating || 5)}</div>
@@ -576,8 +559,8 @@ function renderFAQ() {
   if (!container || !window.CARD_CONFIG) return;
   const faqList = (window.CARD_CONFIG.faq || []).filter(f => f.show !== false);
   container.innerHTML = faqList.map((f, i) => {
-    const q = f[`question_${currentLang}`] || f.question || "";
-    const a = f[`answer_${currentLang}`] || f.answer || "";
+    const q = f[`question_${currentLang}`] || f.question_en || f.question || "";
+    const a = f[`answer_${currentLang}`] || f.answer_en || f.answer || "";
     return `
       <div class="faq-item" onclick="this.classList.toggle('active')">
         <div class="faq-question"><span>${q}</span><span class="faq-icon">+</span></div>
