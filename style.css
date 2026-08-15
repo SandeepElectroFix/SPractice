@@ -1,5 +1,5 @@
 /* =========================================
-SANDEEP ELECTROFIX - COMPLETE REFINED STYLES
+SANDEEP ELECTROFIX - COMPLETE REFINED CSS
 ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
@@ -138,7 +138,7 @@ HERO & BIG PROMINENT LOGO
 }
 
 .hero-logo {
-  width: 140px;  /* बड़ा और स्पष्ट लोगो */
+  width: 140px;
   height: 140px;
   margin: 10px auto 14px auto;
   border-radius: 50%;
@@ -204,7 +204,7 @@ HERO & BIG PROMINENT LOGO
 }
 
 /* =========================================
-1. SPECIAL DISCOUNT (CENTERED)
+SPECIAL DISCOUNT (CENTERED)
 ========================================= */
 .discount-section {
   width: min(100% - 24px, 600px);
@@ -255,54 +255,38 @@ HERO & BIG PROMINENT LOGO
 }
 
 /* =========================================
-2. MATERIAL CATALOGUE (SEPARATE BANNER)
+LAYOUT SWITCHER BUTTONS BAR (COMMON)
 ========================================= */
-.catalogue-section {
-  width: min(100% - 24px, 600px);
-  margin: 0 auto 16px auto;
-}
-
-.catalogue-banner-card {
+.service-layout-bar {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-  background: linear-gradient(135deg, rgba(245, 197, 66, 0.12), var(--card));
-  border: 1px solid rgba(245, 197, 66, 0.35);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
-.catalogue-banner-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--gold);
-}
-
-.catalogue-banner-text {
-  flex: 1;
-  text-align: left;
-}
-
-.catalogue-banner-text strong {
-  display: block;
-  font-size: 1rem;
-  color: var(--gold-light);
-}
-
-.catalogue-banner-text p {
-  font-size: 0.78rem;
+.layout-btn {
+  border: 1px solid var(--card-border);
+  background: var(--card);
   color: var(--muted);
-  margin: 2px 0 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
 }
 
-.arrow-icon {
-  font-size: 1.2rem;
-  color: var(--gold);
+.layout-btn.active, .layout-btn:hover {
+  background: linear-gradient(135deg, var(--gold), #dcae25);
+  color: #111827;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(245, 197, 66, 0.25);
 }
 
 /* =========================================
-3. QUICK ACCESS GRID
+QUICK ACCESS & SERVICES LAYOUT STYLES
 ========================================= */
 section {
   width: min(100% - 24px, 600px);
@@ -312,27 +296,14 @@ section {
 
 section h2 {
   text-align: center;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   font-size: clamp(1.3rem, 5vw, 1.7rem);
   font-weight: 700;
   color: var(--gold-light);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.card {
-  min-height: 105px;
-  padding: 14px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
+/* Base Card Styling */
+.card, .service-card {
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
@@ -341,12 +312,16 @@ section h2 {
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
-.card:hover {
-  transform: translateY(-4px);
+.card:hover, .service-card:hover {
+  transform: translateY(-3px);
   border-color: rgba(0, 191, 255, 0.5);
 }
 
-.card strong { font-size: 0.8rem; font-weight: 600; }
+.catalogue-card-highlight {
+  border-color: rgba(245, 197, 66, 0.45);
+  background: linear-gradient(180deg, rgba(245, 197, 66, 0.08), var(--card));
+}
+
 .icon {
   width: 44px;
   height: 44px;
@@ -356,9 +331,120 @@ section h2 {
   border-radius: 12px;
 }
 .icon svg { width: 32px; height: 32px; display: block; }
+.service-icon { font-size: 1.8rem; display: block; }
+
+/* 1. LAYOUT: 2-COLUMN GRID (DEFAULT) */
+.grid.layout-grid-2,
+.service-grid.layout-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.grid.layout-grid-2 .card,
+.service-grid.layout-grid-2 .service-card {
+  min-height: 105px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+.grid.layout-grid-2 .card strong,
+.service-grid.layout-grid-2 .service-card strong {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* 2. LAYOUT: HORIZONTAL CAROUSEL (SWIPE SLIDER) */
+.grid.layout-carousel,
+.service-grid.layout-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 4px 2px 14px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.grid.layout-carousel::-webkit-scrollbar,
+.service-grid.layout-carousel::-webkit-scrollbar { height: 4px; }
+.grid.layout-carousel::-webkit-scrollbar-thumb,
+.service-grid.layout-carousel::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+.grid.layout-carousel .card,
+.service-grid.layout-carousel .service-card {
+  min-width: 140px;
+  max-width: 145px;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 14px 10px;
+  gap: 8px;
+}
+.grid.layout-carousel .card strong,
+.service-grid.layout-carousel .service-card strong {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* 3. LAYOUT: HORIZONTAL LIST CARDS */
+.grid.layout-list,
+.service-grid.layout-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.grid.layout-list .card,
+.service-grid.layout-list .service-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  padding: 12px 16px;
+  gap: 14px;
+}
+.grid.layout-list .card strong,
+.service-grid.layout-list .service-card strong {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* 4. LAYOUT: 3-COLUMN COMPACT MINI GRID */
+.grid.layout-grid-3,
+.service-grid.layout-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.grid.layout-grid-3 .card,
+.service-grid.layout-grid-3 .service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px 4px;
+  gap: 4px;
+  border-radius: 14px;
+}
+.grid.layout-grid-3 .icon,
+.service-grid.layout-grid-3 .icon { width: 36px; height: 36px; }
+.grid.layout-grid-3 .icon svg { width: 26px; height: 26px; }
+.grid.layout-grid-3 .service-icon { font-size: 1.4rem; }
+.grid.layout-grid-3 .card strong,
+.service-grid.layout-grid-3 .service-card strong {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
 
 /* =========================================
-ABOUT, SERVICES, GALLERY & FORMS
+ABOUT, GALLERY, QUOTE & FAQ
 ========================================= */
 .about {
   text-align: center;
@@ -367,22 +453,6 @@ ABOUT, SERVICES, GALLERY & FORMS
   border-radius: var(--radius);
 }
 .about p { font-size: 0.9rem; color: var(--muted); }
-
-.service-grid {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 10px;
-}
-.service-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.service-icon { font-size: 1.4rem; }
 
 .gallery-grid {
   display: grid;
@@ -438,7 +508,7 @@ ABOUT, SERVICES, GALLERY & FORMS
 .discount-calculation > div { display: flex; justify-content: space-between; padding: 4px 0; }
 .discount-calculation .final-price { border-top: 1px solid var(--card-border); padding-top: 6px; font-weight: 700; color: var(--green); }
 
-/* FAQ Styles */
+/* FAQ Accordion */
 .faq-item {
   margin-bottom: 8px;
   background: var(--card);
@@ -489,12 +559,10 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
 }
 .bottom-nav-item span { font-size: 1.1rem; }
 
-@media (min-width: 768px) {
-  .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (min-width: 900px) {
   body { padding-bottom: 20px; }
-  .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .grid.layout-grid-2 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .service-grid.layout-grid-2 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .gallery-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .mobile-bottom-nav { display: none; }
 }
