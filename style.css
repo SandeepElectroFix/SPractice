@@ -347,8 +347,8 @@ section h2 {
 #serviceContainer.layout-carousel::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
 #serviceContainer.layout-carousel .service-card {
-  min-width: 260px !important;
-  max-width: 260px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
   flex: 0 0 auto !important;
   scroll-snap-align: start !important;
 }
@@ -360,7 +360,7 @@ section h2 {
   gap: 10px !important;
 }
 
-/* 4. Mini (2 Columns with Full Text Wrap & Clear View) */
+/* 4. Mini (2 Columns with Full Text Wrap) */
 #serviceContainer.layout-grid-3 {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -397,51 +397,27 @@ section h2 {
   white-space: normal !important;
   word-break: normal !important;
   overflow: visible !important;
-  text-overflow: clip !important;
   display: block !important;
 }
 
-#serviceContainer.layout-grid-3 .sub-service-item {
-  padding: 6px 6px !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 4px !important;
-}
-
-#serviceContainer.layout-grid-3 .sub-service-info {
-  width: 100% !important;
-}
-
-#serviceContainer.layout-grid-3 .sub-name {
-  font-size: 0.78rem !important;
-  line-height: 1.25 !important;
-  white-space: normal !important;
-}
-
-#serviceContainer.layout-grid-3 .sub-rate {
-  font-size: 0.70rem !important;
-  margin-top: 2px !important;
-}
-
-#serviceContainer.layout-grid-3 .qty-control {
-  align-self: flex-end !important;
-  transform: scale(0.9) !important;
-  margin-top: 2px !important;
-}
-
-/* Service Card Accordion Base */
+/* Service Card Base */
 .service-card {
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: all 0.3s ease;
-  height: fit-content;
+  transition: all 0.25s ease;
+  cursor: pointer;
 }
 
-.service-card.open {
+.service-card:hover {
+  transform: translateY(-2px);
   border-color: rgba(245, 197, 66, 0.45);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.service-card.has-active-items {
+  border-color: var(--gold);
+  background: rgba(245, 197, 66, 0.08);
 }
 
 .service-header {
@@ -449,9 +425,7 @@ section h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
   user-select: none;
-  background: rgba(255, 255, 255, 0.02);
 }
 
 .service-title-wrap {
@@ -468,68 +442,141 @@ section h2 {
 }
 
 .toggle-arrow {
-  font-size: 0.75rem;
   color: var(--gold);
-  transition: transform 0.3s ease;
 }
 
-.service-card.open .toggle-arrow {
-  transform: rotate(180deg);
-}
+/* =========================================
+   SERVICE POPUP MODAL (BOTTOM SHEET)
+========================================= */
 
-.service-body {
+.service-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
   display: none;
-  padding: 0 12px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
-.service-card.open .service-body {
-  display: block;
+.service-modal-overlay.active {
+  display: flex;
+  opacity: 1;
 }
 
-.service-desc {
-  font-size: 0.82rem;
-  color: var(--muted);
-  margin: 8px 0 10px;
-}
-
-.sub-services-list {
+.service-modal-content {
+  width: 100%;
+  max-width: 550px;
+  max-height: 80vh;
+  background: #0b1224;
+  border: 1px solid var(--card-border);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 20px 16px 30px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
 }
 
-/* Sub-service row layout */
-.sub-service-item {
+.service-modal-overlay.active .service-modal-content {
+  transform: translateY(0);
+}
+
+.saved-light-theme .service-modal-content {
+  background: #ffffff;
+}
+
+.modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 7px 8px;
-  border-radius: 10px;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.2);
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
 }
 
-.sub-service-item.has-qty {
-  background: rgba(245, 197, 66, 0.12);
-  border-color: rgba(245, 197, 66, 0.3);
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.sub-service-info {
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text);
+  font-size: 1.4rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.modal-desc {
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.modal-items-list {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 8px;
 }
 
-.sub-name {
+.modal-items-list .sub-service-item {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 10px 12px !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08) !important;
+}
+
+.saved-light-theme .modal-items-list .sub-service-item {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.modal-items-list .sub-service-item.has-qty {
+  background: rgba(245, 197, 66, 0.12) !important;
+  border-color: rgba(245, 197, 66, 0.3) !important;
+}
+
+.modal-items-list .sub-service-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 65%;
+}
+
+.modal-items-list .sub-name {
   color: var(--text);
   font-weight: 500;
-  font-size: 0.83rem;
+  font-size: 0.88rem;
+  line-height: 1.3;
 }
 
-.sub-rate {
+.modal-items-list .sub-rate {
   color: var(--gold-light);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 600;
 }
 
@@ -906,128 +953,4 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
 @media (min-width: 900px) {
   body { padding-bottom: 20px; }
   .mobile-bottom-nav { display: none; }
-}
-/* =========================================
-   SERVICE POPUP MODAL (BOTTOM SHEET)
-========================================= */
-
-.service-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 99999;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.service-modal-overlay.active {
-  display: flex;
-  opacity: 1;
-}
-
-.service-modal-content {
-  width: 100%;
-  max-width: 550px;
-  max-height: 80vh;
-  background: var(--bg-secondary, #0b1224);
-  border: 1px solid var(--card-border);
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  padding: 20px 16px 30px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-y: auto;
-}
-
-.service-modal-overlay.active .service-modal-content {
-  transform: translateY(0);
-}
-
-.saved-light-theme .service-modal-content {
-  background: #ffffff;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 12px;
-}
-
-.modal-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.modal-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-}
-
-.modal-close-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: var(--text);
-  font-size: 1.2rem;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.modal-desc {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 14px;
-}
-
-.modal-items-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Modal ke andar full row layout */
-.modal-items-list .sub-service-item {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 10px 12px !important;
-  background: rgba(0, 0, 0, 0.25) !important;
-  border-radius: 12px !important;
-}
-
-.modal-items-list .sub-service-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-width: 65%;
-}
-
-.modal-items-list .sub-name {
-  font-size: 0.9rem !important;
-  font-weight: 600 !important;
-  white-space: normal !important;
-  line-height: 1.3 !important;
-}
-
-.modal-items-list .sub-rate {
-  font-size: 0.8rem !important;
-  color: var(--gold-light) !important;
 }
