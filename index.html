@@ -217,6 +217,21 @@
         <div class="faq-container" id="faqContainer"></div>
      </section>
 
+     <!-- SERVICE POPUP MODAL -->
+     <div id="serviceModalOverlay" class="service-modal-overlay" onclick="closeServiceModal(event)">
+       <div class="service-modal-content" onclick="event.stopPropagation()">
+         <div class="modal-header">
+           <div class="modal-title-wrap">
+             <span id="modalServiceIcon" style="font-size: 1.4rem;">⚡</span>
+             <h3 id="modalServiceTitle" class="modal-title">Service Title</h3>
+           </div>
+           <button type="button" class="modal-close-btn" onclick="closeServiceModal()">&times;</button>
+         </div>
+         <p id="modalServiceDesc" class="modal-desc"></p>
+         <div id="modalItemsContainer" class="modal-items-list"></div>
+       </div>
+     </div>
+    
      <!-- FOOTER -->
      <footer id="footerSection">
         <p id="footerText">&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
@@ -231,7 +246,7 @@
         <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">कॉल</small></a>
      </nav>
 
-     <!-- SCRIPT LOGIC (PERSISTENT & COMPLETE BILINGUAL) -->
+     <!-- SCRIPT LOGIC -->
      <script>
         const FULL_CONFIG = {
             services: [
@@ -243,7 +258,7 @@
                         { name_en: "Concealed Wiring", name_hi: "कंसील्ड (अंडरग्राउंड) वायरिंग", rate_en: "₹40 / sq.ft.", rate_hi: "₹40 / वर्ग फीट", price: 40 },
                         { name_en: "Surface Wiring", name_hi: "ओपन / सरफेस वायरिंग", rate_en: "₹30 / sq.ft.", rate_hi: "₹30 / वर्ग फीट", price: 30 },
                         { name_en: "Slab Piping", name_hi: "छत / स्लैब पाइपिंग", rate_en: "₹15 / sq.ft.", rate_hi: "₹15 / वर्ग फीट", price: 15 },
-                        { name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80 },
+                        { name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
                         { name_en: "Complete House Wiring", name_hi: "फुल हाउस वायरिंग सेटअप", rate_en: "₹50 / sq.ft.", rate_hi: "₹50 / वर्ग फीट", price: 50 }
                     ]
                 },
@@ -409,7 +424,7 @@
             document.getElementById("labelWork").innerText = isHi ? "हमारे कार्य" : "Our Work";
             document.getElementById("labelCatalogue").innerText = isHi ? "सामग्री सूची" : "Catalogue";
 
-            // About Us (Completely Fixed)
+            // About Us
             document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
             document.getElementById("aboutText").innerHTML = isHi 
                 ? "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।" 
@@ -455,6 +470,7 @@
             updateCalculations();
         }
 
+        // 1. Grid/Mini me cards clean dikhenge aur click par Modal open hoga
         function renderServices() {
             const container = document.getElementById("serviceContainer");
             if (!container) return;
@@ -462,46 +478,90 @@
 
             FULL_CONFIG.services.forEach((service, sIdx) => {
                 const title = currentLang === "hi" ? service.title_hi : service.title_en;
-                const desc = currentLang === "hi" ? service.desc_hi : service.desc_en;
-
-                const subHtml = service.subServices.map((sub, subIdx) => {
-                    const key = `${sIdx}_${subIdx}`;
-                    const qty = selectedItemsMap[key]?.qty || 0;
-                    const name = currentLang === "hi" ? sub.name_hi : sub.name_en;
-                    const rate = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
-
-                    return `
-                        <div class="sub-service-item ${qty > 0 ? 'has-qty' : ''}" id="row_${key}">
-                            <div class="sub-service-info">
-                                <span class="sub-name">${name}</span>
-                                <span class="sub-rate">${rate}</span>
-                            </div>
-                            <div class="qty-control" onclick="event.stopPropagation();">
-                                <button type="button" class="qty-btn minus-btn" onclick="changeQty(${sIdx}, ${subIdx}, -1)">−</button>
-                                <span class="qty-val" id="qty_${key}">${qty}</span>
-                                <button type="button" class="qty-btn plus-btn" onclick="changeQty(${sIdx}, ${subIdx}, 1)">+</button>
-                            </div>
-                        </div>
-                    `;
-                }).join("");
+                
+                let activeCount = 0;
+                service.subServices.forEach((_, subIdx) => {
+                    if (selectedItemsMap[`${sIdx}_${subIdx}`]?.qty > 0) {
+                        activeCount += selectedItemsMap[`${sIdx}_${subIdx}`].qty;
+                    }
+                });
 
                 const card = document.createElement("div");
-                card.className = "service-card";
+                card.className = `service-card ${activeCount > 0 ? 'has-active-items' : ''}`;
                 card.innerHTML = `
-                    <div class="service-header" onclick="this.parentElement.classList.toggle('open')">
+                    <div class="service-header" onclick="openServiceModal(${sIdx})">
                         <div class="service-title-wrap">
                             <span class="service-icon">${service.icon}</span>
                             <h3 class="service-title">${title}</h3>
                         </div>
-                        <span class="toggle-arrow">▼</span>
-                    </div>
-                    <div class="service-body">
-                        <p class="service-desc">${desc}</p>
-                        <div class="sub-services-list">${subHtml}</div>
+                        <span class="toggle-arrow" style="font-size: 1rem;">➔</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // 2. Open Modal Function
+        function openServiceModal(sIdx) {
+            const service = FULL_CONFIG.services[sIdx];
+            const title = currentLang === "hi" ? service.title_hi : service.title_en;
+            const desc = currentLang === "hi" ? service.desc_hi : service.desc_en;
+
+            document.getElementById("modalServiceIcon").innerText = service.icon;
+            document.getElementById("modalServiceTitle").innerText = title;
+            document.getElementById("modalServiceDesc").innerText = desc;
+
+            const itemsContainer = document.getElementById("modalItemsContainer");
+            itemsContainer.innerHTML = service.subServices.map((sub, subIdx) => {
+                const key = `${sIdx}_${subIdx}`;
+                const qty = selectedItemsMap[key]?.qty || 0;
+                const name = currentLang === "hi" ? sub.name_hi : sub.name_en;
+                const rate = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
+
+                return `
+                    <div class="sub-service-item ${qty > 0 ? 'has-qty' : ''}" id="modal_row_${key}">
+                        <div class="sub-service-info">
+                            <span class="sub-name">${name}</span>
+                            <span class="sub-rate">${rate}</span>
+                        </div>
+                        <div class="qty-control">
+                            <button type="button" class="qty-btn minus-btn" onclick="changeQtyModal(${sIdx}, ${subIdx}, -1)">−</button>
+                            <span class="qty-val" id="modal_qty_${key}">${qty}</span>
+                            <button type="button" class="qty-btn plus-btn" onclick="changeQtyModal(${sIdx}, ${subIdx}, 1)">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            const overlay = document.getElementById("serviceModalOverlay");
+            overlay.style.display = "flex";
+            setTimeout(() => overlay.classList.add("active"), 10);
+            document.body.style.overflow = "hidden";
+        }
+
+        // 3. Modal Quantity Change Helper
+        function changeQtyModal(sIdx, subIdx, change) {
+            changeQty(sIdx, subIdx, change);
+            const key = `${sIdx}_${subIdx}`;
+            const currentQty = selectedItemsMap[key]?.qty || 0;
+            
+            const mQty = document.getElementById(`modal_qty_${key}`);
+            const mRow = document.getElementById(`modal_row_${key}`);
+            if (mQty) mQty.innerText = currentQty;
+            if (mRow) mRow.classList.toggle("has-qty", currentQty > 0);
+        }
+
+        // 4. Close Modal Function
+        function closeServiceModal(e) {
+            const overlay = document.getElementById("serviceModalOverlay");
+            if (overlay) {
+                overlay.classList.remove("active");
+                setTimeout(() => {
+                    overlay.style.display = "none";
+                    document.body.style.overflow = "";
+                    renderServices(); // update active items badge
+                }, 300);
+            }
         }
 
         function changeQty(sIdx, subIdx, change) {
@@ -522,13 +582,6 @@
 
             // Save Cart to LocalStorage
             localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
-
-            const currentQty = selectedItemsMap[key]?.qty || 0;
-            const qEl = document.getElementById(`qty_${key}`);
-            const rEl = document.getElementById(`row_${key}`);
-
-            if (qEl) qEl.innerText = currentQty;
-            if (rEl) rEl.classList.toggle("has-qty", currentQty > 0);
 
             updateCalculations();
         }
