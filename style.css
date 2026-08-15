@@ -319,7 +319,7 @@ section h2 {
 .service-icon { font-size: 1.4rem; display: inline-block; }
 
 /* =========================================
-   SERVICES CONTAINER & DYNAMIC LAYOUTS (FIXED)
+   SERVICES CONTAINER & DYNAMIC LAYOUTS
 ========================================= */
 
 #serviceContainer {
@@ -360,17 +360,74 @@ section h2 {
   gap: 10px !important;
 }
 
-/* 4. Mini (3 Columns) */
+/* 4. Mini (2 Columns with Full Text Wrap & Clear View) */
 #serviceContainer.layout-grid-3 {
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 8px !important;
 }
 
-#serviceContainer.layout-grid-3 .service-title { font-size: 0.76rem !important; }
-#serviceContainer.layout-grid-3 .service-header { padding: 8px 10px !important; }
-#serviceContainer.layout-grid-3 .sub-name { font-size: 0.72rem !important; }
-#serviceContainer.layout-grid-3 .sub-rate { font-size: 0.65rem !important; }
+#serviceContainer.layout-grid-3 .service-card {
+  height: auto !important;
+  min-height: auto !important;
+}
+
+#serviceContainer.layout-grid-3 .service-header {
+  padding: 10px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+#serviceContainer.layout-grid-3 .service-title-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 85% !important;
+}
+
+#serviceContainer.layout-grid-3 .service-icon {
+  font-size: 1.1rem !important;
+  flex-shrink: 0 !important;
+}
+
+#serviceContainer.layout-grid-3 .service-title {
+  font-size: 0.82rem !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  display: block !important;
+}
+
+#serviceContainer.layout-grid-3 .sub-service-item {
+  padding: 6px 6px !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+}
+
+#serviceContainer.layout-grid-3 .sub-service-info {
+  width: 100% !important;
+}
+
+#serviceContainer.layout-grid-3 .sub-name {
+  font-size: 0.78rem !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+}
+
+#serviceContainer.layout-grid-3 .sub-rate {
+  font-size: 0.70rem !important;
+  margin-top: 2px !important;
+}
+
+#serviceContainer.layout-grid-3 .qty-control {
+  align-self: flex-end !important;
+  transform: scale(0.9) !important;
+  margin-top: 2px !important;
+}
 
 /* Service Card Accordion Base */
 .service-card {
@@ -487,17 +544,24 @@ section h2 {
   border: 1px solid var(--card-border);
 }
 
+.saved-light-theme .qty-control {
+  background: rgba(0, 0, 0, 0.06);
+}
+
 .qty-btn {
   width: 24px;
   height: 24px;
   border-radius: 50%;
   border: none;
+  background: var(--card);
+  color: var(--text);
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .qty-btn.plus-btn {
@@ -508,6 +572,10 @@ section h2 {
 .qty-btn.minus-btn {
   background: rgba(255, 255, 255, 0.1);
   color: var(--text);
+}
+
+.qty-btn:active {
+  transform: scale(0.9);
 }
 
 .qty-val {
