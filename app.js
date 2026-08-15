@@ -124,16 +124,16 @@ function setLanguage(lang) {
   setElemPlaceholder("customerMessage", t.notePlaceholder);
 
   if (cfg.discount) {
-    setElemText("discountTitle", cfg.discount[`title_${currentLang}`] || cfg.discount.title);
-    setElemText("discountMessage", cfg.discount[`message_${currentLang}`] || cfg.discount.message);
-    setElemText("discountValidity", cfg.discount[`validity_${currentLang}`] || cfg.discount.validityText);
+    setElemText("discountTitle", cfg.discount[`title_${currentLang}`] || cfg.discount.title_en);
+    setElemText("discountMessage", cfg.discount[`message_${currentLang}`] || cfg.discount.message_en);
+    setElemText("discountValidity", cfg.discount[`validity_${currentLang}`] || cfg.discount.validity_en);
   }
 
   updateThemeButtonText();
-  loadServices();
-  loadGallery();
-  loadReviews();
-  renderFAQ();
+  renderAllServices();
+  renderAllGallery();
+  renderAllReviews();
+  renderAllFAQ();
   updateCalculationUI();
 }
 
@@ -191,8 +191,8 @@ function applyVisibilityControls() {
   }
 }
 
-// 4. Services Loader (100% Fixed - No Undefined)
-function loadServices() {
+// 4. Universal Services Loader
+function renderAllServices() {
   const container = document.getElementById("serviceContainer");
   if (!container || !window.CARD_CONFIG) return;
 
@@ -202,20 +202,17 @@ function loadServices() {
   services.forEach((service, sIndex) => {
     if (service.show === false) return;
 
-    // Direct language check with fallbacks
-    const title = service[`title_${currentLang}`] || service.title || service.title_en || service.name || "Electrical Service";
-    const desc = service[`desc_${currentLang}`] || service.description || service.desc_en || "";
-
-    const subList = service.subServices || service.items || [];
+    const title = service[`title_${currentLang}`] || service.title_en || "Service";
+    const desc = service[`desc_${currentLang}`] || service.desc_en || "";
+    const subList = service.subServices || [];
     const visibleSub = subList.filter(sub => sub.show !== false);
 
     const subListHtml = visibleSub.map((sub, subIndex) => {
       const itemId = `item_${sIndex}_${subIndex}`;
       const savedQty = selectedItemsMap[itemId]?.qty || 0;
-
-      const subName = sub[`name_${currentLang}`] || sub.name_en || sub.title || sub.name || "Service Item";
-      const subRate = sub[`rate_${currentLang}`] || sub.rate_en || (sub.price && sub.unit ? `₹${sub.price} / ${sub.unit}` : sub.rate) || `₹${sub.price || 0}`;
-      const numPrice = sub.price || (parseInt(subRate.toString().match(/\d+/)?.[0], 10) || 0);
+      const subName = sub[`name_${currentLang}`] || sub.name_en;
+      const subRate = sub[`rate_${currentLang}`] || sub.rate_en;
+      const numPrice = sub.price || 0;
 
       return `
         <div class="sub-service-item ${savedQty > 0 ? 'has-qty' : ''}" id="row_${itemId}">
@@ -223,7 +220,7 @@ function loadServices() {
             <span class="sub-name">${subName}</span>
             <span class="sub-rate">${subRate}</span>
           </div>
-          <div class="qty-control">
+          <div class="qty-control" onclick="event.stopPropagation();">
             <button type="button" class="qty-btn minus-btn" onclick="updateQty('${itemId}', -1, ${numPrice}, ${sIndex}, ${subIndex})">−</button>
             <span class="qty-val" id="qty_${itemId}">${savedQty}</span>
             <button type="button" class="qty-btn plus-btn" onclick="updateQty('${itemId}', 1, ${numPrice}, ${sIndex}, ${subIndex})">+</button>
@@ -254,17 +251,16 @@ function loadServices() {
 // 5. Quantity Management (+ / -)
 function updateQty(itemId, change, price, sIndex, subIndex) {
   const service = window.CARD_CONFIG.services[sIndex];
-  const subList = service.subServices || service.items || [];
-  const sub = subList[subIndex];
+  const sub = service.subServices[subIndex];
 
   if (!selectedItemsMap[itemId]) {
     selectedItemsMap[itemId] = {
-      name_en: sub.name_en || sub.title || sub.name || "Item",
-      name_hi: sub.name_hi || sub.title || sub.name || "Item",
-      category_en: service.title_en || service.title || "Service",
-      category_hi: service.title_hi || service.title || "Service",
-      rate_en: sub.rate_en || sub.rate || `₹${price}`,
-      rate_hi: sub.rate_hi || sub.rate || `₹${price}`,
+      name_en: sub.name_en,
+      name_hi: sub.name_hi,
+      category_en: service.title_en,
+      category_hi: service.title_hi,
+      rate_en: sub.rate_en,
+      rate_hi: sub.rate_hi,
       price: price,
       qty: 0
     };
@@ -314,7 +310,7 @@ function updateCalculationUI() {
 
   listContainer.innerHTML = items.map(item => `
     <div class="summary-item">
-      <span>• ${item[`name_${currentLang}`] || item.name_en} × <strong>${item.qty}</strong></span>
+      <span>• ${item[`name_${currentLang}`]} × <strong>${item.qty}</strong></span>
       <strong>₹${item.price * item.qty}</strong>
     </div>
   `).join("");
@@ -323,7 +319,7 @@ function updateCalculationUI() {
   if (subtotalEl) subtotalEl.innerText = `₹${subtotal}`;
 
   const discountCfg = window.CARD_CONFIG?.discount || {};
-  const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
+  const isDiscountActive = (discountCfg.show !== false && discountCfg.percentage > 0);
 
   let discountAmount = 0;
   if (isDiscountActive) {
@@ -355,7 +351,7 @@ function setupQuoteActions() {
 
     const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
     const discountCfg = window.CARD_CONFIG?.discount || {};
-    const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
+    const isDiscountActive = (discountCfg.show !== false && discountCfg.percentage > 0);
     const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
     const grandTotal = subtotal - discountAmount;
 
@@ -366,8 +362,8 @@ function setupQuoteActions() {
     text += `\n📋 *Selected Services:*\n`;
 
     items.forEach((item, i) => {
-      const sName = item[`name_${currentLang}`] || item.name_en;
-      const sRate = item[`rate_${currentLang}`] || item.rate_en;
+      const sName = item[`name_${currentLang}`];
+      const sRate = item[`rate_${currentLang}`];
       text += `${i + 1}. ${sName} [Qty: ${item.qty}] — ₹${item.price * item.qty} (${sRate})\n`;
     });
 
@@ -422,14 +418,14 @@ function setupQuoteActions() {
 
     const tableRows = items.map((item, index) => [
       index + 1,
-      item.name_en || item.name_hi,
+      item.name_en,
       `Rs. ${item.price}`,
       item.qty,
       `Rs. ${item.price * item.qty}`
     ]);
 
     const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
-    const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
+    const isDiscountActive = (discountCfg.show !== false && discountCfg.percentage > 0);
     const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
     const grandTotal = subtotal - discountAmount;
 
@@ -462,15 +458,14 @@ function setupQuoteActions() {
   });
 }
 
-// 8. Layout Switchers
+// 8. Layout Switchers (Synchronized)
 function setupQuickAccessLayoutSwitcher() {
   const container = document.getElementById("quickGridContainer");
   const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
   if (!container || !buttons.length) return;
 
   function applyQuickLayout(layoutName) {
-    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
-    container.classList.add(`layout-${layoutName}`);
+    container.className = `grid layout-${layoutName}`;
     buttons.forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-quick-layout") === layoutName));
     localStorage.setItem("sandeepQuickLayout", layoutName);
   }
@@ -492,8 +487,7 @@ function setupServiceLayoutSwitcher() {
   if (!container || !buttons.length) return;
 
   function applyServiceLayout(layoutName) {
-    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
-    container.classList.add(`layout-${layoutName}`);
+    container.className = `service-grid layout-${layoutName}`;
     buttons.forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-service-layout") === layoutName));
     localStorage.setItem("sandeepServiceLayout", layoutName);
   }
@@ -505,7 +499,7 @@ function setupServiceLayoutSwitcher() {
     };
   });
 
-  const savedLayout = localStorage.getItem("sandeepServiceLayout") || "grid-2";
+  const savedLayout = localStorage.getItem("sandeepServiceLayout") || "list";
   applyServiceLayout(savedLayout);
 }
 
@@ -515,7 +509,7 @@ function loadGallery() {
   if (!container || !window.CARD_CONFIG) return;
   const galleryItems = (window.CARD_CONFIG.gallery || []).filter(item => item.show !== false);
   container.innerHTML = galleryItems.map(g => {
-    const title = g[`title_${currentLang}`] || g.title_en || g.title || "";
+    const title = g[`title_${currentLang}`] || g.title_en || "";
     return `
       <div class="gallery-item">
         <img src="${g.image}" alt="${title}" onclick="openLightbox('${g.image}')" onerror="this.parentElement.style.display='none'">
@@ -543,7 +537,7 @@ function loadReviews() {
   if (!container || !window.CARD_CONFIG) return;
   const reviewItems = (window.CARD_CONFIG.reviews || []).filter(item => item.show !== false);
   container.innerHTML = reviewItems.map(r => {
-    const text = r[`text_${currentLang}`] || r.text_en || r.text || "";
+    const text = r[`text_${currentLang}`] || r.text_en || "";
     return `
       <div class="card review-card" style="padding:12px; margin-bottom:8px;">
         <div style="color:#f59e0b;">${"★".repeat(r.rating || 5)}</div>
@@ -559,8 +553,8 @@ function renderFAQ() {
   if (!container || !window.CARD_CONFIG) return;
   const faqList = (window.CARD_CONFIG.faq || []).filter(f => f.show !== false);
   container.innerHTML = faqList.map((f, i) => {
-    const q = f[`question_${currentLang}`] || f.question_en || f.question || "";
-    const a = f[`answer_${currentLang}`] || f.answer_en || f.answer || "";
+    const q = f[`question_${currentLang}`] || f.question_en || "";
+    const a = f[`answer_${currentLang}`] || f.answer_en || "";
     return `
       <div class="faq-item" onclick="this.classList.toggle('active')">
         <div class="faq-question"><span>${q}</span><span class="faq-icon">+</span></div>
@@ -568,4 +562,38 @@ function renderFAQ() {
       </div>
     `;
   }).join("");
+}
+
+function getUserLocation() {
+  const status = document.getElementById("locationStatus");
+  if (!navigator.geolocation) {
+    status.innerText = "Geolocation not supported.";
+    return;
+  }
+  status.innerText = "Locating...";
+  
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const R = 6371;
+      const dLat = (position.coords.latitude - 26.8467) * (Math.PI / 180);
+      const dLon = (position.coords.longitude - 80.9462) * (Math.PI / 180);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(26.8467 * (Math.PI / 180)) * Math.cos(position.coords.latitude * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const distance = (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))).toFixed(1);
+      status.innerHTML = `✅ You are approx <strong>${distance} km</strong> away from Lucknow center.`;
+    },
+    () => { status.innerText = "Location permission denied."; }
+  );
+}
+
+function shareWebsite() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Sandeep ElectroFix',
+      text: 'Professional Electrical Services in Lucknow.',
+      url: window.location.href
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Link copied to clipboard!');
+  }
 }
