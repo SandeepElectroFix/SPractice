@@ -1,10 +1,9 @@
 /* =========================================================
-   SANDEEP ELECTROFIX - MASTER APP.JS
-   Fixed "undefined", Bilingual, Qty (+/-), Smart Discount & PDF
+   SANDEEP ELECTROFIX - MASTER APP.JS (CRASH-PROOF)
 ========================================================= */
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
-let selectedItemsMap = {}; // Format: { [itemId]: { name_en, name_hi, price, rate_en, rate_hi, category_en, category_hi, qty } }
+let selectedItemsMap = {}; 
 
 const UI_TEXT = {
   en: {
@@ -14,7 +13,6 @@ const UI_TEXT = {
     whatsapp: "💬 WhatsApp",
     lightMode: "Light Mode",
     darkMode: "Dark Mode",
-    specialOffer: "🔥 SPECIAL OFFER",
     ourServices: "Our Services",
     selectedServices: "Selected Services",
     noSelection: "No services selected yet. Use + / − to add items.",
@@ -38,7 +36,6 @@ const UI_TEXT = {
     whatsapp: "💬 व्हाट्सएप करें",
     lightMode: "लाइट मोड",
     darkMode: "डार्क मोड",
-    specialOffer: "🔥 विशेष ऑफर",
     ourServices: "हमारी सेवाएँ",
     selectedServices: "चुनी गई सेवाएँ",
     noSelection: "अभी तक कोई सेवा नहीं चुनी गई। + / − का उपयोग करें।",
@@ -57,39 +54,56 @@ const UI_TEXT = {
   }
 };
 
-// 1. Single Clean DOM Initialization
+// Safe helper function
+function safeSetText(id, text) {
+  const el = document.getElementById(id);
+  if (el && text !== undefined) el.innerHTML = text;
+}
+
+function safeSetPlaceholder(id, text) {
+  const el = document.getElementById(id);
+  if (el && text !== undefined) el.placeholder = text;
+}
+
+// 1. DOM Ready
 document.addEventListener("DOMContentLoaded", () => {
-  applyVisibilityControls();
-  setLanguage(currentLang);
+  try {
+    applyVisibilityControls();
+    setLanguage(currentLang);
 
-  // Language buttons event
-  document.querySelectorAll(".language-btn").forEach(btn => {
-    btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang")));
-  });
-
-  // Theme toggle event
-  const themeBtn = document.getElementById("themeToggle");
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      document.documentElement.classList.toggle("saved-light-theme");
-      const isLight = document.documentElement.classList.contains("saved-light-theme");
-      localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
-      updateThemeButtonText();
+    // Language Buttons
+    document.querySelectorAll(".language-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const lang = btn.getAttribute("data-lang");
+        if (lang) setLanguage(lang);
+      });
     });
-  }
 
-  // Restore Theme
-  if (localStorage.getItem("sandeepTheme") === "light") {
-    document.documentElement.classList.add("saved-light-theme");
-  }
-  updateThemeButtonText();
+    // Theme Toggle
+    const themeBtn = document.getElementById("themeToggle");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        document.documentElement.classList.toggle("saved-light-theme");
+        const isLight = document.documentElement.classList.contains("saved-light-theme");
+        localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
+        updateThemeButtonText();
+      });
+    }
 
-  setupQuickAccessLayoutSwitcher();
-  setupServiceLayoutSwitcher();
-  setupQuoteActions();
+    if (localStorage.getItem("sandeepTheme") === "light") {
+      document.documentElement.classList.add("saved-light-theme");
+    }
+    updateThemeButtonText();
+
+    setupQuickAccessLayoutSwitcher();
+    setupServiceLayoutSwitcher();
+    setupQuoteActions();
+  } catch (err) {
+    console.error("Initialization Error:", err);
+  }
 });
 
-// 2. Language Switcher Function
+// 2. Language Switcher
 function setLanguage(lang) {
   currentLang = (lang === "en") ? "en" : "hi";
   localStorage.setItem("sandeepLang", currentLang);
@@ -101,32 +115,24 @@ function setLanguage(lang) {
   const t = UI_TEXT[currentLang];
   const cfg = window.CARD_CONFIG || {};
 
-  const setElemText = (id, text) => {
-    const el = document.getElementById(id);
-    if (el && text) el.innerHTML = text;
-  };
-  const setElemPlaceholder = (id, text) => {
-    const el = document.getElementById(id);
-    if (el && text) el.placeholder = text;
-  };
+  safeSetText("businessTagline", cfg.business?.[`tagline_${currentLang}`] || t.tagline);
+  safeSetText("businessLocation", cfg.business?.[`location_${currentLang}`] || t.location);
+  safeSetText("callBtnText", t.callNow);
+  safeSetText("whatsappBtnText", t.whatsapp);
+  safeSetText("servicesHeading", t.ourServices);
+  safeSetText("faqHeading", t.faqHeading);
+  safeSetText("sendWhatsappBtn", t.sendWhatsApp);
+  safeSetText("downloadPdfBtn", t.downloadPDF);
 
-  setElemText("businessTagline", cfg.business?.[`tagline_${currentLang}`] || cfg.business?.tagline || t.tagline);
-  setElemText("businessLocation", cfg.business?.[`location_${currentLang}`] || cfg.business?.location || t.location);
-  setElemText("callBtnText", t.callNow);
-  setElemText("whatsappBtnText", t.whatsapp);
-  setElemText("servicesHeading", t.ourServices);
-  setElemText("faqHeading", t.faqHeading);
-  setElemText("sendWhatsappBtn", t.sendWhatsApp);
-  setElemText("downloadPdfBtn", t.downloadPDF);
-
-  setElemPlaceholder("customerName", t.namePlaceholder);
-  setElemPlaceholder("customerPhone", t.phonePlaceholder);
-  setElemPlaceholder("customerMessage", t.notePlaceholder);
+  safeSetPlaceholder("customerName", t.namePlaceholder);
+  safeSetPlaceholder("customerPhone", t.phonePlaceholder);
+  safeSetPlaceholder("customerMessage", t.notePlaceholder);
 
   if (cfg.discount) {
-    setElemText("discountTitle", cfg.discount[`title_${currentLang}`] || cfg.discount.title_en);
-    setElemText("discountMessage", cfg.discount[`message_${currentLang}`] || cfg.discount.message_en);
-    setElemText("discountValidity", cfg.discount[`validity_${currentLang}`] || cfg.discount.validity_en);
+    safeSetText("discountTitle", cfg.discount[`title_${currentLang}`] || cfg.discount.title_en);
+    safeSetText("discountMessage", cfg.discount[`message_${currentLang}`] || cfg.discount.message_en);
+    safeSetText("discountValidity", cfg.discount[`validity_${currentLang}`] || cfg.discount.validity_en);
+    safeSetText("discountPercentage", cfg.discount.percentage || 10);
   }
 
   updateThemeButtonText();
@@ -147,13 +153,16 @@ function updateThemeButtonText() {
   }
 }
 
-// 3. Show / Hide Control Applier
+// 3. Safe Visibility Controls
 function applyVisibilityControls() {
   const cfg = window.CARD_CONFIG;
   if (!cfg) return;
+
   const toggle = (id, condition) => {
     const el = document.getElementById(id);
-    if (el) el.style.display = condition ? "" : "none";
+    if (el && condition !== undefined) {
+      el.style.display = condition ? "" : "none";
+    }
   };
 
   if (cfg.features) {
@@ -171,27 +180,9 @@ function applyVisibilityControls() {
     toggle("footerSection", cfg.features.footerSection);
     toggle("mobileBottomNav", cfg.features.mobileBottomNav);
   }
-
-  if (cfg.business && cfg.business.showElements) {
-    const el = cfg.business.showElements;
-    toggle("businessLogo", el.logo);
-    toggle("businessTagline", el.tagline);
-    toggle("businessLocation", el.location);
-    toggle("callBtn", el.phoneCall);
-    toggle("whatsappBtn", el.whatsappChat);
-    toggle("emailBtn", el.email);
-    toggle("websiteBtn", el.website);
-    toggle("mapsBtn", el.googleMaps);
-    toggle("facebookBtn", el.facebook);
-    toggle("instagramBtn", el.instagram);
-    toggle("youtubeBtn", el.youtube);
-    toggle("cardQRContainer", el.cardQR);
-    toggle("saveContactBtn", el.saveContactBtn);
-    toggle("shareBtn", el.shareBtn);
-  }
 }
 
-// 4. Universal Services Loader
+// 4. Safe Services Loader
 function renderAllServices() {
   const container = document.getElementById("serviceContainer");
   if (!container || !window.CARD_CONFIG) return;
@@ -248,10 +239,11 @@ function renderAllServices() {
   });
 }
 
-// 5. Quantity Management (+ / -)
+// 5. Quantity Manager
 function updateQty(itemId, change, price, sIndex, subIndex) {
-  const service = window.CARD_CONFIG.services[sIndex];
-  const sub = service.subServices[subIndex];
+  const service = window.CARD_CONFIG?.services?.[sIndex];
+  const sub = service?.subServices?.[subIndex];
+  if (!service || !sub) return;
 
   if (!selectedItemsMap[itemId]) {
     selectedItemsMap[itemId] = {
@@ -282,7 +274,7 @@ function updateQty(itemId, change, price, sIndex, subIndex) {
   updateCalculationUI();
 }
 
-// 6. Live Calculation Update
+// 6. Calculation Box
 function updateCalculationUI() {
   const t = UI_TEXT[currentLang];
   const listContainer = document.getElementById("selectedServicesList");
@@ -458,7 +450,7 @@ function setupQuoteActions() {
   });
 }
 
-// 8. Layout Switchers (Synchronized)
+// 8. Layout Switchers
 function setupQuickAccessLayoutSwitcher() {
   const container = document.getElementById("quickGridContainer");
   const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
@@ -503,7 +495,7 @@ function setupServiceLayoutSwitcher() {
   applyServiceLayout(savedLayout);
 }
 
-// 9. Gallery, Reviews & FAQ Loaders
+// 9. Loaders
 function loadGallery() {
   const container = document.getElementById("galleryContainer");
   if (!container || !window.CARD_CONFIG) return;
@@ -567,10 +559,10 @@ function renderFAQ() {
 function getUserLocation() {
   const status = document.getElementById("locationStatus");
   if (!navigator.geolocation) {
-    status.innerText = "Geolocation not supported.";
+    if (status) status.innerText = "Geolocation not supported.";
     return;
   }
-  status.innerText = "Locating...";
+  if (status) status.innerText = "Locating...";
   
   navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -579,9 +571,9 @@ function getUserLocation() {
       const dLon = (position.coords.longitude - 80.9462) * (Math.PI / 180);
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(26.8467 * (Math.PI / 180)) * Math.cos(position.coords.latitude * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const distance = (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))).toFixed(1);
-      status.innerHTML = `✅ You are approx <strong>${distance} km</strong> away from Lucknow center.`;
+      if (status) status.innerHTML = `✅ You are approx <strong>${distance} km</strong> away from Lucknow center.`;
     },
-    () => { status.innerText = "Location permission denied."; }
+    () => { if (status) status.innerText = "Location permission denied."; }
   );
 }
 
