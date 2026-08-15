@@ -1,0 +1,11 @@
+[
+  { "icon": "⚡", "name": "House Wiring" },
+  { "icon": "💡", "name": "False Ceiling Wiring" },
+  { "icon": "🔌", "name": "Switch & Socket Installation" },
+  { "icon": "⚙️", "name": "MCB & DB Installation" },
+  { "icon": "🌬️", "name": "Fan Installation" },
+  { "icon": "🔋", "name": "Inverter Wiring" },
+  { "icon": "🛠️", "name": "Electrical Repair" },
+  { "icon": "🚨", "name": "Fault Finding" },
+  { "icon": "🏢", "name": "Commercial Wiring" }
+]
