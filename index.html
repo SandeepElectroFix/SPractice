@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=26.0">
+    <link rel="stylesheet" href="style.css?v=30.0">
     
     <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -112,7 +112,7 @@
             </a>
             <a href="material-catalogue.html" class="card catalogue-card-highlight">
                 <span class="icon catalogue-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#F5C542"/><path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM14.2 12l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/></svg>
+                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#F5C542"/><path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm-22-24l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/></svg>
                 </span>
                 <strong id="labelCatalogue">सामग्री सूची</strong>
             </a>
@@ -393,6 +393,21 @@
             } catch(e) {}
         }
 
+        function updateThemeButtonText() {
+            const isLight = document.documentElement.classList.contains("saved-light-theme");
+            const themeIcon = document.getElementById("themeIcon");
+            const themeText = document.getElementById("themeText");
+            if (themeIcon && themeText) {
+                if (isLight) {
+                    themeIcon.innerText = "🌙";
+                    themeText.innerText = currentLang === "hi" ? "डार्क मोड" : "Dark Mode";
+                } else {
+                    themeIcon.innerText = "☀️";
+                    themeText.innerText = currentLang === "hi" ? "लाइट मोड" : "Light Mode";
+                }
+            }
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem("sandeepLang", currentLang);
@@ -463,6 +478,7 @@
             document.getElementById("navQuote").innerText = isHi ? "कोट" : "Quote";
             document.getElementById("navCall").innerText = isHi ? "कॉल" : "Call";
 
+            updateThemeButtonText();
             renderServices();
             renderGallery();
             renderReviews();
@@ -817,16 +833,13 @@
             const savedTheme = localStorage.getItem("sandeepTheme");
             if (savedTheme === "light") {
                 document.documentElement.classList.add("saved-light-theme");
-                document.getElementById("themeIcon").innerText = "🌙";
-                document.getElementById("themeText").innerText = "डार्क मोड";
             }
 
             document.getElementById("themeToggle")?.addEventListener("click", () => {
                 document.documentElement.classList.toggle("saved-light-theme");
                 const isLight = document.documentElement.classList.contains("saved-light-theme");
                 localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
-                document.getElementById("themeIcon").innerText = isLight ? "🌙" : "☀️";
-                document.getElementById("themeText").innerText = isLight ? (currentLang === 'hi' ? "डार्क मोड" : "Dark Mode") : (currentLang === 'hi' ? "लाइट मोड" : "Light Mode");
+                updateThemeButtonText();
             });
 
             // Restore Layout Choices
