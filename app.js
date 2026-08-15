@@ -1,8 +1,11 @@
 /* =========================================
-SANDEEP ELECTROFIX - LOGIC & RENDERING
+SANDEEP ELECTROFIX - APP.JS (Full Bilingual Support)
 ========================================= */
 
-const translations = {
+let currentLang = localStorage.getItem("sandeepLang") || "hi";
+let selectedItemsMap = {}; // { [itemId]: { name_en, name_hi, price, rate_en, rate_hi, category_en, category_hi, qty } }
+
+const UI_TEXT = {
   en: {
     tagline: "Powering Your Trust",
     location: "📍 Lucknow, Uttar Pradesh",
@@ -11,44 +14,21 @@ const translations = {
     lightMode: "Light Mode",
     darkMode: "Dark Mode",
     specialOffer: "🔥 SPECIAL OFFER",
-    discountTitle: "Special Discount",
-    discountMessage: "Get 10% OFF on Electrical Services",
-    discountValidity: "⏳ Limited Time Offer",
-    getDiscountBtn: "⚡ Get Discount",
-    quickAccess: "Quick Access",
-    call: "Call",
-    website: "Website",
-    maps: "Google Maps",
-    email: "Email",
-    saveContact: "Save Contact",
-    share: "Share",
-    ourWorkNav: "Our Work",
-    materialCatalogue: "Material Catalogue",
-    aboutHeading: "About Us",
-    aboutText: "Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow.",
-    locationTitle: "📍 Service Location",
-    locationDesc: "Providing professional electrical services across Lucknow, Uttar Pradesh.",
-    checkDistanceBtn: "Check Your Distance from Us",
-    openMapsBtn: "Get Directions on Google Maps",
-    scanQRTitle: "Scan QR Code",
-    scanQRDesc: "Scan this QR code to quickly save our digital card or pay via UPI.",
-    downloadQR: "📥 Download QR Code",
     ourServices: "Our Services",
-    ourWork: "Our Work",
-    customerReviews: "Customer Reviews",
-    requestQuote: "Request a Quote",
-    inputName: "Your Name",
-    inputPhone: "Mobile Number",
-    selectServiceDefault: "Select Service",
-    inputTotal: "Estimated Total Amount (₹)",
-    inputMessage: "Describe your electrical work...",
-    sendQuoteBtn: "💬 Send Enquiry on WhatsApp",
+    selectedServices: "Selected Services",
+    noSelection: "No services selected yet. Use + / − to add items.",
+    subtotal: "Subtotal:",
+    discount: "Discount",
+    grandTotal: "Grand Total:",
+    namePlaceholder: "Your Name *",
+    phonePlaceholder: "Mobile Number *",
+    notePlaceholder: "Site Address / Additional details...",
+    sendWhatsApp: "💬 Send on WhatsApp",
+    downloadPDF: "📄 Download PDF Estimate",
     faqHeading: "Frequently Asked Questions",
-    navHome: "Home",
-    navServices: "Services",
-    navWork: "Work",
-    navQuote: "Quote",
-    navCall: "Call"
+    estimateFor: "Estimate Request",
+    alertMissing: "Please enter your Name and Mobile Number.",
+    alertEmpty: "Please add at least one service using the + button."
   },
   hi: {
     tagline: "आपके विश्वास को रोशन करते हुए",
@@ -58,83 +38,31 @@ const translations = {
     lightMode: "लाइट मोड",
     darkMode: "डार्क मोड",
     specialOffer: "🔥 विशेष ऑफर",
-    discountTitle: "विशेष छूट",
-    discountMessage: "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं",
-    discountValidity: "⏳ सीमित समय के लिए",
-    getDiscountBtn: "⚡ छूट प्राप्त करें",
-    quickAccess: "त्वरित सेवाएँ",
-    call: "कॉल करें",
-    website: "वेबसाइट",
-    maps: "गूगल मैप्स",
-    email: "ईमेल",
-    saveContact: "नंबर सेव करें",
-    share: "शेयर करें",
-    ourWorkNav: "हमारे कार्य",
-    materialCatalogue: "सामग्री सूची",
-    aboutHeading: "हमारे बारे में",
-    aboutText: "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं।",
-    locationTitle: "📍 सेवा क्षेत्र एवं लोकेशन",
-    locationDesc: "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।",
-    checkDistanceBtn: "हमारे यहाँ से अपनी दूरी चेक करें",
-    openMapsBtn: "गूगल मैप्स पर रास्ता देखें",
-    scanQRTitle: "क्यूआर कोड स्कैन करें",
-    scanQRDesc: "हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।",
-    downloadQR: "📥 क्यूआर कोड डाउनलोड करें",
     ourServices: "हमारी सेवाएँ",
-    ourWork: "हमारे द्वारा किए गए कार्य",
-    customerReviews: "ग्राहकों की राय",
-    requestQuote: "कोटेशन प्राप्त करें",
-    inputName: "आपका नाम",
-    inputPhone: "मोबाइल नंबर",
-    selectServiceDefault: "सेवा चुनें",
-    inputTotal: "अनुमानित कुल राशि (₹)",
-    inputMessage: "अपने इलेक्ट्रिकल कार्य के बारे में बताएं...",
-    sendQuoteBtn: "💬 व्हाट्सएप पर जानकारी भेजें",
+    selectedServices: "चुनी गई सेवाएँ",
+    noSelection: "अभी तक कोई सेवा नहीं चुनी गई। + / − का उपयोग करें।",
+    subtotal: "कुल राशि (सबटोटल):",
+    discount: "विशेष छूट",
+    grandTotal: "अंतिम कुल राशि:",
+    namePlaceholder: "आपका नाम *",
+    phonePlaceholder: "मोबाइल नंबर *",
+    notePlaceholder: "पता / कार्य का विवरण...",
+    sendWhatsApp: "💬 व्हाट्सएप पर भेजें",
+    downloadPDF: "📄 पीडीएफ एस्टीमेट डाउनलोड करें",
     faqHeading: "अक्सर पूछे जाने वाले सवाल",
-    navHome: "होम",
-    navServices: "सेवाएं",
-    navWork: "कार्य",
-    navQuote: "कोट",
-    navCall: "कॉल"
+    estimateFor: "इलेक्ट्रिकल कार्य एस्टीमेट",
+    alertMissing: "कृपया अपना नाम और मोबाइल नंबर दर्ज करें।",
+    alertEmpty: "कृपया + बटन दबाकर कम से कम एक सेवा चुनें।"
   }
 };
 
-function setLanguage(lang) {
-  const currentLang = translations[lang] ? lang : "en";
-  const t = translations[currentLang];
-
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const key = el.getAttribute("data-i18n");
-    if (t[key]) el.innerHTML = t[key];
-  });
-
-  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-    const key = el.getAttribute("data-i18n-placeholder");
-    if (t[key]) el.placeholder = t[key];
-  });
-
-  document.querySelectorAll(".language-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
-  });
-
-  localStorage.setItem("sandeepLang", currentLang);
-  updateThemeButtonText();
-}
-
-function updateThemeButtonText() {
-  const isLight = document.documentElement.classList.contains("saved-light-theme");
-  const currentLang = localStorage.getItem("sandeepLang") || "en";
-  const themeTextEl = document.getElementById("themeText");
-  const themeIconEl = document.getElementById("themeIcon");
-
-  if (themeTextEl && themeIconEl) {
-    themeIconEl.innerText = isLight ? "🌙" : "☀️";
-    themeTextEl.innerText = isLight ? translations[currentLang].darkMode : translations[currentLang].lightMode;
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   applyVisibilityControls();
+  setLanguage(currentLang);
+
+  document.querySelectorAll(".language-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang")));
+  });
 
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
@@ -146,27 +74,71 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  setupQuoteActions();
+});
+
+function setLanguage(lang) {
+  currentLang = lang === "en" ? "en" : "hi";
+  localStorage.setItem("sandeepLang", currentLang);
+
   document.querySelectorAll(".language-btn").forEach(btn => {
-    btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang")));
+    btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
   });
 
-  const savedLang = localStorage.getItem("sandeepLang") || "en";
-  setLanguage(savedLang);
+  const t = UI_TEXT[currentLang];
+  const cfg = window.CARD_CONFIG;
 
-  setupQuickAccessLayoutSwitcher();
-  setupServiceLayoutSwitcher();
+  // Static UI updates
+  const setElemText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = text;
+  };
+  const setElemPlaceholder = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.placeholder = text;
+  };
 
+  setElemText("businessTagline", cfg?.business?.[`tagline_${currentLang}`] || t.tagline);
+  setElemText("businessLocation", cfg?.business?.[`location_${currentLang}`] || t.location);
+  setElemText("callBtnText", t.callNow);
+  setElemText("whatsappBtnText", t.whatsapp);
+  setElemText("servicesHeading", t.ourServices);
+  setElemText("faqHeading", t.faqHeading);
+  setElemText("sendWhatsappBtn", t.sendWhatsApp);
+  setElemText("downloadPdfBtn", t.downloadPDF);
+
+  setElemPlaceholder("customerName", t.namePlaceholder);
+  setElemPlaceholder("customerPhone", t.phonePlaceholder);
+  setElemPlaceholder("customerMessage", t.notePlaceholder);
+
+  // Discount text
+  if (cfg?.discount) {
+    setElemText("discountTitle", cfg.discount[`title_${currentLang}`]);
+    setElemText("discountMessage", cfg.discount[`message_${currentLang}`]);
+    setElemText("discountValidity", cfg.discount[`validity_${currentLang}`]);
+  }
+
+  updateThemeButtonText();
   loadServices();
   loadGallery();
   loadReviews();
   renderFAQ();
-  setupQuoteCalculation();
-});
+  updateCalculationUI();
+}
+
+function updateThemeButtonText() {
+  const isLight = document.documentElement.classList.contains("saved-light-theme");
+  const themeTextEl = document.getElementById("themeText");
+  const themeIconEl = document.getElementById("themeIcon");
+  if (themeTextEl && themeIconEl) {
+    themeIconEl.innerText = isLight ? "🌙" : "☀️";
+    themeTextEl.innerText = isLight ? UI_TEXT[currentLang].darkMode : UI_TEXT[currentLang].lightMode;
+  }
+}
 
 function applyVisibilityControls() {
   const cfg = window.CARD_CONFIG;
   if (!cfg) return;
-
   const toggle = (id, condition) => {
     const el = document.getElementById(id);
     if (el) el.style.display = condition ? "" : "none";
@@ -174,325 +146,323 @@ function applyVisibilityControls() {
 
   if (cfg.features) {
     toggle("heroSection", cfg.features.heroSection);
-    toggle("quickAccessBar", cfg.features.quickAccessBar);
-    toggle("themeToggle", cfg.features.themeToggle);
-    toggle("languageSwitcher", cfg.features.languageSwitch);
-    toggle("discountSection", cfg.features.discountOffer);
+    toggle("discountSection", cfg.features.discountOffer && cfg.discount?.show);
     toggle("servicesSection", cfg.features.servicesSection);
     toggle("gallerySection", cfg.features.gallerySection);
     toggle("reviewsSection", cfg.features.reviewsSection);
     toggle("quoteFormSection", cfg.features.quoteFormSection);
     toggle("faqSection", cfg.features.faqSection);
-    toggle("locationSection", cfg.features.locationTracker);
-    toggle("footerSection", cfg.features.footerSection);
-    toggle("mobileBottomNav", cfg.features.mobileBottomNav);
   }
-
-  if (cfg.business && cfg.business.showElements) {
-    const el = cfg.business.showElements;
-    toggle("businessLogo", el.logo);
-    toggle("businessTagline", el.tagline);
-    toggle("businessLocation", el.location);
-    toggle("callBtn", el.phoneCall);
-    toggle("whatsappBtn", el.whatsappChat);
-    toggle("emailBtn", el.email);
-    toggle("websiteBtn", el.website);
-    toggle("mapsBtn", el.googleMaps);
-    toggle("facebookBtn", el.facebook);
-    toggle("instagramBtn", el.instagram);
-    toggle("youtubeBtn", el.youtube);
-    toggle("cardQRContainer", el.cardQR);
-    toggle("saveContactBtn", el.saveContactBtn);
-    toggle("shareBtn", el.shareBtn);
-  }
-}
-
-function setupQuickAccessLayoutSwitcher() {
-  const container = document.getElementById("quickGridContainer");
-  const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
-  if (!container || !buttons.length) return;
-
-  function applyQuickLayout(layoutName) {
-    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
-    container.classList.add(`layout-${layoutName}`);
-    buttons.forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-quick-layout") === layoutName));
-    localStorage.setItem("sandeepQuickLayout", layoutName);
-  }
-
-  buttons.forEach(btn => {
-    btn.onclick = function() {
-      const layout = this.getAttribute("data-quick-layout");
-      if (layout) applyQuickLayout(layout);
-    };
-  });
-
-  const savedLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
-  applyQuickLayout(savedLayout);
-}
-
-function setupServiceLayoutSwitcher() {
-  const container = document.getElementById("serviceContainer");
-  const buttons = document.querySelectorAll("#servicesLayoutBar .layout-btn");
-  if (!container || !buttons.length) return;
-
-  function applyServiceLayout(layoutName) {
-    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
-    container.classList.add(`layout-${layoutName}`);
-    buttons.forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-service-layout") === layoutName));
-    localStorage.setItem("sandeepServiceLayout", layoutName);
-  }
-
-  buttons.forEach(btn => {
-    btn.onclick = function() {
-      const layout = this.getAttribute("data-service-layout");
-      if (layout) applyServiceLayout(layout);
-    };
-  });
-
-  const savedLayout = localStorage.getItem("sandeepServiceLayout") || "grid-2";
-  applyServiceLayout(savedLayout);
 }
 
 function loadServices() {
   const container = document.getElementById("serviceContainer");
-  const serviceSelect = document.getElementById("serviceName");
   if (!container || !window.CARD_CONFIG) return;
 
   const services = window.CARD_CONFIG.services || [];
-  const settings = window.CARD_CONFIG.serviceSettings || {
-    showCategoryDescription: true,
-    showSubItems: true,
-    showPrices: true
-  };
-
   container.innerHTML = "";
-  if (serviceSelect) {
-    serviceSelect.innerHTML = `<option value="">Select Service</option>`;
-  }
 
-  services.forEach((service, index) => {
+  services.forEach((service, sIndex) => {
     if (service.show === false) return;
 
-    if (serviceSelect) {
-      const opt = document.createElement("option");
-      opt.value = service.title;
-      opt.textContent = service.title;
-      serviceSelect.appendChild(opt);
-    }
+    const visibleSub = (service.subServices || []).filter(sub => sub.show !== false);
+    const subListHtml = visibleSub.map((sub, subIndex) => {
+      const itemId = `item_${sIndex}_${subIndex}`;
+      const savedQty = selectedItemsMap[itemId]?.qty || 0;
+      const subName = sub[`name_${currentLang}`] || sub.name_en;
+      const subRate = sub[`rate_${currentLang}`] || sub.rate_en;
 
-    const visibleSubServices = (service.subServices || []).filter(sub => sub.show !== false);
-
-    const subListHtml = (settings.showSubItems && visibleSubServices.length > 0)
-      ? `
-        <div class="sub-services-list">
-          ${visibleSubServices.map(sub => `
-            <div class="sub-service-item">
-              <span class="sub-name">• ${sub.name}</span>
-              ${settings.showPrices ? `<span class="sub-rate">${sub.rate}</span>` : ""}
-            </div>
-          `).join("")}
+      return `
+        <div class="sub-service-item ${savedQty > 0 ? 'has-qty' : ''}" id="row_${itemId}">
+          <div class="sub-service-info">
+            <span class="sub-name">${subName}</span>
+            <span class="sub-rate">${subRate}</span>
+          </div>
+          <div class="qty-control">
+            <button type="button" class="qty-btn minus-btn" onclick="updateQty('${itemId}', -1, ${sub.price}, '${sIndex}', '${subIndex}')">−</button>
+            <span class="qty-val" id="qty_${itemId}">${savedQty}</span>
+            <button type="button" class="qty-btn plus-btn" onclick="updateQty('${itemId}', 1, ${sub.price}, '${sIndex}', '${subIndex}')">+</button>
+          </div>
         </div>
-      `
-      : "";
+      `;
+    }).join("");
 
-    const descHtml = (settings.showCategoryDescription && service.description)
-      ? `<p class="service-desc">${service.description}</p>`
-      : "";
+    const title = service[`title_${currentLang}`] || service.title_en;
+    const desc = service[`desc_${currentLang}`] || service.desc_en;
 
     const card = document.createElement("div");
     card.className = "service-card";
-    card.id = `service-${service.id || index}`;
     card.innerHTML = `
-      <div class="service-header" onclick="toggleServiceDetails(this)">
+      <div class="service-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="service-title-wrap">
           <span class="service-icon">${service.icon}</span>
-          <h3 class="service-title">${service.title}</h3>
+          <h3 class="service-title">${title}</h3>
         </div>
         <span class="toggle-arrow">▼</span>
       </div>
       <div class="service-body">
-        ${descHtml}
-        ${subListHtml}
+        ${desc ? `<p class="service-desc">${desc}</p>` : ""}
+        <div class="sub-services-list">${subListHtml}</div>
       </div>
     `;
-
     container.appendChild(card);
   });
 }
 
-function toggleServiceDetails(headerElement) {
-  const card = headerElement.closest(".service-card");
-  if (card) card.classList.toggle("open");
+function updateQty(itemId, change, price, sIndex, subIndex) {
+  const service = window.CARD_CONFIG.services[sIndex];
+  const sub = service.subServices[subIndex];
+
+  if (!selectedItemsMap[itemId]) {
+    selectedItemsMap[itemId] = {
+      name_en: sub.name_en,
+      name_hi: sub.name_hi,
+      category_en: service.title_en,
+      category_hi: service.title_hi,
+      rate_en: sub.rate_en,
+      rate_hi: sub.rate_hi,
+      price: price,
+      qty: 0
+    };
+  }
+
+  selectedItemsMap[itemId].qty += change;
+
+  if (selectedItemsMap[itemId].qty <= 0) {
+    delete selectedItemsMap[itemId];
+  }
+
+  const currentQty = selectedItemsMap[itemId]?.qty || 0;
+  const qtyEl = document.getElementById(`qty_${itemId}`);
+  const rowEl = document.getElementById(`row_${itemId}`);
+
+  if (qtyEl) qtyEl.innerText = currentQty;
+  if (rowEl) rowEl.classList.toggle("has-qty", currentQty > 0);
+
+  updateCalculationUI();
+}
+
+function updateCalculationUI() {
+  const t = UI_TEXT[currentLang];
+  const listContainer = document.getElementById("selectedServicesList");
+  const countEl = document.getElementById("selectedCount");
+  const subtotalEl = document.getElementById("calcSubtotal");
+  const discountRow = document.getElementById("calcDiscountRow");
+  const discountEl = document.getElementById("calcDiscount");
+  const grandTotalEl = document.getElementById("calcGrandTotal");
+  const discountLabel = document.getElementById("discountLabel");
+
+  if (!listContainer) return;
+
+  const items = Object.values(selectedItemsMap);
+  const totalCount = items.reduce((sum, itm) => sum + itm.qty, 0);
+
+  if (countEl) countEl.innerText = totalCount;
+
+  if (items.length === 0) {
+    listContainer.innerHTML = `<p class="no-selection-hint">${t.noSelection}</p>`;
+    subtotalEl.innerText = "₹0";
+    if (discountRow) discountRow.style.display = "none";
+    grandTotalEl.innerText = "₹0";
+    return;
+  }
+
+  listContainer.innerHTML = items.map(item => `
+    <div class="summary-item">
+      <span>• ${item[`name_${currentLang}`]} × <strong>${item.qty}</strong></span>
+      <strong>₹${item.price * item.qty}</strong>
+    </div>
+  `).join("");
+
+  const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
+  subtotalEl.innerText = `₹${subtotal}`;
+
+  const discountCfg = window.CARD_CONFIG?.discount || {};
+  const isDiscountActive = discountCfg.show === true && discountCfg.percentage > 0;
+
+  let discountAmount = 0;
+  if (isDiscountActive) {
+    discountAmount = Math.round(subtotal * (discountCfg.percentage / 100));
+    if (discountRow) {
+      discountRow.style.display = "flex";
+      discountLabel.innerText = `${t.discount} (${discountCfg.percentage}% OFF):`;
+      discountEl.innerText = `-₹${discountAmount}`;
+    }
+  } else {
+    if (discountRow) discountRow.style.display = "none";
+  }
+
+  const grandTotal = subtotal - discountAmount;
+  grandTotalEl.innerText = `₹${grandTotal}`;
+}
+
+function setupQuoteActions() {
+  document.getElementById("sendWhatsappBtn")?.addEventListener("click", sendWhatsappQuote);
+  document.getElementById("downloadPdfBtn")?.addEventListener("click", generateEstimatePDF);
+}
+
+function sendWhatsappQuote() {
+  const t = UI_TEXT[currentLang];
+  const name = document.getElementById("customerName")?.value.trim();
+  const phone = document.getElementById("customerPhone")?.value.trim();
+  const note = document.getElementById("customerMessage")?.value.trim();
+  const items = Object.values(selectedItemsMap);
+
+  if (!name || !phone) {
+    alert(t.alertMissing);
+    return;
+  }
+  if (items.length === 0) {
+    alert(t.alertEmpty);
+    return;
+  }
+
+  const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
+  const discountCfg = window.CARD_CONFIG?.discount || {};
+  const isDiscountActive = discountCfg.show === true && discountCfg.percentage > 0;
+  const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
+  const grandTotal = subtotal - discountAmount;
+
+  let text = `⚡ *${window.CARD_CONFIG?.business?.name || "Sandeep ElectroFix"} - ${t.estimateFor}* ⚡\n\n`;
+  text += `👤 *${currentLang === 'en' ? 'Customer' : 'ग्राहक'}:* ${name}\n`;
+  text += `📞 *${currentLang === 'en' ? 'Mobile' : 'मोबाइल'}:* ${phone}\n`;
+  if (note) text += `📍 *${currentLang === 'en' ? 'Site / Note' : 'पता / नोट'}:* ${note}\n`;
+  text += `\n📋 *${currentLang === 'en' ? 'Selected Services' : 'चुनी गई सेवाएँ'}:*\n`;
+
+  items.forEach((item, i) => {
+    const sName = item[`name_${currentLang}`];
+    const sRate = item[`rate_${currentLang}`];
+    text += `${i + 1}. ${sName} [Qty: ${item.qty}] — ₹${item.price * item.qty} (${sRate})\n`;
+  });
+
+  text += `\n💵 *${currentLang === 'en' ? 'Subtotal' : 'सबटोटल'}:* ₹${subtotal}\n`;
+  if (isDiscountActive) {
+    text += `🎁 *${currentLang === 'en' ? 'Discount' : 'छूट'} (${discountCfg.percentage}%):* -₹${discountAmount}\n`;
+  }
+  text += `✅ *${currentLang === 'en' ? 'Grand Total' : 'अंतिम राशि'}:* ₹${grandTotal}\n`;
+
+  const waNumber = window.CARD_CONFIG?.quote?.whatsappNumber || "919026036445";
+  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank");
+}
+
+function generateEstimatePDF() {
+  const { jsPDF } = window.jspdf;
+  if (!jsPDF) {
+    alert("PDF library error.");
+    return;
+  }
+
+  const t = UI_TEXT[currentLang];
+  const name = document.getElementById("customerName")?.value.trim() || "Customer";
+  const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
+  const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
+  const items = Object.values(selectedItemsMap);
+
+  if (items.length === 0) {
+    alert(t.alertEmpty);
+    return;
+  }
+
+  const doc = new jsPDF();
+  const biz = window.CARD_CONFIG?.business || {};
+  const discountCfg = window.CARD_CONFIG?.discount || {};
+
+  doc.setFillColor(5, 8, 22);
+  doc.rect(0, 0, 210, 40, "F");
+
+  doc.setTextColor(245, 197, 66);
+  doc.setFontSize(20);
+  doc.setFont("helvetica", "bold");
+  doc.text(biz.name || "Sandeep ElectroFix", 14, 20);
+
+  doc.setFontSize(10);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Phone: ${biz.phone} | Lucknow, UP`, 14, 28);
+  doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 160, 28);
+
+  doc.setTextColor(16, 24, 39);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("ESTIMATE SUMMARY", 14, 52);
+
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Client: ${name}`, 14, 60);
+  doc.text(`Phone: ${phone}`, 14, 66);
+  doc.text(`Address / Note: ${note}`, 14, 72);
+
+  const tableRows = items.map((item, index) => [
+    index + 1,
+    item.name_en,
+    `Rs. ${item.price}`,
+    item.qty,
+    `Rs. ${item.price * item.qty}`
+  ]);
+
+  const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
+  const isDiscountActive = discountCfg.show === true && discountCfg.percentage > 0;
+  const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
+  const grandTotal = subtotal - discountAmount;
+
+  doc.autoTable({
+    startY: 80,
+    head: [["#", "Service Item", "Rate", "Qty", "Total Amount"]],
+    body: tableRows,
+    theme: "grid",
+    headStyles: { fillColor: [5, 8, 22], textColor: [245, 197, 66], fontStyle: "bold" },
+    styles: { fontSize: 9, cellPadding: 4 }
+  });
+
+  const finalY = doc.lastAutoTable.finalY + 10;
+  doc.setFontSize(10);
+  doc.text(`Subtotal: Rs. ${subtotal}`, 140, finalY);
+  let nextY = finalY + 6;
+
+  if (isDiscountActive) {
+    doc.setTextColor(37, 211, 102);
+    doc.text(`Discount (${discountCfg.percentage}%): -Rs. ${discountAmount}`, 140, nextY);
+    nextY += 6;
+  }
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(16, 24, 39);
+  doc.text(`Grand Total: Rs. ${grandTotal}`, 140, nextY);
+
+  doc.save(`Estimate_${name.replace(/\s+/g, "_")}.pdf`);
 }
 
 function loadGallery() {
   const container = document.getElementById("galleryContainer");
   if (!container || !window.CARD_CONFIG) return;
-
   const galleryItems = (window.CARD_CONFIG.gallery || []).filter(item => item.show !== false);
   container.innerHTML = galleryItems.map(g => `
-    <div class="gallery-item">
-      <img src="${g.image}" alt="${g.title}" onclick="openLightbox('${g.image}')" onerror="this.parentElement.style.display='none'">
-      <div class="gallery-title">${g.title}</div>
-    </div>
+    <div class="gallery-item"><img src="${g.image}" alt="${g[`title_${currentLang}`]}"><div class="gallery-title">${g[`title_${currentLang}`]}</div></div>
   `).join("");
 }
-
-function openLightbox(src) {
-  const box = document.getElementById("lightbox");
-  const img = document.getElementById("lightboxImage");
-  if (box && img) {
-    img.src = src;
-    box.style.display = "flex";
-  }
-}
-
-document.getElementById("closeLightbox")?.addEventListener("click", () => {
-  document.getElementById("lightbox").style.display = "none";
-});
 
 function loadReviews() {
   const container = document.getElementById("reviewContainer");
   if (!container || !window.CARD_CONFIG) return;
-
   const reviewItems = (window.CARD_CONFIG.reviews || []).filter(item => item.show !== false);
   container.innerHTML = reviewItems.map(r => `
-    <div class="card review-card" style="text-align:left; padding:15px; margin-bottom:10px;">
-      <div style="color:#f59e0b; font-size:1.1rem;">${"★".repeat(r.rating || 5)}</div>
-      <p style="margin:6px 0; font-size:0.9rem;">"${r.text}"</p>
+    <div class="card review-card" style="padding:12px; margin-bottom:8px;">
+      <div style="color:#f59e0b;">${"★".repeat(r.rating || 5)}</div>
+      <p style="margin:4px 0; font-size:0.85rem;">"${r[`text_${currentLang}`]}"</p>
       <small style="color:#888;">— ${r.name}</small>
     </div>
   `).join("");
 }
 
-function getUserLocation() {
-  const status = document.getElementById("locationStatus");
-  if (!navigator.geolocation) {
-    status.innerText = "Geolocation is not supported by your browser.";
-    return;
-  }
-  status.innerText = "Locating your distance...";
-  
-  const shopLat = 26.8467;
-  const shopLon = 80.9462;
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const userLat = position.coords.latitude;
-      const userLon = position.coords.longitude;
-      
-      const R = 6371;
-      const dLat = (userLat - shopLat) * (Math.PI / 180);
-      const dLon = (userLon - shopLon) * (Math.PI / 180);
-      const a = 
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(shopLat * (Math.PI / 180)) * Math.cos(userLat * (Math.PI / 180)) * 
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      const distance = (R * c).toFixed(1);
-
-      status.innerHTML = `✅ You are approx <strong>${distance} km</strong> away from our service hub in Lucknow.`;
-    },
-    () => {
-      status.innerText = "Location permission denied or unavailable.";
-    }
-  );
-}
-
 function renderFAQ() {
   const container = document.getElementById("faqContainer");
   if (!container || !window.CARD_CONFIG) return;
-
   const faqList = (window.CARD_CONFIG.faq || []).filter(f => f.show !== false);
   container.innerHTML = faqList.map((f, i) => `
-    <div class="faq-item" id="faq-item-${i}">
-      <button class="faq-question" onclick="toggleFaq(${i})">
-        <span>${f.question}</span>
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-answer">${f.answer}</div>
+    <div class="faq-item" onclick="this.classList.toggle('active')">
+      <div class="faq-question"><span>${f[`question_${currentLang}`]}</span><span class="faq-icon">+</span></div>
+      <div class="faq-answer">${f[`answer_${currentLang}`]}</div>
     </div>
   `).join("");
-}
-
-function toggleFaq(index) {
-  const item = document.getElementById(`faq-item-${index}`);
-  if (item) item.classList.toggle("active");
-}
-
-function shareWebsite() {
-  if (navigator.share) {
-    navigator.share({
-      title: window.CARD_CONFIG?.business?.name || 'Sandeep ElectroFix',
-      text: 'Professional Electrical Services in Lucknow.',
-      url: window.location.href
-    }).catch((error) => console.log('Share canceled', error));
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Website link copied to clipboard!');
-  }
-}
-
-function setupQuoteCalculation() {
-  const totalInput = document.getElementById("serviceTotal");
-  const calcBox = document.getElementById("discountCalculation");
-  const sendBtn = document.getElementById("sendQuoteBtn");
-
-  const discountPercent = window.CARD_CONFIG?.discount?.percentage || 10;
-
-  totalInput?.addEventListener("input", () => {
-    const val = parseFloat(totalInput.value);
-    if (!isNaN(val) && val > 0) {
-      const discount = val * (discountPercent / 100);
-      const finalPrice = val - discount;
-      calcBox.style.display = "block";
-      calcBox.innerHTML = `
-        <div><span>Original Price:</span> <strong>₹${val.toFixed(2)}</strong></div>
-        <div><span>Discount (${discountPercent}% OFF):</span> <strong>-₹${discount.toFixed(2)}</strong></div>
-        <div class="final-price"><span>Net Payable:</span> <strong>₹${finalPrice.toFixed(2)}</strong></div>
-      `;
-    } else {
-      calcBox.style.display = "none";
-    }
-  });
-
-  sendBtn?.addEventListener("click", () => {
-    const name = document.getElementById("customerName")?.value.trim() || "";
-    const phone = document.getElementById("customerPhone")?.value.trim() || "";
-    const service = document.getElementById("serviceName")?.value || "";
-    const total = document.getElementById("serviceTotal")?.value.trim() || "";
-    const msg = document.getElementById("customerMessage")?.value.trim() || "";
-
-    const quoteCfg = window.CARD_CONFIG?.quote || {};
-
-    if (quoteCfg.requireName && !name) {
-      alert("Please provide your Name.");
-      return;
-    }
-    if (quoteCfg.requirePhone && !phone) {
-      alert("Please provide your Mobile Number.");
-      return;
-    }
-    if (quoteCfg.requireService && !service) {
-      alert("Please select a Service.");
-      return;
-    }
-
-    let text = `⚡ *${window.CARD_CONFIG?.business?.name || "Sandeep ElectroFix"} Enquiry* ⚡\n\n`;
-    text += `👤 *Name:* ${name}\n`;
-    text += `📞 *Phone:* ${phone}\n`;
-    if (service) text += `🛠️ *Service:* ${service}\n`;
-    if (total) {
-      const val = parseFloat(total);
-      const discount = val * (discountPercent / 100);
-      const finalPrice = val - discount;
-      text += `💰 *Est. Amount:* ₹${val}\n`;
-      text += `🎁 *Discount Applied (${discountPercent}%):* ₹${discount}\n`;
-      text += `✅ *Final Quote:* ₹${finalPrice}\n`;
-    }
-    if (msg) text += `📝 *Message:* ${msg}\n`;
-
-    const waNum = quoteCfg.whatsappNumber || window.CARD_CONFIG?.business?.whatsapp || "919026036445";
-    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(text)}`, "_blank");
-  });
 }
