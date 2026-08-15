@@ -1,5 +1,5 @@
 /* =========================================
-SANDEEP ELECTROFIX - REFINED STYLES
+SANDEEP ELECTROFIX - FULL PAGE BACKGROUND & REFINED CSS
 ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
@@ -19,6 +19,7 @@ SANDEEP ELECTROFIX - REFINED STYLES
   --radius: 20px;
 }
 
+/* Light Mode Override */
 html.saved-light-theme {
   --bg: #f4f7fb;
   --bg-secondary: #ffffff;
@@ -31,15 +32,31 @@ html.saved-light-theme {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+
+/* =========================================
+FULL PAGE BACKGROUND (DARK MODE COVER)
+========================================= */
 body {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   color: var(--text);
-  background: radial-gradient(circle at top, rgba(0, 191, 255, 0.08), transparent 32%), var(--bg);
+  
+  /* Dark Mode: Cover image with dark gradient overlay */
+  background: 
+    linear-gradient(180deg, rgba(5, 8, 22, 0.88) 0%, rgba(5, 8, 22, 0.95) 100%),
+    url('assets/cover.jpg') no-repeat center center fixed;
+  background-size: cover;
+  
   line-height: 1.6;
   overflow-x: hidden;
   padding-bottom: 85px;
 }
+
+html.saved-light-theme body {
+  background: #f4f7fb;
+  color: #101827;
+}
+
 a { color: inherit; text-decoration: none; }
 
 .background-glow {
@@ -58,7 +75,7 @@ TOP CONTROLS (LANGUAGE & THEME SIDE BY SIDE)
   justify-content: center;
   align-items: center;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
   flex-wrap: wrap;
 }
 
@@ -115,41 +132,23 @@ TOP CONTROLS (LANGUAGE & THEME SIDE BY SIDE)
 }
 
 /* =========================================
-HERO COVER & OVERLAPPING PROFILE
+HERO SECTION
 ========================================= */
 .hero {
   width: 100%;
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 25px 20px 20px;
+  padding: 20px 15px 15px;
   text-align: center;
 }
 
-.hero-cover {
-  width: 100%;
-  height: 160px;
-  margin: 0 auto -55px auto;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 215, 80, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
-.hero-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .hero-logo {
-  position: relative;
-  z-index: 2;
   width: 110px;
   height: 110px;
-  margin: 0 auto 12px auto;
+  margin: 10px auto 14px auto;
   border-radius: 50%;
-  background: #0b1224;
-  padding: 6px;
+  background: rgba(11, 18, 36, 0.9);
+  padding: 5px;
   border: 3px solid var(--gold);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
@@ -158,7 +157,8 @@ HERO COVER & OVERLAPPING PROFILE
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
+  display: block;
 }
 
 .hero h1 { font-size: 28px; font-weight: 800; margin: 4px 0; }
@@ -205,15 +205,15 @@ HERO COVER & OVERLAPPING PROFILE
 CENTERED DISCOUNT BANNER
 ========================================= */
 .discount-section {
-  width: min(100% - 28px, 950px);
-  margin: 0 auto 20px auto;
+  width: min(100% - 24px, 600px);
+  margin: 0 auto 16px auto;
   text-align: center;
 }
 
 .discount-card {
-  max-width: 650px;
+  width: 100%;
   margin: 0 auto;
-  padding: 22px 18px;
+  padding: 20px 16px;
   background: var(--card);
   border: 1px solid rgba(245, 197, 66, 0.4);
   border-radius: 20px;
@@ -233,7 +233,7 @@ CENTERED DISCOUNT BANNER
   font-weight: 700;
 }
 
-.discount-card h2 { font-size: 1.4rem; color: var(--text); }
+.discount-card h2 { font-size: 1.35rem; color: var(--text); }
 .discount-percent {
   font-size: clamp(2.4rem, 8vw, 3.5rem);
   font-weight: 800;
@@ -257,15 +257,15 @@ CENTERED DISCOUNT BANNER
 QUICK ACCESS GRID
 ========================================= */
 section {
-  width: min(100% - 28px, 950px);
-  margin: 0 auto 24px;
-  padding: 24px 18px;
+  width: min(100% - 24px, 600px);
+  margin: 0 auto 20px;
+  padding: 18px 14px;
 }
 
 section h2 {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: clamp(1.3rem, 5vw, 1.8rem);
+  margin-bottom: 18px;
+  font-size: clamp(1.3rem, 5vw, 1.7rem);
   font-weight: 700;
   color: var(--gold-light);
 }
@@ -300,7 +300,7 @@ section h2 {
 
 .catalogue-card-highlight {
   border-color: rgba(245, 197, 66, 0.45);
-  background: linear-gradient(180deg, rgba(245, 197, 66, 0.05), var(--card));
+  background: linear-gradient(180deg, rgba(245, 197, 66, 0.08), var(--card));
 }
 
 .card strong { font-size: 0.8rem; font-weight: 600; }
@@ -348,7 +348,7 @@ SECTIONS, ACCORDION & FORMS
 }
 .gallery-grid img {
   width: 100%;
-  height: 160px;
+  height: 150px;
   object-fit: cover;
   border-radius: 14px;
   border: 1px solid var(--card-border);
@@ -368,8 +368,7 @@ SECTIONS, ACCORDION & FORMS
 #closeLightbox { position: absolute; top: 20px; right: 25px; font-size: 36px; color: #fff; cursor: pointer; }
 
 .quote-form {
-  max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
