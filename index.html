@@ -4,22 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0ea5e9">
-    <meta name="robots" content="index, follow">
-    <meta name="google-site-verification" content="DcSvRpMWr7K4Mmvy0rl2-ZxAklY5g_b_017f0wl-LKU">
-    <title>Sandeep ElectroFix | Electrician in Lucknow | Electrical Services</title>
-    <meta name="description" content="Sandeep ElectroFix provides professional electrician and electrical services in Lucknow, Uttar Pradesh including house wiring, MCB & DB installation, false ceiling wiring, fan and light installation, inverter wiring, repair and fault finding.">
-    <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
-    <link rel="icon" type="image/png" href="assets/logo.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=10.0.0">
-    <script>
-        (function () {
-            try {
-                const savedTheme = localStorage.getItem("sandeepTheme");
-                if (savedTheme === "light") document.documentElement.classList.add("saved-light-theme");
-            } catch (error) { console.log("Theme storage unavailable"); }
-        })();
-    </script>
+    <title>Sandeep ElectroFix | Electrician in Lucknow</title>
+    <link rel="stylesheet" href="style.css?v=20.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body id="top">
      <div class="background-glow"></div>
@@ -31,13 +19,13 @@
               <span id="themeIcon">☀️</span> <span id="themeText">लाइट मोड</span>
             </button>
             <div class="language-switcher" id="languageSwitcher">
-              <button type="button" class="language-btn active" data-lang="hi">हिंदी</button>
-              <button type="button" class="language-btn" data-lang="en">English</button>
+              <button type="button" class="language-btn active" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+              <button type="button" class="language-btn" data-lang="en" onclick="setLanguage('en')">English</button>
             </div>
           </div>
 
           <div class="hero-logo" id="businessLogo">
-            <img src="assets/logo.png" alt="Sandeep ElectroFix Logo">
+            <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" onerror="this.style.display='none'">
           </div>
 
           <h1>Sandeep ElectroFix</h1>
@@ -71,212 +59,52 @@
          <h2>त्वरित सेवाएँ</h2>
          
          <div class="service-layout-bar" id="quickLayoutBar">
-            <button type="button" class="layout-btn active" data-quick-layout="grid-2">⊞ Grid</button>
-            <button type="button" class="layout-btn" data-quick-layout="carousel">⇆ Slider</button>
-            <button type="button" class="layout-btn" data-quick-layout="list">☰ List</button>
-            <button type="button" class="layout-btn" data-quick-layout="grid-3">☷ Mini</button>
+            <button type="button" class="layout-btn active" onclick="applyQuickLayout('grid-2')">⊞ Grid</button>
+            <button type="button" class="layout-btn" onclick="applyQuickLayout('carousel')">⇆ Slider</button>
+            <button type="button" class="layout-btn" onclick="applyQuickLayout('list')">☰ List</button>
+            <button type="button" class="layout-btn" onclick="applyQuickLayout('grid-3')">☷ Mini</button>
          </div>
 
          <div class="grid layout-grid-2" id="quickGridContainer">
-            <a href="tel:+919026036445" class="card" id="quickCall">
-                <span class="icon call-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <circle cx="24" cy="24" r="23" fill="#F5C542"/>
-                        <path fill="#111827" d="M33.2 28.5l-4.1-1.7c-.5-.2-1.1 0-1.5.4l-1.8 2.2c-3.1-1.6-5.6-4.1-7.2-7.2l2.2-1.8c.4-.4.6-1 .4-1.5l-1.7-4.1c-.2-.6-.9-1-1.6-1h-3.4c-.9 0-1.7.8-1.6 1.7 1.2 8.7 8.1 15.6 16.8 16.8.9.1 1.7-.7 1.7-1.6v-3.4c0-.7-.4-1.4-1.2-1.8z"/>
-                    </svg>
-                </span>
+            <a href="tel:+919026036445" class="card">
+                <span class="icon call-icon">📞</span>
                 <strong>कॉल करें</strong>
             </a>
-
-            <a href="https://wa.me/919026036445" class="card" target="_blank" rel="noopener" id="quickWhatsapp">
-                <span class="icon whatsapp-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <path fill="#25D366" d="M24 4C12.95 4 4 12.95 4 24c0 3.82 1.07 7.39 2.92 10.43L4 44l9.84-2.85C16.8 43.02 20.3 44 24 44c11.05 0 20-8.95 20-20S35.05 4 24 4z"/>
-                        <path fill="#FFFFFF" d="M34.6 28.9c-.48-.24-2.82-1.39-3.26-1.55-.44-.16-.76-.24-1.08.24-.32.48-1.24 1.55-1.52 1.87-.28.32-.56.36-1.04.12-2.92-1.25-5.11-3.69-6.38-5.88-.28-.48 0-.74.2-.98.2-.24.48-.56.72-.84.24-.28.32-.48.48-.8.16-.32 0-.6-.08-.84-.08-.24-1.04-2.51-1.43-3.44-.38-.91-.77-.79-1.06-.8h-.91c-.32 0-.84.12-1.28.6-.44.48-1.68 1.64-1.68 4s1.72 4.64 1.96 4.96c.24.32 3.39 5.18 8.21 7.26 3.12 1.35 4.34 1.48 5.88 1.25 1.04-.16 2.48-.96 2.83-1.89.35-.93.35-1.73.25-1.89-.1-.16-.38-.28-.84-.52z"/>
-                    </svg>
-                </span>
+            <a href="https://wa.me/919026036445" class="card" target="_blank" rel="noopener">
+                <span class="icon whatsapp-icon">💬</span>
                 <strong>व्हाट्सएप</strong>
             </a>
-
-            <a href="https://sandeepelectrofix.github.io/" class="card" target="_blank" rel="noopener" id="websiteBtn">
-                <span class="icon website-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <defs>
-                            <linearGradient id="webGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#00E5FF"/>
-                                <stop offset="100%" stop-color="#0066FF"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="24" cy="24" r="23" fill="url(#webGrad)"/>
-                        <ellipse cx="24" cy="24" rx="10" ry="21" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
-                        <line x1="3" y1="24" x2="45" y2="24" stroke="#FFFFFF" stroke-width="2.5"/>
-                        <line x1="24" y1="1" x2="24" y2="47" stroke="#FFFFFF" stroke-width="2.5"/>
-                        <path d="M7 14h34M7 34h34" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </span>
+            <a href="https://sandeepelectrofix.github.io/" class="card" target="_blank" rel="noopener">
+                <span class="icon website-icon">🌐</span>
                 <strong>वेबसाइट</strong>
             </a>
-
-            <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="card" target="_blank" rel="noopener" id="mapsBtn">
-                <span class="icon maps-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <path fill="#4285F4" d="M24 4C15.2 4 8 11.2 8 20c0 10.5 13.5 22.8 15.2 24.3.5.4 1.1.4 1.6 0C26.5 42.8 40 30.5 40 20c0-8.8-7.2-16-16-16z"/>
-                        <circle cx="24" cy="19" r="6" fill="#FFFFFF"/>
-                        <path fill="#EA4335" d="M24 4c-8.8 0-16 7.2-16 16 0 4.2 1.6 8 4.3 11l11.7-11.7V4z"/>
-                        <path fill="#FBBC04" d="M8 20c0 3.8 1.4 7.3 3.7 10.1l12.3-10.8V13.3L10.3 8.6C8.8 11.8 8 15.7 8 20z"/>
-                        <path fill="#34A853" d="M24 44.3c.5-.4 16-14.8 16-24.3 0-3-.8-5.8-2.2-8.3L24 24.5v19.8z"/>
-                    </svg>
-                </span>
+            <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="card" target="_blank" rel="noopener">
+                <span class="icon maps-icon">🗺️</span>
                 <strong>गूगल मैप्स</strong>
             </a>
-
-            <a href="https://www.facebook.com/SandeepElectroFix" class="card" target="_blank" rel="noopener" id="facebookBtn">
-                <span class="icon facebook-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <circle cx="24" cy="24" r="23" fill="#1877F2"/>
-                        <path fill="#FFFFFF" d="M26.7 37V24.3h4.3l.6-5h-4.9v-3.2c0-1.4.4-2.4 2.5-2.4h2.6V9.2c-.5-.1-2-.2-3.8-.2-3.8 0-6.4 2.3-6.4 6.6v3.7h-4.3v5h4.3V37h5.1z"/>
-                    </svg>
-                </span>
-                <strong>Facebook</strong>
-            </a>
-
-            <a href="https://www.instagram.com/sandeep_electrofix" class="card" target="_blank" rel="noopener" id="instagramBtn">
-                <span class="icon instagram-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <defs>
-                            <radialGradient id="igGrad" cx="20%" cy="100%" r="120%">
-                                <stop offset="0%" stop-color="#FFD521"/>
-                                <stop offset="30%" stop-color="#F50000"/>
-                                <stop offset="60%" stop-color="#B900B4"/>
-                                <stop offset="100%" stop-color="#4B00C3"/>
-                            </radialGradient>
-                        </defs>
-                        <rect width="46" height="46" x="1" y="1" rx="12" fill="url(#igGrad)"/>
-                        <rect width="26" height="26" x="11" y="11" rx="8" fill="none" stroke="#FFFFFF" stroke-width="3"/>
-                        <circle cx="24" cy="24" r="6" fill="none" stroke="#FFFFFF" stroke-width="3"/>
-                        <circle cx="31.5" cy="16.5" r="1.5" fill="#FFFFFF"/>
-                    </svg>
-                </span>
-                <strong>Instagram</strong>
-            </a>
-
-            <a href="https://youtube.com/@sandeepelectrofix" class="card" target="_blank" rel="noopener" id="youtubeBtn">
-                <span class="icon youtube-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <path fill="#FF0000" d="M43.2 14.8c-.5-1.9-2-3.4-3.9-3.9C35.8 10 24 10 24 10s-11.8 0-15.3.9c-1.9.5-3.4 2-3.9 3.9C4 18.3 4 24 4 24s0 5.7.9 9.2c.5 1.9 2 3.4 3.9 3.9 3.5.9 15.3.9 15.3.9s11.8 0 15.3-.9c1.9-.5 3.4-2 3.9-3.9.9-3.5.9-9.2.9-9.2s0-5.7-.9-9.2z"/>
-                        <polygon fill="#FFFFFF" points="20,18 20,30 30,24"/>
-                    </svg>
-                </span>
-                <strong>YouTube</strong>
-            </a>
-
-            <a href="mailto:SandeepElectroFix@gmail.com" class="card" id="emailBtn">
-                <span class="icon email-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <circle cx="24" cy="24" r="23" fill="#EA4335"/>
-                        <path fill="#FFFFFF" d="M12 16c0-1.1.9-2 2-2h20c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H14c-1.1 0-2-.9-2-2V16zm4 2l8 5 8-5h-16zm16 12V20.5l-8 5-8-5V30h16z"/>
-                    </svg>
-                </span>
-                <strong>ईमेल</strong>
-            </a>
-
-            <a href="javascript:void(0)" class="card" onclick="shareWebsite()" id="shareBtn">
-                <span class="icon share-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <circle cx="24" cy="24" r="23" fill="#25D366"/>
-                        <path fill="#FFFFFF" d="M34 16c0-2.2-1.8-4-4-4s-4 1.8-4 4c0 .3 0 .7.1 1L17.5 21.3c-.7-.8-1.8-1.3-3-1.3-2.2 0-4 1.8-4 4s1.8 4 4 4c1.2 0 2.3-.5 3-1.3l8.6 4.3c-.1.3-.1.7-.1 1 0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1.2 0-2.3.5-3 1.3L17.5 25c.1-.3.1-.7.1-1s0-.7-.1-1l8.6-4.3c.7.8 1.8 1.3 3 1.3 2.2 0 4-1.8 4-4z"/>
-                    </svg>
-                </span>
+            <a href="javascript:void(0)" class="card" onclick="shareWebsite()">
+                <span class="icon share-icon">🔗</span>
                 <strong>शेयर करें</strong>
             </a>
-
             <a href="our-work.html" class="card">
-                <span class="icon work-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <defs>
-                            <linearGradient id="camGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#FF9900"/>
-                                <stop offset="100%" stop-color="#FF5500"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="24" cy="24" r="23" fill="url(#camGrad)"/>
-                        <path fill="#FFFFFF" d="M18 14l-2 3h-4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2V19c0-1.1-.9-2-2-2h-4l-2-3H18zm6 18c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm0-10c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"/>
-                    </svg>
-                </span>
+                <span class="icon work-icon">📸</span>
                 <strong>हमारे कार्य</strong>
-            </a>
-
-            <a href="material-catalogue.html" class="card catalogue-card-highlight">
-                <span class="icon catalogue-icon">
-                    <svg viewBox="0 0 48 48" width="32" height="32">
-                        <circle cx="24" cy="24" r="23" fill="#F5C542"/>
-                        <path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM14.2 12l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/>
-                    </svg>
-                </span>
-                <strong>सामग्री सूची</strong>
             </a>
          </div>
      </section>
 
-     <!-- ABOUT SECTION -->
-     <section class="about">
-         <h2>हमारे बारे में</h2>
-         <p><strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।</p>
-     </section>  
-
-     <!-- SERVICE LOCATION SECTION -->
-     <section id="locationSection" class="location-box">
-        <h2>📍 सेवा क्षेत्र एवं लोकेशन</h2>
-        <p>पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।</p>
-        
-        <button type="button" class="location-btn" id="checkLocationBtn" onclick="getUserLocation()">
-            <span>📡</span> <span>हमारे यहाँ से अपनी दूरी चेक करें</span>
-        </button>
-        
-        <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="location-btn maps-btn" target="_blank" rel="noopener">
-            <span>🗺️</span> <span>गूगल मैप्स पर रास्ता देखें</span>
-        </a>
-        
-        <div id="locationStatus" class="location-status"></div>
-     </section>
-     
      <!-- SERVICES SECTION -->
      <section id="servicesSection" class="services">
         <h2 id="servicesHeading">हमारी सेवाएँ</h2>
         
         <div class="service-layout-bar" id="servicesLayoutBar">
-          <button type="button" class="layout-btn active" data-service-layout="list">☰ List</button>
-          <button type="button" class="layout-btn" data-service-layout="grid-2">⊞ Grid</button>
-          <button type="button" class="layout-btn" data-service-layout="carousel">⇆ Slider</button>
-          <button type="button" class="layout-btn" data-service-layout="grid-3">☷ Mini</button>
+          <button type="button" class="layout-btn active" onclick="applyServiceLayout('list')">☰ List</button>
+          <button type="button" class="layout-btn" onclick="applyServiceLayout('grid-2')">⊞ Grid</button>
+          <button type="button" class="layout-btn" onclick="applyServiceLayout('carousel')">⇆ Slider</button>
+          <button type="button" class="layout-btn" onclick="applyServiceLayout('grid-3')">☷ Mini</button>
         </div>
 
         <div class="service-grid layout-list" id="serviceContainer"></div>
-     </section>
-
-     <!-- GALLERY SECTION -->
-     <section id="gallerySection" class="gallery">
-        <h2>हमारे द्वारा किए गए कार्य</h2>
-        <div class="gallery-grid" id="galleryContainer"></div>
-     </section>
-
-     <!-- LIGHTBOX -->
-     <div id="lightbox"><span id="closeLightbox">&times;</span><img id="lightboxImage" src="" alt="Work"></div>
-
-     <!-- SCAN QR SECTION -->
-     <section id="cardQRContainer" class="qr-section">
-        <h2>क्यूआर कोड स्कैन करें</h2>
-        <p>हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।</p>
-        <div class="qr-container">
-            <img src="assets/qr.png" alt="Sandeep ElectroFix QR" id="cardQR" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sandeepelectrofix.github.io/SandeepElectroFix-Card/'">
-        </div>
-        <a href="assets/qr.png" download="SandeepElectroFix_QR.png" class="btn download-qr-btn">📥 क्यूआर कोड डाउनलोड करें</a>
-     </section>
-
-     <!-- REVIEWS SECTION -->
-     <section id="reviewsSection">
-        <h2>ग्राहकों की राय</h2>
-        <div class="review-grid" id="reviewContainer"></div>
      </section>
 
      <!-- QUOTE & ESTIMATE FORM SECTION -->
@@ -288,7 +116,6 @@
               <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *">
               <textarea id="customerMessage" rows="2" placeholder="पता / कार्य का विवरण..."></textarea>
               
-              <!-- Realtime Calculation & Items Summary Box -->
               <div id="estimateSummaryBox" class="estimate-summary-box">
                   <div class="summary-heading">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
                   <div id="selectedServicesList" class="selected-services-list">
@@ -302,10 +129,9 @@
                   <div class="calc-row total-row"><span>अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
               </div>
 
-              <!-- Action Buttons -->
               <div class="quote-action-buttons">
-                <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn">💬 व्हाट्सएप पर भेजें</button>
-                <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
+                <button type="button" class="btn whatsapp-btn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
+                <button type="button" class="btn pdf-download-btn" onclick="downloadEstimatePDF()">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
               </div>
           </div>
         </div>
@@ -322,19 +148,294 @@
         <p>&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
      </footer>
 
-     <!-- BOTTOM NAVIGATION BAR -->
-     <nav class="mobile-bottom-nav" id="mobileBottomNav">
+     <!-- BOTTOM NAV -->
+     <nav class="mobile-bottom-nav">
         <a href="#top" class="bottom-nav-item"><span>🏠</span><small>होम</small></a>
         <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small>सेवाएं</small></a>
-        <a href="#gallerySection" class="bottom-nav-item"><span>📸</span><small>कार्य</small></a>
         <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small>कोट</small></a>
         <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small>कॉल</small></a>
      </nav>
 
-     <!-- SCRIPTS -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-     <script src="config.js?v=10.0.0"></script>
-     <script src="app.js?v=10.0.0"></script>
+     <!-- INTEGRATED JAVASCRIPT LOGIC -->
+     <script>
+        const CARD_DATA = {
+            services: [
+                {
+                    title_en: "House Wiring", title_hi: "हाउस वायरिंग", icon: "🏠",
+                    desc_en: "Complete house wiring solutions.", desc_hi: "नए और पुराने मकान की पूरी वायरिंग।",
+                    subServices: [
+                        { name_en: "New House Wiring", name_hi: "नए मकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45 },
+                        { name_en: "Concealed Wiring", name_hi: "कंसील्ड वायरिंग", rate_en: "₹40 / sq.ft.", rate_hi: "₹40 / वर्ग फीट", price: 40 },
+                        { name_en: "Switch & Socket Fitting", name_hi: "स्विच सॉकेट फिटिंग", rate_en: "₹80 / pt", rate_hi: "₹80 / पॉइंट", price: 80 }
+                    ]
+                },
+                {
+                    title_en: "Light & Fan Fitting", title_hi: "लाइट और पंखा फिटिंग", icon: "💡",
+                    desc_en: "Installation of lights and fans.", desc_hi: "सीलिंग फैन, एग्जॉस्ट फैन और लाइट फिटिंग।",
+                    subServices: [
+                        { name_en: "Ceiling Fan Installation", name_hi: "सीलिंग पंखा फिटिंग", rate_en: "₹250 / fan", rate_hi: "₹250 / पंखा", price: 250 },
+                        { name_en: "LED Light Fitting", name_hi: "एलईडी लाइट इंस्टॉलेशन", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
+                        { name_en: "Exhaust Fan Fitting", name_hi: "एग्जॉस्ट पंखा फिटिंग", rate_en: "₹200 / fan", rate_hi: "₹200 / पंखा", price: 200 }
+                    ]
+                },
+                {
+                    title_en: "MCB & DB Work", title_hi: "एमसीबी और डीबी पैनल वर्क", icon: "🔌",
+                    desc_en: "MCB, DB and circuit safety setup.", desc_hi: "एमसीबी और डिस्ट्रीब्यूशन बोर्ड फिटिंग।",
+                    subServices: [
+                        { name_en: "MCB Installation", name_hi: "एमसीबी फिटिंग", rate_en: "₹150 / MCB", rate_hi: "₹150 / MCB", price: 150 },
+                        { name_en: "DB Box Setup", name_hi: "डीबी बॉक्स सेटअप", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 },
+                        { name_en: "RCCB / RCBO Fitting", name_hi: "आरसीसीबी फिटिंग", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 }
+                    ]
+                },
+                {
+                    title_en: "False Ceiling Wiring", title_hi: "फॉल्स सीलिंग वायरिंग", icon: "🏗️",
+                    desc_en: "Wiring for COB and profile lights.", desc_hi: "फॉल्स सीलिंग लाइट्स और प्रोफाइल वायरिंग।",
+                    subServices: [
+                        { name_en: "Profile Light Wiring", name_hi: "प्रोफाइल लाइट वायरिंग", rate_en: "₹10 / sq.ft.", rate_hi: "₹10 / वर्ग फीट", price: 10 },
+                        { name_en: "COB / Downlight Wiring", name_hi: "डाउनलाइट वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 }
+                    ]
+                },
+                {
+                    title_en: "Inverter Connection", title_hi: "इन्वर्टर और बैटरी कनेक्शन", icon: "🔋",
+                    desc_en: "Inverter battery setup and wiring.", desc_hi: "इन्वर्टर कनेक्शन और बैकअप वायरिंग।",
+                    subServices: [
+                        { name_en: "Inverter Installation", name_hi: "इन्वर्टर इंस्टॉलेशन", rate_en: "₹500 / set", rate_hi: "₹500 / सेट", price: 500 },
+                        { name_en: "Changeover Switch", name_hi: "चेंजओवर स्विच लगाना", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 }
+                    ]
+                },
+                {
+                    title_en: "Repair & Fault Finding", title_hi: "रिपेयर और फॉल्ट चेकिंग", icon: "🔧",
+                    desc_en: "Short circuit and power fault testing.", desc_hi: "शॉर्ट सर्किट और लाइन फॉल्ट रिपेयर।",
+                    subServices: [
+                        { name_en: "Short Circuit Detection", name_hi: "शॉर्ट सर्किट पकड़ना", rate_en: "₹300 / visit", rate_hi: "₹300 / विजिट", price: 300 },
+                        { name_en: "Switch / Socket Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / pt", rate_hi: "₹80 / पॉइंट", price: 80 }
+                    ]
+                }
+            ],
+            faq: [
+                { q_en: "Do you do complete house wiring?", q_hi: "क्या आप पूरे मकान की वायरिंग करते हैं?", a_en: "Yes, complete concealed and surface wiring.", a_hi: "हाँ, हम नए और पुराने मकानों की पूरी अंडरग्राउंड व ओपन वायरिंग करते हैं।" },
+                { q_en: "Do you fix short circuits?", q_hi: "क्या आप शॉर्ट सर्किट ठीक करते हैं?", a_en: "Yes, fast and safe fault troubleshooting.", a_hi: "हाँ, शॉर्ट सर्किट और एमसीबी ट्रिपिंग तुरंत चेक करके ठीक करते हैं।" }
+            ]
+        };
+
+        let currentLang = "hi";
+        let selectedMap = {};
+
+        function renderServices() {
+            const container = document.getElementById("serviceContainer");
+            if (!container) return;
+            container.innerHTML = "";
+
+            CARD_DATA.services.forEach((service, sIdx) => {
+                const title = currentLang === "hi" ? service.title_hi : service.title_en;
+                const desc = currentLang === "hi" ? service.desc_hi : service.desc_en;
+
+                const subHtml = service.subServices.map((sub, subIdx) => {
+                    const key = `${sIdx}_${subIdx}`;
+                    const qty = selectedMap[key]?.qty || 0;
+                    const name = currentLang === "hi" ? sub.name_hi : sub.name_en;
+                    const rate = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
+
+                    return `
+                        <div class="sub-service-item ${qty > 0 ? 'has-qty' : ''}" id="row_${key}">
+                            <div class="sub-service-info">
+                                <span class="sub-name">${name}</span>
+                                <span class="sub-rate">${rate}</span>
+                            </div>
+                            <div class="qty-control" onclick="event.stopPropagation();">
+                                <button type="button" class="qty-btn minus-btn" onclick="changeQty(${sIdx}, ${subIdx}, -1)">−</button>
+                                <span class="qty-val" id="qty_${key}">${qty}</span>
+                                <button type="button" class="qty-btn plus-btn" onclick="changeQty(${sIdx}, ${subIdx}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                const card = document.createElement("div");
+                card.className = "service-card";
+                card.innerHTML = `
+                    <div class="service-header" onclick="this.parentElement.classList.toggle('open')">
+                        <div class="service-title-wrap">
+                            <span class="service-icon">${service.icon}</span>
+                            <h3 class="service-title">${title}</h3>
+                        </div>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                    <div class="service-body">
+                        <p class="service-desc">${desc}</p>
+                        <div class="sub-services-list">${subHtml}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function changeQty(sIdx, subIdx, change) {
+            const key = `${sIdx}_${subIdx}`;
+            const sub = CARD_DATA.services[sIdx].subServices[subIdx];
+
+            if (!selectedMap[key]) {
+                selectedMap[key] = {
+                    name_hi: sub.name_hi,
+                    name_en: sub.name_en,
+                    price: sub.price,
+                    qty: 0
+                };
+            }
+
+            selectedMap[key].qty += change;
+            if (selectedMap[key].qty <= 0) delete selectedMap[key];
+
+            const currentQty = selectedMap[key]?.qty || 0;
+            const qEl = document.getElementById(`qty_${key}`);
+            const rEl = document.getElementById(`row_${key}`);
+
+            if (qEl) qEl.innerText = currentQty;
+            if (rEl) rEl.classList.toggle("has-qty", currentQty > 0);
+
+            updateCalculations();
+        }
+
+        function updateCalculations() {
+            const items = Object.values(selectedMap);
+            const countEl = document.getElementById("selectedCount");
+            const listEl = document.getElementById("selectedServicesList");
+            const subtotalEl = document.getElementById("calcSubtotal");
+            const discRow = document.getElementById("calcDiscountRow");
+            const discEl = document.getElementById("calcDiscount");
+            const totalEl = document.getElementById("calcGrandTotal");
+
+            const count = items.reduce((acc, itm) => acc + itm.qty, 0);
+            if (countEl) countEl.innerText = count;
+
+            if (items.length === 0) {
+                if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'कोई सेवा नहीं चुनी गई।' : 'No services selected.'}</p>`;
+                if (subtotalEl) subtotalEl.innerText = "₹0";
+                if (discRow) discRow.style.display = "none";
+                if (totalEl) totalEl.innerText = "₹0";
+                return;
+            }
+
+            if (listEl) {
+                listEl.innerHTML = items.map(itm => `
+                    <div class="summary-item">
+                        <span>• ${currentLang === 'hi' ? itm.name_hi : itm.name_en} × <strong>${itm.qty}</strong></span>
+                        <strong>₹${itm.price * itm.qty}</strong>
+                    </div>
+                `).join("");
+            }
+
+            const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
+            const discount = Math.round(subtotal * 0.10);
+            const total = subtotal - discount;
+
+            if (subtotalEl) subtotalEl.innerText = `₹${subtotal}`;
+            if (discRow) discRow.style.display = "flex";
+            if (discEl) discEl.innerText = `-₹${discount}`;
+            if (totalEl) totalEl.innerText = `₹${total}`;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll(".language-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-lang") === lang));
+            
+            document.getElementById("businessTagline").innerText = lang === "hi" ? "आपके विश्वास को रोशन करते हुए" : "Powering Your Trust";
+            document.getElementById("businessLocation").innerText = lang === "hi" ? "📍 लखनऊ, उत्तर प्रदेश" : "📍 Lucknow, Uttar Pradesh";
+            document.getElementById("callBtnText").innerText = lang === "hi" ? "📞 अभी कॉल करें" : "📞 Call Now";
+            document.getElementById("whatsappBtnText").innerText = lang === "hi" ? "💬 व्हाट्सएप करें" : "💬 WhatsApp";
+            document.getElementById("servicesHeading").innerText = lang === "hi" ? "हमारी सेवाएँ" : "Our Services";
+            document.getElementById("faqHeading").innerText = lang === "hi" ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
+
+            renderServices();
+            renderFAQ();
+            updateCalculations();
+        }
+
+        function renderFAQ() {
+            const container = document.getElementById("faqContainer");
+            if (!container) return;
+            container.innerHTML = CARD_DATA.faq.map(f => `
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question"><span>${currentLang === 'hi' ? f.q_hi : f.q_en}</span><span class="faq-icon">+</span></div>
+                    <div class="faq-answer">${currentLang === 'hi' ? f.a_hi : f.a_en}</div>
+                </div>
+            `).join("");
+        }
+
+        function applyQuickLayout(layout) {
+            const container = document.getElementById("quickGridContainer");
+            if (container) container.className = `grid layout-${layout}`;
+            document.querySelectorAll("#quickLayoutBar .layout-btn").forEach(b => {
+                b.classList.toggle("active", b.getAttribute("onclick").includes(layout));
+            });
+        }
+
+        function applyServiceLayout(layout) {
+            const container = document.getElementById("serviceContainer");
+            if (container) container.className = `service-grid layout-${layout}`;
+            document.querySelectorAll("#servicesLayoutBar .layout-btn").forEach(b => {
+                b.classList.toggle("active", b.getAttribute("onclick").includes(layout));
+            });
+        }
+
+        function sendWhatsappQuote() {
+            const name = document.getElementById("customerName")?.value.trim();
+            const phone = document.getElementById("customerPhone")?.value.trim();
+            const note = document.getElementById("customerMessage")?.value.trim();
+            const items = Object.values(selectedMap);
+
+            if (!name || !phone) return alert("कृपया अपना नाम और मोबाइल नंबर दर्ज करें।");
+            if (items.length === 0) return alert("कृपया + बटन से कोई सेवा चुनें।");
+
+            const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
+            const total = subtotal - Math.round(subtotal * 0.10);
+
+            let msg = `⚡ *Sandeep ElectroFix - Estimate* ⚡\n\n`;
+            msg += `👤 *ग्राहक:* ${name}\n📞 *मोबाइल:* ${phone}\n`;
+            if (note) msg += `📍 *पता:* ${note}\n`;
+            msg += `\n📋 *सेवाएँ:*\n`;
+            items.forEach((itm, i) => {
+                msg += `${i+1}. ${itm.name_hi} [Qty: ${itm.qty}] - ₹${itm.price * itm.qty}\n`;
+            });
+            msg += `\n✅ *कुल राशि:* ₹${total} (10% छूट के बाद)`;
+
+            window.open(`https://wa.me/919026036445?text=${encodeURIComponent(msg)}`, "_blank");
+        }
+
+        function downloadEstimatePDF() {
+            if (!window.jspdf) return alert("PDF Library load ho rahi hai...");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const items = Object.values(selectedMap);
+            if (items.length === 0) return alert("कृपया पहले सेवा चुनें।");
+
+            doc.setFillColor(5, 8, 22);
+            doc.rect(0, 0, 210, 30, "F");
+            doc.setTextColor(245, 197, 66);
+            doc.setFontSize(16);
+            doc.text("Sandeep ElectroFix - Estimate", 14, 18);
+
+            const rows = items.map((itm, i) => [i + 1, itm.name_en, `Rs. ${itm.price}`, itm.qty, `Rs. ${itm.price * itm.qty}`]);
+            doc.autoTable({ startY: 40, head: [["#", "Service", "Rate", "Qty", "Total"]], body: rows });
+            doc.save("Estimate.pdf");
+        }
+
+        function shareWebsite() {
+            if (navigator.share) {
+                navigator.share({ title: 'Sandeep ElectroFix', url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied!");
+            }
+        }
+
+        // Init
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("themeToggle")?.addEventListener("click", () => {
+                document.documentElement.classList.toggle("saved-light-theme");
+            });
+            setLanguage('hi');
+        });
+     </script>
 </body>
 </html>
