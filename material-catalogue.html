@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070b12">
+    <meta name="description" content="Sandeep ElectroFix Material Catalogue - Electrical wires, conduit pipes, switches, sockets, MCB, RCCB, DB boxes, lighting and electrical accessories.">
+    <meta name="keywords" content="electrical material, electrical shop, electrical wire, PVC conduit, MCB, RCCB, switches, sockets, electrical accessories, Lucknow electrician, Sandeep ElectroFix">
+    <meta name="author" content="Sandeep ElectroFix">
+
+    <title>Material Catalogue | Sandeep ElectroFix</title>
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="material-catalogue.css">
+</head>
+<body>
+
+    <div class="catalogue-background" aria-hidden="true"></div>
+
+    <!-- HEADER -->
+    <header class="catalogue-header">
+        <a href="index.html" class="back-button" id="backButton" aria-label="Back to home" title="Back">←</a>
+        <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" class="catalogue-logo">
+        <h1>Material Catalogue</h1>
+        <p class="catalogue-subtitle">
+            Electrical Materials & Accessories<br>
+            <span>Sandeep ElectroFix • Lucknow</span>
+        </p>
+    </header>
+
+    <!-- SEARCH TOOLBAR -->
+    <section class="catalogue-toolbar" aria-label="Catalogue Search">
+        <div class="search-box">
+            <input type="search" id="materialSearch" placeholder="Search material..." autocomplete="off" aria-label="Search materials">
+            <button type="button" class="clear-search" id="clearSearch" aria-label="Clear search" title="Clear search">×</button>
+        </div>
+        <button type="button" class="search-toggle" id="searchToggle" aria-label="Toggle search" title="Search">🔍</button>
+    </section>
+
+    <!-- SEARCH PANEL -->
+    <div class="catalogue-search-panel" id="searchPanel">
+        <div style="padding:12px 14px; border-radius:14px; background:rgba(255,255,255,0.045); border:1px solid rgba(255,255,255,0.08); color:#9da9b9; font-size:12px;">
+            Search by material name, category or size.
+        </div>
+    </div>
+
+    <!-- CATEGORY SECTION -->
+    <section class="category-section">
+        <div class="section-label">
+            <h2>Categories</h2>
+            <span class="product-counter" id="productCounter">0 Materials</span>
+        </div>
+        <div class="category-container" id="categoryContainer" aria-label="Material Categories"></div>
+    </section>
+
+    <!-- PRODUCTS SECTION -->
+    <main class="products-section">
+        <div class="products-grid" id="productsGrid"></div>
+
+        <!-- NO PRODUCTS -->
+        <div class="no-products" id="noProducts">
+            <div class="no-products-icon">🔎</div>
+            <h3>No Material Found</h3>
+            <p style="margin-top:6px; font-size:12px;">Try another material name, category or size.</p>
+            <button type="button" class="reset-filters" id="resetFilters">Reset Search</button>
+        </div>
+    </main>
+
+    <!-- PRODUCT MODAL -->
+    <div class="product-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalProductTitle">
+        <div class="modal-backdrop" aria-hidden="true"></div>
+        <div class="modal-box">
+            <button type="button" class="modal-close" id="modalClose" aria-label="Close product details" title="Close">×</button>
+            <div class="modal-product-image">
+                <img id="modalProductImage" src="" alt="">
+            </div>
+            <div class="modal-product-content">
+                <span class="modal-product-tag" id="modalProductTag">CATEGORY</span>
+                <h2 id="modalProductTitle">Product Name</h2>
+                <div class="modal-product-size" id="modalProductSize">Size</div>
+                <div class="modal-product-price" id="modalProductPrice">Price on Request</div>
+                <p class="modal-product-description" id="modalProductDescription">Product description</p>
+                <div class="modal-specifications">
+                    <h3>Specifications</h3>
+                    <ul id="modalSpecifications"></ul>
+                </div>
+                <a href="#" class="modal-whatsapp" id="modalWhatsapp" role="button">💬 Enquire on WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="catalogue-footer">
+        <strong>⚡ SANDEEP ELECTROFIX</strong><br>
+        Electrical Services • Materials • Solutions<br><br>
+        Lucknow, Uttar Pradesh<br>
+        © <span id="currentYear"></span> Sandeep ElectroFix
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
+    <script src="material-catalogue.js" defer></script>
+</body>
+</html>
