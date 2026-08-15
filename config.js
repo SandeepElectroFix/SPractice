@@ -1,13 +1,13 @@
 /* =========================================================
    SANDEEP ELECTROFIX
    SMART DIGITAL CARD CONFIGURATION
-   Version 3.0.0
+   Version 3.1.0 - Full Visibility & Toggle Control
 ========================================================= */
 
 window.CARD_CONFIG = {
 
     /* =====================================================
-       BUSINESS PROFILE
+       BUSINESS PROFILE & SOCIAL LINKS VISIBILITY
     ===================================================== */
     business: {
         name: "Sandeep ElectroFix",
@@ -24,30 +24,60 @@ window.CARD_CONFIG = {
         instagram: "https://www.instagram.com/sandeep_electrofix",
         youtube: "https://youtube.com/@sandeepelectrofix",
         logo: "assets/logo.png",
-        cardQR: "assets/qr-card.png"
+        cardQR: "assets/qr-card.png",
+
+        // Individual Contact & Social Button Controls
+        showElements: {
+            logo: true,
+            tagline: true,
+            location: true,
+            phoneCall: true,
+            whatsappChat: true,
+            email: true,
+            website: true,
+            googleMaps: true,
+            facebook: true,
+            instagram: true,
+            youtube: true,
+            cardQR: true,
+            saveContactBtn: true,
+            shareBtn: true
+        }
     },
 
     /* =====================================================
-       FEATURES CONTROL
+       MAIN SECTIONS & UI FEATURES (SHOW / HIDE)
     ===================================================== */
     features: {
+        heroSection: true,
+        quickAccessBar: true,
         themeToggle: true,
         languageSwitch: true,
         discountOffer: true,
-        services: true,
-        gallery: true,
-        reviews: true,
-        quoteForm: true,
-        faq: true,
+        servicesSection: true,
+        gallerySection: true,
+        reviewsSection: true,
+        quoteFormSection: true,
+        faqSection: true,
         locationTracker: true,
+        footerSection: true,
         mobileBottomNav: true
     },
 
     /* =====================================================
-       SPECIAL DISCOUNT
+       GLOBAL SERVICE DISPLAY SETTINGS
+    ===================================================== */
+    serviceSettings: {
+        showCategoryDescription: true,
+        showSubItems: true,
+        showPrices: true
+    },
+
+    /* =====================================================
+       SPECIAL DISCOUNT SECTION
     ===================================================== */
     discount: {
-        enabled: true,
+        show: true,
         title: "Special Discount",
         percentage: 10,
         message: "Get 10% OFF on selected electrical services.",
@@ -55,9 +85,10 @@ window.CARD_CONFIG = {
     },
 
     /* =====================================================
-       SERVICES WITH SUB-SERVICES & RATES (Updated from CONFIG v3.1)
+       SERVICES & ALL SUB-SERVICES (WITH INDIVIDUAL SHOW/HIDE)
     ===================================================== */
     services: [
+        /* 1. House Wiring */
         {
             id: "house-wiring",
             show: true,
@@ -65,14 +96,16 @@ window.CARD_CONFIG = {
             icon: "🏠",
             description: "Professional house wiring and electrical installation services.",
             subServices: [
-                { name: "New House Wiring", rate: "₹45 / sq.ft. onwards" },
-                { name: "Concealed Wiring", rate: "₹40 / sq.ft. onwards" },
-                { name: "Surface Wiring", rate: "₹30 / sq.ft. onwards" },
-                { name: "Slab Piping", rate: "₹15 / sq.ft. onwards" },
-                { name: "Switch & Socket Installation", rate: "₹80 / point onwards" },
-                { name: "Complete House Wiring", rate: "₹50 / sq.ft. onwards" }
+                { name: "New House Wiring", rate: "₹45 / sq.ft. onwards", show: true },
+                { name: "Concealed Wiring", rate: "₹40 / sq.ft. onwards", show: true },
+                { name: "Surface Wiring", rate: "₹30 / sq.ft. onwards", show: true },
+                { name: "Slab Piping", rate: "₹15 / sq.ft. onwards", show: true },
+                { name: "Switch & Socket Installation", rate: "₹80 / point onwards", show: true },
+                { name: "Complete House Wiring", rate: "₹50 / sq.ft. onwards", show: true }
             ]
         },
+
+        /* 2. Light & Fan Installation */
         {
             id: "light-fan-installation",
             show: true,
@@ -80,14 +113,16 @@ window.CARD_CONFIG = {
             icon: "💡",
             description: "Professional installation of lights, fans and electrical fittings.",
             subServices: [
-                { name: "Ceiling Fan Installation", rate: "₹250 / fan onwards" },
-                { name: "Exhaust Fan Installation", rate: "₹200 / fan onwards" },
-                { name: "LED Light Installation", rate: "₹100 / light onwards" },
-                { name: "Decorative Light Installation", rate: "₹250 / light onwards" },
-                { name: "Tube Light Installation", rate: "₹120 / light onwards" },
-                { name: "Fan Regulator Installation", rate: "₹100 / piece onwards" }
+                { name: "Ceiling Fan Installation", rate: "₹250 / fan onwards", show: true },
+                { name: "Exhaust Fan Installation", rate: "₹200 / fan onwards", show: true },
+                { name: "LED Light Installation", rate: "₹100 / light onwards", show: true },
+                { name: "Decorative Light Installation", rate: "₹250 / light onwards", show: true },
+                { name: "Tube Light Installation", rate: "₹120 / light onwards", show: true },
+                { name: "Fan Regulator Installation", rate: "₹100 / piece onwards", show: true }
             ]
         },
+
+        /* 3. MCB & DB Work */
         {
             id: "mcb-db-work",
             show: true,
@@ -95,14 +130,16 @@ window.CARD_CONFIG = {
             icon: "🔌",
             description: "MCB, DB, RCCB and RCBO installation and electrical panel work.",
             subServices: [
-                { name: "MCB Installation", rate: "₹150 / MCB onwards" },
-                { name: "DB Installation", rate: "₹500 / DB onwards" },
-                { name: "MCB Replacement", rate: "₹100 / MCB onwards" },
-                { name: "RCCB Installation", rate: "₹300 / piece onwards" },
-                { name: "RCBO Installation", rate: "₹350 / piece onwards" },
-                { name: "DB Wiring & Maintenance", rate: "₹500 / DB onwards" }
+                { name: "MCB Installation", rate: "₹150 / MCB onwards", show: true },
+                { name: "DB Installation", rate: "₹500 / DB onwards", show: true },
+                { name: "MCB Replacement", rate: "₹100 / MCB onwards", show: true },
+                { name: "RCCB Installation", rate: "₹300 / piece onwards", show: true },
+                { name: "RCBO Installation", rate: "₹350 / piece onwards", show: true },
+                { name: "DB Wiring & Maintenance", rate: "₹500 / DB onwards", show: true }
             ]
         },
+
+        /* 4. False Ceiling Wiring */
         {
             id: "false-ceiling-wiring",
             show: true,
@@ -110,14 +147,16 @@ window.CARD_CONFIG = {
             icon: "🏗️",
             description: "Electrical wiring and lighting point installation for false ceilings.",
             subServices: [
-                { name: "Ceiling Light Wiring", rate: "₹8 / sq.ft. onwards" },
-                { name: "Downlight Wiring", rate: "₹8 / sq.ft. onwards" },
-                { name: "Panel Light Wiring", rate: "₹8 / sq.ft. onwards" },
-                { name: "Strip Light Wiring", rate: "₹10 / sq.ft. onwards" },
-                { name: "Fan Point Wiring", rate: "₹150 / point onwards" },
-                { name: "Concealed Ceiling Wiring", rate: "₹10 / sq.ft. onwards" }
+                { name: "Ceiling Light Wiring", rate: "₹8 / sq.ft. onwards", show: true },
+                { name: "Downlight Wiring", rate: "₹8 / sq.ft. onwards", show: true },
+                { name: "Panel Light Wiring", rate: "₹8 / sq.ft. onwards", show: true },
+                { name: "Strip Light Wiring", rate: "₹10 / sq.ft. onwards", show: true },
+                { name: "Fan Point Wiring", rate: "₹150 / point onwards", show: true },
+                { name: "Concealed Ceiling Wiring", rate: "₹10 / sq.ft. onwards", show: true }
             ]
         },
+
+        /* 5. Inverter & Backup */
         {
             id: "inverter-backup",
             show: true,
@@ -125,14 +164,16 @@ window.CARD_CONFIG = {
             icon: "🔋",
             description: "Inverter, battery, changeover and backup electrical services.",
             subServices: [
-                { name: "Inverter Installation", rate: "₹500 / set onwards" },
-                { name: "Inverter Wiring", rate: "₹8 / sq.ft. onwards" },
-                { name: "Battery Connection", rate: "₹150 / connection onwards" },
-                { name: "Changeover Installation", rate: "₹300 / piece onwards" },
-                { name: "Backup Wiring", rate: "₹8 / sq.ft. onwards" },
-                { name: "Inverter Fault Checking", rate: "₹200 / visit onwards" }
+                { name: "Inverter Installation", rate: "₹500 / set onwards", show: true },
+                { name: "Inverter Wiring", rate: "₹8 / sq.ft. onwards", show: true },
+                { name: "Battery Connection", rate: "₹150 / connection onwards", show: true },
+                { name: "Changeover Installation", rate: "₹300 / piece onwards", show: true },
+                { name: "Backup Wiring", rate: "₹8 / sq.ft. onwards", show: true },
+                { name: "Inverter Fault Checking", rate: "₹200 / visit onwards", show: true }
             ]
         },
+
+        /* 6. Electrical Repair */
         {
             id: "electrical-repair",
             show: true,
@@ -140,14 +181,16 @@ window.CARD_CONFIG = {
             icon: "🔧",
             description: "Electrical repair and maintenance for common household problems.",
             subServices: [
-                { name: "Switch Repair", rate: "₹80 / point onwards" },
-                { name: "Socket Repair", rate: "₹80 / point onwards" },
-                { name: "Fan Repair", rate: "₹150 / fan onwards" },
-                { name: "Light Repair", rate: "₹100 / light onwards" },
-                { name: "Loose Connection Repair", rate: "₹150 / point onwards" },
-                { name: "Short Circuit Repair", rate: "₹300 / visit onwards" }
+                { name: "Switch Repair", rate: "₹80 / point onwards", show: true },
+                { name: "Socket Repair", rate: "₹80 / point onwards", show: true },
+                { name: "Fan Repair", rate: "₹150 / fan onwards", show: true },
+                { name: "Light Repair", rate: "₹100 / light onwards", show: true },
+                { name: "Loose Connection Repair", rate: "₹150 / point onwards", show: true },
+                { name: "Short Circuit Repair", rate: "₹300 / visit onwards", show: true }
             ]
         },
+
+        /* 7. Fault Finding */
         {
             id: "fault-finding",
             show: true,
@@ -155,14 +198,16 @@ window.CARD_CONFIG = {
             icon: "🔍",
             description: "Electrical fault detection and troubleshooting services.",
             subServices: [
-                { name: "Power Failure Checking", rate: "₹200 / visit onwards" },
-                { name: "Short Circuit Detection", rate: "₹300 / visit onwards" },
-                { name: "MCB Tripping Problem", rate: "₹250 / visit onwards" },
-                { name: "Voltage Checking", rate: "₹150 / visit onwards" },
-                { name: "Wiring Fault Detection", rate: "₹300 / visit onwards" },
-                { name: "Loose Connection Detection", rate: "₹200 / visit onwards" }
+                { name: "Power Failure Checking", rate: "₹200 / visit onwards", show: true },
+                { name: "Short Circuit Detection", rate: "₹300 / visit onwards", show: true },
+                { name: "MCB Tripping Problem", rate: "₹250 / visit onwards", show: true },
+                { name: "Voltage Checking", rate: "₹150 / visit onwards", show: true },
+                { name: "Wiring Fault Detection", rate: "₹300 / visit onwards", show: true },
+                { name: "Loose Connection Detection", rate: "₹200 / visit onwards", show: true }
             ]
         },
+
+        /* 8. Commercial Electrical Work */
         {
             id: "commercial-electrical-work",
             show: true,
@@ -170,18 +215,18 @@ window.CARD_CONFIG = {
             icon: "🏢",
             description: "Electrical installation, wiring and maintenance for shops and offices.",
             subServices: [
-                { name: "Shop Wiring", rate: "₹45 / sq.ft. onwards" },
-                { name: "Office Wiring", rate: "₹50 / sq.ft. onwards" },
-                { name: "Electrical Point Installation", rate: "₹100 / point onwards" },
-                { name: "DB & MCB Work", rate: "₹500 / DB onwards" },
-                { name: "Lighting Installation", rate: "₹150 / light onwards" },
-                { name: "Electrical Maintenance", rate: "₹500 / visit onwards" }
+                { name: "Shop Wiring", rate: "₹45 / sq.ft. onwards", show: true },
+                { name: "Office Wiring", rate: "₹50 / sq.ft. onwards", show: true },
+                { name: "Electrical Point Installation", rate: "₹100 / point onwards", show: true },
+                { name: "DB & MCB Work", rate: "₹500 / DB onwards", show: true },
+                { name: "Lighting Installation", rate: "₹150 / light onwards", show: true },
+                { name: "Electrical Maintenance", rate: "₹500 / visit onwards", show: true }
             ]
         }
     ],
 
     /* =====================================================
-       GALLERY
+       GALLERY ITEMS (INDIVIDUAL SHOW/HIDE)
     ===================================================== */
     gallery: [
         { id: "work-1", show: true, image: "assets/gallery/work1.jpg", title: "House Wiring" },
@@ -194,7 +239,7 @@ window.CARD_CONFIG = {
     ],
 
     /* =====================================================
-       CUSTOMER REVIEWS
+       CUSTOMER REVIEWS (INDIVIDUAL SHOW/HIDE)
     ===================================================== */
     reviews: [
         {
@@ -221,7 +266,7 @@ window.CARD_CONFIG = {
     ],
 
     /* =====================================================
-       FAQ
+       FAQ ACCORDION (INDIVIDUAL SHOW/HIDE)
     ===================================================== */
     faq: [
         {
@@ -254,5 +299,17 @@ window.CARD_CONFIG = {
             question: "Aap Lucknow me service dete hain?",
             answer: "Haan, Sandeep ElectroFix Lucknow, Uttar Pradesh me electrical services provide karta hai."
         }
-    ]
+    ],
+
+    /* =====================================================
+       QUOTE / CONTACT FORM SETTINGS
+    ===================================================== */
+    quote: {
+        show: true,
+        whatsappNumber: "919026036445",
+        requireName: true,
+        requirePhone: true,
+        requireService: true,
+        requireLocation: false
+    }
 };
