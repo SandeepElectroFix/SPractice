@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Customer",
+    "rating": "★★★★★",
+    "review": "Excellent electrical service and professional work.",
+    "date": "2026"
+  },
+  {
+    "name": "Customer",
+    "rating": "★★★★★",
+    "review": "Good quality work and on-time service.",
+    "date": "2026"
+  },
+  {
+    "name": "Customer",
+    "rating": "★★★★★",
+    "review": "Trusted electrician service in Lucknow.",
+    "date": "2026"
+  }
+]
