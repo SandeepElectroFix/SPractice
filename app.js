@@ -1,9 +1,10 @@
 /* =========================================
-SANDEEP ELECTROFIX - APP.JS (Full Bilingual Support)
+SANDEEP ELECTROFIX - COMPLETE APP.JS
+Version 4.0 - Multi-Language, Qty (+/-), Discount & PDF
 ========================================= */
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
-let selectedItemsMap = {}; // { [itemId]: { name_en, name_hi, price, rate_en, rate_hi, category_en, category_hi, qty } }
+let selectedItemsMap = {}; // Format: { [itemId]: { name_en, name_hi, price, rate_en, rate_hi, category_en, category_hi, qty } }
 
 const UI_TEXT = {
   en: {
@@ -56,6 +57,15 @@ const UI_TEXT = {
   }
 };
 
+// Extract numeric price from rate string
+function extractPrice(rateString) {
+  if (!rateString) return 0;
+  if (typeof rateString === "number") return rateString;
+  const match = rateString.toString().match(/(\d+)/);
+  return match ? parseInt(match[0], 10) : 0;
+}
+
+// 1. DOM Initialization
 document.addEventListener("DOMContentLoaded", () => {
   applyVisibilityControls();
   setLanguage(currentLang);
@@ -74,9 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  setupQuickAccessLayoutSwitcher();
+  setupServiceLayoutSwitcher();
   setupQuoteActions();
 });
 
+// 2. Language Switcher
 function setLanguage(lang) {
   currentLang = lang === "en" ? "en" : "hi";
   localStorage.setItem("sandeepLang", currentLang);
@@ -88,18 +101,17 @@ function setLanguage(lang) {
   const t = UI_TEXT[currentLang];
   const cfg = window.CARD_CONFIG;
 
-  // Static UI updates
   const setElemText = (id, text) => {
     const el = document.getElementById(id);
-    if (el) el.innerHTML = text;
+    if (el && text) el.innerHTML = text;
   };
   const setElemPlaceholder = (id, text) => {
     const el = document.getElementById(id);
-    if (el) el.placeholder = text;
+    if (el && text) el.placeholder = text;
   };
 
-  setElemText("businessTagline", cfg?.business?.[`tagline_${currentLang}`] || t.tagline);
-  setElemText("businessLocation", cfg?.business?.[`location_${currentLang}`] || t.location);
+  setElemText("businessTagline", cfg?.business?.[`tagline_${currentLang}`] || cfg?.business?.tagline || t.tagline);
+  setElemText("businessLocation", cfg?.business?.[`location_${currentLang}`] || cfg?.business?.location || t.location);
   setElemText("callBtnText", t.callNow);
   setElemText("whatsappBtnText", t.whatsapp);
   setElemText("servicesHeading", t.ourServices);
@@ -111,11 +123,10 @@ function setLanguage(lang) {
   setElemPlaceholder("customerPhone", t.phonePlaceholder);
   setElemPlaceholder("customerMessage", t.notePlaceholder);
 
-  // Discount text
   if (cfg?.discount) {
-    setElemText("discountTitle", cfg.discount[`title_${currentLang}`]);
-    setElemText("discountMessage", cfg.discount[`message_${currentLang}`]);
-    setElemText("discountValidity", cfg.discount[`validity_${currentLang}`]);
+    setElemText("discountTitle", cfg.discount[`title_${currentLang}`] || cfg.discount.title);
+    setElemText("discountMessage", cfg.discount[`message_${currentLang}`] || cfg.discount.message);
+    setElemText("discountValidity", cfg.discount[`validity_${currentLang}`] || cfg.discount.validityText);
   }
 
   updateThemeButtonText();
@@ -136,6 +147,7 @@ function updateThemeButtonText() {
   }
 }
 
+// 3. Show / Hide Control Applier
 function applyVisibilityControls() {
   const cfg = window.CARD_CONFIG;
   if (!cfg) return;
@@ -146,15 +158,40 @@ function applyVisibilityControls() {
 
   if (cfg.features) {
     toggle("heroSection", cfg.features.heroSection);
-    toggle("discountSection", cfg.features.discountOffer && cfg.discount?.show);
+    toggle("quickAccessBar", cfg.features.quickAccessBar);
+    toggle("themeToggle", cfg.features.themeToggle);
+    toggle("languageSwitcher", cfg.features.languageSwitch);
+    toggle("discountSection", cfg.features.discountOffer && cfg.discount?.show !== false);
     toggle("servicesSection", cfg.features.servicesSection);
     toggle("gallerySection", cfg.features.gallerySection);
     toggle("reviewsSection", cfg.features.reviewsSection);
     toggle("quoteFormSection", cfg.features.quoteFormSection);
     toggle("faqSection", cfg.features.faqSection);
+    toggle("locationSection", cfg.features.locationTracker);
+    toggle("footerSection", cfg.features.footerSection);
+    toggle("mobileBottomNav", cfg.features.mobileBottomNav);
+  }
+
+  if (cfg.business && cfg.business.showElements) {
+    const el = cfg.business.showElements;
+    toggle("businessLogo", el.logo);
+    toggle("businessTagline", el.tagline);
+    toggle("businessLocation", el.location);
+    toggle("callBtn", el.phoneCall);
+    toggle("whatsappBtn", el.whatsappChat);
+    toggle("emailBtn", el.email);
+    toggle("websiteBtn", el.website);
+    toggle("mapsBtn", el.googleMaps);
+    toggle("facebookBtn", el.facebook);
+    toggle("instagramBtn", el.instagram);
+    toggle("youtubeBtn", el.youtube);
+    toggle("cardQRContainer", el.cardQR);
+    toggle("saveContactBtn", el.saveContactBtn);
+    toggle("shareBtn", el.shareBtn);
   }
 }
 
+// 4. Universal Services Loader (Fixes "undefined" across all schema formats)
 function loadServices() {
   const container = document.getElementById("serviceContainer");
   if (!container || !window.CARD_CONFIG) return;
@@ -165,12 +202,19 @@ function loadServices() {
   services.forEach((service, sIndex) => {
     if (service.show === false) return;
 
-    const visibleSub = (service.subServices || []).filter(sub => sub.show !== false);
+    const title = service[`title_${currentLang}`] || service.title || service.title_en || "Service";
+    const desc = service[`desc_${currentLang}`] || service.description || service.desc_en || "";
+
+    const subList = service.subServices || service.items || [];
+    const visibleSub = subList.filter(sub => sub.show !== false);
+
     const subListHtml = visibleSub.map((sub, subIndex) => {
       const itemId = `item_${sIndex}_${subIndex}`;
       const savedQty = selectedItemsMap[itemId]?.qty || 0;
-      const subName = sub[`name_${currentLang}`] || sub.name_en;
-      const subRate = sub[`rate_${currentLang}`] || sub.rate_en;
+
+      const subName = sub[`name_${currentLang}`] || sub.title || sub.name || sub.name_en || "Item";
+      const subRate = sub[`rate_${currentLang}`] || (sub.price && sub.unit ? `₹${sub.price} / ${sub.unit}` : sub.rate) || `₹${sub.price || 0}`;
+      const numPrice = sub.price || extractPrice(subRate);
 
       return `
         <div class="sub-service-item ${savedQty > 0 ? 'has-qty' : ''}" id="row_${itemId}">
@@ -179,23 +223,20 @@ function loadServices() {
             <span class="sub-rate">${subRate}</span>
           </div>
           <div class="qty-control">
-            <button type="button" class="qty-btn minus-btn" onclick="updateQty('${itemId}', -1, ${sub.price}, '${sIndex}', '${subIndex}')">−</button>
+            <button type="button" class="qty-btn minus-btn" onclick="updateQty('${itemId}', -1, ${numPrice}, '${sIndex}', '${subIndex}')">−</button>
             <span class="qty-val" id="qty_${itemId}">${savedQty}</span>
-            <button type="button" class="qty-btn plus-btn" onclick="updateQty('${itemId}', 1, ${sub.price}, '${sIndex}', '${subIndex}')">+</button>
+            <button type="button" class="qty-btn plus-btn" onclick="updateQty('${itemId}', 1, ${numPrice}, '${sIndex}', '${subIndex}')">+</button>
           </div>
         </div>
       `;
     }).join("");
-
-    const title = service[`title_${currentLang}`] || service.title_en;
-    const desc = service[`desc_${currentLang}`] || service.desc_en;
 
     const card = document.createElement("div");
     card.className = "service-card";
     card.innerHTML = `
       <div class="service-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="service-title-wrap">
-          <span class="service-icon">${service.icon}</span>
+          <span class="service-icon">${service.icon || "⚡"}</span>
           <h3 class="service-title">${title}</h3>
         </div>
         <span class="toggle-arrow">▼</span>
@@ -209,18 +250,20 @@ function loadServices() {
   });
 }
 
+// 5. Quantity Management (+ / -)
 function updateQty(itemId, change, price, sIndex, subIndex) {
   const service = window.CARD_CONFIG.services[sIndex];
-  const sub = service.subServices[subIndex];
+  const subList = service.subServices || service.items || [];
+  const sub = subList[subIndex];
 
   if (!selectedItemsMap[itemId]) {
     selectedItemsMap[itemId] = {
-      name_en: sub.name_en,
-      name_hi: sub.name_hi,
-      category_en: service.title_en,
-      category_hi: service.title_hi,
-      rate_en: sub.rate_en,
-      rate_hi: sub.rate_hi,
+      name_en: sub.name_en || sub.title || sub.name || "Item",
+      name_hi: sub.name_hi || sub.title || sub.name || "Item",
+      category_en: service.title_en || service.title || "Service",
+      category_hi: service.title_hi || service.title || "Service",
+      rate_en: sub.rate_en || sub.rate || `₹${price}`,
+      rate_hi: sub.rate_hi || sub.rate || `₹${price}`,
       price: price,
       qty: 0
     };
@@ -242,6 +285,7 @@ function updateQty(itemId, change, price, sIndex, subIndex) {
   updateCalculationUI();
 }
 
+// 6. Live Calculation Update
 function updateCalculationUI() {
   const t = UI_TEXT[currentLang];
   const listContainer = document.getElementById("selectedServicesList");
@@ -269,7 +313,7 @@ function updateCalculationUI() {
 
   listContainer.innerHTML = items.map(item => `
     <div class="summary-item">
-      <span>• ${item[`name_${currentLang}`]} × <strong>${item.qty}</strong></span>
+      <span>• ${item[`name_${currentLang}`] || item.name_en} × <strong>${item.qty}</strong></span>
       <strong>₹${item.price * item.qty}</strong>
     </div>
   `).join("");
@@ -278,7 +322,7 @@ function updateCalculationUI() {
   subtotalEl.innerText = `₹${subtotal}`;
 
   const discountCfg = window.CARD_CONFIG?.discount || {};
-  const isDiscountActive = discountCfg.show === true && discountCfg.percentage > 0;
+  const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
 
   let discountAmount = 0;
   if (isDiscountActive) {
@@ -296,6 +340,7 @@ function updateCalculationUI() {
   grandTotalEl.innerText = `₹${grandTotal}`;
 }
 
+// 7. Actions: WhatsApp & PDF
 function setupQuoteActions() {
   document.getElementById("sendWhatsappBtn")?.addEventListener("click", sendWhatsappQuote);
   document.getElementById("downloadPdfBtn")?.addEventListener("click", generateEstimatePDF);
@@ -319,7 +364,7 @@ function sendWhatsappQuote() {
 
   const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
   const discountCfg = window.CARD_CONFIG?.discount || {};
-  const isDiscountActive = discountCfg.show === true && discountCfg.percentage > 0;
+  const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
   const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
   const grandTotal = subtotal - discountAmount;
 
@@ -330,8 +375,8 @@ function sendWhatsappQuote() {
   text += `\n📋 *${currentLang === 'en' ? 'Selected Services' : 'चुनी गई सेवाएँ'}:*\n`;
 
   items.forEach((item, i) => {
-    const sName = item[`name_${currentLang}`];
-    const sRate = item[`rate_${currentLang}`];
+    const sName = item[`name_${currentLang}`] || item.name_en;
+    const sRate = item[`rate_${currentLang}`] || item.rate_en;
     text += `${i + 1}. ${sName} [Qty: ${item.qty}] — ₹${item.price * item.qty} (${sRate})\n`;
   });
 
@@ -339,16 +384,17 @@ function sendWhatsappQuote() {
   if (isDiscountActive) {
     text += `🎁 *${currentLang === 'en' ? 'Discount' : 'छूट'} (${discountCfg.percentage}%):* -₹${discountAmount}\n`;
   }
-  text += `✅ *${currentLang === 'en' ? 'Grand Total' : 'अंतिम राशि'}:* ₹${grandTotal}\n`;
+  text += `✅ *${currentLang === 'en' ? 'Grand Total' : 'अंतिम राशि'}:* ₹${grandTotal}\n\n`;
+  text += `_Please confirm my visit / booking._`;
 
-  const waNumber = window.CARD_CONFIG?.quote?.whatsappNumber || "919026036445";
+  const waNumber = window.CARD_CONFIG?.quote?.whatsappNumber || window.CARD_CONFIG?.business?.whatsapp || "919026036445";
   window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank");
 }
 
 function generateEstimatePDF() {
-  const { jsPDF } = window.jspdf;
+  const { jsPDF } = window.jspdf || {};
   if (!jsPDF) {
-    alert("PDF library error.");
+    alert("PDF library error. Make sure jspdf script is included.");
     return;
   }
 
@@ -378,7 +424,7 @@ function generateEstimatePDF() {
   doc.setFontSize(10);
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "normal");
-  doc.text(`Phone: ${biz.phone} | Lucknow, UP`, 14, 28);
+  doc.text(`Phone: ${biz.phone || "+91 9026036445"} | Lucknow, UP`, 14, 28);
   doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 160, 28);
 
   doc.setTextColor(16, 24, 39);
@@ -394,14 +440,14 @@ function generateEstimatePDF() {
 
   const tableRows = items.map((item, index) => [
     index + 1,
-    item.name_en,
+    item.name_en || item.name_hi,
     `Rs. ${item.price}`,
     item.qty,
     `Rs. ${item.price * item.qty}`
   ]);
 
   const subtotal = items.reduce((sum, itm) => sum + (itm.price * itm.qty), 0);
-  const isDiscountActive = discountCfg.show === true && discountCfg.percentage > 0;
+  const isDiscountActive = discountCfg.show !== false && discountCfg.percentage > 0;
   const discountAmount = isDiscountActive ? Math.round(subtotal * (discountCfg.percentage / 100)) : 0;
   const grandTotal = subtotal - discountAmount;
 
@@ -433,36 +479,110 @@ function generateEstimatePDF() {
   doc.save(`Estimate_${name.replace(/\s+/g, "_")}.pdf`);
 }
 
+// 8. Layout Switchers
+function setupQuickAccessLayoutSwitcher() {
+  const container = document.getElementById("quickGridContainer");
+  const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
+  if (!container || !buttons.length) return;
+
+  function applyQuickLayout(layoutName) {
+    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
+    container.classList.add(`layout-${layoutName}`);
+    buttons.forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-quick-layout") === layoutName));
+    localStorage.setItem("sandeepQuickLayout", layoutName);
+  }
+
+  buttons.forEach(btn => {
+    btn.onclick = function() {
+      const layout = this.getAttribute("data-quick-layout");
+      if (layout) applyQuickLayout(layout);
+    };
+  });
+
+  const savedLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
+  applyQuickLayout(savedLayout);
+}
+
+function setupServiceLayoutSwitcher() {
+  const container = document.getElementById("serviceContainer");
+  const buttons = document.querySelectorAll("#servicesLayoutBar .layout-btn");
+  if (!container || !buttons.length) return;
+
+  function applyServiceLayout(layoutName) {
+    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
+    container.classList.add(`layout-${layoutName}`);
+    buttons.forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-service-layout") === layoutName));
+    localStorage.setItem("sandeepServiceLayout", layoutName);
+  }
+
+  buttons.forEach(btn => {
+    btn.onclick = function() {
+      const layout = this.getAttribute("data-service-layout");
+      if (layout) applyServiceLayout(layout);
+    };
+  });
+
+  const savedLayout = localStorage.getItem("sandeepServiceLayout") || "grid-2";
+  applyServiceLayout(savedLayout);
+}
+
+// 9. Loaders: Gallery, Reviews & FAQ
 function loadGallery() {
   const container = document.getElementById("galleryContainer");
   if (!container || !window.CARD_CONFIG) return;
   const galleryItems = (window.CARD_CONFIG.gallery || []).filter(item => item.show !== false);
-  container.innerHTML = galleryItems.map(g => `
-    <div class="gallery-item"><img src="${g.image}" alt="${g[`title_${currentLang}`]}"><div class="gallery-title">${g[`title_${currentLang}`]}</div></div>
-  `).join("");
+  container.innerHTML = galleryItems.map(g => {
+    const title = g[`title_${currentLang}`] || g.title || "";
+    return `
+      <div class="gallery-item">
+        <img src="${g.image}" alt="${title}" onclick="openLightbox('${g.image}')" onerror="this.parentElement.style.display='none'">
+        <div class="gallery-title">${title}</div>
+      </div>
+    `;
+  }).join("");
 }
+
+function openLightbox(src) {
+  const box = document.getElementById("lightbox");
+  const img = document.getElementById("lightboxImage");
+  if (box && img) {
+    img.src = src;
+    box.style.display = "flex";
+  }
+}
+
+document.getElementById("closeLightbox")?.addEventListener("click", () => {
+  document.getElementById("lightbox").style.display = "none";
+});
 
 function loadReviews() {
   const container = document.getElementById("reviewContainer");
   if (!container || !window.CARD_CONFIG) return;
   const reviewItems = (window.CARD_CONFIG.reviews || []).filter(item => item.show !== false);
-  container.innerHTML = reviewItems.map(r => `
-    <div class="card review-card" style="padding:12px; margin-bottom:8px;">
-      <div style="color:#f59e0b;">${"★".repeat(r.rating || 5)}</div>
-      <p style="margin:4px 0; font-size:0.85rem;">"${r[`text_${currentLang}`]}"</p>
-      <small style="color:#888;">— ${r.name}</small>
-    </div>
-  `).join("");
+  container.innerHTML = reviewItems.map(r => {
+    const text = r[`text_${currentLang}`] || r.text || "";
+    return `
+      <div class="card review-card" style="padding:12px; margin-bottom:8px;">
+        <div style="color:#f59e0b;">${"★".repeat(r.rating || 5)}</div>
+        <p style="margin:4px 0; font-size:0.85rem;">"${text}"</p>
+        <small style="color:#888;">— ${r.name}</small>
+      </div>
+    `;
+  }).join("");
 }
 
 function renderFAQ() {
   const container = document.getElementById("faqContainer");
   if (!container || !window.CARD_CONFIG) return;
   const faqList = (window.CARD_CONFIG.faq || []).filter(f => f.show !== false);
-  container.innerHTML = faqList.map((f, i) => `
-    <div class="faq-item" onclick="this.classList.toggle('active')">
-      <div class="faq-question"><span>${f[`question_${currentLang}`]}</span><span class="faq-icon">+</span></div>
-      <div class="faq-answer">${f[`answer_${currentLang}`]}</div>
-    </div>
-  `).join("");
+  container.innerHTML = faqList.map((f, i) => {
+    const q = f[`question_${currentLang}`] || f.question || "";
+    const a = f[`answer_${currentLang}`] || f.answer || "";
+    return `
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-question"><span>${q}</span><span class="faq-icon">+</span></div>
+        <div class="faq-answer">${a}</div>
+      </div>
+    `;
+  }).join("");
 }
