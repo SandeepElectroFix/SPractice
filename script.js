@@ -16,8 +16,6 @@ const translations = {
     discountMessage: "Get 10% OFF on Electrical Services",
     discountValidity: "⏳ Limited Time Offer",
     getDiscountBtn: "⚡ Get Discount",
-    materialCatalogueTitle: "Material Catalogue",
-    materialCatalogueSub: "View Electrical Wire, Switch, Pipes & Prices",
     quickAccess: "Quick Access",
     call: "Call",
     website: "Website",
@@ -26,6 +24,7 @@ const translations = {
     saveContact: "Save Contact",
     share: "Share",
     ourWorkNav: "Our Work",
+    materialCatalogue: "Material Catalogue",
     aboutHeading: "About Us",
     aboutText: "Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault finding, repair, maintenance and electrical upgrades.",
     ourServices: "Our Services",
@@ -46,24 +45,24 @@ const translations = {
     navCall: "Call",
     faqs: [
       {
-        question: "Do you provide house wiring services?",
-        answer: "Yes, complete new house wiring, concealed conduit wiring, and renovation wiring services are available."
+        question: "Do you provide complete house wiring services?",
+        answer: "Yes, we provide full house wiring for new homes, conduit piping, modular switch fitting, and renovation wiring."
       },
       {
-        question: "Do you handle electrical fault finding and short circuits?",
-        answer: "Yes, we specialize in fault diagnosis, MCB tripping issues, short circuit repair, and power load troubleshooting."
+        question: "Do you handle emergency short circuits & fault finding?",
+        answer: "Yes, our team quickly diagnoses MCB tripping, electrical line faults, short circuits, and restores power safely."
       },
       {
-        question: "Is fan, light, and appliance installation available?",
-        answer: "Yes, we install ceiling fans, designer lights, chandeliers, exhaust fans, switchboards, and inverters."
+        question: "Is installation available for lights, fans, and appliances?",
+        answer: "Yes, we install false ceiling lights, chandeliers, profile lights, ceiling fans, switchboards, and inverters."
       },
       {
-        question: "How can I get an estimate/quote?",
-        answer: "You can fill out the WhatsApp quote form below or directly call us with your work requirements for an estimate."
+        question: "How can I calculate or get a work estimate?",
+        answer: "You can use our WhatsApp Quote form below or directly call us for an instant estimate with special discounts."
       },
       {
-        question: "Which locations in Lucknow do you cover?",
-        answer: "Sandeep ElectroFix provides fast on-site electrical services across Lucknow, Uttar Pradesh."
+        question: "Which areas in Lucknow do you cover?",
+        answer: "Sandeep ElectroFix provides fast on-site electrician services across all locations in Lucknow, Uttar Pradesh."
       }
     ]
   },
@@ -79,8 +78,6 @@ const translations = {
     discountMessage: "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं",
     discountValidity: "⏳ सीमित समय के लिए",
     getDiscountBtn: "⚡ छूट प्राप्त करें",
-    materialCatalogueTitle: "सामग्री सूची (कैटलॉग)",
-    materialCatalogueSub: "वायर, स्विच, पाइप और उनकी कीमतें देखें",
     quickAccess: "त्वरित सेवाएँ",
     call: "कॉल करें",
     website: "वेबसाइट",
@@ -89,6 +86,7 @@ const translations = {
     saveContact: "नंबर सेव करें",
     share: "शेयर करें",
     ourWorkNav: "हमारे कार्य",
+    materialCatalogue: "सामग्री सूची",
     aboutHeading: "हमारे बारे में",
     aboutText: "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।",
     ourServices: "हमारी सेवाएँ",
@@ -109,24 +107,24 @@ const translations = {
     navCall: "कॉल",
     faqs: [
       {
-        question: "क्या आप हाउस वायरिंग का काम करते हैं?",
-        answer: "हाँ, नए मकान की पूरी पाइपिंग, अंडरग्राउंड वायरिंग और पुरानी वायरिंग बदलने की पूरी सेवा उपलब्ध है।"
+        question: "क्या आप नए मकान की पूरी हाउस वायरिंग करते हैं?",
+        answer: "हाँ, नए मकान की अंडरग्राउंड पाइपिंग, कन्सिल्ड वायरिंग, मॉड्यूलर स्विच बोर्ड और रिनोवेशन का पूरा काम किया जाता है।"
       },
       {
-        question: "क्या शॉर्ट सर्किट और फॉल्ट ठीक करते हैं?",
-        answer: "हाँ, हम शॉर्ट सर्किट, एमसीबी ट्रिपिंग, लाइन फॉल्ट और पावर लीकेज की तुरंत जांच और रिपेयर करते हैं।"
+        question: "क्या शॉर्ट सर्किट और लाइन फॉल्ट की रिपेयरिंग होती है?",
+        answer: "हाँ, एमसीबी ट्रिपिंग, शॉर्ट सर्किट, पावर लीकेज और लाइन फॉल्ट को तुरंत टेस्ट करके सही किया जाता है।"
       },
       {
-        question: "पंखा, लाइट और बोर्ड फिटिंग की सुविधा है?",
-        answer: "हाँ, सीलिंग फैन, फॉल्स सीलिंग लाइट्स, स्विच बोर्ड, इन्वर्टर और अन्य फिटिंग का काम किया जाता है।"
+        question: "पंखा, लाइट, झूमर और इन्वर्टर फिटिंग की सुविधा है?",
+        answer: "हाँ, फॉल्स सीलिंग लाइट्स, प्रोफाइल लाइट, सीलिंग फैन, स्विच बोर्ड और इन्वर्टर वायरिंग का काम किया जाता है।"
       },
       {
-        question: "काम का एस्टीमेट या रेट कैसे मिलेगा?",
-        answer: "आप नीचे दिए गए व्हाट्सएप फॉर्म को भरकर या सीधे कॉल करके अपने काम के अनुसार रेट पता कर सकते हैं।"
+        question: "काम का खर्च या एस्टीमेट कैसे पता करें?",
+        answer: "आप नीचे दिए गए कोटेशन फॉर्म से अनुमानित रेट देख सकते हैं या सीधे कॉल करके जानकारी ले सकते हैं।"
       },
       {
-        question: "क्या आप पूरे लखनऊ में सेवा देते हैं?",
-        answer: "हाँ, संदीप इलेक्ट्रोफिक्स पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रिशियन सेवा देता है।"
+        question: "क्या आप पूरे लखनऊ में अपनी सेवा देते हैं?",
+        answer: "हाँ, संदीप इलेक्ट्रोफिक्स पूरे लखनऊ और आसपास के सभी इलाकों में ऑन-साइट इलेक्ट्रिशियन सेवा देता है।"
       }
     ]
   }
@@ -183,7 +181,7 @@ function updateThemeButtonText() {
 
 // 4. Initialization on DOM Load
 document.addEventListener("DOMContentLoaded", () => {
-  // Theme Toggle Listener
+  // Theme setup
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
@@ -194,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Language Switch Listener
+  // Language setup
   document.querySelectorAll(".language-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       setLanguage(btn.getAttribute("data-lang"));
@@ -204,14 +202,66 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedLang = localStorage.getItem("sandeepLang") || "en";
   setLanguage(savedLang);
 
-  // Dynamic Loaders
+  // Layout Switchers Setup
+  setupQuickAccessLayoutSwitcher();
+  setupServiceLayoutSwitcher();
+
+  // Dynamic Content Loaders
   loadServices();
   loadGallery();
   loadReviews();
   setupQuoteCalculation();
 });
 
-// 5. Dynamic Data Loaders
+// 5. Quick Access Layout Switcher
+function setupQuickAccessLayoutSwitcher() {
+  const container = document.getElementById("quickGridContainer");
+  const buttons = document.querySelectorAll("[data-quick-layout]");
+  if (!container || !buttons.length) return;
+
+  function applyQuickLayout(layoutName) {
+    container.className = `grid layout-${layoutName}`;
+    buttons.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-quick-layout") === layoutName);
+    });
+    localStorage.setItem("sandeepQuickLayout", layoutName);
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      applyQuickLayout(btn.getAttribute("data-quick-layout"));
+    });
+  });
+
+  const savedLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
+  applyQuickLayout(savedLayout);
+}
+
+// 6. Services Layout Switcher
+function setupServiceLayoutSwitcher() {
+  const container = document.getElementById("serviceContainer");
+  const buttons = document.querySelectorAll("[data-service-layout]");
+  if (!container || !buttons.length) return;
+
+  function applyServiceLayout(layoutName) {
+    container.className = `service-grid layout-${layoutName}`;
+    buttons.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-service-layout") === layoutName);
+    });
+    localStorage.setItem("sandeepServiceLayout", layoutName);
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      applyServiceLayout(btn.getAttribute("data-service-layout"));
+    });
+  });
+
+  const savedLayout = localStorage.getItem("sandeepServiceLayout") || "grid-2";
+  applyServiceLayout(savedLayout);
+}
+
+// 7. Dynamic Loaders
 async function loadServices() {
   const container = document.getElementById("serviceContainer");
   if (!container) return;
@@ -274,7 +324,7 @@ async function loadReviews() {
   }
 }
 
-// 6. Bilingual FAQ Renderer
+// 8. Bilingual FAQ Renderer
 function renderFAQ(lang) {
   const container = document.getElementById("faqContainer");
   if (!container) return;
@@ -297,7 +347,7 @@ function toggleFaq(index) {
   }
 }
 
-// 7. Share Functionality
+// 9. Share Functionality
 function shareWebsite() {
   if (navigator.share) {
     navigator.share({
@@ -311,7 +361,7 @@ function shareWebsite() {
   }
 }
 
-// 8. WhatsApp Quote & Discount Handler
+// 10. WhatsApp Quote & Discount Handler
 function setupQuoteCalculation() {
   const totalInput = document.getElementById("serviceTotal");
   const calcBox = document.getElementById("discountCalculation");
