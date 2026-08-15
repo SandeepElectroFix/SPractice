@@ -1,334 +1,304 @@
-/* =========================================================
-   SANDEEP ELECTROFIX
-   SMART DIGITAL CARD JAVASCRIPT
-   Version 3.0.0
-========================================================= */
+/* =========================================
+SANDEEP ELECTROFIX - COMPLETE JAVASCRIPT
+========================================= */
 
-(function () {
-    "use strict";
+// 1. Translation Dictionary (English & Hindi)
+const translations = {
+  en: {
+    tagline: "Powering Your Trust",
+    location: "📍 Lucknow, Uttar Pradesh",
+    callNow: "📞 Call Now",
+    whatsapp: "💬 WhatsApp",
+    lightMode: "Light Mode",
+    darkMode: "Dark Mode",
+    specialOffer: "🔥 SPECIAL OFFER",
+    discountTitle: "Special Discount",
+    discountMessage: "Get 10% OFF on Electrical Services",
+    discountValidity: "⏳ Limited Time Offer",
+    getDiscountBtn: "⚡ Get Discount",
+    quickAccess: "Quick Access",
+    materialCatalogue: "Material Catalogue",
+    call: "Call",
+    website: "Website",
+    maps: "Google Maps",
+    email: "Email",
+    saveContact: "Save Contact",
+    ourWorkNav: "Our Work",
+    aboutHeading: "About Us",
+    aboutText: "Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault finding, repair, maintenance and electrical upgrades.",
+    ourServices: "Our Services",
+    ourWork: "Our Work",
+    customerReviews: "Customer Reviews",
+    requestQuote: "Request a Quote",
+    inputName: "Your Name",
+    inputPhone: "Mobile Number",
+    selectServiceDefault: "Select Service",
+    inputTotal: "Estimated Total Amount (₹)",
+    inputMessage: "Describe your electrical work...",
+    sendQuoteBtn: "💬 Send Enquiry on WhatsApp",
+    faqHeading: "Frequently Asked Questions",
+    navHome: "Home",
+    navServices: "Services",
+    navWork: "Work",
+    navQuote: "Quote",
+    navCall: "Call"
+  },
+  hi: {
+    tagline: "आपके विश्वास को रोशन करते हुए",
+    location: "📍 लखनऊ, उत्तर प्रदेश",
+    callNow: "📞 अभी कॉल करें",
+    whatsapp: "💬 व्हाट्सएप करें",
+    lightMode: "लाइट मोड",
+    darkMode: "डार्क मोड",
+    specialOffer: "🔥 विशेष ऑफर",
+    discountTitle: "विशेष छूट",
+    discountMessage: "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं",
+    discountValidity: "⏳ सीमित समय के लिए",
+    getDiscountBtn: "⚡ छूट प्राप्त करें",
+    quickAccess: "त्वरित सेवाएँ",
+    materialCatalogue: "सामग्री सूची",
+    call: "कॉल करें",
+    website: "वेबसाइट",
+    maps: "गूगल मैप्स",
+    email: "ईमेल",
+    saveContact: "नंबर सेव करें",
+    ourWorkNav: "हमारे कार्य",
+    aboutHeading: "हमारे बारे में",
+    aboutText: "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।",
+    ourServices: "हमारी सेवाएँ",
+    ourWork: "हमारे द्वारा किए गए कार्य",
+    customerReviews: "ग्राहकों की राय",
+    requestQuote: "कोटेशन प्राप्त करें",
+    inputName: "आपका नाम",
+    inputPhone: "मोबाइल नंबर",
+    selectServiceDefault: "सेवा चुनें",
+    inputTotal: "अनुमानित कुल राशि (₹)",
+    inputMessage: "अपने इलेक्ट्रिकल कार्य के बारे में बताएं...",
+    sendQuoteBtn: "💬 व्हाट्सएप पर जानकारी भेजें",
+    faqHeading: "अक्सर पूछे जाने वाले सवाल",
+    navHome: "होम",
+    navServices: "सेवाएं",
+    navWork: "कार्य",
+    navQuote: "कोट",
+    navCall: "कॉल"
+  }
+};
 
-    const config = window.CARD_CONFIG || {};
-    const business = config.business || {};
-    const features = config.features || {};
+// 2. Change Language Function
+function setLanguage(lang) {
+  const currentLang = translations[lang] ? lang : "en";
+  const t = translations[currentLang];
 
-    let currentLang = "en";
+  // Update innerHTML / text
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (t[key]) {
+      el.innerHTML = t[key];
+    }
+  });
 
-    /* =====================================================
-       TRANSLATIONS (ENGLISH & HINDI)
-    ===================================================== */
-    const translations = {
-        en: {
-            tagline: "Powering Your Trust",
-            location: "📍 Lucknow, Uttar Pradesh",
-            callNow: "📞 Call Now",
-            whatsapp: "💬 WhatsApp",
-            quickAccess: "Quick Access",
-            about: "About",
-            ourServices: "Our Services",
-            ourWork: "Our Work",
-            customerReviews: "Customer Reviews",
-            requestQuote: "Request a Quote",
-            faq: "Frequently Asked Questions",
-            viewRates: "▼ View Rates & Details",
-            hideRates: "▲ Hide Rates"
-        },
-        hi: {
-            tagline: "विश्वास ही हमारी पहचान",
-            location: "📍 लखनऊ, उत्तर प्रदेश",
-            callNow: "📞 अभी कॉल करें",
-            whatsapp: "💬 व्हाट्सएप करें",
-            quickAccess: "त्वरित सेवाएँ",
-            about: "हमारे बारे में",
-            ourServices: "हमारी सेवाएँ",
-            ourWork: "हमारे प्रोजेक्ट्स",
-            customerReviews: "ग्राहकों की राय",
-            requestQuote: "कोटेशन प्राप्त करें",
-            faq: "अक्सर पूछे जाने वाले सवाल",
-            viewRates: "▼ रेट और विवरण देखें",
-            hideRates: "▲ विवरण छुपाएं"
-        }
-    };
+  // Update input placeholders
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (t[key]) {
+      el.placeholder = t[key];
+    }
+  });
 
-    /* =====================================================
-       DOM READY
-    ===================================================== */
-    document.addEventListener("DOMContentLoaded", function () {
-        initTheme();
-        initLanguage();
-        initServices();
-        initGallery();
-        initReviews();
-        initFAQ();
-        initQuoteCalculator();
-        initPWA();
+  // Update button active state
+  document.querySelectorAll(".language-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
+  });
+
+  localStorage.setItem("sandeepLang", currentLang);
+  updateThemeButtonText();
+}
+
+// 3. Theme Toggle & Sync
+function updateThemeButtonText() {
+  const isLight = document.documentElement.classList.contains("saved-light-theme");
+  const currentLang = localStorage.getItem("sandeepLang") || "en";
+  const themeTextEl = document.getElementById("themeText");
+  const themeIconEl = document.getElementById("themeIcon");
+
+  if (themeTextEl && themeIconEl) {
+    if (isLight) {
+      themeIconEl.innerText = "🌙";
+      themeTextEl.innerText = translations[currentLang].darkMode;
+    } else {
+      themeIconEl.innerText = "☀️";
+      themeTextEl.innerText = translations[currentLang].lightMode;
+    }
+  }
+}
+
+// 4. Initialization on DOM Load
+document.addEventListener("DOMContentLoaded", () => {
+  // Theme setup
+  const themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      document.documentElement.classList.toggle("saved-light-theme");
+      const isLight = document.documentElement.classList.contains("saved-light-theme");
+      localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
+      updateThemeButtonText();
     });
+  }
 
-    /* =====================================================
-       THEME CONTROLLER
-    ===================================================== */
-    function initTheme() {
-        const toggleBtn = document.getElementById("themeToggle");
-        if (!toggleBtn) return;
+  // Language setup
+  document.querySelectorAll(".language-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setLanguage(btn.getAttribute("data-lang"));
+    });
+  });
 
-        const isLight = document.documentElement.classList.contains("saved-light-theme");
-        toggleBtn.textContent = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
+  const savedLang = localStorage.getItem("sandeepLang") || "en";
+  setLanguage(savedLang);
 
-        toggleBtn.addEventListener("click", function () {
-            const currentLight = document.documentElement.classList.toggle("saved-light-theme");
-            toggleBtn.textContent = currentLight ? "🌙 Dark Mode" : "☀️ Light Mode";
-            try {
-                localStorage.setItem("sandeepTheme", currentLight ? "light" : "dark");
-            } catch (e) {}
-        });
+  // Load Data
+  loadServices();
+  loadGallery();
+  loadReviews();
+  loadFAQ();
+  setupQuoteCalculation();
+});
+
+// 5. Dynamic Data Loaders
+async function loadServices() {
+  const container = document.getElementById("serviceContainer");
+  if (!container) return;
+  try {
+    const res = await fetch("data/services.json");
+    const data = await res.json();
+    container.innerHTML = data.map(s => `
+      <div class="service-card">
+        <span class="service-icon">${s.icon}</span>
+        <strong>${s.name}</strong>
+      </div>
+    `).join("");
+  } catch (e) {
+    console.log("Services loaded from fallback");
+  }
+}
+
+async function loadGallery() {
+  const container = document.getElementById("galleryContainer");
+  if (!container) return;
+  try {
+    const res = await fetch("data/gallery.json");
+    const data = await res.json();
+    container.innerHTML = data.map(g => `
+      <img src="${g.image}" alt="${g.title}" onclick="openLightbox('${g.image}')" onerror="this.style.display='none'">
+    `).join("");
+  } catch (e) {
+    console.log("Gallery fallback");
+  }
+}
+
+function openLightbox(src) {
+  const box = document.getElementById("lightbox");
+  const img = document.getElementById("lightboxImage");
+  if (box && img) {
+    img.src = src;
+    box.style.display = "flex";
+  }
+}
+
+document.getElementById("closeLightbox")?.addEventListener("click", () => {
+  document.getElementById("lightbox").style.display = "none";
+});
+
+async function loadReviews() {
+  const container = document.getElementById("reviewContainer");
+  if (!container) return;
+  try {
+    const res = await fetch("data/reviews.json");
+    const data = await res.json();
+    container.innerHTML = data.map(r => `
+      <div class="card" style="text-align:left; padding:15px;">
+        <div style="color:var(--gold); font-size:1.1rem;">${r.rating}</div>
+        <p style="margin:6px 0; font-size:0.85rem;">"${r.review}"</p>
+        <small style="color:var(--muted);">${r.name} - ${r.date}</small>
+      </div>
+    `).join("");
+  } catch (e) {
+    console.log("Reviews fallback");
+  }
+}
+
+async function loadFAQ() {
+  const container = document.getElementById("faqContainer");
+  if (!container) return;
+  try {
+    const res = await fetch("data/faq.json");
+    const data = await res.json();
+    container.innerHTML = data.map((f, i) => `
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(${i})">
+          <span>${f.question}</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer" id="faq-ans-${i}">${f.answer}</div>
+      </div>
+    `).join("");
+  } catch (e) {
+    console.log("FAQ fallback");
+  }
+}
+
+function toggleFaq(index) {
+  const item = document.querySelectorAll(".faq-item")[index];
+  if (item) item.classList.toggle("active");
+}
+
+// 6. WhatsApp Quote & Discount Handler
+function setupQuoteCalculation() {
+  const totalInput = document.getElementById("serviceTotal");
+  const calcBox = document.getElementById("discountCalculation");
+  const sendBtn = document.getElementById("sendQuoteBtn");
+
+  totalInput?.addEventListener("input", () => {
+    const val = parseFloat(totalInput.value);
+    if (!isNaN(val) && val > 0) {
+      const discount = val * 0.10;
+      const finalPrice = val - discount;
+      calcBox.style.display = "block";
+      calcBox.innerHTML = `
+        <div><span>Original Price:</span> <strong>₹${val.toFixed(2)}</strong></div>
+        <div><span>Discount (10% OFF):</span> <strong>-₹${discount.toFixed(2)}</strong></div>
+        <div class="final-price"><span>Net Payable:</span> <strong>₹${finalPrice.toFixed(2)}</strong></div>
+      `;
+    } else {
+      calcBox.style.display = "none";
+    }
+  });
+
+  sendBtn?.addEventListener("click", () => {
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const service = document.getElementById("serviceName").value;
+    const total = document.getElementById("serviceTotal").value.trim();
+    const msg = document.getElementById("customerMessage").value.trim();
+
+    if (!name || !phone) {
+      alert("Please provide your Name and Mobile Number.");
+      return;
     }
 
-    /* =====================================================
-       LANGUAGE CONTROLLER
-    ===================================================== */
-    function initLanguage() {
-        const langBtns = document.querySelectorAll(".language-btn");
-        langBtns.forEach(btn => {
-            btn.addEventListener("click", function () {
-                currentLang = this.getAttribute("data-lang");
-                langBtns.forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-                applyLanguage(currentLang);
-            });
-        });
+    let text = `⚡ *Sandeep ElectroFix Enquiry* ⚡\n\n`;
+    text += `👤 *Name:* ${name}\n`;
+    text += `📞 *Phone:* ${phone}\n`;
+    if (service) text += `🛠️ *Service:* ${service}\n`;
+    if (total) {
+      const val = parseFloat(total);
+      const discount = val * 0.10;
+      const finalPrice = val - discount;
+      text += `💰 *Est. Amount:* ₹${val}\n`;
+      text += `🎁 *Discount Applied (10%):* ₹${discount}\n`;
+      text += `✅ *Final Quote:* ₹${finalPrice}\n`;
     }
+    if (msg) text += `📝 *Message:* ${msg}\n`;
 
-    function applyLanguage(lang) {
-        const data = translations[lang] || translations.en;
-        document.querySelectorAll("[data-i18n]").forEach(el => {
-            const key = el.getAttribute("data-i18n");
-            if (data[key]) el.textContent = data[key];
-        });
-    }
-
-    /* =====================================================
-       SERVICES & ACCORDION DROPDOWN
-    ===================================================== */
-    function initServices() {
-        const container = document.getElementById("serviceContainer");
-        const selectBox = document.getElementById("serviceName");
-        if (!container || !config.services) return;
-
-        container.innerHTML = "";
-        if (selectBox) selectBox.innerHTML = '<option value="">Select Service</option>';
-
-        config.services.forEach((service, index) => {
-            if (!service.show) return;
-
-            // Populate Form Dropdown
-            if (selectBox) {
-                const opt = document.createElement("option");
-                opt.value = service.title;
-                opt.textContent = service.title;
-                selectBox.appendChild(opt);
-            }
-
-            // Create Service Card
-            const card = document.createElement("div");
-            card.className = "service-card";
-            card.id = `service-${service.id}`;
-
-            let subServicesHTML = "";
-            if (service.subServices && service.subServices.length > 0) {
-                subServicesHTML = `
-                    <div class="service-details" style="display:none; margin-top:12px; padding-top:10px; border-top:1px dashed var(--card-border);">
-                        <ul style="list-style:none; padding:0; margin:0 0 10px 0;">
-                            ${service.subServices.map(sub => `
-                                <li style="display:flex; justify-content:space-between; font-size:0.82rem; margin:6px 0; color:var(--muted);">
-                                    <span>• ${sub.name}</span>
-                                    <strong style="color:var(--gold-light);">${sub.rate}</strong>
-                                </li>
-                            `).join("")}
-                        </ul>
-                    </div>
-                `;
-            }
-
-            card.innerHTML = `
-                <div class="service-header" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span class="service-icon">${service.icon || "⚡"}</span>
-                        <div>
-                            <strong style="font-size:0.95rem; color:var(--text);">${service.title}</strong>
-                            <p style="font-size:0.8rem; color:var(--muted); margin-top:2px;">${service.description}</p>
-                        </div>
-                    </div>
-                    <span class="accordion-arrow" style="font-size:0.85rem; color:var(--blue-light); margin-left:8px;">▼</span>
-                </div>
-                ${subServicesHTML}
-            `;
-
-            // Toggle Click
-            const header = card.querySelector(".service-header");
-            const details = card.querySelector(".service-details");
-            const arrow = card.querySelector(".accordion-arrow");
-
-            if (header && details) {
-                header.addEventListener("click", function () {
-                    const isOpen = details.style.display === "block";
-                    details.style.display = isOpen ? "none" : "block";
-                    arrow.textContent = isOpen ? "▼" : "▲";
-                    card.classList.toggle("active", !isOpen);
-                });
-            }
-
-            container.appendChild(card);
-        });
-    }
-
-    /* =====================================================
-       GALLERY & LIGHTBOX
-    ===================================================== */
-    function initGallery() {
-        const container = document.getElementById("galleryContainer");
-        const lightbox = document.getElementById("lightbox");
-        const lightboxImg = document.getElementById("lightboxImage");
-        const closeBtn = document.getElementById("closeLightbox");
-
-        if (!container || !config.gallery) return;
-        container.innerHTML = "";
-
-        config.gallery.forEach(item => {
-            if (!item.show) return;
-            const img = document.createElement("img");
-            img.src = item.image;
-            img.alt = item.title;
-            img.loading = "lazy";
-            img.addEventListener("click", function () {
-                if (lightbox && lightboxImg) {
-                    lightboxImg.src = item.image;
-                    lightbox.style.display = "flex";
-                }
-            });
-            container.appendChild(img);
-        });
-
-        if (closeBtn && lightbox) {
-            closeBtn.addEventListener("click", () => lightbox.style.display = "none");
-            lightbox.addEventListener("click", (e) => {
-                if (e.target === lightbox) lightbox.style.display = "none";
-            });
-        }
-    }
-
-    /* =====================================================
-       REVIEWS
-    ===================================================== */
-    function initReviews() {
-        const container = document.getElementById("reviewContainer");
-        if (!container || !config.reviews) return;
-        container.innerHTML = "";
-
-        config.reviews.forEach(rev => {
-            if (!rev.show) return;
-            const card = document.createElement("div");
-            card.className = "review-card";
-            card.innerHTML = `
-                <div style="color:var(--gold); font-size:0.9rem; margin-bottom:4px;">★★★★★</div>
-                <p style="font-size:0.85rem; margin-bottom:6px;">"${rev.text}"</p>
-                <strong style="font-size:0.8rem;">- ${rev.name}</strong>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    /* =====================================================
-       FAQ ACCORDION
-    ===================================================== */
-    function initFAQ() {
-        const container = document.getElementById("faqContainer");
-        if (!container || !config.faq) return;
-        container.innerHTML = "";
-
-        config.faq.forEach(item => {
-            if (!item.show) return;
-            const box = document.createElement("div");
-            box.className = "faq-item";
-            box.innerHTML = `
-                <button type="button" class="faq-question">
-                    <span>${item.question}</span>
-                    <span style="color:var(--gold);">+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>${item.answer}</p>
-                </div>
-            `;
-            box.querySelector(".faq-question").addEventListener("click", function () {
-                box.classList.toggle("active");
-                const sym = box.querySelector(".faq-question span:last-child");
-                sym.textContent = box.classList.contains("active") ? "−" : "+";
-            });
-            container.appendChild(box);
-        });
-    }
-
-    /* =====================================================
-       QUOTE & DISCOUNT CALCULATOR
-    ===================================================== */
-    function initQuoteCalculator() {
-        const totalInput = document.getElementById("serviceTotal");
-        const calcBox = document.getElementById("discountCalculation");
-        const sendBtn = document.getElementById("sendQuoteBtn");
-
-        const discountPercent = config.discount && config.discount.enabled ? config.discount.percentage : 0;
-
-        function updateCalc() {
-            const val = parseFloat(totalInput.value);
-            if (!val || val <= 0 || discountPercent <= 0) {
-                if (calcBox) calcBox.style.display = "none";
-                return;
-            }
-            const discountAmt = Math.round((val * discountPercent) / 100);
-            const finalAmt = Math.round(val - discountAmt);
-
-            if (calcBox) {
-                calcBox.style.display = "block";
-                calcBox.innerHTML = `
-                    <div><span>Subtotal:</span><strong>₹${val}</strong></div>
-                    <div><span>Discount (${discountPercent}% OFF):</span><strong>- ₹${discountAmt}</strong></div>
-                    <div class="final-price"><span>Final Estimated Price:</span><strong>₹${finalAmt}</strong></div>
-                `;
-            }
-        }
-
-        if (totalInput) totalInput.addEventListener("input", updateCalc);
-
-        if (sendBtn) {
-            sendBtn.addEventListener("click", function () {
-                const name = document.getElementById("customerName")?.value.trim() || "Customer";
-                const phone = document.getElementById("customerPhone")?.value.trim() || "Not Provided";
-                const service = document.getElementById("serviceName")?.value || "General Service";
-                const total = document.getElementById("serviceTotal")?.value || "";
-                const msg = document.getElementById("customerMessage")?.value.trim() || "Need service.";
-
-                let quoteDetails = `👤 Name: ${name}\n📞 Phone: ${phone}\n⚡ Service: ${service}\n📝 Requirement: ${msg}`;
-                if (total && discountPercent > 0) {
-                    const dAmt = Math.round((parseFloat(total) * discountPercent) / 100);
-                    const fAmt = Math.round(parseFloat(total) - dAmt);
-                    quoteDetails += `\n\n💰 Estimated Total: ₹${total}\n🔥 Discount: ₹${dAmt} (${discountPercent}% OFF)\n✅ Final Payable: ₹${fAmt}`;
-                }
-
-                const waURL = `https://wa.me/${business.whatsapp || "919026036445"}?text=${encodeURIComponent(`Hello Sandeep ElectroFix 👋\n\nI want to request a quote:\n\n${quoteDetails}`)}`;
-                window.open(waURL, "_blank", "noopener,noreferrer");
-            });
-        }
-    }
-
-    /* =====================================================
-       SERVICE WORKER REGISTRATION (PWA)
-    ===================================================== */
-    function initPWA() {
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", function () {
-                navigator.serviceWorker.register("./sw.js")
-                    .then(() => console.log("⚡ Service Worker Registered"))
-                    .catch(err => console.log("SW registration failed", err));
-            });
-        }
-    }
-
-})();
+    window.open(`https://wa.me/919026036445?text=${encodeURIComponent(text)}`, "_blank");
+  });
+}
