@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070b12">
+    <meta name="description" content="Sandeep ElectroFix - Our Electrical Work Gallery, Wiring, Installation, Repair and Electrical Projects in Lucknow.">
+    <meta name="author" content="Sandeep ElectroFix">
+
+    <title>Our Work | Sandeep ElectroFix</title>
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="our-work.css">
+</head>
+<body>
+
+    <div class="work-background"></div>
+
+    <!-- HEADER -->
+    <header class="work-header">
+        <a href="index.html" class="back-button" id="backButton" aria-label="Go Back">←</a>
+        <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" class="work-logo">
+        <h1>Our Work</h1>
+        <p class="work-subtitle">Real Electrical Work • Quality Installation • Professional Service</p>
+    </header>
+
+    <!-- TOOLBAR -->
+    <section class="work-toolbar">
+        <div class="work-heading">
+            <span class="work-eyebrow">⚡ SANDEEP ELECTROFIX</span>
+            <h2>Our Latest Projects</h2>
+            <p>Take a look at our electrical installation, wiring and repair work.</p>
+        </div>
+
+        <div class="work-search">
+            <input type="search" id="workSearch" placeholder="Search work..." autocomplete="off">
+            <button type="button" id="clearWorkSearch" aria-label="Clear Search">×</button>
+        </div>
+    </section>
+
+    <!-- CATEGORY FILTER -->
+    <section class="work-categories">
+        <div class="category-container" id="workCategoryContainer"></div>
+    </section>
+
+    <!-- WORK COUNTER -->
+    <section class="work-counter-section">
+        <div>
+            <span id="workCounter">0 Projects</span>
+        </div>
+    </section>
+
+    <!-- WORK GRID -->
+    <main class="work-section">
+        <div class="work-grid" id="workGrid"></div>
+
+        <!-- NO RESULTS -->
+        <div class="no-work" id="noWork">
+            <div class="no-work-icon">🔎</div>
+            <h3>No Work Found</h3>
+            <p>Try another category or search term.</p>
+            <button type="button" class="reset-work" id="resetWork">Reset Filters</button>
+        </div>
+    </main>
+
+    <!-- CTA -->
+    <section class="work-cta">
+        <div class="cta-icon">⚡</div>
+        <h2>Need Electrical Work?</h2>
+        <p>Contact Sandeep ElectroFix for professional electrical services in Lucknow.</p>
+        <div class="cta-buttons">
+            <a href="tel:+919026036445" class="cta-call">📞 Call Now</a>
+            <a href="https://wa.me/919026036445" target="_blank" rel="noopener" class="cta-whatsapp">💬 WhatsApp</a>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX -->
+    <div class="work-lightbox" id="workLightbox" aria-hidden="true">
+        <div class="lightbox-backdrop"></div>
+        <div class="lightbox-box">
+            <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">×</button>
+            
+            <img src="" alt="" id="lightboxImage" class="lightbox-image">
+            <video id="lightboxVideo" class="lightbox-video" controls playsinline></video>
+            
+            <div class="lightbox-content">
+                <span id="lightboxCategory" class="lightbox-category"></span>
+                <h2 id="lightboxTitle"></h2>
+                <p id="lightboxDescription"></p>
+                <a href="#" id="lightboxWhatsApp" class="lightbox-whatsapp" target="_blank" rel="noopener">
+                    💬 Enquire About This Work
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="work-footer">
+        <p>© <span id="currentYear"></span> <strong>Sandeep ElectroFix</strong></p>
+        <p>Professional Electrical Services • Lucknow</p>
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
+    <script src="our-work.js" defer></script>
+</body>
+</html>
