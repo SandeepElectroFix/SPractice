@@ -1,5 +1,6 @@
 /* =========================================
 SANDEEP ELECTROFIX - COMPLETE JAVASCRIPT
+Version 3.2 - Fully Connected with CARD_CONFIG
 ========================================= */
 
 // 1. Translation Dictionary (English & Hindi)
@@ -49,29 +50,7 @@ const translations = {
     navServices: "Services",
     navWork: "Work",
     navQuote: "Quote",
-    navCall: "Call",
-    faqs: [
-      {
-        question: "Do you provide complete house wiring services?",
-        answer: "Yes, we provide full house wiring for new homes, conduit piping, modular switch fitting, and renovation wiring."
-      },
-      {
-        question: "Do you handle emergency short circuits & fault finding?",
-        answer: "Yes, our team quickly diagnoses MCB tripping, electrical line faults, short circuits, and restores power safely."
-      },
-      {
-        question: "Is installation available for lights, fans, and appliances?",
-        answer: "Yes, we install false ceiling lights, chandeliers, profile lights, ceiling fans, switchboards, and inverters."
-      },
-      {
-        question: "How can I calculate or get a work estimate?",
-        answer: "You can use our WhatsApp Quote form below or directly call us for an instant estimate with special discounts."
-      },
-      {
-        question: "Which areas in Lucknow do you cover?",
-        answer: "Sandeep ElectroFix provides fast on-site electrician services across all locations in Lucknow, Uttar Pradesh."
-      }
-    ]
+    navCall: "Call"
   },
   hi: {
     tagline: "आपके विश्वास को रोशन करते हुए",
@@ -118,29 +97,7 @@ const translations = {
     navServices: "सेवाएं",
     navWork: "कार्य",
     navQuote: "कोट",
-    navCall: "कॉल",
-    faqs: [
-      {
-        question: "क्या आप नए मकान की पूरी हाउस वायरिंग करते हैं?",
-        answer: "हाँ, नए मकान की अंडरग्राउंड पाइपिंग, कन्सिल्ड वायरिंग, मॉड्यूलर स्विच बोर्ड और रिनोवेशन का पूरा काम किया जाता है।"
-      },
-      {
-        question: "क्या शॉर्ट सर्किट और लाइन फॉल्ट की रिपेयरिंग होती है?",
-        answer: "हाँ, एमसीबी ट्रिपिंग, शॉर्ट सर्किट, पावर लीकेज और लाइन फॉल्ट को तुरंत टेस्ट करके सही किया जाता है।"
-      },
-      {
-        question: "पंखा, लाइट, झूमर और इन्वर्टर फिटिंग की सुविधा है?",
-        answer: "हाँ, फॉल्स सीलिंग लाइट्स, प्रोफाइल लाइट, सीलिंग फैन, स्विच बोर्ड और इन्वर्टर वायरिंग का काम किया जाता है।"
-      },
-      {
-        question: "काम का खर्च या एस्टीमेट कैसे पता करें?",
-        answer: "आप नीचे दिए गए कोटेशन फॉर्म से अनुमानित रेट देख सकते हैं या सीधे कॉल करके जानकारी ले सकते हैं।"
-      },
-      {
-        question: "क्या आप पूरे लखनऊ में अपनी सेवा देते हैं?",
-        answer: "हाँ, संदीप इलेक्ट्रोफिक्स पूरे लखनऊ और आसपास के सभी इलाकों में ऑन-साइट इलेक्ट्रिशियन सेवा देता है।"
-      }
-    ]
+    navCall: "कॉल"
   }
 };
 
@@ -165,7 +122,7 @@ function setLanguage(lang) {
 
   localStorage.setItem("sandeepLang", currentLang);
   updateThemeButtonText();
-  renderFAQ(currentLang);
+  renderFAQ();
 }
 
 // 3. Theme Toggle & UI Update
@@ -188,6 +145,8 @@ function updateThemeButtonText() {
 
 // 4. Initialization
 document.addEventListener("DOMContentLoaded", () => {
+  applyVisibilityControls();
+
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
@@ -213,10 +172,58 @@ document.addEventListener("DOMContentLoaded", () => {
   loadServices();
   loadGallery();
   loadReviews();
+  renderFAQ();
   setupQuoteCalculation();
 });
 
-// 5. Quick Access Layout Switcher
+// 5. Apply Global Feature & Element Toggles
+function applyVisibilityControls() {
+  const config = window.CARD_CONFIG;
+  if (!config) return;
+
+  const toggleElem = (id, condition) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = condition ? "" : "none";
+  };
+
+  // Main Section Visibility
+  if (config.features) {
+    toggleElem("heroSection", config.features.heroSection);
+    toggleElem("quickAccessBar", config.features.quickAccessBar);
+    toggleElem("themeToggle", config.features.themeToggle);
+    toggleElem("languageSwitcher", config.features.languageSwitch);
+    toggleElem("discountSection", config.features.discountOffer);
+    toggleElem("servicesSection", config.features.servicesSection);
+    toggleElem("gallerySection", config.features.gallerySection);
+    toggleElem("reviewsSection", config.features.reviewsSection);
+    toggleElem("quoteFormSection", config.features.quoteFormSection);
+    toggleElem("faqSection", config.features.faqSection);
+    toggleElem("locationSection", config.features.locationTracker);
+    toggleElem("footerSection", config.features.footerSection);
+    toggleElem("mobileBottomNav", config.features.mobileBottomNav);
+  }
+
+  // Business Elements & Quick Action Toggles
+  if (config.business && config.business.showElements) {
+    const el = config.business.showElements;
+    toggleElem("businessLogo", el.logo);
+    toggleElem("businessTagline", el.tagline);
+    toggleElem("businessLocation", el.location);
+    toggleElem("callBtn", el.phoneCall);
+    toggleElem("whatsappBtn", el.whatsappChat);
+    toggleElem("emailBtn", el.email);
+    toggleElem("websiteBtn", el.website);
+    toggleElem("mapsBtn", el.googleMaps);
+    toggleElem("facebookBtn", el.facebook);
+    toggleElem("instagramBtn", el.instagram);
+    toggleElem("youtubeBtn", el.youtube);
+    toggleElem("cardQRContainer", el.cardQR);
+    toggleElem("saveContactBtn", el.saveContactBtn);
+    toggleElem("shareBtn", el.shareBtn);
+  }
+}
+
+// 6. Quick Access Layout Switcher
 function setupQuickAccessLayoutSwitcher() {
   const container = document.getElementById("quickGridContainer");
   const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
@@ -244,7 +251,7 @@ function setupQuickAccessLayoutSwitcher() {
   applyQuickLayout(savedLayout);
 }
 
-// 6. Services Layout Switcher
+// 7. Services Layout Switcher
 function setupServiceLayoutSwitcher() {
   const container = document.getElementById("serviceContainer");
   const buttons = document.querySelectorAll("#servicesLayoutBar .layout-btn");
@@ -272,36 +279,96 @@ function setupServiceLayoutSwitcher() {
   applyServiceLayout(savedLayout);
 }
 
-// 7. Dynamic Data Loaders
-async function loadServices() {
+// 8. Services Loader (Reads from CARD_CONFIG & handles Open/Close Toggle)
+function loadServices() {
   const container = document.getElementById("serviceContainer");
-  if (!container) return;
-  try {
-    const res = await fetch("data/services.json");
-    const data = await res.json();
-    container.innerHTML = data.map(s => `
-      <div class="service-card">
-        <span class="service-icon">${s.icon}</span>
-        <strong>${s.name}</strong>
+  const serviceSelect = document.getElementById("serviceName");
+  if (!container || !window.CARD_CONFIG) return;
+
+  const services = window.CARD_CONFIG.services || [];
+  const settings = window.CARD_CONFIG.serviceSettings || {
+    showCategoryDescription: true,
+    showSubItems: true,
+    showPrices: true
+  };
+
+  container.innerHTML = "";
+  if (serviceSelect) {
+    serviceSelect.innerHTML = `<option value="">Select Service</option>`;
+  }
+
+  services.forEach((service, index) => {
+    if (service.show === false) return;
+
+    // Populate Quote dropdown
+    if (serviceSelect) {
+      const opt = document.createElement("option");
+      opt.value = service.title;
+      opt.textContent = service.title;
+      serviceSelect.appendChild(opt);
+    }
+
+    // Filter sub-services
+    const visibleSubServices = (service.subServices || []).filter(sub => sub.show !== false);
+
+    const subListHtml = (settings.showSubItems && visibleSubServices.length > 0)
+      ? `
+        <div class="sub-services-list">
+          ${visibleSubServices.map(sub => `
+            <div class="sub-service-item">
+              <span class="sub-name">• ${sub.name}</span>
+              ${settings.showPrices ? `<span class="sub-rate">${sub.rate}</span>` : ""}
+            </div>
+          `).join("")}
+        </div>
+      `
+      : "";
+
+    const descHtml = (settings.showCategoryDescription && service.description)
+      ? `<p class="service-desc">${service.description}</p>`
+      : "";
+
+    const card = document.createElement("div");
+    card.className = "service-card";
+    card.id = `service-${service.id || index}`;
+    card.innerHTML = `
+      <div class="service-header" onclick="toggleServiceDetails(this)">
+        <div class="service-title-wrap">
+          <span class="service-icon">${service.icon}</span>
+          <h3 class="service-title">${service.title}</h3>
+        </div>
+        <span class="toggle-arrow">▼</span>
       </div>
-    `).join("");
-  } catch (e) {
-    console.log("Services fallback");
+      <div class="service-body">
+        ${descHtml}
+        ${subListHtml}
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+// Function to toggle accordion open/close
+function toggleServiceDetails(headerElement) {
+  const card = headerElement.closest(".service-card");
+  if (card) {
+    card.classList.toggle("open");
   }
 }
 
-async function loadGallery() {
+// 9. Gallery Loader
+function loadGallery() {
   const container = document.getElementById("galleryContainer");
-  if (!container) return;
-  try {
-    const res = await fetch("data/gallery.json");
-    const data = await res.json();
-    container.innerHTML = data.map(g => `
-      <img src="${g.image}" alt="${g.title}" onclick="openLightbox('${g.image}')" onerror="this.style.display='none'">
-    `).join("");
-  } catch (e) {
-    console.log("Gallery fallback");
-  }
+  if (!container || !window.CARD_CONFIG) return;
+
+  const galleryItems = (window.CARD_CONFIG.gallery || []).filter(item => item.show !== false);
+  container.innerHTML = galleryItems.map(g => `
+    <div class="gallery-item">
+      <img src="${g.image}" alt="${g.title}" onclick="openLightbox('${g.image}')" onerror="this.parentElement.style.display='none'">
+      <div class="gallery-title">${g.title}</div>
+    </div>
+  `).join("");
 }
 
 function openLightbox(src) {
@@ -317,25 +384,22 @@ document.getElementById("closeLightbox")?.addEventListener("click", () => {
   document.getElementById("lightbox").style.display = "none";
 });
 
-async function loadReviews() {
+// 10. Reviews Loader
+function loadReviews() {
   const container = document.getElementById("reviewContainer");
-  if (!container) return;
-  try {
-    const res = await fetch("data/reviews.json");
-    const data = await res.json();
-    container.innerHTML = data.map(r => `
-      <div class="card" style="text-align:left; padding:15px;">
-        <div style="color:var(--gold); font-size:1.1rem;">${r.rating}</div>
-        <p style="margin:6px 0; font-size:0.85rem;">"${r.review}"</p>
-        <small style="color:var(--muted);">${r.name} - ${r.date}</small>
-      </div>
-    `).join("");
-  } catch (e) {
-    console.log("Reviews fallback");
-  }
+  if (!container || !window.CARD_CONFIG) return;
+
+  const reviewItems = (window.CARD_CONFIG.reviews || []).filter(item => item.show !== false);
+  container.innerHTML = reviewItems.map(r => `
+    <div class="card review-card" style="text-align:left; padding:15px; margin-bottom:10px;">
+      <div style="color:#f59e0b; font-size:1.1rem;">${"★".repeat(r.rating || 5)}</div>
+      <p style="margin:6px 0; font-size:0.9rem;">"${r.text}"</p>
+      <small style="color:#888;">— ${r.name}</small>
+    </div>
+  `).join("");
 }
 
-// 8. GPS Distance Calculator
+// 11. GPS Distance Calculator
 function getUserLocation() {
   const status = document.getElementById("locationStatus");
   if (!navigator.geolocation) {
@@ -370,13 +434,14 @@ function getUserLocation() {
   );
 }
 
-// 9. FAQ Renderer
-function renderFAQ(lang) {
+// 12. FAQ Renderer (Reads directly from CARD_CONFIG)
+function renderFAQ() {
   const container = document.getElementById("faqContainer");
-  if (!container) return;
-  const faqList = translations[lang].faqs;
+  if (!container || !window.CARD_CONFIG) return;
+
+  const faqList = (window.CARD_CONFIG.faq || []).filter(f => f.show !== false);
   container.innerHTML = faqList.map((f, i) => `
-    <div class="faq-item">
+    <div class="faq-item" id="faq-item-${i}">
       <button class="faq-question" onclick="toggleFaq(${i})">
         <span>${f.question}</span>
         <span class="faq-icon">+</span>
@@ -387,15 +452,15 @@ function renderFAQ(lang) {
 }
 
 function toggleFaq(index) {
-  const items = document.querySelectorAll(".faq-item");
-  if (items[index]) items[index].classList.toggle("active");
+  const item = document.getElementById(`faq-item-${index}`);
+  if (item) item.classList.toggle("active");
 }
 
-// 10. Share Website
+// 13. Share Website
 function shareWebsite() {
   if (navigator.share) {
     navigator.share({
-      title: 'Sandeep ElectroFix - Electrician Services',
+      title: window.CARD_CONFIG?.business?.name || 'Sandeep ElectroFix',
       text: 'Professional Electrical Services in Lucknow. House wiring, Repair, Fitting & Maintenance.',
       url: window.location.href
     }).catch((error) => console.log('Share canceled', error));
@@ -405,21 +470,23 @@ function shareWebsite() {
   }
 }
 
-// 11. WhatsApp Quote & Calculation
+// 14. WhatsApp Quote & Calculation
 function setupQuoteCalculation() {
   const totalInput = document.getElementById("serviceTotal");
   const calcBox = document.getElementById("discountCalculation");
   const sendBtn = document.getElementById("sendQuoteBtn");
 
+  const discountPercent = window.CARD_CONFIG?.discount?.percentage || 10;
+
   totalInput?.addEventListener("input", () => {
     const val = parseFloat(totalInput.value);
     if (!isNaN(val) && val > 0) {
-      const discount = val * 0.10;
+      const discount = val * (discountPercent / 100);
       const finalPrice = val - discount;
       calcBox.style.display = "block";
       calcBox.innerHTML = `
         <div><span>Original Price:</span> <strong>₹${val.toFixed(2)}</strong></div>
-        <div><span>Discount (10% OFF):</span> <strong>-₹${discount.toFixed(2)}</strong></div>
+        <div><span>Discount (${discountPercent}% OFF):</span> <strong>-₹${discount.toFixed(2)}</strong></div>
         <div class="final-price"><span>Net Payable:</span> <strong>₹${finalPrice.toFixed(2)}</strong></div>
       `;
     } else {
@@ -428,31 +495,42 @@ function setupQuoteCalculation() {
   });
 
   sendBtn?.addEventListener("click", () => {
-    const name = document.getElementById("customerName").value.trim();
-    const phone = document.getElementById("customerPhone").value.trim();
-    const service = document.getElementById("serviceName").value;
-    const total = document.getElementById("serviceTotal").value.trim();
-    const msg = document.getElementById("customerMessage").value.trim();
+    const name = document.getElementById("customerName")?.value.trim() || "";
+    const phone = document.getElementById("customerPhone")?.value.trim() || "";
+    const service = document.getElementById("serviceName")?.value || "";
+    const total = document.getElementById("serviceTotal")?.value.trim() || "";
+    const msg = document.getElementById("customerMessage")?.value.trim() || "";
 
-    if (!name || !phone) {
-      alert("Please provide your Name and Mobile Number.");
+    const quoteCfg = window.CARD_CONFIG?.quote || {};
+
+    if (quoteCfg.requireName && !name) {
+      alert("Please provide your Name.");
+      return;
+    }
+    if (quoteCfg.requirePhone && !phone) {
+      alert("Please provide your Mobile Number.");
+      return;
+    }
+    if (quoteCfg.requireService && !service) {
+      alert("Please select a Service.");
       return;
     }
 
-    let text = `⚡ *Sandeep ElectroFix Enquiry* ⚡\n\n`;
+    let text = `⚡ *${window.CARD_CONFIG?.business?.name || "Sandeep ElectroFix"} Enquiry* ⚡\n\n`;
     text += `👤 *Name:* ${name}\n`;
     text += `📞 *Phone:* ${phone}\n`;
     if (service) text += `🛠️ *Service:* ${service}\n`;
     if (total) {
       const val = parseFloat(total);
-      const discount = val * 0.10;
+      const discount = val * (discountPercent / 100);
       const finalPrice = val - discount;
       text += `💰 *Est. Amount:* ₹${val}\n`;
-      text += `🎁 *Discount Applied (10%):* ₹${discount}\n`;
+      text += `🎁 *Discount Applied (${discountPercent}%):* ₹${discount}\n`;
       text += `✅ *Final Quote:* ₹${finalPrice}\n`;
     }
     if (msg) text += `📝 *Message:* ${msg}\n`;
 
-    window.open(`https://wa.me/919026036445?text=${encodeURIComponent(text)}`, "_blank");
+    const waNum = quoteCfg.whatsappNumber || window.CARD_CONFIG?.business?.whatsapp || "919026036445";
+    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(text)}`, "_blank");
   });
 }
