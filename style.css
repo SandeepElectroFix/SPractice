@@ -308,6 +308,9 @@ QUICK ACCESS
 
 .card strong { font-size: 0.8rem; font-weight: 600; }
 
+/* =========================================
+QUICK ACCESS & SVG ICONS
+========================================= */
 .icon {
   width: 46px;
   height: 46px;
@@ -316,15 +319,29 @@ QUICK ACCESS
   justify-content: center;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 2px;
 }
 
 .icon svg {
   width: 24px;
   height: 24px;
-  fill: currentColor;
-  stroke: currentColor;
-  stroke-width: 1.5;
+  display: block;
 }
+
+/* Brand Colors */
+.call-icon { color: var(--gold); }
+.whatsapp-icon { color: var(--green); }
+.website-icon { color: var(--blue); }
+.maps-icon { color: #ff5252; }
+.facebook-icon { color: var(--facebook); }
+.instagram-icon { color: #e1306c; }
+.youtube-icon { color: var(--youtube); }
+.work-icon { color: var(--blue-light); }
+.email-icon { color: var(--gold-light); }
+.contact-icon { color: var(--blue-light); }
+.share-icon { color: var(--green); }
+.catalogue-icon { font-size: 24px; }
+
 
 .call-icon { color: var(--gold); }
 .whatsapp-icon { color: var(--green); }
