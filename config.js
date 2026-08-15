@@ -21,7 +21,7 @@ window.CARD_CONFIG = {
         instagram: "https://www.instagram.com/sandeep_electrofix",
         youtube: "https://youtube.com/@sandeepelectrofix",
         logo: "assets/logo.png",
-        cardQR: "assets/qr-card.png",
+        cardQR: "assets/qr.png",
 
         showElements: {
             logo: true,
@@ -69,7 +69,7 @@ window.CARD_CONFIG = {
         title_en: "Special Discount",
         title_hi: "विशेष छूट",
         message_en: "Get 10% OFF on selected electrical services.",
-        message_hi: "इलेक्ट्रिकल सेवाओं पर पाएं 10% की विशेष छूट।",
+        message_hi: "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं",
         validity_en: "Limited Time Offer",
         validity_hi: "सीमित समय के लिए"
     },
@@ -81,14 +81,14 @@ window.CARD_CONFIG = {
             icon: "🏠",
             title_en: "House Wiring",
             title_hi: "हाउस वायरिंग",
-            desc_en: "Complete house wiring and piping solutions.",
+            desc_en: "Complete house wiring and electrical installation services.",
             desc_hi: "नए और पुराने मकान की पूरी वायरिंग और पाइपिंग।",
             subServices: [
                 { name_en: "New House Wiring", name_hi: "नए मकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45, show: true },
                 { name_en: "Concealed Wiring", name_hi: "कंसील्ड (अंडरग्राउंड) वायरिंग", rate_en: "₹40 / sq.ft.", rate_hi: "₹40 / वर्ग फीट", price: 40, show: true },
                 { name_en: "Surface Wiring", name_hi: "ओपन / सरफेस वायरिंग", rate_en: "₹30 / sq.ft.", rate_hi: "₹30 / वर्ग फीट", price: 30, show: true },
                 { name_en: "Slab Piping", name_hi: "छत / स्लैब पाइपिंग", rate_en: "₹15 / sq.ft.", rate_hi: "₹15 / वर्ग फीट", price: 15, show: true },
-                { name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80, show: true },
+                { name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80, show: true },
                 { name_en: "Complete House Wiring", name_hi: "फुल हाउस वायरिंग सेटअप", rate_en: "₹50 / sq.ft.", rate_hi: "₹50 / वर्ग फीट", price: 50, show: true }
             ]
         },
@@ -98,7 +98,7 @@ window.CARD_CONFIG = {
             icon: "💡",
             title_en: "Light & Fan Installation",
             title_hi: "लाइट और पंखा फिटिंग",
-            desc_en: "Fitting of ceiling fans, LED lights and fixtures.",
+            desc_en: "Professional installation of lights, fans and electrical fittings.",
             desc_hi: "सीलिंग फैन, एग्जॉस्ट फैन और सभी प्रकार की लाइट फिटिंग।",
             subServices: [
                 { name_en: "Ceiling Fan Installation", name_hi: "सीलिंग पंखा फिटिंग", rate_en: "₹250 / fan", rate_hi: "₹250 / पंखा", price: 250, show: true },
@@ -115,7 +115,7 @@ window.CARD_CONFIG = {
             icon: "🔌",
             title_en: "MCB & DB Work",
             title_hi: "एमसीबी और डीबी पैनल वर्क",
-            desc_en: "MCB, DB, RCCB, and circuit safety installation.",
+            desc_en: "MCB, DB, RCCB and circuit safety installation.",
             desc_hi: "एमसीबी, आरसीसीबी और डिस्ट्रीब्यूशन बोर्ड सुरक्षित फिटिंग।",
             subServices: [
                 { name_en: "MCB Installation", name_hi: "एमसीबी फिटिंग", rate_en: "₹150 / MCB", rate_hi: "₹150 / MCB", price: 150, show: true },
@@ -132,7 +132,7 @@ window.CARD_CONFIG = {
             icon: "🏗️",
             title_en: "False Ceiling Wiring",
             title_hi: "फॉल्स सीलिंग वायरिंग",
-            desc_en: "Wiring for COB, profile, strip lights in ceiling.",
+            desc_en: "Electrical wiring and lighting point installation for false ceilings.",
             desc_hi: "फॉल्स सीलिंग लाइट्स, प्रोफाइल और स्ट्रिप लाइट वायरिंग।",
             subServices: [
                 { name_en: "Ceiling Light Wiring", name_hi: "सीलिंग लाइट वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8, show: true },
@@ -149,7 +149,7 @@ window.CARD_CONFIG = {
             icon: "🔋",
             title_en: "Inverter & Backup",
             title_hi: "इन्वर्टर और बैटरी कनेक्शन",
-            desc_en: "Inverter battery setup and changeover services.",
+            desc_en: "Inverter, battery, changeover and backup electrical services.",
             desc_hi: "इन्वर्टर कनेक्शन, चेंजओवर स्विच और बैकअप वायरिंग।",
             subServices: [
                 { name_en: "Inverter Installation", name_hi: "इन्वर्टर इंस्टॉलेशन", rate_en: "₹500 / set", rate_hi: "₹500 / सेट", price: 500, show: true },
@@ -166,11 +166,11 @@ window.CARD_CONFIG = {
             icon: "🔧",
             title_en: "Electrical Repair",
             title_hi: "इलेक्ट्रिकल रिपेयर",
-            desc_en: "Quick repairs for switches, sockets, and fans.",
+            desc_en: "Electrical repair and maintenance for common household problems.",
             desc_hi: "स्विच, सॉकेट, पंखा और सामान्य बिजली रिपेयर सेवा।",
             subServices: [
                 { name_en: "Switch Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80, show: true },
-                { name_en: "Socket Repair", name_hi: "सॉकेट रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80, show: true },
+                { name_en: "Socket Repair", name_hi: "सॉकेट रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80, show: true },
                 { name_en: "Fan Repair", name_hi: "पंखा रिपेयर", rate_en: "₹150 / fan", rate_hi: "₹150 / पंखा", price: 150, show: true },
                 { name_en: "Light Repair", name_hi: "लाइट रिपेयर", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100, show: true },
                 { name_en: "Loose Connection Fix", name_hi: "लूज कनेक्शन सही करना", rate_en: "₹150 / point", rate_hi: "₹150 / पॉइंट", price: 150, show: true },
@@ -183,7 +183,7 @@ window.CARD_CONFIG = {
             icon: "🔍",
             title_en: "Fault Finding",
             title_hi: "फॉल्ट टेस्टिंग और चेकिंग",
-            desc_en: "Short circuit detection and power restoration.",
+            desc_en: "Electrical fault detection and troubleshooting services.",
             desc_hi: "शॉर्ट सर्किट, लाइन फॉल्ट और वोल्टेज टेस्टिंग।",
             subServices: [
                 { name_en: "Power Failure Checking", name_hi: "पावर कट / लाइन चेकिंग", rate_en: "₹200 / visit", rate_hi: "₹200 / विजिट", price: 200, show: true },
@@ -200,7 +200,7 @@ window.CARD_CONFIG = {
             icon: "🏢",
             title_en: "Commercial Work",
             title_hi: "कमर्शियल इलेक्ट्रिकल कार्य",
-            desc_en: "Wiring and maintenance for shops, offices, and clinics.",
+            desc_en: "Electrical installation, wiring and maintenance for shops and offices.",
             desc_hi: "दुकान, ऑफिस और शोरूम की पूरी वायरिंग व मेंटेनेंस।",
             subServices: [
                 { name_en: "Shop Wiring", name_hi: "दुकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45, show: true },
@@ -221,8 +221,8 @@ window.CARD_CONFIG = {
     ],
 
     reviews: [
-        { id: "review-1", show: true, name: "Rahul Sharma", rating: 5, text_en: "Excellent electrical service and professional work.", text_hi: "बहुत ही बढ़िया और सुरक्षित काम किया।" },
-        { id: "review-2", show: true, name: "Amit Verma", rating: 5, text_en: "Good quality work and on-time service.", text_hi: "समय पर और बेहतरीन क्वालिटी का काम।" }
+        { id: "review-1", show: true, name: "Customer", rating: 5, text_en: "Excellent electrical service and professional work.", text_hi: "बहुत ही बढ़िया और सुरक्षित काम किया।" },
+        { id: "review-2", show: true, name: "Customer", rating: 5, text_en: "Good quality work and on-time service.", text_hi: "समय पर और बेहतरीन क्वालिटी का काम।" }
     ],
 
     faq: [
