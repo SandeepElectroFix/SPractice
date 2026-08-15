@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=25.0">
+    <link rel="stylesheet" href="style.css?v=26.0">
     
     <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -53,12 +53,12 @@
      <!-- SPECIAL DISCOUNT -->
      <section id="discountSection" class="discount-section">
         <div class="discount-card">
-            <div class="discount-badge">🔥 विशेष ऑफर</div>
+            <div class="discount-badge" id="discountBadge">🔥 विशेष ऑफर</div>
             <h2 id="discountTitle">विशेष छूट</h2>
             <div class="discount-percent"><span id="discountPercentage">10</span>% OFF</div>
             <p id="discountMessage">इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं</p>
             <div class="discount-validity" id="discountValidity">⏳ सीमित समय के लिए</div>
-            <a href="#quoteFormSection" class="discount-btn">⚡ छूट प्राप्त करें</a>
+            <a href="#quoteFormSection" class="discount-btn" id="discountBtnText">⚡ छूट प्राप्त करें</a>
         </div>
      </section> 
 
@@ -67,10 +67,10 @@
          <h2 id="quickHeading">त्वरित सेवाएँ</h2>
          
          <div class="service-layout-bar" id="quickLayoutBar">
-            <button type="button" class="layout-btn active" onclick="applyQuickLayout('grid-2')">⊞ Grid</button>
-            <button type="button" class="layout-btn" onclick="applyQuickLayout('carousel')">⇆ Slider</button>
-            <button type="button" class="layout-btn" onclick="applyQuickLayout('list')">☰ List</button>
-            <button type="button" class="layout-btn" onclick="applyQuickLayout('grid-3')">☷ Mini</button>
+            <button type="button" class="layout-btn active" data-ql="grid-2" onclick="applyQuickLayout('grid-2')">⊞ Grid</button>
+            <button type="button" class="layout-btn" data-ql="carousel" onclick="applyQuickLayout('carousel')">⇆ Slider</button>
+            <button type="button" class="layout-btn" data-ql="list" onclick="applyQuickLayout('list')">☰ List</button>
+            <button type="button" class="layout-btn" data-ql="grid-3" onclick="applyQuickLayout('grid-3')">☷ Mini</button>
          </div>
 
          <div class="grid layout-grid-2" id="quickGridContainer">
@@ -146,10 +146,10 @@
         <h2 id="servicesHeading">हमारी सेवाएँ</h2>
         
         <div class="service-layout-bar" id="servicesLayoutBar">
-          <button type="button" class="layout-btn active" onclick="applyServiceLayout('list')">☰ List</button>
-          <button type="button" class="layout-btn" onclick="applyServiceLayout('grid-2')">⊞ Grid</button>
-          <button type="button" class="layout-btn" onclick="applyServiceLayout('carousel')">⇆ Slider</button>
-          <button type="button" class="layout-btn" onclick="applyServiceLayout('grid-3')">☷ Mini</button>
+          <button type="button" class="layout-btn active" data-sl="list" onclick="applyServiceLayout('list')">☰ List</button>
+          <button type="button" class="layout-btn" data-sl="grid-2" onclick="applyServiceLayout('grid-2')">⊞ Grid</button>
+          <button type="button" class="layout-btn" data-sl="carousel" onclick="applyServiceLayout('carousel')">⇆ Slider</button>
+          <button type="button" class="layout-btn" data-sl="grid-3" onclick="applyServiceLayout('grid-3')">☷ Mini</button>
         </div>
 
         <div class="service-grid layout-list" id="serviceContainer"></div>
@@ -186,9 +186,9 @@
         <h2 id="quoteHeading">कोटेशन व अनुमानित खर्च</h2>
         <div class="quote-card card" style="padding:16px;">
           <div class="quote-form">
-              <input type="text" id="customerName" placeholder="आपका नाम *">
-              <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *">
-              <textarea id="customerMessage" rows="2" placeholder="पता / कार्य का विवरण..."></textarea>
+              <input type="text" id="customerName" placeholder="आपका नाम *" oninput="saveCustomerInputs()">
+              <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *" oninput="saveCustomerInputs()">
+              <textarea id="customerMessage" rows="2" placeholder="पता / कार्य का विवरण..." oninput="saveCustomerInputs()"></textarea>
               
               <div id="estimateSummaryBox" class="estimate-summary-box">
                   <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
@@ -219,7 +219,7 @@
 
      <!-- FOOTER -->
      <footer id="footerSection">
-        <p>&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
+        <p id="footerText">&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
      </footer>
 
      <!-- BOTTOM NAV -->
@@ -231,7 +231,7 @@
         <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">कॉल</small></a>
      </nav>
 
-     <!-- SCRIPT LOGIC -->
+     <!-- SCRIPT LOGIC (PERSISTENT & COMPLETE BILINGUAL) -->
      <script>
         const FULL_CONFIG = {
             services: [
@@ -351,6 +351,33 @@
         let currentLang = localStorage.getItem("sandeepLang") || "hi";
         let selectedItemsMap = {};
 
+        // Load Persistent Data from LocalStorage
+        try {
+            const savedItems = localStorage.getItem("sandeepCart");
+            if (savedItems) selectedItemsMap = JSON.parse(savedItems);
+        } catch(e) { selectedItemsMap = {}; }
+
+        function saveCustomerInputs() {
+            const data = {
+                name: document.getElementById("customerName")?.value || "",
+                phone: document.getElementById("customerPhone")?.value || "",
+                message: document.getElementById("customerMessage")?.value || ""
+            };
+            localStorage.setItem("sandeepCustomer", JSON.stringify(data));
+        }
+
+        function restoreCustomerInputs() {
+            try {
+                const saved = localStorage.getItem("sandeepCustomer");
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.name) document.getElementById("customerName").value = data.name;
+                    if (data.phone) document.getElementById("customerPhone").value = data.phone;
+                    if (data.message) document.getElementById("customerMessage").value = data.message;
+                }
+            } catch(e) {}
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem("sandeepLang", currentLang);
@@ -358,34 +385,22 @@
             document.querySelectorAll(".language-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-lang") === lang));
 
             const isHi = lang === "hi";
+            
+            // Header & Hero
             document.getElementById("businessTagline").innerText = isHi ? "आपके विश्वास को रोशन करते हुए" : "Powering Your Trust";
             document.getElementById("businessLocation").innerText = isHi ? "📍 लखनऊ, उत्तर प्रदेश" : "📍 Lucknow, Uttar Pradesh";
             document.getElementById("callBtnText").innerText = isHi ? "📞 अभी कॉल करें" : "📞 Call Now";
             document.getElementById("whatsappBtnText").innerText = isHi ? "💬 व्हाट्सएप करें" : "💬 WhatsApp";
+            
+            // Discount
+            document.getElementById("discountBadge").innerText = isHi ? "🔥 विशेष ऑफर" : "🔥 SPECIAL OFFER";
             document.getElementById("discountTitle").innerText = isHi ? "विशेष छूट" : "Special Discount";
             document.getElementById("discountMessage").innerText = isHi ? "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं" : "Get 10% OFF on selected electrical services.";
             document.getElementById("discountValidity").innerText = isHi ? "⏳ सीमित समय के लिए" : "⏳ Limited Time Offer";
+            document.getElementById("discountBtnText").innerText = isHi ? "⚡ छूट प्राप्त करें" : "⚡ Get Discount";
+            
+            // Quick Access Labels
             document.getElementById("quickHeading").innerText = isHi ? "त्वरित सेवाएँ" : "Quick Access";
-            document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
-            document.getElementById("locHeading").innerText = isHi ? "📍 सेवा क्षेत्र एवं लोकेशन" : "📍 Service Location";
-            document.getElementById("locDesc").innerText = isHi ? "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।" : "Providing on-site electrical services across Lucknow.";
-            document.getElementById("distBtnText").innerText = isHi ? "हमारे यहाँ से अपनी दूरी चेक करें" : "Check Your Distance from Us";
-            document.getElementById("mapBtnText").innerText = isHi ? "गूगल मैप्स पर रास्ता देखें" : "Get Directions on Google Maps";
-            document.getElementById("servicesHeading").innerText = isHi ? "हमारी सेवाएँ" : "Our Services";
-            document.getElementById("galleryHeading").innerText = isHi ? "हमारे द्वारा किए गए कार्य" : "Our Work";
-            document.getElementById("qrHeading").innerText = isHi ? "क्यूआर कोड स्कैन करें" : "Scan QR Code";
-            document.getElementById("qrDesc").innerText = isHi ? "हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।" : "Scan this QR code to quickly save our digital card or pay.";
-            document.getElementById("qrBtnText").innerText = isHi ? "📥 क्यूआर कोड डाउनलोड करें" : "📥 Download QR Code";
-            document.getElementById("reviewsHeading").innerText = isHi ? "ग्राहकों की राय" : "Customer Reviews";
-            document.getElementById("quoteHeading").innerText = isHi ? "कोटेशन व अनुमानित खर्च" : "Estimate & Quotation";
-            document.getElementById("faqHeading").innerText = isHi ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
-
-            document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
-            document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
-            document.getElementById("customerMessage").placeholder = isHi ? "पता / कार्य का विवरण..." : "Address / Work details...";
-            document.getElementById("sendWhatsappBtn").innerText = isHi ? "💬 व्हाट्सएप पर भेजें" : "💬 Send on WhatsApp";
-            document.getElementById("downloadPdfBtn").innerText = isHi ? "📄 पीडीएफ एस्टीमेट डाउनलोड करें" : "📄 Download PDF Estimate";
-
             document.getElementById("labelCall").innerText = isHi ? "कॉल करें" : "Call";
             document.getElementById("labelWhatsapp").innerText = isHi ? "व्हाट्सएप" : "WhatsApp";
             document.getElementById("labelWeb").innerText = isHi ? "वेबसाइट" : "Website";
@@ -393,6 +408,45 @@
             document.getElementById("labelShare").innerText = isHi ? "शेयर करें" : "Share";
             document.getElementById("labelWork").innerText = isHi ? "हमारे कार्य" : "Our Work";
             document.getElementById("labelCatalogue").innerText = isHi ? "सामग्री सूची" : "Catalogue";
+
+            // About Us (Completely Fixed)
+            document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
+            document.getElementById("aboutText").innerHTML = isHi 
+                ? "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।" 
+                : "Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.";
+
+            // Location
+            document.getElementById("locHeading").innerText = isHi ? "📍 सेवा क्षेत्र एवं लोकेशन" : "📍 Service Location";
+            document.getElementById("locDesc").innerText = isHi ? "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।" : "Providing on-site electrical services across Lucknow.";
+            document.getElementById("distBtnText").innerText = isHi ? "हमारे यहाँ से अपनी दूरी चेक करें" : "Check Your Distance from Us";
+            document.getElementById("mapBtnText").innerText = isHi ? "गूगल मैप्स पर रास्ता देखें" : "Get Directions on Google Maps";
+            
+            // Services, Gallery, QR, Reviews
+            document.getElementById("servicesHeading").innerText = isHi ? "हमारी सेवाएँ" : "Our Services";
+            document.getElementById("galleryHeading").innerText = isHi ? "हमारे द्वारा किए गए कार्य" : "Our Work";
+            document.getElementById("qrHeading").innerText = isHi ? "क्यूआर कोड स्कैन करें" : "Scan QR Code";
+            document.getElementById("qrDesc").innerText = isHi ? "हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।" : "Scan this QR code to quickly save our digital card or pay.";
+            document.getElementById("qrBtnText").innerText = isHi ? "📥 क्यूआर कोड डाउनलोड करें" : "📥 Download QR Code";
+            document.getElementById("reviewsHeading").innerText = isHi ? "ग्राहकों की राय" : "Customer Reviews";
+            
+            // Quotation Form
+            document.getElementById("quoteHeading").innerText = isHi ? "कोटेशन व अनुमानित खर्च" : "Estimate & Quotation";
+            document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
+            document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
+            document.getElementById("customerMessage").placeholder = isHi ? "पता / कार्य का विवरण..." : "Address / Work details...";
+            document.getElementById("lblSubtotal").innerText = isHi ? "कुल राशि:" : "Subtotal:";
+            document.getElementById("lblGrandTotal").innerText = isHi ? "अंतिम राशि:" : "Grand Total:";
+            document.getElementById("discountLabel").innerText = isHi ? "विशेष छूट (10% OFF):" : "Special Discount (10% OFF):";
+            document.getElementById("sendWhatsappBtn").innerText = isHi ? "💬 व्हाट्सएप पर भेजें" : "💬 Send on WhatsApp";
+            document.getElementById("downloadPdfBtn").innerText = isHi ? "📄 पीडीएफ एस्टीमेट डाउनलोड करें" : "📄 Download PDF Estimate";
+
+            // FAQ & Nav
+            document.getElementById("faqHeading").innerText = isHi ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
+            document.getElementById("navHome").innerText = isHi ? "होम" : "Home";
+            document.getElementById("navServices").innerText = isHi ? "सेवाएं" : "Services";
+            document.getElementById("navWork").innerText = isHi ? "कार्य" : "Work";
+            document.getElementById("navQuote").innerText = isHi ? "कोट" : "Quote";
+            document.getElementById("navCall").innerText = isHi ? "कॉल" : "Call";
 
             renderServices();
             renderGallery();
@@ -466,6 +520,9 @@
             selectedItemsMap[key].qty += change;
             if (selectedItemsMap[key].qty <= 0) delete selectedItemsMap[key];
 
+            // Save Cart to LocalStorage
+            localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
+
             const currentQty = selectedItemsMap[key]?.qty || 0;
             const qEl = document.getElementById(`qty_${key}`);
             const rEl = document.getElementById(`row_${key}`);
@@ -489,7 +546,7 @@
             if (countEl) countEl.innerText = count;
 
             if (items.length === 0) {
-                if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।' : 'No services selected yet. Use + / − above.'}</p>`;
+                if (listEl) listEl.innerHTML = `<p class="no-selection-hint" id="noSelHint">${currentLang === 'hi' ? 'अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।' : 'No services selected yet. Use + / − above.'}</p>`;
                 if (subtotalEl) subtotalEl.innerText = "₹0";
                 if (discRow) discRow.style.display = "none";
                 if (totalEl) totalEl.innerText = "₹0";
@@ -570,16 +627,18 @@
             const container = document.getElementById("quickGridContainer");
             if (container) container.className = `grid layout-${layout}`;
             document.querySelectorAll("#quickLayoutBar .layout-btn").forEach(b => {
-                b.classList.toggle("active", b.getAttribute("onclick").includes(layout));
+                b.classList.toggle("active", b.getAttribute("data-ql") === layout);
             });
+            localStorage.setItem("sandeepQuickLayout", layout);
         }
 
         function applyServiceLayout(layout) {
             const container = document.getElementById("serviceContainer");
             if (container) container.className = `service-grid layout-${layout}`;
             document.querySelectorAll("#servicesLayoutBar .layout-btn").forEach(b => {
-                b.classList.toggle("active", b.getAttribute("onclick").includes(layout));
+                b.classList.toggle("active", b.getAttribute("data-sl") === layout);
             });
+            localStorage.setItem("sandeepServiceLayout", layout);
         }
 
         function sendWhatsappQuote() {
@@ -685,7 +744,7 @@
                     const dLon = (pos.coords.longitude - 80.9462) * (Math.PI / 180);
                     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(26.8467 * (Math.PI / 180)) * Math.cos(pos.coords.latitude * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
                     const dist = (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))).toFixed(1);
-                    if (status) status.innerHTML = `✅ ${currentLang === 'hi' ? 'आप हमारे केंद्र से लगभग' : 'You are approx'} <strong>${dist} km</strong> ${currentLang === 'hi' ? 'दूर हैं।' : 'away from Lucknow.'}`;
+                    if (status) status.innerHTML = `✅ ${currentLang === 'hi' ? 'आप हमारे केंद्र से लगभग' : 'You are approx'} <strong>${dist} km</strong> ${currentLang === 'hi' ? 'दूर हैं।' : 'away from Lucknow center.'}`;
                 },
                 () => { if (status) status.innerText = "Location permission denied."; }
             );
@@ -700,17 +759,34 @@
             }
         }
 
+        // Initialize Theme & Settings
         document.addEventListener("DOMContentLoaded", () => {
-            const themeBtn = document.getElementById("themeToggle");
-            if (themeBtn) {
-                themeBtn.addEventListener("click", () => {
-                    document.documentElement.classList.toggle("saved-light-theme");
-                    const isLight = document.documentElement.classList.contains("saved-light-theme");
-                    localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
-                    document.getElementById("themeIcon").innerText = isLight ? "🌙" : "☀️";
-                    document.getElementById("themeText").innerText = isLight ? "डार्क मोड" : "लाइट मोड";
-                });
+            const savedTheme = localStorage.getItem("sandeepTheme");
+            if (savedTheme === "light") {
+                document.documentElement.classList.add("saved-light-theme");
+                document.getElementById("themeIcon").innerText = "🌙";
+                document.getElementById("themeText").innerText = "डार्क मोड";
             }
+
+            document.getElementById("themeToggle")?.addEventListener("click", () => {
+                document.documentElement.classList.toggle("saved-light-theme");
+                const isLight = document.documentElement.classList.contains("saved-light-theme");
+                localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
+                document.getElementById("themeIcon").innerText = isLight ? "🌙" : "☀️";
+                document.getElementById("themeText").innerText = isLight ? (currentLang === 'hi' ? "डार्क मोड" : "Dark Mode") : (currentLang === 'hi' ? "लाइट मोड" : "Light Mode");
+            });
+
+            // Restore Layout Choices
+            const qLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
+            applyQuickLayout(qLayout);
+
+            const sLayout = localStorage.getItem("sandeepServiceLayout") || "list";
+            applyServiceLayout(sLayout);
+
+            // Restore Customer Inputs
+            restoreCustomerInputs();
+
+            // Set Language & Render
             setLanguage(currentLang);
         });
      </script>
