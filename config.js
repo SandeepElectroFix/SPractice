@@ -1,16 +1,14 @@
 /* =========================================================
    SANDEEP ELECTROFIX
-   PROJECT 2 - DIGITAL CARD
-   MASTER CONFIGURATION
-   VERSION 3.0
-   ========================================================= */
+   SMART DIGITAL CARD CONFIGURATION
+   Version 3.0.0
+========================================================= */
 
-const CONFIG = {
+window.CARD_CONFIG = {
 
     /* =====================================================
-       BUSINESS INFORMATION
+       BUSINESS PROFILE
     ===================================================== */
-
     business: {
         name: "Sandeep ElectroFix",
         owner: "Sandeep Verma",
@@ -30,186 +28,142 @@ const CONFIG = {
     },
 
     /* =====================================================
-       MASTER FEATURE CONTROL
+       FEATURES CONTROL
     ===================================================== */
-
     features: {
-        hero: true,
-        quickAccess: true,
-        about: true,
+        themeToggle: true,
+        languageSwitch: true,
+        discountOffer: true,
         services: true,
         gallery: true,
-        reviews: false,
-        googleMaps: true,
-        contactForm: true,
+        reviews: true,
+        quoteForm: true,
         faq: true,
-        qrCode: true,
-        contact: true,
-        footer: true,
-
-        heroItems: {
-            logo: true,
-            tagline: true,
-            location: true,
-            callButton: true,
-            whatsappButton: true,
-            themeButton: true,
-            languageSwitcher: true
-        },
-
-        quickAccessItems: {
-            materialCatalogue: true,
-            call: true,
-            whatsapp: true,
-            website: true,
-            googleMaps: true,
-            facebook: true,
-            instagram: true,
-            youtube: true,
-            email: true,
-            saveContact: true,
-            share: true,
-            ourWork: true
-        },
-
-        serviceSettings: {
-            showMainServices: true,
-            showSubItems: true,
-            showDescription: true,
-            showPrices: true,
-            showUnits: true
-        },
-
-        offers: true,
-        discountOffer: true,
-        discountSection: true,
-
-        darkMode: true,
-        languageSwitcher: true,
-        visitorCounter: false,
-        youtube: true,
-
-        bottomNavigation: true,
-
-        bottomNavItems: {
-            home: true,
-            services: true,
-            work: true,
-            quote: true,
-            call: true
-        }
+        locationTracker: true,
+        mobileBottomNav: true
     },
 
     /* =====================================================
-       DISCOUNT
+       SPECIAL DISCOUNT
     ===================================================== */
-
     discount: {
         enabled: true,
-        type: "percentage",
-        value: 10,
         title: "Special Discount",
-        message: "Get special discount on selected electrical services.",
-        validUntil: "",
-        showOnCard: true
+        percentage: 10,
+        message: "Get 10% OFF on selected electrical services.",
+        validityText: "Valid for limited time"
     },
 
     /* =====================================================
-       SERVICES (MAIN + SUB-SERVICES + RATES)
+       SERVICES WITH SUB-SERVICES & RATES
     ===================================================== */
-
     services: [
         {
             id: "house-wiring",
             show: true,
-            icon: "🏠",
             title: "House Wiring",
-            description: "Professional house wiring for new and existing homes.",
-            items: [
-                { id: "concealed-wiring", show: true, title: "Concealed Wiring", price: 25, unit: "sq.ft" },
-                { id: "surface-wiring", show: true, title: "Surface Wiring", price: 18, unit: "sq.ft" },
-                { id: "point-wiring", show: true, title: "Point Wiring", price: 350, unit: "point" },
-                { id: "fan-point", show: true, title: "Fan Point", price: 450, unit: "point" },
-                { id: "light-point", show: true, title: "Light Point", price: 300, unit: "point" }
-            ]
-        },
-        {
-            id: "fan-light",
-            show: true,
-            icon: "💡",
-            title: "Fan & Light Fitting",
-            description: "Professional installation of fans, lights and fittings.",
-            items: [
-                { id: "ceiling-fan", show: true, title: "Ceiling Fan Installation", price: 300, unit: "piece" },
-                { id: "wall-fan", show: true, title: "Wall Fan Installation", price: 250, unit: "piece" },
-                { id: "led-light", show: true, title: "LED Light Installation", price: 150, unit: "piece" }
-            ]
-        },
-        {
-            id: "mcb-db",
-            show: true,
             icon: "⚡",
-            title: "MCB & DB Installation",
-            description: "MCB, DB and electrical protection system installation.",
-            items: [
-                { id: "mcb-installation", show: true, title: "MCB Installation", price: 150, unit: "piece" },
-                { id: "db-installation", show: true, title: "DB Installation", price: 500, unit: "piece" },
-                { id: "rccb-installation", show: true, title: "RCCB Installation", price: 300, unit: "piece" }
+            description: "Complete residential wiring, concealed piping, renovation and rewiring solutions.",
+            subServices: [
+                { name: "New House Wiring (Per Point)", rate: "₹150 - ₹250" },
+                { name: "Slab / Wall Piping", rate: "₹15 - ₹25 / ft" },
+                { name: "Complete Rewiring", rate: "Estimate on Visit" }
             ]
         },
         {
             id: "false-ceiling",
             show: true,
-            icon: "🔌",
             title: "False Ceiling Wiring",
-            description: "Neat and safe wiring for false ceiling lights and electrical points.",
-            items: [
-                { id: "ceiling-light-point", show: true, title: "Ceiling Light Point", price: 250, unit: "point" },
-                { id: "ceiling-fan-point", show: true, title: "Ceiling Fan Point", price: 400, unit: "point" }
+            icon: "💡",
+            description: "Modern false ceiling light wiring, COB lights, strip lights and profile channel lights.",
+            subServices: [
+                { name: "COB Light Installation", rate: "₹70 - ₹120 / pc" },
+                { name: "LED Strip / Profile Light", rate: "₹30 - ₹50 / meter" },
+                { name: "Panel Light Cutting & Fitting", rate: "₹80 - ₹150 / pc" }
             ]
         },
         {
-            id: "inverter",
+            id: "switch-socket",
             show: true,
-            icon: "🔋",
+            title: "Switch & Socket Installation",
+            icon: "🔌",
+            description: "Modular switch board installation, 6A/16A socket replacement and power points.",
+            subServices: [
+                { name: "Single Switch / Socket Change", rate: "₹50 - ₹80" },
+                { name: "Complete Modular Board Fitting", rate: "₹150 - ₹300" },
+                { name: "Heavy Power Plug (AC/Geyser)", rate: "₹120 - ₹200" }
+            ]
+        },
+        {
+            id: "mcb-db",
+            show: true,
+            title: "MCB & DB Installation",
+            icon: "⚙️",
+            description: "Distribution board dressing, single/double pole MCB, RCCB and circuit protection.",
+            subServices: [
+                { name: "Single Pole MCB Fitting", rate: "₹100 - ₹150" },
+                { name: "DP / 4-Pole MCB / RCCB Fitting", rate: "₹250 - ₹450" },
+                { name: "Complete DB Board Dressing", rate: "₹500 - ₹1200" }
+            ]
+        },
+        {
+            id: "fan-fitting",
+            show: true,
+            title: "Fan Installation",
+            icon: "🌬️",
+            description: "Ceiling fan installation, exhaust fan, wall fan mounting and regulator replacement.",
+            subServices: [
+                { name: "Ceiling Fan Assembly & Fitting", rate: "₹150 - ₹250" },
+                { name: "Exhaust Fan Fitting", rate: "₹120 - ₹200" },
+                { name: "Fan Regulator Change", rate: "₹50 - ₹80" }
+            ]
+        },
+        {
+            id: "inverter-wiring",
+            show: true,
             title: "Inverter Wiring",
-            description: "Professional inverter and backup power wiring.",
-            items: [
-                { id: "inverter-wiring", show: true, title: "Basic Inverter Wiring", price: 800, unit: "job" },
-                { id: "changeover", show: true, title: "Inverter Changeover", price: 500, unit: "job" }
+            icon: "🔋",
+            description: "Inverter battery setup, separate home inverter wiring and changeover installation.",
+            subServices: [
+                { name: "Inverter & Battery Connection", rate: "₹250 - ₹400" },
+                { name: "Separate Inverter Line Routing", rate: "₹300 - ₹600" },
+                { name: "Manual / Auto Changeover Switch", rate: "₹200 - ₹350" }
             ]
         },
         {
-            id: "repair",
+            id: "electrical-repair",
             show: true,
-            icon: "🛠️",
             title: "Electrical Repair",
-            description: "Electrical repair and maintenance for homes and shops.",
-            items: [
-                { id: "minor-repair", show: true, title: "Minor Electrical Repair", price: 300, unit: "job" },
-                { id: "fault-repair", show: true, title: "Electrical Fault Repair", price: 500, unit: "job" }
+            icon: "🛠️",
+            description: "General electrical repairs, geyser connection, motor starter and appliance fixes.",
+            subServices: [
+                { name: "Geyser Electrical Connection", rate: "₹150 - ₹250" },
+                { name: "Water Motor / Submersible Starter", rate: "₹200 - ₹350" },
+                { name: "General Maintenance Visit", rate: "₹150 - ₹200" }
             ]
         },
         {
             id: "fault-finding",
             show: true,
-            icon: "🔎",
             title: "Fault Finding",
-            description: "Electrical fault detection and troubleshooting.",
-            items: [
-                { id: "basic-fault", show: true, title: "Basic Fault Finding", price: 300, unit: "visit" },
-                { id: "detailed-fault", show: true, title: "Detailed Fault Finding", price: 500, unit: "visit" }
+            icon: "🚨",
+            description: "Short circuit detection, MCB tripping resolution and complete wire continuity test.",
+            subServices: [
+                { name: "Short Circuit Checking", rate: "₹250 - ₹450" },
+                { name: "MCB Tripping Fault Fix", rate: "₹200 - ₹350" },
+                { name: "Neutral / Earth Leakage Check", rate: "₹300 - ₹500" }
             ]
         },
         {
-            id: "commercial",
+            id: "commercial-wiring",
             show: true,
-            icon: "🏢",
             title: "Commercial Wiring",
-            description: "Electrical wiring for shops and commercial spaces.",
-            items: [
-                { id: "commercial-point", show: true, title: "Commercial Point Wiring", price: 450, unit: "point" },
-                { id: "shop-wiring", show: true, title: "Shop Wiring", price: 1500, unit: "job" }
+            icon: "🏢",
+            description: "Electrical setup for shops, offices, showrooms, schools and commercial units.",
+            subServices: [
+                { name: "Shop / Office Wiring", rate: "Estimate on Visit" },
+                { name: "3-Phase DB Dressing", rate: "₹800 - ₹2000" },
+                { name: "Commercial Track Lighting", rate: "₹100 - ₹200 / pc" }
             ]
         }
     ],
@@ -217,75 +171,76 @@ const CONFIG = {
     /* =====================================================
        GALLERY
     ===================================================== */
-
     gallery: [
-        { id: "work-1", show: true, image: "assets/gallery/work1.jpg", title: "Electrical Work" },
-        { id: "work-2", show: true, image: "assets/gallery/work2.jpg", title: "House Wiring" },
-        { id: "work-3", show: true, image: "assets/gallery/work3.jpg", title: "Electrical Installation" },
-        { id: "work-4", show: true, image: "assets/gallery/work4.jpg", title: "Professional Electrical Work" }
+        { id: "work-1", show: true, image: "assets/gallery/work1.jpg", title: "House Wiring" },
+        { id: "work-2", show: true, image: "assets/gallery/work2.jpg", title: "False Ceiling Wiring" },
+        { id: "work-3", show: true, image: "assets/gallery/work3.jpg", title: "DB Panel Installation" },
+        { id: "work-4", show: true, image: "assets/gallery/work4.jpg", title: "Lighting Work" },
+        { id: "work-5", show: true, image: "assets/gallery/work5.jpg", title: "Switch Board Work" },
+        { id: "work-6", show: true, image: "assets/gallery/work6.jpg", title: "Electrical Repair" },
+        { id: "work-7", show: true, image: "assets/gallery/work7.jpg", title: "New Project" }
     ],
 
     /* =====================================================
-       REVIEWS
+       CUSTOMER REVIEWS
     ===================================================== */
-
     reviews: [
-        { id: "review-1", show: true, name: "Customer", rating: 5, text: "Professional electrical service with good workmanship." },
-        { id: "review-2", show: true, name: "Customer", rating: 5, text: "Good quality electrical work and proper guidance." },
-        { id: "review-3", show: true, name: "Customer", rating: 5, text: "Reliable electrician service in Lucknow." }
+        {
+            id: "review-1",
+            show: true,
+            name: "Customer",
+            rating: 5,
+            text: "Excellent electrical service and professional work."
+        },
+        {
+            id: "review-2",
+            show: true,
+            name: "Customer",
+            rating: 5,
+            text: "Good quality work and on-time service."
+        },
+        {
+            id: "review-3",
+            show: true,
+            name: "Customer",
+            rating: 5,
+            text: "Trusted electrician service in Lucknow."
+        }
     ],
 
     /* =====================================================
        FAQ
     ===================================================== */
-
     faq: [
         {
             id: "faq-1",
             show: true,
-            question: "What electrical services do you provide?",
-            answer: "We provide house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, electrical repair, fault finding and maintenance services."
+            question: "House wiring ka kaam karte hain?",
+            answer: "Haan, new house wiring, concealed wiring aur renovation wiring ki service available hai."
         },
         {
             id: "faq-2",
             show: true,
-            question: "Do you provide house wiring services?",
-            answer: "Yes. We provide professional electrical wiring services for new construction, renovation and existing homes."
+            question: "Electrical fault finding karte hain?",
+            answer: "Haan, short circuit, MCB tripping, power fault aur wiring fault checking ki service available hai."
         },
         {
             id: "faq-3",
             show: true,
-            question: "Do you provide electrical repair services?",
-            answer: "Yes. We provide electrical fault finding, repair and maintenance services."
+            question: "Fan aur light installation available hai?",
+            answer: "Haan, fan, light, switch, socket aur other electrical fittings install ki jaati hain."
         },
         {
             id: "faq-4",
             show: true,
-            question: "How can I request a quotation?",
-            answer: "Use the Request a Quote form on this digital card and send your enquiry directly through WhatsApp."
+            question: "Estimate kaise milega?",
+            answer: "Neeche diye gaye WhatsApp Quote Form se apni requirement bhejiye. Aapki requirement ke according estimate discuss kiya ja sakta hai."
         },
         {
             id: "faq-5",
             show: true,
-            question: "Which area do you serve?",
-            answer: "Sandeep ElectroFix provides electrical services in Lucknow, Uttar Pradesh."
+            question: "Aap Lucknow me service dete hain?",
+            answer: "Haan, Sandeep ElectroFix Lucknow, Uttar Pradesh me electrical services provide karta hai."
         }
-    ],
-
-    /* =====================================================
-       QUOTE FORM
-    ===================================================== */
-
-    quote: {
-        enabled: true,
-        whatsappNumber: "919026036445",
-        defaultMessage: "Hello Sandeep ElectroFix, I would like to enquire about electrical service.",
-        requireName: true,
-        requirePhone: true,
-        requireService: true,
-        requireLocation: true
-    }
+    ]
 };
-
-window.CONFIG = CONFIG;
-console.log("Sandeep ElectroFix Master Config Loaded", CONFIG);
