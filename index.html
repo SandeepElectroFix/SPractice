@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=6.0.0">
+    <link rel="stylesheet" href="style.css?v=10.0.0">
     <script>
         (function () {
             try {
@@ -26,7 +26,6 @@
      
      <!-- HERO SECTION -->
      <header class="hero" id="heroSection">
-          <!-- Top Bar: Theme & Language Side by Side -->
           <div class="top-controls-bar">
             <button id="themeToggle" class="theme-toggle" type="button">
               <span id="themeIcon">☀️</span> <span id="themeText">लाइट मोड</span>
@@ -37,7 +36,6 @@
             </div>
           </div>
 
-          <!-- Big Floating Logo -->
           <div class="hero-logo" id="businessLogo">
             <img src="assets/logo.png" alt="Sandeep ElectroFix Logo">
           </div>
@@ -56,7 +54,7 @@
           </div>
      </header>
 
-     <!-- SPECIAL DISCOUNT (CENTERED) -->
+     <!-- SPECIAL DISCOUNT -->
      <section id="discountSection" class="discount-section">
         <div class="discount-card">
             <div class="discount-badge">🔥 विशेष ऑफर</div>
@@ -80,7 +78,6 @@
          </div>
 
          <div class="grid layout-grid-2" id="quickGridContainer">
-            <!-- Call -->
             <a href="tel:+919026036445" class="card" id="quickCall">
                 <span class="icon call-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -91,7 +88,6 @@
                 <strong>कॉल करें</strong>
             </a>
 
-            <!-- WhatsApp -->
             <a href="https://wa.me/919026036445" class="card" target="_blank" rel="noopener" id="quickWhatsapp">
                 <span class="icon whatsapp-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -102,7 +98,6 @@
                 <strong>व्हाट्सएप</strong>
             </a>
 
-            <!-- Website -->
             <a href="https://sandeepelectrofix.github.io/" class="card" target="_blank" rel="noopener" id="websiteBtn">
                 <span class="icon website-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -122,7 +117,6 @@
                 <strong>वेबसाइट</strong>
             </a>
 
-            <!-- Google Maps -->
             <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="card" target="_blank" rel="noopener" id="mapsBtn">
                 <span class="icon maps-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -136,7 +130,6 @@
                 <strong>गूगल मैप्स</strong>
             </a>
 
-            <!-- Facebook -->
             <a href="https://www.facebook.com/SandeepElectroFix" class="card" target="_blank" rel="noopener" id="facebookBtn">
                 <span class="icon facebook-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -147,7 +140,6 @@
                 <strong>Facebook</strong>
             </a>
 
-            <!-- Instagram -->
             <a href="https://www.instagram.com/sandeep_electrofix" class="card" target="_blank" rel="noopener" id="instagramBtn">
                 <span class="icon instagram-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -168,7 +160,6 @@
                 <strong>Instagram</strong>
             </a>
 
-            <!-- YouTube -->
             <a href="https://youtube.com/@sandeepelectrofix" class="card" target="_blank" rel="noopener" id="youtubeBtn">
                 <span class="icon youtube-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -179,7 +170,6 @@
                 <strong>YouTube</strong>
             </a>
 
-            <!-- Email -->
             <a href="mailto:SandeepElectroFix@gmail.com" class="card" id="emailBtn">
                 <span class="icon email-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -190,7 +180,6 @@
                 <strong>ईमेल</strong>
             </a>
 
-            <!-- Share -->
             <a href="javascript:void(0)" class="card" onclick="shareWebsite()" id="shareBtn">
                 <span class="icon share-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -201,7 +190,6 @@
                 <strong>शेयर करें</strong>
             </a>
 
-            <!-- Our Work -->
             <a href="our-work.html" class="card">
                 <span class="icon work-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -218,7 +206,6 @@
                 <strong>हमारे कार्य</strong>
             </a>
 
-            <!-- Material Catalogue -->
             <a href="material-catalogue.html" class="card catalogue-card-highlight">
                 <span class="icon catalogue-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
@@ -253,18 +240,18 @@
         <div id="locationStatus" class="location-status"></div>
      </section>
      
-     <!-- SERVICES SECTION (WITH DYNAMIC SWITCHER) -->
+     <!-- SERVICES SECTION -->
      <section id="servicesSection" class="services">
         <h2 id="servicesHeading">हमारी सेवाएँ</h2>
         
         <div class="service-layout-bar" id="servicesLayoutBar">
-          <button type="button" class="layout-btn active" data-service-layout="grid-2">⊞ Grid</button>
+          <button type="button" class="layout-btn active" data-service-layout="list">☰ List</button>
+          <button type="button" class="layout-btn" data-service-layout="grid-2">⊞ Grid</button>
           <button type="button" class="layout-btn" data-service-layout="carousel">⇆ Slider</button>
-          <button type="button" class="layout-btn" data-service-layout="list">☰ List</button>
           <button type="button" class="layout-btn" data-service-layout="grid-3">☷ Mini</button>
         </div>
 
-        <div class="service-grid layout-grid-2" id="serviceContainer"></div>
+        <div class="service-grid layout-list" id="serviceContainer"></div>
      </section>
 
      <!-- GALLERY SECTION -->
@@ -292,7 +279,7 @@
         <div class="review-grid" id="reviewContainer"></div>
      </section>
 
-     <!-- QUOTE & ESTIMATE FORM SECTION (DYNAMIC (+ / -) & PDF) -->
+     <!-- QUOTE & ESTIMATE FORM SECTION -->
      <section id="quoteFormSection" class="quote-section">
         <h2>कोटेशन व अनुमानित खर्च</h2>
         <div class="quote-card card" style="padding:16px;">
@@ -344,10 +331,10 @@
         <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small>कॉल</small></a>
      </nav>
 
-     <!-- SCRIPTS (Libraries first, then Config & Main App) -->
+     <!-- SCRIPTS -->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-     <script src="config.js?v=6.0.0"></script>
-     <script src="app.js?v=6.0.0"></script>
+     <script src="config.js?v=10.0.0"></script>
+     <script src="app.js?v=10.0.0"></script>
 </body>
 </html>
