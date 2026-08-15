@@ -2,7 +2,7 @@
 SANDEEP ELECTROFIX - COMPLETE JAVASCRIPT
 ========================================= */
 
-// 1. Full Translation Dictionary (English & Hindi)
+// 1. Translation Dictionary (English & Hindi)
 const translations = {
   en: {
     tagline: "Powering Your Trust",
@@ -130,28 +130,21 @@ const translations = {
   }
 };
 
-// 2. Change Language Function
+// 2. Language Switcher Function
 function setLanguage(lang) {
   const currentLang = translations[lang] ? lang : "en";
   const t = translations[currentLang];
 
-  // Update text with data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (t[key]) {
-      el.innerHTML = t[key];
-    }
+    if (t[key]) el.innerHTML = t[key];
   });
 
-  // Update input placeholders
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.getAttribute("data-i18n-placeholder");
-    if (t[key]) {
-      el.placeholder = t[key];
-    }
+    if (t[key]) el.placeholder = t[key];
   });
 
-  // Update button active state
   document.querySelectorAll(".language-btn").forEach(btn => {
     btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
   });
@@ -161,7 +154,7 @@ function setLanguage(lang) {
   renderFAQ(currentLang);
 }
 
-// 3. Theme Toggle & Sync
+// 3. Theme Toggle & UI Update
 function updateThemeButtonText() {
   const isLight = document.documentElement.classList.contains("saved-light-theme");
   const currentLang = localStorage.getItem("sandeepLang") || "en";
@@ -179,9 +172,8 @@ function updateThemeButtonText() {
   }
 }
 
-// 4. Initialization on DOM Load
+// 4. Initialization
 document.addEventListener("DOMContentLoaded", () => {
-  // Theme setup
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
@@ -192,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Language setup
   document.querySelectorAll(".language-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       setLanguage(btn.getAttribute("data-lang"));
@@ -202,66 +193,72 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedLang = localStorage.getItem("sandeepLang") || "en";
   setLanguage(savedLang);
 
-  // Layout Switchers Setup
   setupQuickAccessLayoutSwitcher();
   setupServiceLayoutSwitcher();
 
-  // Dynamic Content Loaders
   loadServices();
   loadGallery();
   loadReviews();
   setupQuoteCalculation();
 });
 
-// 5. Quick Access Layout Switcher
+// 5. Quick Access Layout Switcher (Direct Binding)
 function setupQuickAccessLayoutSwitcher() {
   const container = document.getElementById("quickGridContainer");
-  const buttons = document.querySelectorAll("[data-quick-layout]");
+  const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
   if (!container || !buttons.length) return;
 
   function applyQuickLayout(layoutName) {
-    container.className = `grid layout-${layoutName}`;
+    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
+    container.classList.add(`layout-${layoutName}`);
+
     buttons.forEach(btn => {
       btn.classList.toggle("active", btn.getAttribute("data-quick-layout") === layoutName);
     });
+
     localStorage.setItem("sandeepQuickLayout", layoutName);
   }
 
   buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      applyQuickLayout(btn.getAttribute("data-quick-layout"));
-    });
+    btn.onclick = function() {
+      const layout = this.getAttribute("data-quick-layout");
+      if (layout) applyQuickLayout(layout);
+    };
   });
 
   const savedLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
   applyQuickLayout(savedLayout);
 }
 
-// 6. Services Layout Switcher
+// 6. Services Layout Switcher (Direct Binding)
 function setupServiceLayoutSwitcher() {
   const container = document.getElementById("serviceContainer");
-  const buttons = document.querySelectorAll("[data-service-layout]");
+  const buttons = document.querySelectorAll("#servicesLayoutBar .layout-btn");
   if (!container || !buttons.length) return;
 
   function applyServiceLayout(layoutName) {
-    container.className = `service-grid layout-${layoutName}`;
+    container.classList.remove("layout-grid-2", "layout-carousel", "layout-list", "layout-grid-3");
+    container.classList.add(`layout-${layoutName}`);
+
     buttons.forEach(btn => {
       btn.classList.toggle("active", btn.getAttribute("data-service-layout") === layoutName);
     });
+
     localStorage.setItem("sandeepServiceLayout", layoutName);
   }
 
   buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      applyServiceLayout(btn.getAttribute("data-service-layout"));
-    });
+    btn.onclick = function() {
+      const layout = this.getAttribute("data-service-layout");
+      if (layout) applyServiceLayout(layout);
+    };
   });
 
   const savedLayout = localStorage.getItem("sandeepServiceLayout") || "grid-2";
   applyServiceLayout(savedLayout);
 }
 
-// 7. Dynamic Loaders
+// 7. Dynamic Data Loaders
 async function loadServices() {
   const container = document.getElementById("serviceContainer");
   if (!container) return;
@@ -275,7 +272,7 @@ async function loadServices() {
       </div>
     `).join("");
   } catch (e) {
-    console.log("Services loaded");
+    console.log("Services fallback");
   }
 }
 
@@ -289,7 +286,7 @@ async function loadGallery() {
       <img src="${g.image}" alt="${g.title}" onclick="openLightbox('${g.image}')" onerror="this.style.display='none'">
     `).join("");
   } catch (e) {
-    console.log("Gallery loaded");
+    console.log("Gallery fallback");
   }
 }
 
@@ -320,11 +317,11 @@ async function loadReviews() {
       </div>
     `).join("");
   } catch (e) {
-    console.log("Reviews loaded");
+    console.log("Reviews fallback");
   }
 }
 
-// 8. Bilingual FAQ Renderer
+// 8. FAQ Renderer
 function renderFAQ(lang) {
   const container = document.getElementById("faqContainer");
   if (!container) return;
@@ -342,12 +339,10 @@ function renderFAQ(lang) {
 
 function toggleFaq(index) {
   const items = document.querySelectorAll(".faq-item");
-  if (items[index]) {
-    items[index].classList.toggle("active");
-  }
+  if (items[index]) items[index].classList.toggle("active");
 }
 
-// 9. Share Functionality
+// 9. Share Website
 function shareWebsite() {
   if (navigator.share) {
     navigator.share({
@@ -361,7 +356,7 @@ function shareWebsite() {
   }
 }
 
-// 10. WhatsApp Quote & Discount Handler
+// 10. Quote Calculation
 function setupQuoteCalculation() {
   const totalInput = document.getElementById("serviceTotal");
   const calcBox = document.getElementById("discountCalculation");
