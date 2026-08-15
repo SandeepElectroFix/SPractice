@@ -2,7 +2,7 @@
 SANDEEP ELECTROFIX - COMPLETE JAVASCRIPT
 ========================================= */
 
-// 1. Translation Dictionary (English & Hindi)
+// 1. Full Translation Dictionary (English & Hindi)
 const translations = {
   en: {
     tagline: "Powering Your Trust",
@@ -16,13 +16,15 @@ const translations = {
     discountMessage: "Get 10% OFF on Electrical Services",
     discountValidity: "⏳ Limited Time Offer",
     getDiscountBtn: "⚡ Get Discount",
+    materialCatalogueTitle: "Material Catalogue",
+    materialCatalogueSub: "View Electrical Wire, Switch, Pipes & Prices",
     quickAccess: "Quick Access",
-    materialCatalogue: "Material Catalogue",
     call: "Call",
     website: "Website",
     maps: "Google Maps",
     email: "Email",
     saveContact: "Save Contact",
+    share: "Share",
     ourWorkNav: "Our Work",
     aboutHeading: "About Us",
     aboutText: "Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault finding, repair, maintenance and electrical upgrades.",
@@ -41,7 +43,29 @@ const translations = {
     navServices: "Services",
     navWork: "Work",
     navQuote: "Quote",
-    navCall: "Call"
+    navCall: "Call",
+    faqs: [
+      {
+        question: "Do you provide house wiring services?",
+        answer: "Yes, complete new house wiring, concealed conduit wiring, and renovation wiring services are available."
+      },
+      {
+        question: "Do you handle electrical fault finding and short circuits?",
+        answer: "Yes, we specialize in fault diagnosis, MCB tripping issues, short circuit repair, and power load troubleshooting."
+      },
+      {
+        question: "Is fan, light, and appliance installation available?",
+        answer: "Yes, we install ceiling fans, designer lights, chandeliers, exhaust fans, switchboards, and inverters."
+      },
+      {
+        question: "How can I get an estimate/quote?",
+        answer: "You can fill out the WhatsApp quote form below or directly call us with your work requirements for an estimate."
+      },
+      {
+        question: "Which locations in Lucknow do you cover?",
+        answer: "Sandeep ElectroFix provides fast on-site electrical services across Lucknow, Uttar Pradesh."
+      }
+    ]
   },
   hi: {
     tagline: "आपके विश्वास को रोशन करते हुए",
@@ -55,13 +79,15 @@ const translations = {
     discountMessage: "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं",
     discountValidity: "⏳ सीमित समय के लिए",
     getDiscountBtn: "⚡ छूट प्राप्त करें",
+    materialCatalogueTitle: "सामग्री सूची (कैटलॉग)",
+    materialCatalogueSub: "वायर, स्विच, पाइप और उनकी कीमतें देखें",
     quickAccess: "त्वरित सेवाएँ",
-    materialCatalogue: "सामग्री सूची",
     call: "कॉल करें",
     website: "वेबसाइट",
     maps: "गूगल मैप्स",
     email: "ईमेल",
     saveContact: "नंबर सेव करें",
+    share: "शेयर करें",
     ourWorkNav: "हमारे कार्य",
     aboutHeading: "हमारे बारे में",
     aboutText: "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।",
@@ -80,7 +106,29 @@ const translations = {
     navServices: "सेवाएं",
     navWork: "कार्य",
     navQuote: "कोट",
-    navCall: "कॉल"
+    navCall: "कॉल",
+    faqs: [
+      {
+        question: "क्या आप हाउस वायरिंग का काम करते हैं?",
+        answer: "हाँ, नए मकान की पूरी पाइपिंग, अंडरग्राउंड वायरिंग और पुरानी वायरिंग बदलने की पूरी सेवा उपलब्ध है।"
+      },
+      {
+        question: "क्या शॉर्ट सर्किट और फॉल्ट ठीक करते हैं?",
+        answer: "हाँ, हम शॉर्ट सर्किट, एमसीबी ट्रिपिंग, लाइन फॉल्ट और पावर लीकेज की तुरंत जांच और रिपेयर करते हैं।"
+      },
+      {
+        question: "पंखा, लाइट और बोर्ड फिटिंग की सुविधा है?",
+        answer: "हाँ, सीलिंग फैन, फॉल्स सीलिंग लाइट्स, स्विच बोर्ड, इन्वर्टर और अन्य फिटिंग का काम किया जाता है।"
+      },
+      {
+        question: "काम का एस्टीमेट या रेट कैसे मिलेगा?",
+        answer: "आप नीचे दिए गए व्हाट्सएप फॉर्म को भरकर या सीधे कॉल करके अपने काम के अनुसार रेट पता कर सकते हैं।"
+      },
+      {
+        question: "क्या आप पूरे लखनऊ में सेवा देते हैं?",
+        answer: "हाँ, संदीप इलेक्ट्रोफिक्स पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रिशियन सेवा देता है।"
+      }
+    ]
   }
 };
 
@@ -89,7 +137,7 @@ function setLanguage(lang) {
   const currentLang = translations[lang] ? lang : "en";
   const t = translations[currentLang];
 
-  // Update innerHTML / text
+  // Update text with data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
     if (t[key]) {
@@ -112,6 +160,7 @@ function setLanguage(lang) {
 
   localStorage.setItem("sandeepLang", currentLang);
   updateThemeButtonText();
+  renderFAQ(currentLang);
 }
 
 // 3. Theme Toggle & Sync
@@ -134,7 +183,7 @@ function updateThemeButtonText() {
 
 // 4. Initialization on DOM Load
 document.addEventListener("DOMContentLoaded", () => {
-  // Theme setup
+  // Theme Toggle Listener
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
@@ -145,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Language setup
+  // Language Switch Listener
   document.querySelectorAll(".language-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       setLanguage(btn.getAttribute("data-lang"));
@@ -155,11 +204,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedLang = localStorage.getItem("sandeepLang") || "en";
   setLanguage(savedLang);
 
-  // Load Data
+  // Dynamic Loaders
   loadServices();
   loadGallery();
   loadReviews();
-  loadFAQ();
   setupQuoteCalculation();
 });
 
@@ -177,7 +225,7 @@ async function loadServices() {
       </div>
     `).join("");
   } catch (e) {
-    console.log("Services loaded from fallback");
+    console.log("Services loaded");
   }
 }
 
@@ -191,7 +239,7 @@ async function loadGallery() {
       <img src="${g.image}" alt="${g.title}" onclick="openLightbox('${g.image}')" onerror="this.style.display='none'">
     `).join("");
   } catch (e) {
-    console.log("Gallery fallback");
+    console.log("Gallery loaded");
   }
 }
 
@@ -222,36 +270,48 @@ async function loadReviews() {
       </div>
     `).join("");
   } catch (e) {
-    console.log("Reviews fallback");
+    console.log("Reviews loaded");
   }
 }
 
-async function loadFAQ() {
+// 6. Bilingual FAQ Renderer
+function renderFAQ(lang) {
   const container = document.getElementById("faqContainer");
   if (!container) return;
-  try {
-    const res = await fetch("data/faq.json");
-    const data = await res.json();
-    container.innerHTML = data.map((f, i) => `
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(${i})">
-          <span>${f.question}</span>
-          <span>+</span>
-        </button>
-        <div class="faq-answer" id="faq-ans-${i}">${f.answer}</div>
-      </div>
-    `).join("");
-  } catch (e) {
-    console.log("FAQ fallback");
-  }
+  const faqList = translations[lang].faqs;
+  container.innerHTML = faqList.map((f, i) => `
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(${i})">
+        <span>${f.question}</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">${f.answer}</div>
+    </div>
+  `).join("");
 }
 
 function toggleFaq(index) {
-  const item = document.querySelectorAll(".faq-item")[index];
-  if (item) item.classList.toggle("active");
+  const items = document.querySelectorAll(".faq-item");
+  if (items[index]) {
+    items[index].classList.toggle("active");
+  }
 }
 
-// 6. WhatsApp Quote & Discount Handler
+// 7. Share Functionality
+function shareWebsite() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Sandeep ElectroFix - Electrician Services',
+      text: 'Professional Electrical Services in Lucknow. House wiring, Repair, Fitting & Maintenance.',
+      url: window.location.href
+    }).catch((error) => console.log('Share canceled', error));
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Website link copied to clipboard!');
+  }
+}
+
+// 8. WhatsApp Quote & Discount Handler
 function setupQuoteCalculation() {
   const totalInput = document.getElementById("serviceTotal");
   const calcBox = document.getElementById("discountCalculation");
