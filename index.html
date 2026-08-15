@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0ea5e9">
-    <title>Sandeep ElectroFix | Electrician in Lucknow</title>
-    <link rel="stylesheet" href="style.css?v=20.0">
+    <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="DcSvRpMWr7K4Mmvy0rl2-ZxAklY5g_b_017f0wl-LKU">
+    <title>Sandeep ElectroFix | Electrician in Lucknow | Electrical Services</title>
+    <meta name="description" content="Sandeep ElectroFix provides professional electrician and electrical services in Lucknow, Uttar Pradesh including house wiring, MCB & DB installation, false ceiling wiring, fan and light installation, inverter wiring, repair and fault finding.">
+    <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css?v=25.0">
+    
+    <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
@@ -25,7 +33,7 @@
           </div>
 
           <div class="hero-logo" id="businessLogo">
-            <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" onerror="this.style.display='none'">
+            <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" onerror="this.parentElement.style.display='none'">
           </div>
 
           <h1>Sandeep ElectroFix</h1>
@@ -56,7 +64,7 @@
 
      <!-- QUICK ACCESS BAR -->
      <section class="quick-actions" id="quickAccessBar">
-         <h2>त्वरित सेवाएँ</h2>
+         <h2 id="quickHeading">त्वरित सेवाएँ</h2>
          
          <div class="service-layout-bar" id="quickLayoutBar">
             <button type="button" class="layout-btn active" onclick="applyQuickLayout('grid-2')">⊞ Grid</button>
@@ -67,32 +75,72 @@
 
          <div class="grid layout-grid-2" id="quickGridContainer">
             <a href="tel:+919026036445" class="card">
-                <span class="icon call-icon">📞</span>
-                <strong>कॉल करें</strong>
+                <span class="icon call-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#F5C542"/><path fill="#111827" d="M33.2 28.5l-4.1-1.7c-.5-.2-1.1 0-1.5.4l-1.8 2.2c-3.1-1.6-5.6-4.1-7.2-7.2l2.2-1.8c.4-.4.6-1 .4-1.5l-1.7-4.1c-.2-.6-.9-1-1.6-1h-3.4c-.9 0-1.7.8-1.6 1.7 1.2 8.7 8.1 15.6 16.8 16.8.9.1 1.7-.7 1.7-1.6v-3.4c0-.7-.4-1.4-1.2-1.8z"/></svg>
+                </span>
+                <strong id="labelCall">कॉल करें</strong>
             </a>
             <a href="https://wa.me/919026036445" class="card" target="_blank" rel="noopener">
-                <span class="icon whatsapp-icon">💬</span>
-                <strong>व्हाट्सएप</strong>
+                <span class="icon whatsapp-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><path fill="#25D366" d="M24 4C12.95 4 4 12.95 4 24c0 3.82 1.07 7.39 2.92 10.43L4 44l9.84-2.85C16.8 43.02 20.3 44 24 44c11.05 0 20-8.95 20-20S35.05 4 24 4z"/><path fill="#FFFFFF" d="M34.6 28.9c-.48-.24-2.82-1.39-3.26-1.55-.44-.16-.76-.24-1.08.24-.32.48-1.24 1.55-1.52 1.87-.28.32-.56.36-1.04.12-2.92-1.25-5.11-3.69-6.38-5.88-.28-.48 0-.74.2-.98.2-.24.48-.56.72-.84.24-.28.32-.48.48-.8.16-.32 0-.6-.08-.84-.08-.24-1.04-2.51-1.43-3.44-.38-.91-.77-.79-1.06-.8h-.91c-.32 0-.84.12-1.28.6-.44.48-1.68 1.64-1.68 4s1.72 4.64 1.96 4.96c.24.32 3.39 5.18 8.21 7.26 3.12 1.35 4.34 1.48 5.88 1.25 1.04-.16 2.48-.96 2.83-1.89.35-.93.35-1.73.25-1.89-.1-.16-.38-.28-.84-.52z"/></svg>
+                </span>
+                <strong id="labelWhatsapp">व्हाट्सएप</strong>
             </a>
             <a href="https://sandeepelectrofix.github.io/" class="card" target="_blank" rel="noopener">
-                <span class="icon website-icon">🌐</span>
-                <strong>वेबसाइट</strong>
+                <span class="icon website-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#0066FF"/><ellipse cx="24" cy="24" rx="10" ry="21" fill="none" stroke="#FFFFFF" stroke-width="2.5"/><line x1="3" y1="24" x2="45" y2="24" stroke="#FFFFFF" stroke-width="2.5"/><line x1="24" y1="1" x2="24" y2="47" stroke="#FFFFFF" stroke-width="2.5"/></svg>
+                </span>
+                <strong id="labelWeb">वेबसाइट</strong>
             </a>
             <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="card" target="_blank" rel="noopener">
-                <span class="icon maps-icon">🗺️</span>
-                <strong>गूगल मैप्स</strong>
+                <span class="icon maps-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><path fill="#4285F4" d="M24 4C15.2 4 8 11.2 8 20c0 10.5 13.5 22.8 15.2 24.3.5.4 1.1.4 1.6 0C26.5 42.8 40 30.5 40 20c0-8.8-7.2-16-16-16z"/><circle cx="24" cy="19" r="6" fill="#FFFFFF"/></svg>
+                </span>
+                <strong id="labelMap">गूगल मैप्स</strong>
             </a>
             <a href="javascript:void(0)" class="card" onclick="shareWebsite()">
-                <span class="icon share-icon">🔗</span>
-                <strong>शेयर करें</strong>
+                <span class="icon share-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#25D366"/><path fill="#FFFFFF" d="M34 16c0-2.2-1.8-4-4-4s-4 1.8-4 4c0 .3 0 .7.1 1L17.5 21.3c-.7-.8-1.8-1.3-3-1.3-2.2 0-4 1.8-4 4s1.8 4 4 4c1.2 0 2.3-.5 3-1.3l8.6 4.3c-.1.3-.1.7-.1 1 0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1.2 0-2.3.5-3 1.3L17.5 25c.1-.3.1-.7.1-1s0-.7-.1-1l8.6-4.3c.7.8 1.8 1.3 3 1.3 2.2 0 4-1.8 4-4z"/></svg>
+                </span>
+                <strong id="labelShare">शेयर करें</strong>
             </a>
             <a href="our-work.html" class="card">
-                <span class="icon work-icon">📸</span>
-                <strong>हमारे कार्य</strong>
+                <span class="icon work-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#FF5500"/><path fill="#FFFFFF" d="M18 14l-2 3h-4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2V19c0-1.1-.9-2-2-2h-4l-2-3H18zm6 18c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/></svg>
+                </span>
+                <strong id="labelWork">हमारे कार्य</strong>
+            </a>
+            <a href="material-catalogue.html" class="card catalogue-card-highlight">
+                <span class="icon catalogue-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#F5C542"/><path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM14.2 12l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/></svg>
+                </span>
+                <strong id="labelCatalogue">सामग्री सूची</strong>
             </a>
          </div>
      </section>
 
+     <!-- ABOUT SECTION -->
+     <section class="about" id="aboutSection">
+         <h2 id="aboutHeading">हमारे बारे में</h2>
+         <p id="aboutText"><strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।</p>
+     </section>  
+
+     <!-- SERVICE LOCATION & DISTANCE TRACKER -->
+     <section id="locationSection" class="location-box">
+        <h2 id="locHeading">📍 सेवा क्षेत्र एवं लोकेशन</h2>
+        <p id="locDesc">पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।</p>
+        
+        <button type="button" class="location-btn" id="checkLocationBtn" onclick="getUserLocation()">
+            <span>📡</span> <span id="distBtnText">हमारे यहाँ से अपनी दूरी चेक करें</span>
+        </button>
+        
+        <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="location-btn maps-btn" target="_blank" rel="noopener">
+            <span>🗺️</span> <span id="mapBtnText">गूगल मैप्स पर रास्ता देखें</span>
+        </a>
+        
+        <div id="locationStatus" class="location-status"></div>
+     </section>
+     
      <!-- SERVICES SECTION -->
      <section id="servicesSection" class="services">
         <h2 id="servicesHeading">हमारी सेवाएँ</h2>
@@ -107,9 +155,35 @@
         <div class="service-grid layout-list" id="serviceContainer"></div>
      </section>
 
+     <!-- GALLERY SECTION -->
+     <section id="gallerySection" class="gallery">
+        <h2 id="galleryHeading">हमारे द्वारा किए गए कार्य</h2>
+        <div class="gallery-grid" id="galleryContainer"></div>
+     </section>
+
+     <!-- LIGHTBOX -->
+     <div id="lightbox" onclick="closeLightboxModal()"><span id="closeLightbox">&times;</span><img id="lightboxImage" src="" alt="Work"></div>
+
+     <!-- SCAN QR SECTION -->
+     <section id="cardQRContainer" class="qr-section">
+        <h2 id="qrHeading">क्यूआर कोड स्कैन करें</h2>
+        <p id="qrDesc">हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।</p>
+        <div class="qr-container">
+            <img src="assets/qr.png" alt="Sandeep ElectroFix QR" id="cardQR" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sandeepelectrofix.github.io/SandeepElectroFix-Card/'">
+        </div>
+        <br>
+        <a href="assets/qr.png" download="SandeepElectroFix_QR.png" class="btn download-qr-btn" id="qrBtnText">📥 क्यूआर कोड डाउनलोड करें</a>
+     </section>
+
+     <!-- REVIEWS SECTION -->
+     <section id="reviewsSection">
+        <h2 id="reviewsHeading">ग्राहकों की राय</h2>
+        <div class="review-grid" id="reviewContainer"></div>
+     </section>
+
      <!-- QUOTE & ESTIMATE FORM SECTION -->
      <section id="quoteFormSection" class="quote-section">
-        <h2>कोटेशन व अनुमानित खर्च</h2>
+        <h2 id="quoteHeading">कोटेशन व अनुमानित खर्च</h2>
         <div class="quote-card card" style="padding:16px;">
           <div class="quote-form">
               <input type="text" id="customerName" placeholder="आपका नाम *">
@@ -117,21 +191,21 @@
               <textarea id="customerMessage" rows="2" placeholder="पता / कार्य का विवरण..."></textarea>
               
               <div id="estimateSummaryBox" class="estimate-summary-box">
-                  <div class="summary-heading">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
+                  <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
                   <div id="selectedServicesList" class="selected-services-list">
-                    <p class="no-selection-hint">अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।</p>
+                    <p class="no-selection-hint" id="noSelHint">अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।</p>
                   </div>
 
-                  <div class="calc-row"><span>कुल राशि:</span> <strong id="calcSubtotal">₹0</strong></div>
+                  <div class="calc-row"><span id="lblSubtotal">कुल राशि:</span> <strong id="calcSubtotal">₹0</strong></div>
                   <div class="calc-row discount-row" id="calcDiscountRow" style="display:none;">
                     <span id="discountLabel">विशेष छूट (10% OFF):</span> <strong id="calcDiscount">-₹0</strong>
                   </div>
-                  <div class="calc-row total-row"><span>अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
+                  <div class="calc-row total-row"><span id="lblGrandTotal">अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
               </div>
 
               <div class="quote-action-buttons">
-                <button type="button" class="btn whatsapp-btn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
-                <button type="button" class="btn pdf-download-btn" onclick="downloadEstimatePDF()">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
+                <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
+                <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
               </div>
           </div>
         </div>
@@ -150,89 +224,195 @@
 
      <!-- BOTTOM NAV -->
      <nav class="mobile-bottom-nav">
-        <a href="#top" class="bottom-nav-item"><span>🏠</span><small>होम</small></a>
-        <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small>सेवाएं</small></a>
-        <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small>कोट</small></a>
-        <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small>कॉल</small></a>
+        <a href="#top" class="bottom-nav-item"><span>🏠</span><small id="navHome">होम</small></a>
+        <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small id="navServices">सेवाएं</small></a>
+        <a href="#gallerySection" class="bottom-nav-item"><span>📸</span><small id="navWork">कार्य</small></a>
+        <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small id="navQuote">कोट</small></a>
+        <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">कॉल</small></a>
      </nav>
 
-     <!-- INTEGRATED JAVASCRIPT LOGIC -->
+     <!-- SCRIPT LOGIC -->
      <script>
-        const CARD_DATA = {
+        const FULL_CONFIG = {
             services: [
                 {
                     title_en: "House Wiring", title_hi: "हाउस वायरिंग", icon: "🏠",
-                    desc_en: "Complete house wiring solutions.", desc_hi: "नए और पुराने मकान की पूरी वायरिंग।",
+                    desc_en: "Complete house wiring and piping solutions.", desc_hi: "नए और पुराने मकान की पूरी वायरिंग और पाइपिंग।",
                     subServices: [
                         { name_en: "New House Wiring", name_hi: "नए मकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45 },
-                        { name_en: "Concealed Wiring", name_hi: "कंसील्ड वायरिंग", rate_en: "₹40 / sq.ft.", rate_hi: "₹40 / वर्ग फीट", price: 40 },
-                        { name_en: "Switch & Socket Fitting", name_hi: "स्विच सॉकेट फिटिंग", rate_en: "₹80 / pt", rate_hi: "₹80 / पॉइंट", price: 80 }
+                        { name_en: "Concealed Wiring", name_hi: "कंसील्ड (अंडरग्राउंड) वायरिंग", rate_en: "₹40 / sq.ft.", rate_hi: "₹40 / वर्ग फीट", price: 40 },
+                        { name_en: "Surface Wiring", name_hi: "ओपन / सरफेस वायरिंग", rate_en: "₹30 / sq.ft.", rate_hi: "₹30 / वर्ग फीट", price: 30 },
+                        { name_en: "Slab Piping", name_hi: "छत / स्लैब पाइपिंग", rate_en: "₹15 / sq.ft.", rate_hi: "₹15 / वर्ग फीट", price: 15 },
+                        { name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80 },
+                        { name_en: "Complete House Wiring", name_hi: "फुल हाउस वायरिंग सेटअप", rate_en: "₹50 / sq.ft.", rate_hi: "₹50 / वर्ग फीट", price: 50 }
                     ]
                 },
                 {
-                    title_en: "Light & Fan Fitting", title_hi: "लाइट और पंखा फिटिंग", icon: "💡",
-                    desc_en: "Installation of lights and fans.", desc_hi: "सीलिंग फैन, एग्जॉस्ट फैन और लाइट फिटिंग।",
+                    title_en: "Light & Fan Installation", title_hi: "लाइट और पंखा फिटिंग", icon: "💡",
+                    desc_en: "Fitting of ceiling fans, LED lights and fixtures.", desc_hi: "सीलिंग फैन, एग्जॉस्ट फैन और सभी प्रकार की लाइट फिटिंग।",
                     subServices: [
                         { name_en: "Ceiling Fan Installation", name_hi: "सीलिंग पंखा फिटिंग", rate_en: "₹250 / fan", rate_hi: "₹250 / पंखा", price: 250 },
-                        { name_en: "LED Light Fitting", name_hi: "एलईडी लाइट इंस्टॉलेशन", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
-                        { name_en: "Exhaust Fan Fitting", name_hi: "एग्जॉस्ट पंखा फिटिंग", rate_en: "₹200 / fan", rate_hi: "₹200 / पंखा", price: 200 }
+                        { name_en: "Exhaust Fan Installation", name_hi: "एग्जॉस्ट पंखा फिटिंग", rate_en: "₹200 / fan", rate_hi: "₹200 / पंखा", price: 200 },
+                        { name_en: "LED Light Installation", name_hi: "एलईडी लाइट इंस्टॉलेशन", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
+                        { name_en: "Decorative Light Fitting", name_hi: "डेकोरेटिव / झूमर लाइट", rate_en: "₹250 / light", rate_hi: "₹250 / लाइट", price: 250 },
+                        { name_en: "Tube Light Installation", name_hi: "ट्यूब लाइट फिटिंग", rate_en: "₹120 / light", rate_hi: "₹120 / लाइट", price: 120 },
+                        { name_en: "Fan Regulator Fitting", name_hi: "फैन रेगुलेटर फिटिंग", rate_en: "₹100 / piece", rate_hi: "₹100 / पीस", price: 100 }
                     ]
                 },
                 {
                     title_en: "MCB & DB Work", title_hi: "एमसीबी और डीबी पैनल वर्क", icon: "🔌",
-                    desc_en: "MCB, DB and circuit safety setup.", desc_hi: "एमसीबी और डिस्ट्रीब्यूशन बोर्ड फिटिंग।",
+                    desc_en: "MCB, DB, RCCB and circuit safety installation.", desc_hi: "एमसीबी, आरसीसीबी और डिस्ट्रीब्यूशन बोर्ड सुरक्षित फिटिंग।",
                     subServices: [
                         { name_en: "MCB Installation", name_hi: "एमसीबी फिटिंग", rate_en: "₹150 / MCB", rate_hi: "₹150 / MCB", price: 150 },
-                        { name_en: "DB Box Setup", name_hi: "डीबी बॉक्स सेटअप", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 },
-                        { name_en: "RCCB / RCBO Fitting", name_hi: "आरसीसीबी फिटिंग", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 }
+                        { name_en: "DB Installation", name_hi: "डीबी बॉक्स फिटिंग", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 },
+                        { name_en: "MCB Replacement", name_hi: "खराब MCB बदलना", rate_en: "₹100 / MCB", rate_hi: "₹100 / MCB", price: 100 },
+                        { name_en: "RCCB Installation", name_hi: "आरसीसीबी फिटिंग", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 },
+                        { name_en: "RCBO Installation", name_hi: "आरसीबीओ फिटिंग", rate_en: "₹350 / pc", rate_hi: "₹350 / पीस", price: 350 },
+                        { name_en: "DB Board Dressing", name_hi: "डीबी बोर्ड ड्रेसिंग", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 }
                     ]
                 },
                 {
                     title_en: "False Ceiling Wiring", title_hi: "फॉल्स सीलिंग वायरिंग", icon: "🏗️",
-                    desc_en: "Wiring for COB and profile lights.", desc_hi: "फॉल्स सीलिंग लाइट्स और प्रोफाइल वायरिंग।",
+                    desc_en: "Wiring for COB, profile, strip lights in ceiling.", desc_hi: "फॉल्स सीलिंग लाइट्स, प्रोफाइल और स्ट्रिप लाइट वायरिंग।",
                     subServices: [
-                        { name_en: "Profile Light Wiring", name_hi: "प्रोफाइल लाइट वायरिंग", rate_en: "₹10 / sq.ft.", rate_hi: "₹10 / वर्ग फीट", price: 10 },
-                        { name_en: "COB / Downlight Wiring", name_hi: "डाउनलाइट वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 }
+                        { name_en: "Ceiling Light Wiring", name_hi: "सीलिंग लाइट वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                        { name_en: "Downlight Wiring", name_hi: "डाउनलाइट वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                        { name_en: "Panel Light Wiring", name_hi: "पैनल लाइट वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                        { name_en: "Strip Light Wiring", name_hi: "स्ट्रिप लाइट वायरिंग", rate_en: "₹10 / sq.ft.", rate_hi: "₹10 / वर्ग फीट", price: 10 },
+                        { name_en: "Fan Point in Ceiling", name_hi: "सीलिंग में फैन पॉइंट", rate_en: "₹150 / point", rate_hi: "₹150 / पॉइंट", price: 150 },
+                        { name_en: "Concealed Ceiling Wiring", name_hi: "कंसील्ड सीलिंग वायरिंग", rate_en: "₹10 / sq.ft.", rate_hi: "₹10 / वर्ग फीट", price: 10 }
                     ]
                 },
                 {
-                    title_en: "Inverter Connection", title_hi: "इन्वर्टर और बैटरी कनेक्शन", icon: "🔋",
-                    desc_en: "Inverter battery setup and wiring.", desc_hi: "इन्वर्टर कनेक्शन और बैकअप वायरिंग।",
+                    title_en: "Inverter & Backup", title_hi: "इन्वर्टर और बैटरी कनेक्शन", icon: "🔋",
+                    desc_en: "Inverter battery setup and changeover services.", desc_hi: "इन्वर्टर कनेक्शन, चेंजओवर स्विच और बैकअप वायरिंग।",
                     subServices: [
                         { name_en: "Inverter Installation", name_hi: "इन्वर्टर इंस्टॉलेशन", rate_en: "₹500 / set", rate_hi: "₹500 / सेट", price: 500 },
-                        { name_en: "Changeover Switch", name_hi: "चेंजओवर स्विच लगाना", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 }
+                        { name_en: "Inverter Wiring", name_hi: "इन्वर्टर लाइन वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                        { name_en: "Battery Connection", name_hi: "बैटरी कनेक्शन", rate_en: "₹150 / conn", rate_hi: "₹150 / कनेक्शन", price: 150 },
+                        { name_en: "Changeover Switch Fitting", name_hi: "चेंजओवर स्विच लगाना", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 },
+                        { name_en: "Backup Line Routing", name_hi: "बैकअप लाइन बिछाना", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                        { name_en: "Inverter Fault Check", name_hi: "इन्वर्टर फॉल्ट चेकिंग", rate_en: "₹200 / visit", rate_hi: "₹200 / विजिट", price: 200 }
                     ]
                 },
                 {
-                    title_en: "Repair & Fault Finding", title_hi: "रिपेयर और फॉल्ट चेकिंग", icon: "🔧",
-                    desc_en: "Short circuit and power fault testing.", desc_hi: "शॉर्ट सर्किट और लाइन फॉल्ट रिपेयर।",
+                    title_en: "Electrical Repair", title_hi: "इलेक्ट्रिकल रिपेयर", icon: "🔧",
+                    desc_en: "Quick repairs for switches, sockets, and fans.", desc_hi: "स्विच, सॉकेट, पंखा और सामान्य बिजली रिपेयर सेवा।",
                     subServices: [
+                        { name_en: "Switch Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80 },
+                        { name_en: "Socket Repair", name_hi: "सॉकेट रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
+                        { name_en: "Fan Repair", name_hi: "पंखा रिपेयर", rate_en: "₹150 / fan", rate_hi: "₹150 / पंखा", price: 150 },
+                        { name_en: "Light Repair", name_hi: "लाइट रिपेयर", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
+                        { name_en: "Loose Connection Fix", name_hi: "लूज कनेक्शन सही करना", rate_en: "₹150 / point", rate_hi: "₹150 / पॉइंट", price: 150 },
+                        { name_en: "Short Circuit Fix", name_hi: "शॉर्ट सर्किट रिपेयर", rate_en: "₹300 / visit", rate_hi: "₹300 / विजिट", price: 300 }
+                    ]
+                },
+                {
+                    title_en: "Fault Finding", title_hi: "फॉल्ट टेस्टिंग और चेकिंग", icon: "🔍",
+                    desc_en: "Short circuit detection and power restoration.", desc_hi: "शॉर्ट सर्किट, लाइन फॉल्ट और वोल्टेज टेस्टिंग।",
+                    subServices: [
+                        { name_en: "Power Failure Checking", name_hi: "पावर कट / लाइन चेकिंग", rate_en: "₹200 / visit", rate_hi: "₹200 / विजिट", price: 200 },
                         { name_en: "Short Circuit Detection", name_hi: "शॉर्ट सर्किट पकड़ना", rate_en: "₹300 / visit", rate_hi: "₹300 / विजिट", price: 300 },
-                        { name_en: "Switch / Socket Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / pt", rate_hi: "₹80 / पॉइंट", price: 80 }
+                        { name_en: "MCB Tripping Issue", name_hi: "बार-बार MCB गिरना", rate_en: "₹250 / visit", rate_hi: "₹250 / विजिट", price: 250 },
+                        { name_en: "Voltage Checking", name_hi: "वोल्टेज जांच", rate_en: "₹150 / visit", rate_hi: "₹150 / विजिट", price: 150 },
+                        { name_en: "Wiring Fault Detection", name_hi: "वायरिंग फॉल्ट टेस्ट", rate_en: "₹300 / visit", rate_hi: "₹300 / विजिट", price: 300 },
+                        { name_en: "Loose Neutral Detection", name_hi: "न्यूट्रल / अर्थिंग जांच", rate_en: "₹200 / visit", rate_hi: "₹200 / विजिट", price: 200 }
+                    ]
+                },
+                {
+                    title_en: "Commercial Work", title_hi: "कमर्शियल इलेक्ट्रिकल कार्य", icon: "🏢",
+                    desc_en: "Wiring and maintenance for shops, offices, and clinics.", desc_hi: "दुकान, ऑफिस और शोरूम की पूरी वायरिंग व मेंटेनेंस।",
+                    subServices: [
+                        { name_en: "Shop Wiring", name_hi: "दुकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45 },
+                        { name_en: "Office Wiring", name_hi: "ऑफिस वायरिंग", rate_en: "₹50 / sq.ft.", rate_hi: "₹50 / वर्ग फीट", price: 50 },
+                        { name_en: "Commercial Points Fitting", name_hi: "कमर्शियल पॉइंट फिटिंग", rate_en: "₹100 / point", rate_hi: "₹100 / पॉइंट", price: 100 },
+                        { name_en: "Commercial DB Setup", name_hi: "कमर्शियल डीबी सेटअप", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 },
+                        { name_en: "Track Light Fitting", name_hi: "ट्रैक लाइट इंस्टॉलेशन", rate_en: "₹150 / light", rate_hi: "₹150 / लाइट", price: 150 },
+                        { name_en: "Monthly Maintenance", name_hi: "मासिक मेंटेनेंस विजिट", rate_en: "₹500 / visit", rate_hi: "₹500 / विजिट", price: 500 }
                     ]
                 }
             ],
+            gallery: [
+                { image: "assets/gallery/work1.jpg", title_en: "House Wiring", title_hi: "हाउस वायरिंग" },
+                { image: "assets/gallery/work2.jpg", title_en: "False Ceiling Wiring", title_hi: "फॉल्स सीलिंग वायरिंग" },
+                { image: "assets/gallery/work3.jpg", title_en: "DB Panel Installation", title_hi: "डीबी पैनल इंस्टॉलेशन" },
+                { image: "assets/gallery/work4.jpg", title_en: "Lighting Work", title_hi: "लाइटिंग वर्क" }
+            ],
+            reviews: [
+                { name: "Rahul Sharma", rating: 5, text_en: "Excellent electrical service and professional work.", text_hi: "बहुत ही बढ़िया और सुरक्षित काम किया।" },
+                { name: "Amit Verma", rating: 5, text_en: "Good quality work and on-time service.", text_hi: "समय पर और बेहतरीन क्वालिटी का काम।" }
+            ],
             faq: [
-                { q_en: "Do you do complete house wiring?", q_hi: "क्या आप पूरे मकान की वायरिंग करते हैं?", a_en: "Yes, complete concealed and surface wiring.", a_hi: "हाँ, हम नए और पुराने मकानों की पूरी अंडरग्राउंड व ओपन वायरिंग करते हैं।" },
-                { q_en: "Do you fix short circuits?", q_hi: "क्या आप शॉर्ट सर्किट ठीक करते हैं?", a_en: "Yes, fast and safe fault troubleshooting.", a_hi: "हाँ, शॉर्ट सर्किट और एमसीबी ट्रिपिंग तुरंत चेक करके ठीक करते हैं।" }
+                { q_en: "Do you provide complete house wiring?", q_hi: "क्या आप पूरे मकान की वायरिंग करते हैं?", a_en: "Yes, we provide new house concealed and surface wiring.", a_hi: "हाँ, हम नए और पुराने मकानों की पूरी अंडरग्राउंड व ओपन वायरिंग करते हैं।" },
+                { q_en: "Do you fix short circuits and tripping?", q_hi: "क्या आप शॉर्ट सर्किट और फॉल्ट ठीक करते हैं?", a_en: "Yes, we detect and fix short circuits safely.", a_hi: "हाँ, हम शॉर्ट सर्किट और एमसीबी ट्रिपिंग तुरंत चेक करके ठीक करते हैं।" }
             ]
         };
 
-        let currentLang = "hi";
-        let selectedMap = {};
+        let currentLang = localStorage.getItem("sandeepLang") || "hi";
+        let selectedItemsMap = {};
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem("sandeepLang", currentLang);
+
+            document.querySelectorAll(".language-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-lang") === lang));
+
+            const isHi = lang === "hi";
+            document.getElementById("businessTagline").innerText = isHi ? "आपके विश्वास को रोशन करते हुए" : "Powering Your Trust";
+            document.getElementById("businessLocation").innerText = isHi ? "📍 लखनऊ, उत्तर प्रदेश" : "📍 Lucknow, Uttar Pradesh";
+            document.getElementById("callBtnText").innerText = isHi ? "📞 अभी कॉल करें" : "📞 Call Now";
+            document.getElementById("whatsappBtnText").innerText = isHi ? "💬 व्हाट्सएप करें" : "💬 WhatsApp";
+            document.getElementById("discountTitle").innerText = isHi ? "विशेष छूट" : "Special Discount";
+            document.getElementById("discountMessage").innerText = isHi ? "इलेक्ट्रिकल सेवाओं पर 10% की भारी छूट पाएं" : "Get 10% OFF on selected electrical services.";
+            document.getElementById("discountValidity").innerText = isHi ? "⏳ सीमित समय के लिए" : "⏳ Limited Time Offer";
+            document.getElementById("quickHeading").innerText = isHi ? "त्वरित सेवाएँ" : "Quick Access";
+            document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
+            document.getElementById("locHeading").innerText = isHi ? "📍 सेवा क्षेत्र एवं लोकेशन" : "📍 Service Location";
+            document.getElementById("locDesc").innerText = isHi ? "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।" : "Providing on-site electrical services across Lucknow.";
+            document.getElementById("distBtnText").innerText = isHi ? "हमारे यहाँ से अपनी दूरी चेक करें" : "Check Your Distance from Us";
+            document.getElementById("mapBtnText").innerText = isHi ? "गूगल मैप्स पर रास्ता देखें" : "Get Directions on Google Maps";
+            document.getElementById("servicesHeading").innerText = isHi ? "हमारी सेवाएँ" : "Our Services";
+            document.getElementById("galleryHeading").innerText = isHi ? "हमारे द्वारा किए गए कार्य" : "Our Work";
+            document.getElementById("qrHeading").innerText = isHi ? "क्यूआर कोड स्कैन करें" : "Scan QR Code";
+            document.getElementById("qrDesc").innerText = isHi ? "हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।" : "Scan this QR code to quickly save our digital card or pay.";
+            document.getElementById("qrBtnText").innerText = isHi ? "📥 क्यूआर कोड डाउनलोड करें" : "📥 Download QR Code";
+            document.getElementById("reviewsHeading").innerText = isHi ? "ग्राहकों की राय" : "Customer Reviews";
+            document.getElementById("quoteHeading").innerText = isHi ? "कोटेशन व अनुमानित खर्च" : "Estimate & Quotation";
+            document.getElementById("faqHeading").innerText = isHi ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
+
+            document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
+            document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
+            document.getElementById("customerMessage").placeholder = isHi ? "पता / कार्य का विवरण..." : "Address / Work details...";
+            document.getElementById("sendWhatsappBtn").innerText = isHi ? "💬 व्हाट्सएप पर भेजें" : "💬 Send on WhatsApp";
+            document.getElementById("downloadPdfBtn").innerText = isHi ? "📄 पीडीएफ एस्टीमेट डाउनलोड करें" : "📄 Download PDF Estimate";
+
+            document.getElementById("labelCall").innerText = isHi ? "कॉल करें" : "Call";
+            document.getElementById("labelWhatsapp").innerText = isHi ? "व्हाट्सएप" : "WhatsApp";
+            document.getElementById("labelWeb").innerText = isHi ? "वेबसाइट" : "Website";
+            document.getElementById("labelMap").innerText = isHi ? "गूगल मैप्स" : "Google Maps";
+            document.getElementById("labelShare").innerText = isHi ? "शेयर करें" : "Share";
+            document.getElementById("labelWork").innerText = isHi ? "हमारे कार्य" : "Our Work";
+            document.getElementById("labelCatalogue").innerText = isHi ? "सामग्री सूची" : "Catalogue";
+
+            renderServices();
+            renderGallery();
+            renderReviews();
+            renderFAQ();
+            updateCalculations();
+        }
 
         function renderServices() {
             const container = document.getElementById("serviceContainer");
             if (!container) return;
             container.innerHTML = "";
 
-            CARD_DATA.services.forEach((service, sIdx) => {
+            FULL_CONFIG.services.forEach((service, sIdx) => {
                 const title = currentLang === "hi" ? service.title_hi : service.title_en;
                 const desc = currentLang === "hi" ? service.desc_hi : service.desc_en;
 
                 const subHtml = service.subServices.map((sub, subIdx) => {
                     const key = `${sIdx}_${subIdx}`;
-                    const qty = selectedMap[key]?.qty || 0;
+                    const qty = selectedItemsMap[key]?.qty || 0;
                     const name = currentLang === "hi" ? sub.name_hi : sub.name_en;
                     const rate = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
 
@@ -272,10 +452,10 @@
 
         function changeQty(sIdx, subIdx, change) {
             const key = `${sIdx}_${subIdx}`;
-            const sub = CARD_DATA.services[sIdx].subServices[subIdx];
+            const sub = FULL_CONFIG.services[sIdx].subServices[subIdx];
 
-            if (!selectedMap[key]) {
-                selectedMap[key] = {
+            if (!selectedItemsMap[key]) {
+                selectedItemsMap[key] = {
                     name_hi: sub.name_hi,
                     name_en: sub.name_en,
                     price: sub.price,
@@ -283,10 +463,10 @@
                 };
             }
 
-            selectedMap[key].qty += change;
-            if (selectedMap[key].qty <= 0) delete selectedMap[key];
+            selectedItemsMap[key].qty += change;
+            if (selectedItemsMap[key].qty <= 0) delete selectedItemsMap[key];
 
-            const currentQty = selectedMap[key]?.qty || 0;
+            const currentQty = selectedItemsMap[key]?.qty || 0;
             const qEl = document.getElementById(`qty_${key}`);
             const rEl = document.getElementById(`row_${key}`);
 
@@ -297,7 +477,7 @@
         }
 
         function updateCalculations() {
-            const items = Object.values(selectedMap);
+            const items = Object.values(selectedItemsMap);
             const countEl = document.getElementById("selectedCount");
             const listEl = document.getElementById("selectedServicesList");
             const subtotalEl = document.getElementById("calcSubtotal");
@@ -309,7 +489,7 @@
             if (countEl) countEl.innerText = count;
 
             if (items.length === 0) {
-                if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'कोई सेवा नहीं चुनी गई।' : 'No services selected.'}</p>`;
+                if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।' : 'No services selected yet. Use + / − above.'}</p>`;
                 if (subtotalEl) subtotalEl.innerText = "₹0";
                 if (discRow) discRow.style.display = "none";
                 if (totalEl) totalEl.innerText = "₹0";
@@ -335,26 +515,50 @@
             if (totalEl) totalEl.innerText = `₹${total}`;
         }
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll(".language-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-lang") === lang));
-            
-            document.getElementById("businessTagline").innerText = lang === "hi" ? "आपके विश्वास को रोशन करते हुए" : "Powering Your Trust";
-            document.getElementById("businessLocation").innerText = lang === "hi" ? "📍 लखनऊ, उत्तर प्रदेश" : "📍 Lucknow, Uttar Pradesh";
-            document.getElementById("callBtnText").innerText = lang === "hi" ? "📞 अभी कॉल करें" : "📞 Call Now";
-            document.getElementById("whatsappBtnText").innerText = lang === "hi" ? "💬 व्हाट्सएप करें" : "💬 WhatsApp";
-            document.getElementById("servicesHeading").innerText = lang === "hi" ? "हमारी सेवाएँ" : "Our Services";
-            document.getElementById("faqHeading").innerText = lang === "hi" ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
+        function renderGallery() {
+            const container = document.getElementById("galleryContainer");
+            if (!container) return;
+            container.innerHTML = FULL_CONFIG.gallery.map(g => {
+                const title = currentLang === "hi" ? g.title_hi : g.title_en;
+                return `
+                    <div class="gallery-item" onclick="openLightboxModal('${g.image}')">
+                        <img src="${g.image}" alt="${title}" onerror="this.parentElement.style.display='none'">
+                        <div class="gallery-title">${title}</div>
+                    </div>
+                `;
+            }).join("");
+        }
 
-            renderServices();
-            renderFAQ();
-            updateCalculations();
+        function openLightboxModal(src) {
+            const box = document.getElementById("lightbox");
+            const img = document.getElementById("lightboxImage");
+            if (box && img) {
+                img.src = src;
+                box.style.display = "flex";
+            }
+        }
+
+        function closeLightboxModal() {
+            const box = document.getElementById("lightbox");
+            if (box) box.style.display = "none";
+        }
+
+        function renderReviews() {
+            const container = document.getElementById("reviewContainer");
+            if (!container) return;
+            container.innerHTML = FULL_CONFIG.reviews.map(r => `
+                <div class="card review-card" style="padding:12px; margin-bottom:8px;">
+                    <div style="color:#f5c542;">${"★".repeat(r.rating || 5)}</div>
+                    <p style="margin:4px 0; font-size:0.85rem;">"${currentLang === 'hi' ? r.text_hi : r.text_en}"</p>
+                    <small style="color:#aab4c8;">— ${r.name}</small>
+                </div>
+            `).join("");
         }
 
         function renderFAQ() {
             const container = document.getElementById("faqContainer");
             if (!container) return;
-            container.innerHTML = CARD_DATA.faq.map(f => `
+            container.innerHTML = FULL_CONFIG.faq.map(f => `
                 <div class="faq-item" onclick="this.classList.toggle('active')">
                     <div class="faq-question"><span>${currentLang === 'hi' ? f.q_hi : f.q_en}</span><span class="faq-icon">+</span></div>
                     <div class="faq-answer">${currentLang === 'hi' ? f.a_hi : f.a_en}</div>
@@ -382,42 +586,109 @@
             const name = document.getElementById("customerName")?.value.trim();
             const phone = document.getElementById("customerPhone")?.value.trim();
             const note = document.getElementById("customerMessage")?.value.trim();
-            const items = Object.values(selectedMap);
+            const items = Object.values(selectedItemsMap);
 
-            if (!name || !phone) return alert("कृपया अपना नाम और मोबाइल नंबर दर्ज करें।");
-            if (items.length === 0) return alert("कृपया + बटन से कोई सेवा चुनें।");
+            if (!name || !phone) return alert(currentLang === 'hi' ? "कृपया अपना नाम और मोबाइल नंबर दर्ज करें।" : "Please enter Name and Phone.");
+            if (items.length === 0) return alert(currentLang === 'hi' ? "कृपया + बटन दबाकर कम से कम एक सेवा चुनें।" : "Please add at least one service.");
 
             const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
-            const total = subtotal - Math.round(subtotal * 0.10);
+            const discount = Math.round(subtotal * 0.10);
+            const total = subtotal - discount;
 
-            let msg = `⚡ *Sandeep ElectroFix - Estimate* ⚡\n\n`;
-            msg += `👤 *ग्राहक:* ${name}\n📞 *मोबाइल:* ${phone}\n`;
-            if (note) msg += `📍 *पता:* ${note}\n`;
-            msg += `\n📋 *सेवाएँ:*\n`;
+            let msg = `⚡ *Sandeep ElectroFix - Estimate Request* ⚡\n\n`;
+            msg += `👤 *${currentLang === 'hi' ? 'नाम' : 'Name'}:* ${name}\n`;
+            msg += `📞 *${currentLang === 'hi' ? 'फोन' : 'Phone'}:* ${phone}\n`;
+            if (note) msg += `📍 *${currentLang === 'hi' ? 'पता/नोट' : 'Address/Note'}:* ${note}\n`;
+            msg += `\n📋 *${currentLang === 'hi' ? 'चुनी गई सेवाएँ' : 'Selected Services'}:*\n`;
+
             items.forEach((itm, i) => {
-                msg += `${i+1}. ${itm.name_hi} [Qty: ${itm.qty}] - ₹${itm.price * itm.qty}\n`;
+                msg += `${i+1}. ${currentLang === 'hi' ? itm.name_hi : itm.name_en} [Qty: ${itm.qty}] - ₹${itm.price * itm.qty}\n`;
             });
-            msg += `\n✅ *कुल राशि:* ₹${total} (10% छूट के बाद)`;
+
+            msg += `\n💵 *Subtotal:* ₹${subtotal}\n`;
+            msg += `🎁 *Discount (10%):* -₹${discount}\n`;
+            msg += `✅ *Grand Total:* ₹${total}\n\n`;
+            msg += `_Please confirm visit/booking._`;
 
             window.open(`https://wa.me/919026036445?text=${encodeURIComponent(msg)}`, "_blank");
         }
 
         function downloadEstimatePDF() {
-            if (!window.jspdf) return alert("PDF Library load ho rahi hai...");
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const items = Object.values(selectedMap);
-            if (items.length === 0) return alert("कृपया पहले सेवा चुनें।");
+            const { jsPDF } = window.jspdf || {};
+            if (!jsPDF) return alert("PDF library is loading, please try in 2 seconds.");
 
+            const name = document.getElementById("customerName")?.value.trim() || "Customer";
+            const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
+            const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
+            const items = Object.values(selectedItemsMap);
+
+            if (items.length === 0) return alert(currentLang === 'hi' ? "कृपया पहले + से कोई सेवा जोड़ें।" : "Please add services first.");
+
+            const doc = new jsPDF();
             doc.setFillColor(5, 8, 22);
-            doc.rect(0, 0, 210, 30, "F");
+            doc.rect(0, 0, 210, 36, "F");
+
             doc.setTextColor(245, 197, 66);
-            doc.setFontSize(16);
-            doc.text("Sandeep ElectroFix - Estimate", 14, 18);
+            doc.setFontSize(18);
+            doc.text("Sandeep ElectroFix", 14, 16);
+
+            doc.setFontSize(10);
+            doc.setTextColor(255, 255, 255);
+            doc.text(`Phone: +91 9026036445 | Lucknow, UP`, 14, 25);
+            doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 160, 25);
+
+            doc.setTextColor(16, 24, 39);
+            doc.setFontSize(11);
+            doc.text("CUSTOMER ESTIMATE", 14, 46);
+
+            doc.setFontSize(9);
+            doc.text(`Client: ${name}  |  Phone: ${phone}`, 14, 53);
+            doc.text(`Address / Note: ${note}`, 14, 59);
 
             const rows = items.map((itm, i) => [i + 1, itm.name_en, `Rs. ${itm.price}`, itm.qty, `Rs. ${itm.price * itm.qty}`]);
-            doc.autoTable({ startY: 40, head: [["#", "Service", "Rate", "Qty", "Total"]], body: rows });
-            doc.save("Estimate.pdf");
+            const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
+            const discount = Math.round(subtotal * 0.10);
+            const total = subtotal - discount;
+
+            doc.autoTable({
+                startY: 65,
+                head: [["#", "Service Item", "Rate", "Qty", "Total Amount"]],
+                body: rows,
+                theme: "grid",
+                headStyles: { fillColor: [5, 8, 22], textColor: [245, 197, 66] }
+            });
+
+            const finalY = doc.lastAutoTable.finalY + 8;
+            doc.setFontSize(9.5);
+            doc.text(`Subtotal: Rs. ${subtotal}`, 140, finalY);
+            doc.setTextColor(37, 211, 102);
+            doc.text(`Discount (10%): -Rs. ${discount}`, 140, finalY + 5);
+            doc.setFontSize(11);
+            doc.setTextColor(16, 24, 39);
+            doc.text(`Grand Total: Rs. ${total}`, 140, finalY + 11);
+
+            doc.save(`Estimate_${name.replace(/\s+/g, "_")}.pdf`);
+        }
+
+        function getUserLocation() {
+            const status = document.getElementById("locationStatus");
+            if (!navigator.geolocation) {
+                if (status) status.innerText = "Geolocation not supported.";
+                return;
+            }
+            if (status) status.innerText = "Locating...";
+            
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const R = 6371;
+                    const dLat = (pos.coords.latitude - 26.8467) * (Math.PI / 180);
+                    const dLon = (pos.coords.longitude - 80.9462) * (Math.PI / 180);
+                    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(26.8467 * (Math.PI / 180)) * Math.cos(pos.coords.latitude * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                    const dist = (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))).toFixed(1);
+                    if (status) status.innerHTML = `✅ ${currentLang === 'hi' ? 'आप हमारे केंद्र से लगभग' : 'You are approx'} <strong>${dist} km</strong> ${currentLang === 'hi' ? 'दूर हैं।' : 'away from Lucknow.'}`;
+                },
+                () => { if (status) status.innerText = "Location permission denied."; }
+            );
         }
 
         function shareWebsite() {
@@ -429,12 +700,18 @@
             }
         }
 
-        // Init
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("themeToggle")?.addEventListener("click", () => {
-                document.documentElement.classList.toggle("saved-light-theme");
-            });
-            setLanguage('hi');
+            const themeBtn = document.getElementById("themeToggle");
+            if (themeBtn) {
+                themeBtn.addEventListener("click", () => {
+                    document.documentElement.classList.toggle("saved-light-theme");
+                    const isLight = document.documentElement.classList.contains("saved-light-theme");
+                    localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
+                    document.getElementById("themeIcon").innerText = isLight ? "🌙" : "☀️";
+                    document.getElementById("themeText").innerText = isLight ? "डार्क मोड" : "लाइट मोड";
+                });
+            }
+            setLanguage(currentLang);
         });
      </script>
 </body>
