@@ -46,7 +46,7 @@ window.CARD_CONFIG = {
         quickAccessBar: true,
         themeToggle: true,
         languageSwitch: true,
-        discountOffer: true,
+        discountOffer: false,
         servicesSection: true,
         gallerySection: true,
         reviewsSection: false,
