@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=3.0.0">
+    <link rel="stylesheet" href="style.css?v=3.2.0">
     <script>
         (function () {
             try {
@@ -52,7 +52,7 @@
           </div>
      </header>
 
-     <!-- 1. SPECIAL DISCOUNT (CENTERED) -->
+     <!-- SPECIAL DISCOUNT (CENTERED) -->
      <section id="discount-section" class="discount-section">
         <div class="discount-card">
             <div class="discount-badge" data-i18n="specialOffer">🔥 SPECIAL OFFER</div>
@@ -64,27 +64,19 @@
         </div>
      </section> 
 
-     <!-- 2. MATERIAL CATALOGUE (SEPARATE FULL-WIDTH BANNER RIGHT BELOW DISCOUNT) -->
-     <section class="catalogue-section">
-        <a href="material-catalogue.html" class="catalogue-banner-card">
-            <span class="icon">
-                <svg viewBox="0 0 48 48" width="34" height="34">
-                    <circle cx="24" cy="24" r="23" fill="#F5C542"/>
-                    <path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM14.2 12l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/>
-                </svg>
-            </span>
-            <div class="catalogue-banner-text">
-                <strong data-i18n="materialCatalogueTitle">Material Catalogue</strong>
-                <p data-i18n="materialCatalogueSub">View Electrical Wire, Switch, Pipes & Prices</p>
-            </div>
-            <span class="arrow-icon">➔</span>
-        </a>
-     </section>
-
-     <!-- 3. QUICK ACCESS (REAL BRAND ICONS) -->
+     <!-- QUICK ACCESS WITH LAYOUT SWITCHER -->
      <section class="quick-actions">
          <h2 data-i18n="quickAccess">Quick Access</h2>
-         <div class="grid">
+         
+         <!-- Quick Access Layout Switcher -->
+         <div class="service-layout-bar" id="quickLayoutBar">
+            <button type="button" class="layout-btn active" data-quick-layout="grid-2" title="2-Column Grid">⊞ Grid</button>
+            <button type="button" class="layout-btn" data-quick-layout="carousel" title="Swipe Slider">⇆ Slider</button>
+            <button type="button" class="layout-btn" data-quick-layout="list" title="Horizontal List">☰ List</button>
+            <button type="button" class="layout-btn" data-quick-layout="grid-3" title="Compact 3-Column">☷ Mini</button>
+         </div>
+
+         <div class="grid layout-grid-2" id="quickGridContainer">
             <!-- Call -->
             <a href="tel:+919026036445" class="card">
                 <span class="icon call-icon">
@@ -234,6 +226,17 @@
                 </span>
                 <strong data-i18n="ourWorkNav">Our Work</strong>
             </a>
+
+            <!-- Material Catalogue (Next to Our Work) -->
+            <a href="material-catalogue.html" class="card catalogue-card-highlight">
+                <span class="icon catalogue-icon">
+                    <svg viewBox="0 0 48 48" width="32" height="32">
+                        <circle cx="24" cy="24" r="23" fill="#F5C542"/>
+                        <path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM14.2 12l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/>
+                    </svg>
+                </span>
+                <strong data-i18n="materialCatalogue">Material Catalogue</strong>
+            </a>
          </div>
      </section>
 
@@ -243,10 +246,19 @@
          <p data-i18n="aboutText">Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault finding, repair, maintenance and electrical upgrades.</p>
      </section>  
      
-     <!-- SERVICES SECTION -->
+     <!-- SERVICES SECTION WITH LAYOUT SWITCHER -->
      <section id="services" class="services">
         <h2 data-i18n="ourServices">Our Services</h2>
-        <div class="service-grid" id="serviceContainer"></div>
+        
+        <!-- Services Layout Switcher -->
+        <div class="service-layout-bar" id="servicesLayoutBar">
+          <button type="button" class="layout-btn active" data-service-layout="grid-2" title="2-Column Grid">⊞ Grid</button>
+          <button type="button" class="layout-btn" data-service-layout="carousel" title="Swipe Slider">⇆ Slider</button>
+          <button type="button" class="layout-btn" data-service-layout="list" title="Horizontal List">☰ List</button>
+          <button type="button" class="layout-btn" data-service-layout="grid-3" title="Compact 3-Column">☷ Mini</button>
+        </div>
+
+        <div class="service-grid layout-grid-2" id="serviceContainer"></div>
      </section>
 
      <!-- GALLERY SECTION -->
