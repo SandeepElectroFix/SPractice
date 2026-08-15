@@ -49,7 +49,7 @@ window.CARD_CONFIG = {
         discountOffer: true,
         servicesSection: true,
         gallerySection: true,
-        reviewsSection: true,
+        reviewsSection: false,
         quoteFormSection: true,
         faqSection: true,
         locationTracker: true,
