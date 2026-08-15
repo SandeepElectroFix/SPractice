@@ -27,6 +27,13 @@ const translations = {
     materialCatalogue: "Material Catalogue",
     aboutHeading: "About Us",
     aboutText: "Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault finding, repair, maintenance and electrical upgrades.",
+    locationTitle: "📍 Service Location",
+    locationDesc: "Providing professional electrical services across Lucknow, Uttar Pradesh.",
+    checkDistanceBtn: "Check Your Distance from Us",
+    openMapsBtn: "Get Directions on Google Maps",
+    scanQRTitle: "Scan QR Code",
+    scanQRDesc: "Scan this QR code to quickly save our digital card or pay via UPI.",
+    downloadQR: "📥 Download QR Code",
     ourServices: "Our Services",
     ourWork: "Our Work",
     customerReviews: "Customer Reviews",
@@ -89,6 +96,13 @@ const translations = {
     materialCatalogue: "सामग्री सूची",
     aboutHeading: "हमारे बारे में",
     aboutText: "<strong>संदीप इलेक्ट्रोफिक्स</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।",
+    locationTitle: "📍 सेवा क्षेत्र एवं लोकेशन",
+    locationDesc: "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।",
+    checkDistanceBtn: "हमारे यहाँ से अपनी दूरी चेक करें",
+    openMapsBtn: "गूगल मैप्स पर रास्ता देखें",
+    scanQRTitle: "क्यूआर कोड स्कैन करें",
+    scanQRDesc: "हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।",
+    downloadQR: "📥 क्यूआर कोड डाउनलोड करें",
     ourServices: "हमारी सेवाएँ",
     ourWork: "हमारे द्वारा किए गए कार्य",
     customerReviews: "ग्राहकों की राय",
@@ -202,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupQuoteCalculation();
 });
 
-// 5. Quick Access Layout Switcher (Direct Binding)
+// 5. Quick Access Layout Switcher
 function setupQuickAccessLayoutSwitcher() {
   const container = document.getElementById("quickGridContainer");
   const buttons = document.querySelectorAll("#quickLayoutBar .layout-btn");
@@ -230,7 +244,7 @@ function setupQuickAccessLayoutSwitcher() {
   applyQuickLayout(savedLayout);
 }
 
-// 6. Services Layout Switcher (Direct Binding)
+// 6. Services Layout Switcher
 function setupServiceLayoutSwitcher() {
   const container = document.getElementById("serviceContainer");
   const buttons = document.querySelectorAll("#servicesLayoutBar .layout-btn");
@@ -321,7 +335,42 @@ async function loadReviews() {
   }
 }
 
-// 8. FAQ Renderer
+// 8. GPS Distance Calculator
+function getUserLocation() {
+  const status = document.getElementById("locationStatus");
+  if (!navigator.geolocation) {
+    status.innerText = "Geolocation is not supported by your browser.";
+    return;
+  }
+  status.innerText = "Locating your distance...";
+  
+  const shopLat = 26.8467;
+  const shopLon = 80.9462;
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const userLat = position.coords.latitude;
+      const userLon = position.coords.longitude;
+      
+      const R = 6371;
+      const dLat = (userLat - shopLat) * (Math.PI / 180);
+      const dLon = (userLon - shopLon) * (Math.PI / 180);
+      const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(shopLat * (Math.PI / 180)) * Math.cos(userLat * (Math.PI / 180)) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = (R * c).toFixed(1);
+
+      status.innerHTML = `✅ You are approx <strong>${distance} km</strong> away from our service hub in Lucknow.`;
+    },
+    () => {
+      status.innerText = "Location permission denied or unavailable.";
+    }
+  );
+}
+
+// 9. FAQ Renderer
 function renderFAQ(lang) {
   const container = document.getElementById("faqContainer");
   if (!container) return;
@@ -342,7 +391,7 @@ function toggleFaq(index) {
   if (items[index]) items[index].classList.toggle("active");
 }
 
-// 9. Share Website
+// 10. Share Website
 function shareWebsite() {
   if (navigator.share) {
     navigator.share({
@@ -356,7 +405,7 @@ function shareWebsite() {
   }
 }
 
-// 10. Quote Calculation
+// 11. WhatsApp Quote & Calculation
 function setupQuoteCalculation() {
   const totalInput = document.getElementById("serviceTotal");
   const calcBox = document.getElementById("discountCalculation");
