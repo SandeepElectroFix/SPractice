@@ -1,5 +1,5 @@
 /* =========================================
-SANDEEP ELECTROFIX - FULL PAGE BACKGROUND & REFINED CSS
+SANDEEP ELECTROFIX - COMPLETE REFINED STYLES
 ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
@@ -19,7 +19,7 @@ SANDEEP ELECTROFIX - FULL PAGE BACKGROUND & REFINED CSS
   --radius: 20px;
 }
 
-/* Light Mode Override */
+/* Light Mode */
 html.saved-light-theme {
   --bg: #f4f7fb;
   --bg-secondary: #ffffff;
@@ -33,20 +33,15 @@ html.saved-light-theme {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
-/* =========================================
-FULL PAGE BACKGROUND (DARK MODE COVER)
-========================================= */
+/* Full Page Background */
 body {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   color: var(--text);
-  
-  /* Dark Mode: Cover image with dark gradient overlay */
   background: 
-    linear-gradient(180deg, rgba(5, 8, 22, 0.88) 0%, rgba(5, 8, 22, 0.95) 100%),
+    linear-gradient(180deg, rgba(5, 8, 22, 0.90) 0%, rgba(5, 8, 22, 0.96) 100%),
     url('assets/cover.jpg') no-repeat center center fixed;
   background-size: cover;
-  
   line-height: 1.6;
   overflow-x: hidden;
   padding-bottom: 85px;
@@ -68,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================
-TOP CONTROLS (LANGUAGE & THEME SIDE BY SIDE)
+TOP CONTROLS (THEME & LANGUAGE SIDE BY SIDE)
 ========================================= */
 .top-controls-bar {
   display: flex;
@@ -77,6 +72,23 @@ TOP CONTROLS (LANGUAGE & THEME SIDE BY SIDE)
   gap: 12px;
   margin-bottom: 15px;
   flex-wrap: wrap;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 30px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
 }
 
 .language-switcher {
@@ -112,45 +124,35 @@ TOP CONTROLS (LANGUAGE & THEME SIDE BY SIDE)
   background: rgba(0, 0, 0, 0.06);
   border-color: rgba(0, 0, 0, 0.12);
 }
-.saved-light-theme .language-btn { color: #111827; }
-
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 30px;
-  border: 1px solid var(--card-border);
-  background: var(--card);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow);
-}
+.saved-light-theme .language-btn { color: #101827; }
 
 /* =========================================
-HERO SECTION
+HERO & BIG PROMINENT LOGO
 ========================================= */
 .hero {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px 15px 15px;
+  padding: 15px 15px 10px;
   text-align: center;
 }
 
 .hero-logo {
-  width: 110px;
-  height: 110px;
+  width: 140px;  /* बड़ा और स्पष्ट लोगो */
+  height: 140px;
   margin: 10px auto 14px auto;
   border-radius: 50%;
-  background: rgba(11, 18, 36, 0.9);
-  padding: 5px;
-  border: 3px solid var(--gold);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  background: rgba(11, 18, 36, 0.95);
+  padding: 6px;
+  border: 3.5px solid var(--gold);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
 }
 
 .hero-logo img {
@@ -202,7 +204,7 @@ HERO SECTION
 }
 
 /* =========================================
-CENTERED DISCOUNT BANNER
+1. SPECIAL DISCOUNT (CENTERED)
 ========================================= */
 .discount-section {
   width: min(100% - 24px, 600px);
@@ -212,7 +214,6 @@ CENTERED DISCOUNT BANNER
 
 .discount-card {
   width: 100%;
-  margin: 0 auto;
   padding: 20px 16px;
   background: var(--card);
   border: 1px solid rgba(245, 197, 66, 0.4);
@@ -254,7 +255,54 @@ CENTERED DISCOUNT BANNER
 }
 
 /* =========================================
-QUICK ACCESS GRID
+2. MATERIAL CATALOGUE (SEPARATE BANNER)
+========================================= */
+.catalogue-section {
+  width: min(100% - 24px, 600px);
+  margin: 0 auto 16px auto;
+}
+
+.catalogue-banner-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(245, 197, 66, 0.12), var(--card));
+  border: 1px solid rgba(245, 197, 66, 0.35);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.catalogue-banner-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+}
+
+.catalogue-banner-text {
+  flex: 1;
+  text-align: left;
+}
+
+.catalogue-banner-text strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--gold-light);
+}
+
+.catalogue-banner-text p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+.arrow-icon {
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+
+/* =========================================
+3. QUICK ACCESS GRID
 ========================================= */
 section {
   width: min(100% - 24px, 600px);
@@ -298,11 +346,6 @@ section h2 {
   border-color: rgba(0, 191, 255, 0.5);
 }
 
-.catalogue-card-highlight {
-  border-color: rgba(245, 197, 66, 0.45);
-  background: linear-gradient(180deg, rgba(245, 197, 66, 0.08), var(--card));
-}
-
 .card strong { font-size: 0.8rem; font-weight: 600; }
 .icon {
   width: 44px;
@@ -315,7 +358,7 @@ section h2 {
 .icon svg { width: 32px; height: 32px; display: block; }
 
 /* =========================================
-SECTIONS, ACCORDION & FORMS
+ABOUT, SERVICES, GALLERY & FORMS
 ========================================= */
 .about {
   text-align: center;
@@ -395,6 +438,7 @@ SECTIONS, ACCORDION & FORMS
 .discount-calculation > div { display: flex; justify-content: space-between; padding: 4px 0; }
 .discount-calculation .final-price { border-top: 1px solid var(--card-border); padding-top: 6px; font-weight: 700; color: var(--green); }
 
+/* FAQ Styles */
 .faq-item {
   margin-bottom: 8px;
   background: var(--card);
@@ -408,14 +452,18 @@ SECTIONS, ACCORDION & FORMS
   background: transparent;
   color: var(--text);
   border: 0;
+  font-family: inherit;
   font-size: 0.88rem;
   font-weight: 600;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
+  text-align: left;
 }
 .faq-answer { display: none; padding: 0 16px 12px; color: var(--muted); font-size: 0.82rem; }
 .faq-item.active .faq-answer { display: block; }
+.faq-item.active .faq-icon { transform: rotate(45deg); display: inline-block; color: var(--gold); }
 
 footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-size: 0.75rem; }
 
