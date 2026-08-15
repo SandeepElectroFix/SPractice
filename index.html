@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=3.5.0">
+    <link rel="stylesheet" href="style.css?v=4.0.0">
     <script>
         (function () {
             try {
@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <!-- Big Prominent Logo -->
+          <!-- Big Floating & Hover Logo (No Outer Circle) -->
           <div class="hero-logo">
             <img src="assets/logo.png" alt="Sandeep ElectroFix Logo">
           </div>
@@ -168,7 +168,7 @@
             <a href="https://youtube.com/@sandeepelectrofix" class="card" target="_blank" rel="noopener">
                 <span class="icon youtube-icon">
                     <svg viewBox="0 0 48 48" width="32" height="32">
-                        <path fill="#FF0000" d="M43.2 14.8c-.5-1.9-2-3.4-3.9-3.9C35.8 10 24 10 24 10s-11.8 0-15.3.9c-1.9.5-3.4 2-3.9 3.9C4 18.3 4 24 4 24s0 5.7.9 9.2c.5 1.9 2 3.4 3.9 3.5.9 15.3.9 15.3.9s11.8 0 15.3-.9c1.9-.5 3.4-2 3.9-3.9.9-3.5.9-9.2.9-9.2s0-5.7-.9-9.2z"/>
+                        <path fill="#FF0000" d="M43.2 14.8c-.5-1.9-2-3.4-3.9-3.9C35.8 10 24 10 24 10s-11.8 0-15.3.9c-1.9.5-3.4 2-3.9 3.9C4 18.3 4 24 4 24s0 5.7.9 9.2c.5 1.9 2 3.4 3.9 3.9 3.5.9 15.3.9 15.3.9s11.8 0 15.3-.9c1.9-.5 3.4-2 3.9-3.9.9-3.5.9-9.2.9-9.2s0-5.7-.9-9.2z"/>
                         <polygon fill="#FFFFFF" points="20,18 20,30 30,24"/>
                     </svg>
                 </span>
@@ -244,6 +244,22 @@
          <h2 data-i18n="aboutHeading">About Us</h2>
          <p data-i18n="aboutText">Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services in Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault finding, repair, maintenance and electrical upgrades.</p>
      </section>  
+
+     <!-- SERVICE LOCATION SECTION -->
+     <section id="service-location" class="location-box">
+        <h2 data-i18n="locationTitle">📍 Service Location</h2>
+        <p data-i18n="locationDesc">Providing professional electrical services across Lucknow, Uttar Pradesh.</p>
+        
+        <button type="button" class="location-btn" id="checkLocationBtn" onclick="getUserLocation()">
+            <span>📡</span> <span data-i18n="checkDistanceBtn">Check Your Distance from Us</span>
+        </button>
+        
+        <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="location-btn maps-btn" target="_blank" rel="noopener">
+            <span>🗺️</span> <span data-i18n="openMapsBtn">Get Directions on Google Maps</span>
+        </a>
+        
+        <div id="locationStatus" class="location-status"></div>
+     </section>
      
      <!-- SERVICES SECTION (WITH SWITCHER) -->
      <section id="services" class="services">
@@ -267,6 +283,16 @@
 
      <!-- LIGHTBOX -->
      <div id="lightbox"><span id="closeLightbox">&times;</span><img id="lightboxImage" src="" alt="Work"></div>
+
+     <!-- SCAN QR SECTION -->
+     <section id="qr-section" class="qr-section">
+        <h2 data-i18n="scanQRTitle">Scan QR Code</h2>
+        <p data-i18n="scanQRDesc">Scan this QR code to quickly save our digital card or pay via UPI.</p>
+        <div class="qr-container">
+            <img src="assets/qr.png" alt="Sandeep ElectroFix QR" id="cardQR" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sandeepelectrofix.github.io/SandeepElectroFix-Card/'">
+        </div>
+        <a href="assets/qr.png" download="SandeepElectroFix_QR.png" class="btn download-qr-btn" data-i18n="downloadQR">📥 Download QR Code</a>
+     </section>
 
      <!-- REVIEWS SECTION -->
      <section id="reviews">
