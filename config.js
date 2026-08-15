@@ -55,115 +55,127 @@ window.CARD_CONFIG = {
     },
 
     /* =====================================================
-       SERVICES WITH SUB-SERVICES & RATES
+       SERVICES WITH SUB-SERVICES & RATES (Updated from CONFIG v3.1)
     ===================================================== */
     services: [
         {
             id: "house-wiring",
             show: true,
             title: "House Wiring",
-            icon: "⚡",
-            description: "Complete residential wiring, concealed piping, renovation and rewiring solutions.",
+            icon: "🏠",
+            description: "Professional house wiring and electrical installation services.",
             subServices: [
-                { name: "New House Wiring (Per Point)", rate: "₹150 - ₹250" },
-                { name: "Slab / Wall Piping", rate: "₹15 - ₹25 / ft" },
-                { name: "Complete Rewiring", rate: "Estimate on Visit" }
+                { name: "New House Wiring", rate: "₹45 / sq.ft. onwards" },
+                { name: "Concealed Wiring", rate: "₹40 / sq.ft. onwards" },
+                { name: "Surface Wiring", rate: "₹30 / sq.ft. onwards" },
+                { name: "Slab Piping", rate: "₹15 / sq.ft. onwards" },
+                { name: "Switch & Socket Installation", rate: "₹80 / point onwards" },
+                { name: "Complete House Wiring", rate: "₹50 / sq.ft. onwards" }
             ]
         },
         {
-            id: "false-ceiling",
+            id: "light-fan-installation",
+            show: true,
+            title: "Light & Fan Installation",
+            icon: "💡",
+            description: "Professional installation of lights, fans and electrical fittings.",
+            subServices: [
+                { name: "Ceiling Fan Installation", rate: "₹250 / fan onwards" },
+                { name: "Exhaust Fan Installation", rate: "₹200 / fan onwards" },
+                { name: "LED Light Installation", rate: "₹100 / light onwards" },
+                { name: "Decorative Light Installation", rate: "₹250 / light onwards" },
+                { name: "Tube Light Installation", rate: "₹120 / light onwards" },
+                { name: "Fan Regulator Installation", rate: "₹100 / piece onwards" }
+            ]
+        },
+        {
+            id: "mcb-db-work",
+            show: true,
+            title: "MCB & DB Work",
+            icon: "🔌",
+            description: "MCB, DB, RCCB and RCBO installation and electrical panel work.",
+            subServices: [
+                { name: "MCB Installation", rate: "₹150 / MCB onwards" },
+                { name: "DB Installation", rate: "₹500 / DB onwards" },
+                { name: "MCB Replacement", rate: "₹100 / MCB onwards" },
+                { name: "RCCB Installation", rate: "₹300 / piece onwards" },
+                { name: "RCBO Installation", rate: "₹350 / piece onwards" },
+                { name: "DB Wiring & Maintenance", rate: "₹500 / DB onwards" }
+            ]
+        },
+        {
+            id: "false-ceiling-wiring",
             show: true,
             title: "False Ceiling Wiring",
-            icon: "💡",
-            description: "Modern false ceiling light wiring, COB lights, strip lights and profile channel lights.",
+            icon: "🏗️",
+            description: "Electrical wiring and lighting point installation for false ceilings.",
             subServices: [
-                { name: "COB Light Installation", rate: "₹70 - ₹120 / pc" },
-                { name: "LED Strip / Profile Light", rate: "₹30 - ₹50 / meter" },
-                { name: "Panel Light Cutting & Fitting", rate: "₹80 - ₹150 / pc" }
+                { name: "Ceiling Light Wiring", rate: "₹8 / sq.ft. onwards" },
+                { name: "Downlight Wiring", rate: "₹8 / sq.ft. onwards" },
+                { name: "Panel Light Wiring", rate: "₹8 / sq.ft. onwards" },
+                { name: "Strip Light Wiring", rate: "₹10 / sq.ft. onwards" },
+                { name: "Fan Point Wiring", rate: "₹150 / point onwards" },
+                { name: "Concealed Ceiling Wiring", rate: "₹10 / sq.ft. onwards" }
             ]
         },
         {
-            id: "switch-socket",
+            id: "inverter-backup",
             show: true,
-            title: "Switch & Socket Installation",
-            icon: "🔌",
-            description: "Modular switch board installation, 6A/16A socket replacement and power points.",
-            subServices: [
-                { name: "Single Switch / Socket Change", rate: "₹50 - ₹80" },
-                { name: "Complete Modular Board Fitting", rate: "₹150 - ₹300" },
-                { name: "Heavy Power Plug (AC/Geyser)", rate: "₹120 - ₹200" }
-            ]
-        },
-        {
-            id: "mcb-db",
-            show: true,
-            title: "MCB & DB Installation",
-            icon: "⚙️",
-            description: "Distribution board dressing, single/double pole MCB, RCCB and circuit protection.",
-            subServices: [
-                { name: "Single Pole MCB Fitting", rate: "₹100 - ₹150" },
-                { name: "DP / 4-Pole MCB / RCCB Fitting", rate: "₹250 - ₹450" },
-                { name: "Complete DB Board Dressing", rate: "₹500 - ₹1200" }
-            ]
-        },
-        {
-            id: "fan-fitting",
-            show: true,
-            title: "Fan Installation",
-            icon: "🌬️",
-            description: "Ceiling fan installation, exhaust fan, wall fan mounting and regulator replacement.",
-            subServices: [
-                { name: "Ceiling Fan Assembly & Fitting", rate: "₹150 - ₹250" },
-                { name: "Exhaust Fan Fitting", rate: "₹120 - ₹200" },
-                { name: "Fan Regulator Change", rate: "₹50 - ₹80" }
-            ]
-        },
-        {
-            id: "inverter-wiring",
-            show: true,
-            title: "Inverter Wiring",
+            title: "Inverter & Backup",
             icon: "🔋",
-            description: "Inverter battery setup, separate home inverter wiring and changeover installation.",
+            description: "Inverter, battery, changeover and backup electrical services.",
             subServices: [
-                { name: "Inverter & Battery Connection", rate: "₹250 - ₹400" },
-                { name: "Separate Inverter Line Routing", rate: "₹300 - ₹600" },
-                { name: "Manual / Auto Changeover Switch", rate: "₹200 - ₹350" }
+                { name: "Inverter Installation", rate: "₹500 / set onwards" },
+                { name: "Inverter Wiring", rate: "₹8 / sq.ft. onwards" },
+                { name: "Battery Connection", rate: "₹150 / connection onwards" },
+                { name: "Changeover Installation", rate: "₹300 / piece onwards" },
+                { name: "Backup Wiring", rate: "₹8 / sq.ft. onwards" },
+                { name: "Inverter Fault Checking", rate: "₹200 / visit onwards" }
             ]
         },
         {
             id: "electrical-repair",
             show: true,
             title: "Electrical Repair",
-            icon: "🛠️",
-            description: "General electrical repairs, geyser connection, motor starter and appliance fixes.",
+            icon: "🔧",
+            description: "Electrical repair and maintenance for common household problems.",
             subServices: [
-                { name: "Geyser Electrical Connection", rate: "₹150 - ₹250" },
-                { name: "Water Motor / Submersible Starter", rate: "₹200 - ₹350" },
-                { name: "General Maintenance Visit", rate: "₹150 - ₹200" }
+                { name: "Switch Repair", rate: "₹80 / point onwards" },
+                { name: "Socket Repair", rate: "₹80 / point onwards" },
+                { name: "Fan Repair", rate: "₹150 / fan onwards" },
+                { name: "Light Repair", rate: "₹100 / light onwards" },
+                { name: "Loose Connection Repair", rate: "₹150 / point onwards" },
+                { name: "Short Circuit Repair", rate: "₹300 / visit onwards" }
             ]
         },
         {
             id: "fault-finding",
             show: true,
             title: "Fault Finding",
-            icon: "🚨",
-            description: "Short circuit detection, MCB tripping resolution and complete wire continuity test.",
+            icon: "🔍",
+            description: "Electrical fault detection and troubleshooting services.",
             subServices: [
-                { name: "Short Circuit Checking", rate: "₹250 - ₹450" },
-                { name: "MCB Tripping Fault Fix", rate: "₹200 - ₹350" },
-                { name: "Neutral / Earth Leakage Check", rate: "₹300 - ₹500" }
+                { name: "Power Failure Checking", rate: "₹200 / visit onwards" },
+                { name: "Short Circuit Detection", rate: "₹300 / visit onwards" },
+                { name: "MCB Tripping Problem", rate: "₹250 / visit onwards" },
+                { name: "Voltage Checking", rate: "₹150 / visit onwards" },
+                { name: "Wiring Fault Detection", rate: "₹300 / visit onwards" },
+                { name: "Loose Connection Detection", rate: "₹200 / visit onwards" }
             ]
         },
         {
-            id: "commercial-wiring",
+            id: "commercial-electrical-work",
             show: true,
-            title: "Commercial Wiring",
+            title: "Commercial Electrical Work",
             icon: "🏢",
-            description: "Electrical setup for shops, offices, showrooms, schools and commercial units.",
+            description: "Electrical installation, wiring and maintenance for shops and offices.",
             subServices: [
-                { name: "Shop / Office Wiring", rate: "Estimate on Visit" },
-                { name: "3-Phase DB Dressing", rate: "₹800 - ₹2000" },
-                { name: "Commercial Track Lighting", rate: "₹100 - ₹200 / pc" }
+                { name: "Shop Wiring", rate: "₹45 / sq.ft. onwards" },
+                { name: "Office Wiring", rate: "₹50 / sq.ft. onwards" },
+                { name: "Electrical Point Installation", rate: "₹100 / point onwards" },
+                { name: "DB & MCB Work", rate: "₹500 / DB onwards" },
+                { name: "Lighting Installation", rate: "₹150 / light onwards" },
+                { name: "Electrical Maintenance", rate: "₹500 / visit onwards" }
             ]
         }
     ],
