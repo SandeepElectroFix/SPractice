@@ -1,14 +1,8 @@
 /* =========================================================
-   SANDEEP ELECTROFIX
-   SMART DIGITAL CARD CONFIGURATION
-   Version 3.1.0 - Full Visibility & Toggle Control
+   SANDEEP ELECTROFIX - CONFIGURATION FILE (v3.2)
 ========================================================= */
 
 window.CARD_CONFIG = {
-
-    /* =====================================================
-       BUSINESS PROFILE & SOCIAL LINKS VISIBILITY
-    ===================================================== */
     business: {
         name: "Sandeep ElectroFix",
         owner: "Sandeep Verma",
@@ -26,7 +20,7 @@ window.CARD_CONFIG = {
         logo: "assets/logo.png",
         cardQR: "assets/qr-card.png",
 
-        // Individual Contact & Social Button Controls
+        // Buttons & Links Visibility
         showElements: {
             logo: true,
             tagline: true,
@@ -45,9 +39,6 @@ window.CARD_CONFIG = {
         }
     },
 
-    /* =====================================================
-       MAIN SECTIONS & UI FEATURES (SHOW / HIDE)
-    ===================================================== */
     features: {
         heroSection: true,
         quickAccessBar: true,
@@ -64,18 +55,12 @@ window.CARD_CONFIG = {
         mobileBottomNav: true
     },
 
-    /* =====================================================
-       GLOBAL SERVICE DISPLAY SETTINGS
-    ===================================================== */
     serviceSettings: {
         showCategoryDescription: true,
         showSubItems: true,
         showPrices: true
     },
 
-    /* =====================================================
-       SPECIAL DISCOUNT SECTION
-    ===================================================== */
     discount: {
         show: true,
         title: "Special Discount",
@@ -84,11 +69,7 @@ window.CARD_CONFIG = {
         validityText: "Valid for limited time"
     },
 
-    /* =====================================================
-       SERVICES & ALL SUB-SERVICES (WITH INDIVIDUAL SHOW/HIDE)
-    ===================================================== */
     services: [
-        /* 1. House Wiring */
         {
             id: "house-wiring",
             show: true,
@@ -104,8 +85,6 @@ window.CARD_CONFIG = {
                 { name: "Complete House Wiring", rate: "₹50 / sq.ft. onwards", show: true }
             ]
         },
-
-        /* 2. Light & Fan Installation */
         {
             id: "light-fan-installation",
             show: true,
@@ -121,8 +100,6 @@ window.CARD_CONFIG = {
                 { name: "Fan Regulator Installation", rate: "₹100 / piece onwards", show: true }
             ]
         },
-
-        /* 3. MCB & DB Work */
         {
             id: "mcb-db-work",
             show: true,
@@ -138,8 +115,6 @@ window.CARD_CONFIG = {
                 { name: "DB Wiring & Maintenance", rate: "₹500 / DB onwards", show: true }
             ]
         },
-
-        /* 4. False Ceiling Wiring */
         {
             id: "false-ceiling-wiring",
             show: true,
@@ -155,8 +130,6 @@ window.CARD_CONFIG = {
                 { name: "Concealed Ceiling Wiring", rate: "₹10 / sq.ft. onwards", show: true }
             ]
         },
-
-        /* 5. Inverter & Backup */
         {
             id: "inverter-backup",
             show: true,
@@ -172,8 +145,6 @@ window.CARD_CONFIG = {
                 { name: "Inverter Fault Checking", rate: "₹200 / visit onwards", show: true }
             ]
         },
-
-        /* 6. Electrical Repair */
         {
             id: "electrical-repair",
             show: true,
@@ -189,8 +160,6 @@ window.CARD_CONFIG = {
                 { name: "Short Circuit Repair", rate: "₹300 / visit onwards", show: true }
             ]
         },
-
-        /* 7. Fault Finding */
         {
             id: "fault-finding",
             show: true,
@@ -206,8 +175,6 @@ window.CARD_CONFIG = {
                 { name: "Loose Connection Detection", rate: "₹200 / visit onwards", show: true }
             ]
         },
-
-        /* 8. Commercial Electrical Work */
         {
             id: "commercial-electrical-work",
             show: true,
@@ -225,9 +192,6 @@ window.CARD_CONFIG = {
         }
     ],
 
-    /* =====================================================
-       GALLERY ITEMS (INDIVIDUAL SHOW/HIDE)
-    ===================================================== */
     gallery: [
         { id: "work-1", show: true, image: "assets/gallery/work1.jpg", title: "House Wiring" },
         { id: "work-2", show: true, image: "assets/gallery/work2.jpg", title: "False Ceiling Wiring" },
@@ -238,72 +202,20 @@ window.CARD_CONFIG = {
         { id: "work-7", show: true, image: "assets/gallery/work7.jpg", title: "New Project" }
     ],
 
-    /* =====================================================
-       CUSTOMER REVIEWS (INDIVIDUAL SHOW/HIDE)
-    ===================================================== */
     reviews: [
-        {
-            id: "review-1",
-            show: true,
-            name: "Customer",
-            rating: 5,
-            text: "Excellent electrical service and professional work."
-        },
-        {
-            id: "review-2",
-            show: true,
-            name: "Customer",
-            rating: 5,
-            text: "Good quality work and on-time service."
-        },
-        {
-            id: "review-3",
-            show: true,
-            name: "Customer",
-            rating: 5,
-            text: "Trusted electrician service in Lucknow."
-        }
+        { id: "review-1", show: true, name: "Customer", rating: 5, text: "Excellent electrical service and professional work." },
+        { id: "review-2", show: true, name: "Customer", rating: 5, text: "Good quality work and on-time service." },
+        { id: "review-3", show: true, name: "Customer", rating: 5, text: "Trusted electrician service in Lucknow." }
     ],
 
-    /* =====================================================
-       FAQ ACCORDION (INDIVIDUAL SHOW/HIDE)
-    ===================================================== */
     faq: [
-        {
-            id: "faq-1",
-            show: true,
-            question: "House wiring ka kaam karte hain?",
-            answer: "Haan, new house wiring, concealed wiring aur renovation wiring ki service available hai."
-        },
-        {
-            id: "faq-2",
-            show: true,
-            question: "Electrical fault finding karte hain?",
-            answer: "Haan, short circuit, MCB tripping, power fault aur wiring fault checking ki service available hai."
-        },
-        {
-            id: "faq-3",
-            show: true,
-            question: "Fan aur light installation available hai?",
-            answer: "Haan, fan, light, switch, socket aur other electrical fittings install ki jaati hain."
-        },
-        {
-            id: "faq-4",
-            show: true,
-            question: "Estimate kaise milega?",
-            answer: "Neeche diye gaye WhatsApp Quote Form se apni requirement bhejiye. Aapki requirement ke according estimate discuss kiya ja sakta hai."
-        },
-        {
-            id: "faq-5",
-            show: true,
-            question: "Aap Lucknow me service dete hain?",
-            answer: "Haan, Sandeep ElectroFix Lucknow, Uttar Pradesh me electrical services provide karta hai."
-        }
+        { id: "faq-1", show: true, question: "House wiring ka kaam karte hain?", answer: "Haan, new house wiring, concealed wiring aur renovation wiring ki service available hai." },
+        { id: "faq-2", show: true, question: "Electrical fault finding karte hain?", answer: "Haan, short circuit, MCB tripping, power fault aur wiring fault checking ki service available hai." },
+        { id: "faq-3", show: true, question: "Fan aur light installation available hai?", answer: "Haan, fan, light, switch, socket aur other electrical fittings install ki jaati hain." },
+        { id: "faq-4", show: true, question: "Estimate kaise milega?", answer: "Neeche diye gaye WhatsApp Quote Form se apni requirement bhejiye." },
+        { id: "faq-5", show: true, question: "Aap Lucknow me service dete hain?", answer: "Haan, Sandeep ElectroFix Lucknow me service deta hai." }
     ],
 
-    /* =====================================================
-       QUOTE / CONTACT FORM SETTINGS
-    ===================================================== */
     quote: {
         show: true,
         whatsappNumber: "919026036445",
