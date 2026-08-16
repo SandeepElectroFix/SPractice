@@ -3,65 +3,57 @@
 ========================================================= */
 
 window.MASTER_CONFIG = {
-    // 🎛️ 1. MASTER SHOW / HIDE CONTROLS
     controls: {
-    // Sections Visibility
-    showHero: true,
-    showDiscount: false,
-    discountPercent: 10,
-    showQuickAccess: true,
-    showSocialLinks: true,
-    showAbout: true,
-    showLocation: true,
-    showServices: true,
-    showGallery: true,
-    showQR: true,
-    showReviews: false,
-    showQuoteForm: true,
-    showFAQ: true,
-    showFooter: true,
-    showBottomNav: true,
+        showHero: true,
+        showDiscount: true,
+        discountPercent: 10,
+        showQuickAccess: true,
+        showSocialLinks: true,
+        showAbout: true,
+        showLocation: true,
+        showServices: true,
+        showGallery: true,
+        showQR: true,
+        showReviews: true,
+        showQuoteForm: true,
+        showFAQ: true,
+        showFooter: true,
+        showBottomNav: true,
 
-    // 📱 PWA SHORTCUTS - INDIVIDUAL SHOW / HIDE
-    pwaShortcuts: {
-        enabled: true,
-        call: true,
-        whatsapp: true,
-        services: true
+        pwaShortcuts: {
+            enabled: true,
+            call: true,
+            whatsapp: true,
+            services: true
+        },
+
+        showThemeToggle: true,
+        showLanguageSwitcher: true,
+        showResetBtn: true,
+        showLogo: true,
+        showTagline: true,
+        showHeroLocation: true,
+        showHeroCallBtn: true,
+        showHeroWhatsappBtn: true,
+
+        showQuickCall: true,
+        showQuickWhatsapp: true,
+        showQuickEmail: true,
+        showQuickWebsite: true,
+        showQuickMaps: true,
+        showQuickSaveContact: true,
+        showQuickShare: true,
+        showQuickWork: true,
+        showQuickCatalogue: true,
+
+        showFacebook: true,
+        showInstagram: true,
+        showYoutube: true,
+
+        showQuoteWhatsappBtn: true,
+        showQuotePdfBtn: true
     },
 
-    // Top Controls & Hero Elements
-    showThemeToggle: true,
-    showLanguageSwitcher: true,
-    showResetBtn: true,
-    showLogo: true,
-    showTagline: true,
-    showHeroLocation: true,
-    showHeroCallBtn: true,
-    showHeroWhatsappBtn: true,
-
-    // Quick Access Individual Buttons
-    showQuickCall: true,
-    showQuickWhatsapp: true,
-    showQuickEmail: true,
-    showQuickWebsite: true,
-    showQuickMaps: true,
-    showQuickSaveContact: true,
-    showQuickShare: true,
-    showQuickWork: true,
-    showQuickCatalogue: true,
-
-    // Social Media Individual Buttons
-    showFacebook: true,
-    showInstagram: true,
-    showYoutube: true,
-
-    // Quotation Action Buttons
-    showQuoteWhatsappBtn: true,
-    showQuotePdfBtn: true
-},
-
-    // 🏢 2. BUSINESS & SOCIAL DETAILS
     business: {
         name: "Sandeep ElectroFix",
         owner: "Sandeep Verma",
@@ -82,7 +74,6 @@ window.MASTER_CONFIG = {
         qrCode: "assets/qr.png"
     },
 
-    // 🛠️ 3. SERVICES & PRICING
     services: [
         {
             id: "house-wiring",
@@ -222,7 +213,6 @@ window.MASTER_CONFIG = {
         }
     ],
 
-    // 📸 4. GALLERY
     gallery: [
         { show: true, image: "assets/gallery/work1.jpg", title_en: "House Wiring", title_hi: "हाउस वायरिंग" },
         { show: true, image: "assets/gallery/work2.jpg", title_en: "False Ceiling Wiring", title_hi: "फॉल्स सीलिंग वायरिंग" },
@@ -230,13 +220,11 @@ window.MASTER_CONFIG = {
         { show: true, image: "assets/gallery/work4.jpg", title_en: "Lighting Work", title_hi: "लाइटिंग वर्क" }
     ],
 
-    // ⭐ 5. REVIEWS
     reviews: [
         { show: true, name: "Rahul Sharma", rating: 5, text_en: "Excellent electrical service and professional work.", text_hi: "बहुत ही बढ़िया और सुरक्षित काम किया।" },
         { show: true, name: "Amit Verma", rating: 5, text_en: "Good quality work and on-time service.", text_hi: "समय पर और बेहतरीन क्वालिटी का काम।" }
     ],
 
-    // ❓ 6. FAQ
     faq: [
         { show: true, q_en: "Do you provide complete house wiring?", q_hi: "क्या आप पूरे मकान की वायरिंग करते हैं?", a_en: "Yes, we provide new house concealed and surface wiring.", a_hi: "हाँ, हम नए और पुराने मकानों की पूरी अंडरग्राउंड व ओपन वायरिंग करते हैं।" },
         { show: true, q_en: "Do you fix short circuits and tripping?", q_hi: "क्या आप शॉर्ट सर्किट और फॉल्ट ठीक करते हैं?", a_en: "Yes, we detect and fix short circuits safely.", a_hi: "हाँ, हम शॉर्ट सर्किट और एमसीबी ट्रिपिंग तुरंत चेक करके ठीक करते हैं।" }
