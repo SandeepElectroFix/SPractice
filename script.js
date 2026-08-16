@@ -37,6 +37,50 @@ function restoreCustomerInputs() {
     } catch(e) {}
 }
 
+// 🔄 MASTER RESET TO DEFAULT FUNCTION
+function resetAllToDefault() {
+    const confirmMsg = currentLang === "hi" 
+        ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?" 
+        : "Are you sure you want to reset all selected services, inputs, and settings to default?";
+        
+    if (!confirm(confirmMsg)) return;
+
+    // 1. Clear LocalStorage
+    localStorage.removeItem("sandeepCart");
+    localStorage.removeItem("sandeepCustomer");
+    localStorage.removeItem("sandeepTheme");
+    localStorage.removeItem("sandeepLang");
+    localStorage.removeItem("sandeepQuickLayout");
+    localStorage.removeItem("sandeepServiceLayout");
+
+    // 2. Reset Internal Data
+    selectedItemsMap = {};
+
+    // 3. Clear Input Fields
+    if (document.getElementById("customerName")) document.getElementById("customerName").value = "";
+    if (document.getElementById("customerPhone")) document.getElementById("customerPhone").value = "";
+    if (document.getElementById("customerLocation")) document.getElementById("customerLocation").value = "";
+    if (document.getElementById("customerMessage")) document.getElementById("customerMessage").value = "";
+
+    const gpsBtn = document.getElementById("btnGpsDetect");
+    const gpsBtnText = document.getElementById("gpsBtnText");
+    if (gpsBtn) gpsBtn.classList.remove("active-loc");
+    if (gpsBtnText) gpsBtnText.innerText = "GPS";
+
+    // 4. Reset Theme to Dark Mode
+    document.documentElement.classList.remove("saved-light-theme");
+
+    // 5. Reset Layouts
+    applyQuickLayout("grid-2");
+    applyServiceLayout("list");
+
+    // 6. Reset Language to Hindi
+    setLanguage("hi");
+
+    // 7. Toast Alert
+    showExitToast(currentLang === "hi" ? "✅ सब कुछ रीसेट हो गया है" : "✅ Reset to default successfully");
+}
+
 // 1-Click Live GPS Location Fetcher for Quote Form
 function getQuoteLiveLocation() {
     const locInput = document.getElementById("customerLocation");
@@ -160,6 +204,9 @@ function setLanguage(lang) {
     const cfg = window.MASTER_CONFIG;
     const biz = cfg.business;
     const ctrl = cfg.controls;
+
+    // Reset Button Label
+    if (document.getElementById("resetBtnText")) document.getElementById("resetBtnText").innerText = isHi ? "रीसेट" : "Reset";
 
     // Static Texts
     document.getElementById("businessTitle").innerText = biz.name;
