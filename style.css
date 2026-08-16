@@ -326,14 +326,12 @@ section h2 {
   width: 100%;
 }
 
-/* 1. Grid (2 Columns) */
 #serviceContainer.layout-grid-2 {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 10px !important;
 }
 
-/* 2. Slider / Carousel */
 #serviceContainer.layout-carousel {
   display: flex !important;
   flex-direction: row !important;
@@ -353,14 +351,12 @@ section h2 {
   scroll-snap-align: start !important;
 }
 
-/* 3. List (Single Column Full Width - Default) */
 #serviceContainer.layout-list {
   display: flex !important;
   flex-direction: column !important;
   gap: 10px !important;
 }
 
-/* 4. Mini (2 Columns with Full Text Wrap) */
 #serviceContainer.layout-grid-3 {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -400,7 +396,6 @@ section h2 {
   display: block !important;
 }
 
-/* Service Card Base */
 .service-card {
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -580,7 +575,6 @@ section h2 {
   font-weight: 600;
 }
 
-/* + / - Controls */
 .qty-control {
   display: flex;
   align-items: center;
@@ -633,7 +627,7 @@ section h2 {
   color: var(--text);
 }
 
-/* Quick Access Layout Switcher */
+/* Quick Access Layouts */
 #quickGridContainer.layout-grid-2 {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -852,108 +846,11 @@ section h2 {
 }
 
 .selected-services-list {
-  max-height: 120px;
+  max-height: 180px;
   overflow-y: auto;
   margin-bottom: 10px;
 }
 
-.summary-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  padding: 3px 0;
-}
-
-.no-selection-hint {
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-style: italic;
-}
-
-.calc-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  padding: 3px 0;
-}
-
-.discount-row { color: var(--green); }
-.total-row {
-  border-top: 1px solid var(--card-border);
-  padding-top: 8px;
-  margin-top: 4px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--gold);
-}
-
-.quote-action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.pdf-download-btn {
-  background: linear-gradient(135deg, #00bfff, #0072ff);
-  color: #fff;
-  border: none;
-  font-weight: 700;
-}
-
-.faq-item {
-  margin-bottom: 8px;
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.faq-question {
-  width: 100%;
-  padding: 12px 16px;
-  background: transparent;
-  color: var(--text);
-  border: 0;
-  font-family: inherit;
-  font-size: 0.88rem;
-  font-weight: 600;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  text-align: left;
-}
-.faq-answer { display: none; padding: 0 16px 12px; color: var(--muted); font-size: 0.82rem; }
-.faq-item.active .faq-answer { display: block; }
-.faq-item.active .faq-icon { transform: rotate(45deg); display: inline-block; color: var(--gold); }
-
-footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-size: 0.75rem; }
-
-.mobile-bottom-nav {
-  position: fixed;
-  left: 10px; right: 10px; bottom: 10px;
-  z-index: 5000;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: 6px;
-  background: rgba(5, 8, 22, 0.92);
-  border: 1px solid rgba(245, 197, 66, 0.20);
-  border-radius: 20px;
-  backdrop-filter: blur(18px);
-}
-.bottom-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted);
-  font-size: 0.65rem;
-}
-.bottom-nav-item span { font-size: 1.1rem; }
-
-@media (min-width: 900px) {
-  body { padding-bottom: 20px; }
-  .mobile-bottom-nav { display: none; }
-}
 /* =========================================
    SUMMARY BOX INTERACTIVE QTY & DELETE BUTTONS
 ========================================= */
@@ -1054,4 +951,95 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--text);
+}
+
+.no-selection-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 3px 0;
+}
+
+.discount-row { color: var(--green); }
+.total-row {
+  border-top: 1px solid var(--card-border);
+  padding-top: 8px;
+  margin-top: 4px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.quote-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pdf-download-btn {
+  background: linear-gradient(135deg, #00bfff, #0072ff);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+}
+
+.faq-item {
+  margin-bottom: 8px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.faq-question {
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+}
+.faq-answer { display: none; padding: 0 16px 12px; color: var(--muted); font-size: 0.82rem; }
+.faq-item.active .faq-answer { display: block; }
+.faq-item.active .faq-icon { transform: rotate(45deg); display: inline-block; color: var(--gold); }
+
+footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-size: 0.75rem; }
+
+.mobile-bottom-nav {
+  position: fixed;
+  left: 10px; right: 10px; bottom: 10px;
+  z-index: 5000;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 6px;
+  background: rgba(5, 8, 22, 0.92);
+  border: 1px solid rgba(245, 197, 66, 0.20);
+  border-radius: 20px;
+  backdrop-filter: blur(18px);
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+.bottom-nav-item span { font-size: 1.1rem; }
+
+@media (min-width: 900px) {
+  body { padding-bottom: 20px; }
+  .mobile-bottom-nav { display: none; }
 }
