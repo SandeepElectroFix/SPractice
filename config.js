@@ -1,5 +1,5 @@
 /* =========================================================
-   SANDEEP ELECTROFIX - MASTER CONTROL CONFIGURATION
+   SANDEEP ELECTROFIX - MASTER CONFIGURATION
 ========================================================= */
 
 window.MASTER_CONFIG = {
@@ -25,6 +25,7 @@ window.MASTER_CONFIG = {
         // Top Controls & Hero Elements
         showThemeToggle: true,
         showLanguageSwitcher: true,
+        showResetBtn: true,
         showLogo: true,
         showTagline: true,
         showHeroLocation: true,
