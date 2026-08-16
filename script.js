@@ -1,6 +1,5 @@
 /* =========================================================
    SANDEEP ELECTROFIX - CORE JAVASCRIPT ENGINE
-   Reads directly from window.MASTER_CONFIG
 ========================================================= */
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
@@ -37,7 +36,7 @@ function restoreCustomerInputs() {
     } catch(e) {}
 }
 
-// 🔄 MASTER RESET FUNCTION (English + Light Mode)
+// 🔄 MASTER RESET FUNCTION
 function resetAllToDefault() {
     const confirmMsg = currentLang === "hi" 
         ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को रीसेट करना चाहते हैं?" 
@@ -45,16 +44,13 @@ function resetAllToDefault() {
         
     if (!confirm(confirmMsg)) return;
 
-    // 1. Clear Storage
     localStorage.removeItem("sandeepCart");
     localStorage.removeItem("sandeepCustomer");
     localStorage.removeItem("sandeepQuickLayout");
     localStorage.removeItem("sandeepServiceLayout");
 
-    // 2. Reset Data
     selectedItemsMap = {};
 
-    // 3. Clear Inputs
     if (document.getElementById("customerName")) document.getElementById("customerName").value = "";
     if (document.getElementById("customerPhone")) document.getElementById("customerPhone").value = "";
     if (document.getElementById("customerLocation")) document.getElementById("customerLocation").value = "";
@@ -65,22 +61,17 @@ function resetAllToDefault() {
     if (gpsBtn) gpsBtn.classList.remove("active-loc");
     if (gpsBtnText) gpsBtnText.innerText = "GPS";
 
-    // 4. Force Light Mode
     document.documentElement.classList.add("saved-light-theme");
     localStorage.setItem("sandeepTheme", "light");
 
-    // 5. Reset Layouts
     applyQuickLayout("grid-2");
     applyServiceLayout("list");
 
-    // 6. Force Language to English
     setLanguage("en");
-
-    // 7. Toast Notification
     showExitToast("✅ Reset to English & Light Mode successfully");
 }
 
-// 1-Click Live GPS Location Fetcher for Quote Form
+// Live GPS Location
 function getQuoteLiveLocation() {
     const locInput = document.getElementById("customerLocation");
     const gpsBtn = document.getElementById("btnGpsDetect");
@@ -114,7 +105,7 @@ function getQuoteLiveLocation() {
     );
 }
 
-// Show/Hide Elements based on MASTER_CONFIG
+// Show/Hide from MASTER_CONFIG
 function applyVisibilityControls() {
     const ctrl = window.MASTER_CONFIG?.controls;
     const biz = window.MASTER_CONFIG?.business;
@@ -125,7 +116,6 @@ function applyVisibilityControls() {
         if (el) el.style.display = show ? "" : "none";
     };
 
-    // Main Sections
     toggle("heroSection", ctrl.showHero);
     toggle("discountSection", ctrl.showDiscount);
     toggle("quickAccessBar", ctrl.showQuickAccess);
@@ -141,7 +131,6 @@ function applyVisibilityControls() {
     toggle("footerSection", ctrl.showFooter);
     toggle("mobileBottomNav", ctrl.showBottomNav);
 
-    // Hero Elements
     toggle("themeToggle", ctrl.showThemeToggle);
     toggle("languageSwitcher", ctrl.showLanguageSwitcher);
     toggle("btnResetAll", ctrl.showResetBtn !== false);
@@ -151,7 +140,6 @@ function applyVisibilityControls() {
     toggle("callBtn", ctrl.showHeroCallBtn);
     toggle("whatsappBtn", ctrl.showHeroWhatsappBtn);
 
-    // Quick Access Buttons
     toggle("btnQuickCall", ctrl.showQuickCall);
     toggle("btnQuickWhatsapp", ctrl.showQuickWhatsapp);
     toggle("btnQuickEmail", ctrl.showQuickEmail);
@@ -162,12 +150,10 @@ function applyVisibilityControls() {
     toggle("btnQuickWork", ctrl.showQuickWork);
     toggle("btnQuickCatalogue", ctrl.showQuickCatalogue);
 
-    // Social Buttons
     toggle("btnFacebook", ctrl.showFacebook);
     toggle("btnInstagram", ctrl.showInstagram);
     toggle("btnYoutube", ctrl.showYoutube);
 
-    // Sync URLs with Config
     if (biz) {
         if (document.getElementById("btnFacebook")) document.getElementById("btnFacebook").href = biz.facebook;
         if (document.getElementById("btnInstagram")) document.getElementById("btnInstagram").href = biz.instagram;
@@ -175,7 +161,6 @@ function applyVisibilityControls() {
         if (document.getElementById("btnQuickEmail")) document.getElementById("btnQuickEmail").href = `mailto:${biz.email}`;
     }
 
-    // Quote Buttons
     toggle("sendWhatsappBtn", ctrl.showQuoteWhatsappBtn);
     toggle("downloadPdfBtn", ctrl.showQuotePdfBtn);
 }
@@ -205,17 +190,14 @@ function setLanguage(lang) {
     const biz = cfg.business;
     const ctrl = cfg.controls;
 
-    // Reset Button Label
     if (document.getElementById("resetBtnText")) document.getElementById("resetBtnText").innerText = isHi ? "रीसेट" : "Reset";
 
-    // Static Texts
     document.getElementById("businessTitle").innerText = biz.name;
     document.getElementById("businessTagline").innerText = isHi ? biz.tagline_hi : biz.tagline_en;
     document.getElementById("businessLocation").innerText = isHi ? `📍 ${biz.location_hi}` : `📍 ${biz.location_en}`;
     document.getElementById("callBtnText").innerText = isHi ? "📞 अभी कॉल करें" : "📞 Call Now";
     document.getElementById("whatsappBtnText").innerText = isHi ? "💬 व्हाट्सएप करें" : "💬 WhatsApp";
 
-    // Discount Texts
     document.getElementById("discountBadge").innerText = isHi ? "🔥 विशेष ऑफर" : "🔥 SPECIAL OFFER";
     document.getElementById("discountTitle").innerText = isHi ? "विशेष छूट" : "Special Discount";
     document.getElementById("discountPercentage").innerText = ctrl.discountPercent || 10;
@@ -225,7 +207,6 @@ function setLanguage(lang) {
     document.getElementById("discountValidity").innerText = isHi ? "⏳ सीमित समय के लिए" : "⏳ Limited Time Offer";
     document.getElementById("discountBtnText").innerText = isHi ? "⚡ छूट प्राप्त करें" : "⚡ Get Discount";
 
-    // Quick Access Labels
     document.getElementById("quickHeading").innerText = isHi ? "त्वरित सेवाएँ" : "Quick Access";
     document.getElementById("labelCall").innerText = isHi ? "कॉल करें" : "Call";
     document.getElementById("labelWhatsapp").innerText = isHi ? "व्हाट्सएप" : "WhatsApp";
@@ -238,19 +219,16 @@ function setLanguage(lang) {
     document.getElementById("labelCatalogue").innerText = isHi ? "सामग्री सूची" : "Catalogue";
     document.getElementById("socialHeading").innerText = isHi ? "हमसे सोशल मीडिया पर जुड़ें" : "Connect on Social Media";
 
-    // About
     document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
     document.getElementById("aboutText").innerHTML = isHi
         ? `<strong>${biz.name}</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।`
         : `Welcome to <strong>${biz.name}</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.`;
 
-    // Location
     document.getElementById("locHeading").innerText = isHi ? "📍 सेवा क्षेत्र एवं लोकेशन" : "📍 Service Location";
     document.getElementById("locDesc").innerText = isHi ? "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।" : "Providing on-site electrical services across Lucknow.";
     document.getElementById("distBtnText").innerText = isHi ? "हमारे यहाँ से अपनी दूरी चेक करें" : "Check Your Distance from Us";
     document.getElementById("mapBtnText").innerText = isHi ? "गूगल मैप्स पर रास्ता देखें" : "Get Directions on Google Maps";
 
-    // Headers
     document.getElementById("servicesHeading").innerText = isHi ? "हमारी सेवाएँ" : "Our Services";
     document.getElementById("galleryHeading").innerText = isHi ? "हमारे द्वारा किए गए कार्य" : "Our Work";
     document.getElementById("qrHeading").innerText = isHi ? "क्यूआर कोड स्कैन करें" : "Scan QR Code";
@@ -258,7 +236,6 @@ function setLanguage(lang) {
     document.getElementById("qrBtnText").innerText = isHi ? "📥 क्यूआर कोड डाउनलोड करें" : "📥 Download QR Code";
     document.getElementById("reviewsHeading").innerText = isHi ? "ग्राहकों की राय" : "Customer Reviews";
 
-    // Estimate
     document.getElementById("quoteHeading").innerText = isHi ? "कोटेशन व अनुमानित खर्च" : "Estimate & Quotation";
     if (document.getElementById("customerName")) document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
     if (document.getElementById("customerPhone")) document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
@@ -279,7 +256,6 @@ function setLanguage(lang) {
     document.getElementById("sendWhatsappBtn").innerText = isHi ? "💬 व्हाट्सएप पर भेजें" : "💬 Send on WhatsApp";
     document.getElementById("downloadPdfBtn").innerText = isHi ? "📄 पीडीएफ एस्टीमेट डाउनलोड करें" : "📄 Download PDF Estimate";
 
-    // FAQs & Bottom Nav
     document.getElementById("faqHeading").innerText = isHi ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
     document.getElementById("navHome").innerText = isHi ? "होम" : "Home";
     document.getElementById("navServices").innerText = isHi ? "सेवाएं" : "Services";
@@ -620,7 +596,6 @@ function applyServiceLayout(layout) {
     localStorage.setItem("sandeepServiceLayout", layout);
 }
 
-// ⚡ Save Contact vCard (.vcf) Generator
 function saveContactVCard() {
     const biz = window.MASTER_CONFIG?.business;
     if (!biz) return;
@@ -773,86 +748,6 @@ function getUserLocation() {
 
 function shareWebsite() {
     if (navigator.share) {
-        navigator.share({ title: window.MASTER_CONFIG?.business?.name, url: window.location.href });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link copied!");
-    }
-}
-
-// =========================================================
-// 📱 PWA SHORTCUT ACTION HANDLER
-// Handles: Call / WhatsApp / Our Services
-// =========================================================
-function handlePWAShortcutAction() {
-    const params = new URLSearchParams(window.location.search);
-    const action = params.get("pwaAction");
-
-    if (!action) return;
-
-    const ctrl = window.MASTER_CONFIG?.controls?.pwaShortcuts || {};
-    const biz = window.MASTER_CONFIG?.business || {};
-
-    // -------------------------
-    // 📞 CALL ELECTRICIAN
-    // -------------------------
-    if (action === "call") {
-        if (ctrl.enabled === false || ctrl.call === false) return;
-
-        const phone = biz.phone || "+919026036445";
-
-        setTimeout(() => {
-            window.location.href = `tel:${phone}`;
-        }, 300);
-
-        return;
-    }
-
-    // -------------------------
-    // 💬 WHATSAPP
-    // -------------------------
-    if (action === "whatsapp") {
-        if (ctrl.enabled === false || ctrl.whatsapp === false) return;
-
-        const whatsappNumber = biz.whatsapp || "919026036445";
-
-        const message = currentLang === "hi"
-            ? `नमस्ते ${biz.name || "Sandeep ElectroFix"}, मुझे इलेक्ट्रिकल सर्विस की जानकारी चाहिए।`
-            : `Hello ${biz.name || "Sandeep ElectroFix"}, I need information about your electrical services.`;
-
-        setTimeout(() => {
-            window.location.href =
-                `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-        }, 300);
-
-        return;
-    }
-
-    // -------------------------
-    // 🔧 OUR SERVICES
-    // -------------------------
-    if (action === "services") {
-        if (ctrl.enabled === false || ctrl.services === false) return;
-
-        setTimeout(() => {
-            const servicesSection = document.getElementById("servicesSection");
-
-            if (servicesSection) {
-                servicesSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-            } else {
-                window.location.hash = "servicesSection";
-            }
-        }, 300);
-
-        return;
-    }
-}
-
-function shareWebsite() {
-    if (navigator.share) {
         navigator.share({
             title: window.MASTER_CONFIG?.business?.name,
             url: window.location.href
@@ -863,9 +758,48 @@ function shareWebsite() {
     }
 }
 
+function handlePWAShortcutAction() {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get("pwaAction");
 
-// App Initialization
-document.addEventListener("DOMContentLoaded", () => {
+    if (!action) return;
+
+    const ctrl = window.MASTER_CONFIG?.controls?.pwaShortcuts || {};
+    const biz = window.MASTER_CONFIG?.business || {};
+
+    if (action === "call") {
+        if (ctrl.enabled === false || ctrl.call === false) return;
+        const phone = biz.phone || "+919026036445";
+        setTimeout(() => { window.location.href = `tel:${phone}`; }, 300);
+        return;
+    }
+
+    if (action === "whatsapp") {
+        if (ctrl.enabled === false || ctrl.whatsapp === false) return;
+        const whatsappNumber = biz.whatsapp || "919026036445";
+        const message = currentLang === "hi"
+            ? `नमस्ते ${biz.name || "Sandeep ElectroFix"}, मुझे इलेक्ट्रिकल सर्विस की जानकारी चाहिए।`
+            : `Hello ${biz.name || "Sandeep ElectroFix"}, I need information about your electrical services.`;
+        setTimeout(() => {
+            window.location.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        }, 300);
+        return;
+    }
+
+    if (action === "services") {
+        if (ctrl.enabled === false || ctrl.services === false) return;
+        setTimeout(() => {
+            const servicesSection = document.getElementById("servicesSection");
+            if (servicesSection) {
+                servicesSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+                window.location.hash = "servicesSection";
+            }
+        }, 300);
+        return;
+    }
+}
+
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
     history.pushState({ page: "app" }, "");
@@ -892,7 +826,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     restoreCustomerInputs();
     setLanguage(currentLang);
-    initializeQR();
     handlePWAShortcutAction();
-   
 });
