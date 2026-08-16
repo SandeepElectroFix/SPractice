@@ -1132,3 +1132,55 @@ html.saved-light-theme #faqHeading {
   color: #0b1224 !important;
   font-weight: 800 !important;
 }
+/* =========================================
+   QUOTE LOCATION INPUT & GPS BUTTON
+========================================= */
+.quote-location-wrapper {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.quote-location-wrapper input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-gps-detect {
+  background: rgba(0, 191, 255, 0.15);
+  border: 1px solid var(--card-border);
+  color: var(--blue-light);
+  border-radius: 12px;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.btn-gps-detect:hover {
+  background: rgba(0, 191, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.btn-gps-detect.active-loc {
+  background: rgba(37, 211, 102, 0.2);
+  color: #25d366;
+  border-color: #25d366;
+}
+
+.saved-light-theme .btn-gps-detect {
+  background: rgba(0, 191, 255, 0.1);
+  color: #0284c7;
+}
+
+@media screen and (min-width: 768px) {
+  .quote-location-wrapper {
+    grid-column: 1 / 2 !important;
+  }
+}
