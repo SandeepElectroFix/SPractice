@@ -1,6 +1,5 @@
 /* =========================================
-SANDEEP ELECTROFIX - RESPONSIVE CSS
-(Mobile + Desktop Adaptive Engine)
+SANDEEP ELECTROFIX - RESPONSIVE MASTER CSS
 ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
@@ -28,6 +27,35 @@ html.saved-light-theme {
   --text: #101827;
   --muted: #5f6b7a;
   --shadow: 0 15px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* LIGHT MODE HEADINGS SHARP CONTRAST */
+html.saved-light-theme section h2,
+html.saved-light-theme .hero h1,
+html.saved-light-theme .discount-card h2,
+html.saved-light-theme .summary-heading {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+html.saved-light-theme .hero .tagline,
+html.saved-light-theme .about p,
+html.saved-light-theme .location-box p,
+html.saved-light-theme .qr-section p {
+  color: #475569 !important;
+}
+
+html.saved-light-theme #locHeading,
+html.saved-light-theme #servicesHeading,
+html.saved-light-theme #quickHeading,
+html.saved-light-theme #socialHeading,
+html.saved-light-theme #aboutHeading,
+html.saved-light-theme #galleryHeading,
+html.saved-light-theme #qrHeading,
+html.saved-light-theme #quoteHeading,
+html.saved-light-theme #faqHeading {
+  color: #0b1224 !important;
+  font-weight: 800 !important;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,7 +93,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 15px;
   flex-wrap: wrap;
 }
@@ -85,6 +113,7 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow);
+  transition: all 0.25s ease;
 }
 
 .language-switcher {
@@ -122,7 +151,50 @@ a { color: inherit; text-decoration: none; }
 }
 .saved-light-theme .language-btn { color: #101827; }
 
-/* BASE HERO */
+/* ATTRACTIVE TOP PILL RESET BUTTON */
+.reset-app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: var(--card);
+  color: #ef4444;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.reset-app-btn span:first-child {
+  display: inline-block;
+  transition: transform 0.35s ease;
+}
+
+.reset-app-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(239, 68, 68, 0.6);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.reset-app-btn:hover span:first-child {
+  transform: rotate(-180deg);
+}
+
+.reset-app-btn:active { transform: scale(0.95); }
+
+.saved-light-theme .reset-app-btn {
+  background: #ffffff;
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #dc2626;
+}
+
+/* HERO SECTION */
 .hero {
   width: min(100% - 24px, 600px);
   margin: 0 auto;
@@ -133,6 +205,7 @@ a { color: inherit; text-decoration: none; }
 .hero-logo {
   width: 220px;
   height: 220px;
+  max-width: 80vw;
   margin: 10px auto 14px auto;
   background: transparent !important;
   border: none !important;
@@ -160,7 +233,7 @@ a { color: inherit; text-decoration: none; }
   height: 100%;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.65));
 }
 
 .hero h1 { font-size: 28px; font-weight: 800; margin: 4px 0; }
@@ -785,6 +858,51 @@ section h2 {
   font-size: 0.9rem;
 }
 
+/* GPS LOCATION WRAPPER */
+.quote-location-wrapper {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.quote-location-wrapper input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-gps-detect {
+  background: rgba(0, 191, 255, 0.15);
+  border: 1px solid var(--card-border);
+  color: var(--blue-light);
+  border-radius: 12px;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.btn-gps-detect:hover {
+  background: rgba(0, 191, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.btn-gps-detect.active-loc {
+  background: rgba(37, 211, 102, 0.2);
+  color: #25d366;
+  border-color: #25d366;
+}
+
+.saved-light-theme .btn-gps-detect {
+  background: rgba(0, 191, 255, 0.1);
+  color: #0284c7;
+}
+
 .estimate-summary-box {
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid var(--card-border);
@@ -993,7 +1111,6 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
    🖥️ DESKTOP / TABLET FULL WIDTH ENGINE
 ========================================= */
 @media screen and (min-width: 768px) {
-  /* 1. Containers ko 1100px tak failayein */
   .hero,
   section,
   .discount-section,
@@ -1006,13 +1123,6 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     margin-left: auto !important;
     margin-right: auto !important;
   }
- @media screen and (min-width: 768px) {
-  .hero-logo {
-    width: 260px !important;
-    height: 260px !important;
-  }
- }
-  
 
   body {
     padding-bottom: 40px !important;
@@ -1022,7 +1132,11 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     display: none !important;
   }
 
-  /* 2. Quick Access Buttons 4 Columns me */
+  .hero-logo {
+    width: 260px !important;
+    height: 260px !important;
+  }
+
   #quickGridContainer.layout-grid-2,
   #quickGridContainer.layout-grid-3 {
     display: grid !important;
@@ -1035,7 +1149,6 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     padding: 16px 12px !important;
   }
 
-  /* 3. Services Grid Desktop me 3 ya 4 Columns */
   #serviceContainer.layout-grid-2,
   #serviceContainer.layout-grid-3 {
     display: grid !important;
@@ -1049,7 +1162,6 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     gap: 14px !important;
   }
 
-  /* 4. Gallery 4 Columns */
   .gallery-grid {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 16px !important;
@@ -1059,7 +1171,6 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     height: 180px !important;
   }
 
-  /* 5. Quotation Form Side-by-Side */
   .quote-form {
     display: grid !important;
     grid-template-columns: 1fr 1.2fr !important;
@@ -1068,13 +1179,14 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
   }
 
   .quote-form > input,
+  .quote-location-wrapper,
   .quote-form > textarea {
     grid-column: 1 / 2 !important;
   }
 
   .estimate-summary-box {
     grid-column: 2 / 3 !important;
-    grid-row: 1 / 4 !important;
+    grid-row: 1 / 5 !important;
     margin: 0 !important;
   }
 
@@ -1089,7 +1201,6 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     flex: 1 !important;
   }
 
-  /* 6. Service Popup Center me */
   .service-modal-overlay {
     align-items: center !important;
   }
@@ -1098,89 +1209,5 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     border-radius: 24px !important;
     max-height: 75vh !important;
     max-width: 600px !important;
-  }
-}
-/* =========================================
-   LIGHT MODE ME HEADINGS KO DARK & CLEAR KARNA
-========================================= */
-html.saved-light-theme section h2,
-html.saved-light-theme .hero h1,
-html.saved-light-theme .discount-card h2,
-html.saved-light-theme .summary-heading {
-  color: #0f172a !important; /* Sharp Dark Navy Blue */
-  text-shadow: none !important;
-}
-
-/* Sub-headings aur Tags ka color Light Mode me */
-html.saved-light-theme .hero .tagline,
-html.saved-light-theme .about p,
-html.saved-light-theme .location-box p,
-html.saved-light-theme .qr-section p {
-  color: #475569 !important; /* Clear Slate Gray */
-}
-
-/* Service aur Location Icon Headers */
-html.saved-light-theme #locHeading,
-html.saved-light-theme #servicesHeading,
-html.saved-light-theme #quickHeading,
-html.saved-light-theme #socialHeading,
-html.saved-light-theme #aboutHeading,
-html.saved-light-theme #galleryHeading,
-html.saved-light-theme #qrHeading,
-html.saved-light-theme #quoteHeading,
-html.saved-light-theme #faqHeading {
-  color: #0b1224 !important;
-  font-weight: 800 !important;
-}
-/* =========================================
-   QUOTE LOCATION INPUT & GPS BUTTON
-========================================= */
-.quote-location-wrapper {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-}
-
-.quote-location-wrapper input {
-  flex: 1;
-  min-width: 0;
-}
-
-.btn-gps-detect {
-  background: rgba(0, 191, 255, 0.15);
-  border: 1px solid var(--card-border);
-  color: var(--blue-light);
-  border-radius: 12px;
-  padding: 0 14px;
-  font-family: inherit;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-  transition: all 0.25s ease;
-}
-
-.btn-gps-detect:hover {
-  background: rgba(0, 191, 255, 0.28);
-  transform: translateY(-1px);
-}
-
-.btn-gps-detect.active-loc {
-  background: rgba(37, 211, 102, 0.2);
-  color: #25d366;
-  border-color: #25d366;
-}
-
-.saved-light-theme .btn-gps-detect {
-  background: rgba(0, 191, 255, 0.1);
-  color: #0284c7;
-}
-
-@media screen and (min-width: 768px) {
-  .quote-location-wrapper {
-    grid-column: 1 / 2 !important;
   }
 }
