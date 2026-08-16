@@ -42,7 +42,7 @@ window.MASTER_CONFIG = {
 
         // Quotation Action Buttons
         showQuoteWhatsappBtn: true,
-        showQuotePdfBtn: true
+        showQuotePdfBtn: false
     },
 
     // 🏢 2. BUSINESS DETAILS
