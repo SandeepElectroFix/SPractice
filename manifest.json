@@ -8,6 +8,7 @@
   "background_color": "#050816",
   "theme_color": "#0ea5e9",
   "orientation": "portrait-primary",
+
   "categories": [
     "business",
     "utilities",
@@ -34,7 +35,7 @@
       "name": "Call Electrician",
       "short_name": "Call",
       "description": "Direct call to Sandeep ElectroFix",
-      "url": "tel:+919026036445",
+      "url": "./index.html?pwaAction=call",
       "icons": [
         {
           "src": "assets/pwa-icon-192.png",
@@ -48,7 +49,7 @@
       "name": "Book on WhatsApp",
       "short_name": "WhatsApp",
       "description": "Chat on WhatsApp for electrical work",
-      "url": "https://wa.me/919026036445",
+      "url": "./index.html?pwaAction=whatsapp",
       "icons": [
         {
           "src": "assets/pwa-icon-192.png",
