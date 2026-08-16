@@ -851,7 +851,21 @@ function handlePWAShortcutAction() {
     }
 }
 
+function shareWebsite() {
+    if (navigator.share) {
+        navigator.share({
+            title: window.MASTER_CONFIG?.business?.name,
+            url: window.location.href
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied!");
+    }
+}
 
+
+// App Initialization
+document.addEventListener("DOMContentLoaded", () => {
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
     history.pushState({ page: "app" }, "");
@@ -878,7 +892,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     restoreCustomerInputs();
     setLanguage(currentLang);
-
+    initializeQR();
     handlePWAShortcutAction();
    
 });
