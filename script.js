@@ -3,7 +3,17 @@
    Reads directly from window.MASTER_CONFIG
 ========================================================= */
 
-let currentLang = localStorage.getItem("sandeepLang") || "hi";
+// 📱 Phone / System Preference Helpers
+function getSystemLanguage() {
+    const navLang = (navigator.language || navigator.userLanguage || "").toLowerCase();
+    return navLang.startsWith("en") ? "en" : "hi";
+}
+
+function getSystemTheme() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+let currentLang = localStorage.getItem("sandeepLang") || getSystemLanguage();
 let selectedItemsMap = {};
 let lastBackPressTime = 0;
 
@@ -37,11 +47,11 @@ function restoreCustomerInputs() {
     } catch(e) {}
 }
 
-// 🔄 MASTER RESET FUNCTION
+// 🔄 MASTER RESET FUNCTION (Phone Settings ke Anusaar Reset)
 function resetAllToDefault() {
     const confirmMsg = currentLang === "hi" 
-        ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?" 
-        : "Are you sure you want to reset all selected services, inputs, and settings to default?";
+        ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को फ़ोन की डिफ़ॉल्ट सेटिंग्स पर रीसेट करना चाहते हैं?" 
+        : "Are you sure you want to reset all selected services, inputs, and settings to phone default settings?";
         
     if (!confirm(confirmMsg)) return;
 
@@ -67,18 +77,24 @@ function resetAllToDefault() {
     if (gpsBtn) gpsBtn.classList.remove("active-loc");
     if (gpsBtnText) gpsBtnText.innerText = "GPS";
 
-    // 4. Reset Theme
-    document.documentElement.classList.remove("saved-light-theme");
+    // 4. Phone ke Theme ke Anusaar Theme Reset
+    const sysTheme = getSystemTheme();
+    if (sysTheme === "light") {
+        document.documentElement.classList.add("saved-light-theme");
+    } else {
+        document.documentElement.classList.remove("saved-light-theme");
+    }
 
     // 5. Reset Layouts
     applyQuickLayout("grid-2");
     applyServiceLayout("list");
 
-    // 6. Reset Language
-    setLanguage("hi");
+    // 6. Phone ke Language ke Anusaar Language Reset
+    const sysLang = getSystemLanguage();
+    setLanguage(sysLang);
 
     // 7. Toast Notification
-    showExitToast(currentLang === "hi" ? "✅ सब कुछ रीसेट हो गया है" : "✅ Reset to default successfully");
+    showExitToast(currentLang === "hi" ? "✅ फ़ोन सेटिंग्स के अनुसार रीसेट हो गया" : "✅ Reset to phone defaults successfully");
 }
 
 // 1-Click Live GPS Location Fetcher for Quote Form
@@ -786,8 +802,13 @@ function shareWebsite() {
 document.addEventListener("DOMContentLoaded", () => {
     history.pushState({ page: "app" }, "");
 
+    // 📱 Initial Theme check: Storage ya Phone Preferences
     const savedTheme = localStorage.getItem("sandeepTheme");
-    if (savedTheme === "light") document.documentElement.classList.add("saved-light-theme");
+    if (savedTheme === "light" || (!savedTheme && getSystemTheme() === "light")) {
+        document.documentElement.classList.add("saved-light-theme");
+    } else {
+        document.documentElement.classList.remove("saved-light-theme");
+    }
 
     document.getElementById("themeToggle")?.addEventListener("click", () => {
         document.documentElement.classList.toggle("saved-light-theme");
