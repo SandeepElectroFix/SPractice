@@ -1093,3 +1093,35 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     max-width: 600px !important;
   }
 }
+/* =========================================
+   LIGHT MODE ME HEADINGS KO DARK & CLEAR KARNA
+========================================= */
+html.saved-light-theme section h2,
+html.saved-light-theme .hero h1,
+html.saved-light-theme .discount-card h2,
+html.saved-light-theme .summary-heading {
+  color: #0f172a !important; /* Sharp Dark Navy Blue */
+  text-shadow: none !important;
+}
+
+/* Sub-headings aur Tags ka color Light Mode me */
+html.saved-light-theme .hero .tagline,
+html.saved-light-theme .about p,
+html.saved-light-theme .location-box p,
+html.saved-light-theme .qr-section p {
+  color: #475569 !important; /* Clear Slate Gray */
+}
+
+/* Service aur Location Icon Headers */
+html.saved-light-theme #locHeading,
+html.saved-light-theme #servicesHeading,
+html.saved-light-theme #quickHeading,
+html.saved-light-theme #socialHeading,
+html.saved-light-theme #aboutHeading,
+html.saved-light-theme #galleryHeading,
+html.saved-light-theme #qrHeading,
+html.saved-light-theme #quoteHeading,
+html.saved-light-theme #faqHeading {
+  color: #0b1224 !important;
+  font-weight: 800 !important;
+}
