@@ -1,20 +1,20 @@
 /* =========================================================
    SANDEEP ELECTROFIX - MASTER CONTROL CONFIGURATION
-   (Sabhi controls, prices, texts aur switches yahan se badlein)
 ========================================================= */
 
 window.MASTER_CONFIG = {
-    // 🎛️ 1. MASTER SHOW / HIDE CONTROLS (true = Dikhana hai | false = Chupana hai)
+    // 🎛️ 1. MASTER SHOW / HIDE CONTROLS
     controls: {
         // Sections Visibility
         showHero: true,
-        showDiscount: false,          // Discount banner on/off
-        discountPercent: 10,          // Discount percentage (e.g. 10%)
+        showDiscount: false,
+        discountPercent: 10,
         showQuickAccess: true,
+        showSocialLinks: true,
         showAbout: true,
         showLocation: true,
         showServices: true,
-        showGallery: false,
+        showGallery: true,
         showQR: true,
         showReviews: false,
         showQuoteForm: true,
@@ -34,18 +34,25 @@ window.MASTER_CONFIG = {
         // Quick Access Individual Buttons
         showQuickCall: true,
         showQuickWhatsapp: true,
+        showQuickEmail: true,
         showQuickWebsite: true,
         showQuickMaps: true,
+        showQuickSaveContact: true,
         showQuickShare: true,
         showQuickWork: true,
         showQuickCatalogue: true,
 
+        // Social Media Individual Buttons
+        showFacebook: true,
+        showInstagram: true,
+        showYoutube: true,
+
         // Quotation Action Buttons
         showQuoteWhatsappBtn: true,
-        showQuotePdfBtn: false
+        showQuotePdfBtn: true
     },
 
-    // 🏢 2. BUSINESS DETAILS
+    // 🏢 2. BUSINESS & SOCIAL DETAILS
     business: {
         name: "Sandeep ElectroFix",
         owner: "Sandeep Verma",
@@ -59,6 +66,9 @@ window.MASTER_CONFIG = {
         website: "https://sandeepelectrofix.github.io/",
         cardWebsite: "https://sandeepelectrofix.github.io/SandeepElectroFix-Card/",
         googleMaps: "https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7",
+        facebook: "https://www.facebook.com/SandeepElectroFix",
+        instagram: "https://www.instagram.com/sandeep_electrofix",
+        youtube: "https://youtube.com/@sandeepelectrofix",
         logo: "assets/logo.png",
         qrCode: "assets/qr.png"
     },
@@ -159,7 +169,7 @@ window.MASTER_CONFIG = {
             desc_en: "Quick repairs for switches, sockets, and fans.",
             desc_hi: "स्विच, सॉकेट, पंखा और सामान्य बिजली रिपेयर सेवा।",
             subServices: [
-                { show: true, name_en: "Switch Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / पॉइंट", price: 80 },
+                { show: true, name_en: "Switch Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
                 { show: true, name_en: "Socket Repair", name_hi: "सॉकेट रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
                 { show: true, name_en: "Fan Repair", name_hi: "पंखा रिपेयर", rate_en: "₹150 / fan", rate_hi: "₹150 / पंखा", price: 150 },
                 { show: true, name_en: "Light Repair", name_hi: "लाइट रिपेयर", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
@@ -211,7 +221,7 @@ window.MASTER_CONFIG = {
         { show: true, image: "assets/gallery/work4.jpg", title_en: "Lighting Work", title_hi: "लाइटिंग वर्क" }
     ],
 
-    // ⭐ 5. CUSTOMER REVIEWS
+    // ⭐ 5. REVIEWS
     reviews: [
         { show: true, name: "Rahul Sharma", rating: 5, text_en: "Excellent electrical service and professional work.", text_hi: "बहुत ही बढ़िया और सुरक्षित काम किया।" },
         { show: true, name: "Amit Verma", rating: 5, text_en: "Good quality work and on-time service.", text_hi: "समय पर और बेहतरीन क्वालिटी का काम।" }
