@@ -251,7 +251,7 @@ function openServiceModal(sIdx) {
     setTimeout(() => overlay.classList.add("active"), 10);
     document.body.style.overflow = "hidden";
 
-    // Push history for single-back interception
+    // Push history for back button trapping
     history.pushState({ isModalOpen: true }, "");
 }
 
@@ -337,7 +337,7 @@ function showExitToast(msg) {
     }, 2000);
 }
 
-// ⚡ 5. Master Back Button Handler (Modal -> Lightbox -> Double Tap to Exit)
+// ⚡ 5. Master Back Button Handler
 window.addEventListener("popstate", () => {
     const lightbox = document.getElementById("lightbox");
     const isLightboxOpen = lightbox && lightbox.style.display === "flex";
@@ -345,22 +345,18 @@ window.addEventListener("popstate", () => {
     const modalOverlay = document.getElementById("serviceModalOverlay");
     const isModalOpen = modalOverlay && (modalOverlay.classList.contains("active") || modalOverlay.style.display === "flex");
 
-    // 1st Priority: Close Lightbox
     if (isLightboxOpen) {
         closeLightboxModal(true);
         return;
     }
 
-    // 2nd Priority: Close Service Floating Modal
     if (isModalOpen) {
         closeServiceModal(true);
         return;
     }
 
-    // 3rd Priority: Double Back Press to Exit App
     const currentTime = Date.now();
     if (currentTime - lastBackPressTime < 2000) {
-        // Double press verified: exit allowed
         history.back();
     } else {
         lastBackPressTime = currentTime;
@@ -392,8 +388,28 @@ function changeQty(sIdx, subIdx, change) {
     updateCalculations();
 }
 
+// ⚡ DIRECT EDIT FROM ESTIMATE SUMMARY BOX (+ / − / 🗑️)
+function changeQtyDirect(key, change) {
+    if (!selectedItemsMap[key]) return;
+    const parts = key.split('_');
+    const sIdx = parseInt(parts[0]);
+    const subIdx = parseInt(parts[1]);
+
+    changeQty(sIdx, subIdx, change);
+    renderServices();
+}
+
+function removeItemDirect(key) {
+    if (!selectedItemsMap[key]) return;
+    delete selectedItemsMap[key];
+    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
+    updateCalculations();
+    renderServices();
+}
+
+// ⚡ SUMMARY BOX RENDERER WITH INLINE CONTROLS
 function updateCalculations() {
-    const items = Object.values(selectedItemsMap);
+    const entries = Object.entries(selectedItemsMap);
     const countEl = document.getElementById("selectedCount");
     const listEl = document.getElementById("selectedServicesList");
     const subtotalEl = document.getElementById("calcSubtotal");
@@ -402,10 +418,10 @@ function updateCalculations() {
     const totalEl = document.getElementById("calcGrandTotal");
     const ctrl = window.MASTER_CONFIG?.controls;
 
-    const count = items.reduce((acc, itm) => acc + itm.qty, 0);
+    const count = entries.reduce((acc, [_, itm]) => acc + itm.qty, 0);
     if (countEl) countEl.innerText = count;
 
-    if (items.length === 0) {
+    if (entries.length === 0) {
         if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।' : 'No services selected yet. Use + / − above.'}</p>`;
         if (subtotalEl) subtotalEl.innerText = "₹0";
         if (discRow) discRow.style.display = "none";
@@ -414,15 +430,26 @@ function updateCalculations() {
     }
 
     if (listEl) {
-        listEl.innerHTML = items.map(itm => `
-            <div class="summary-item">
-                <span>• ${currentLang === 'hi' ? itm.name_hi : itm.name_en} × <strong>${itm.qty}</strong></span>
-                <strong>₹${itm.price * itm.qty}</strong>
-            </div>
-        `).join("");
+        listEl.innerHTML = entries.map(([key, itm]) => {
+            const name = currentLang === 'hi' ? itm.name_hi : itm.name_en;
+            return `
+                <div class="summary-item-row">
+                    <div class="summary-item-left">
+                        <span class="summary-item-name">• ${name}</span>
+                        <span class="summary-item-price">₹${itm.price * itm.qty} (₹${itm.price} × ${itm.qty})</span>
+                    </div>
+                    <div class="summary-qty-actions">
+                        <button type="button" class="summary-btn minus" onclick="changeQtyDirect('${key}', -1)" title="कम करें">−</button>
+                        <span class="summary-qty-val">${itm.qty}</span>
+                        <button type="button" class="summary-btn plus" onclick="changeQtyDirect('${key}', 1)" title="बढ़ाएं">+</button>
+                        <button type="button" class="summary-btn remove" onclick="removeItemDirect('${key}')" title="हटाएं">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join("");
     }
 
-    const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
+    const subtotal = entries.reduce((acc, [_, itm]) => acc + (itm.price * itm.qty), 0);
     const isDiscountActive = ctrl.showDiscount && (ctrl.discountPercent > 0);
     const discount = isDiscountActive ? Math.round(subtotal * (ctrl.discountPercent / 100)) : 0;
     const total = subtotal - discount;
@@ -618,7 +645,6 @@ function shareWebsite() {
 
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
-    // Initialize root state for back button trapping
     history.pushState({ page: "app" }, "");
 
     const savedTheme = localStorage.getItem("sandeepTheme");
