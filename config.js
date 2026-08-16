@@ -5,53 +5,61 @@
 window.MASTER_CONFIG = {
     // 🎛️ 1. MASTER SHOW / HIDE CONTROLS
     controls: {
-        // Sections Visibility
-        showHero: true,
-        showDiscount: false,
-        discountPercent: 10,
-        showQuickAccess: true,
-        showSocialLinks: true,
-        showAbout: true,
-        showLocation: true,
-        showServices: true,
-        showGallery: true,
-        showQR: true,
-        showReviews: false,
-        showQuoteForm: true,
-        showFAQ: true,
-        showFooter: true,
-        showBottomNav: true,
+    // Sections Visibility
+    showHero: true,
+    showDiscount: false,
+    discountPercent: 10,
+    showQuickAccess: true,
+    showSocialLinks: true,
+    showAbout: true,
+    showLocation: true,
+    showServices: true,
+    showGallery: true,
+    showQR: true,
+    showReviews: false,
+    showQuoteForm: true,
+    showFAQ: true,
+    showFooter: true,
+    showBottomNav: true,
 
-        // Top Controls & Hero Elements
-        showThemeToggle: true,
-        showLanguageSwitcher: true,
-        showResetBtn: true,
-        showLogo: true,
-        showTagline: true,
-        showHeroLocation: true,
-        showHeroCallBtn: true,
-        showHeroWhatsappBtn: true,
-
-        // Quick Access Individual Buttons
-        showQuickCall: true,
-        showQuickWhatsapp: true,
-        showQuickEmail: true,
-        showQuickWebsite: true,
-        showQuickMaps: true,
-        showQuickSaveContact: true,
-        showQuickShare: true,
-        showQuickWork: true,
-        showQuickCatalogue: true,
-
-        // Social Media Individual Buttons
-        showFacebook: true,
-        showInstagram: true,
-        showYoutube: true,
-
-        // Quotation Action Buttons
-        showQuoteWhatsappBtn: true,
-        showQuotePdfBtn: true
+    // 📱 PWA SHORTCUTS - INDIVIDUAL SHOW / HIDE
+    pwaShortcuts: {
+        enabled: true,
+        call: true,
+        whatsapp: true,
+        services: true
     },
+
+    // Top Controls & Hero Elements
+    showThemeToggle: true,
+    showLanguageSwitcher: true,
+    showResetBtn: true,
+    showLogo: true,
+    showTagline: true,
+    showHeroLocation: true,
+    showHeroCallBtn: true,
+    showHeroWhatsappBtn: true,
+
+    // Quick Access Individual Buttons
+    showQuickCall: true,
+    showQuickWhatsapp: true,
+    showQuickEmail: true,
+    showQuickWebsite: true,
+    showQuickMaps: true,
+    showQuickSaveContact: true,
+    showQuickShare: true,
+    showQuickWork: true,
+    showQuickCatalogue: true,
+
+    // Social Media Individual Buttons
+    showFacebook: true,
+    showInstagram: true,
+    showYoutube: true,
+
+    // Quotation Action Buttons
+    showQuoteWhatsappBtn: true,
+    showQuotePdfBtn: true
+},
 
     // 🏢 2. BUSINESS & SOCIAL DETAILS
     business: {
