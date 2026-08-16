@@ -248,6 +248,9 @@ function openServiceModal(sIdx) {
     overlay.style.display = "flex";
     setTimeout(() => overlay.classList.add("active"), 10);
     document.body.style.overflow = "hidden";
+
+    // ⚡ Back button support: Push temporary state to browser history
+    history.pushState({ isModalOpen: true }, "");
 }
 
 function changeQtyModal(sIdx, subIdx, change) {
@@ -261,17 +264,30 @@ function changeQtyModal(sIdx, subIdx, change) {
     if (mRow) mRow.classList.toggle("has-qty", currentQty > 0);
 }
 
-function closeServiceModal() {
+function closeServiceModal(isFromHistoryBack = false) {
     const overlay = document.getElementById("serviceModalOverlay");
-    if (overlay) {
+    if (overlay && overlay.classList.contains("active")) {
         overlay.classList.remove("active");
         setTimeout(() => {
             overlay.style.display = "none";
             document.body.style.overflow = "";
             renderServices();
         }, 300);
+
+        // Agar user ne 'X' ya bahar click karke close kiya hai, toh history clear karein
+        if (!isFromHistoryBack && history.state && history.state.isModalOpen) {
+            history.back();
+        }
     }
 }
+
+// ⚡ Hardware / Mobile Browser Back Button Event Listener
+window.addEventListener("popstate", () => {
+    const overlay = document.getElementById("serviceModalOverlay");
+    if (overlay && overlay.classList.contains("active")) {
+        closeServiceModal(true);
+    }
+});
 
 function changeQty(sIdx, subIdx, change) {
     const key = `${sIdx}_${subIdx}`;
