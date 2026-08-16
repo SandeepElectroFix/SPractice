@@ -18,6 +18,7 @@ function saveCustomerInputs() {
     const data = {
         name: document.getElementById("customerName")?.value || "",
         phone: document.getElementById("customerPhone")?.value || "",
+        location: document.getElementById("customerLocation")?.value || "",
         message: document.getElementById("customerMessage")?.value || ""
     };
     localStorage.setItem("sandeepCustomer", JSON.stringify(data));
@@ -28,11 +29,46 @@ function restoreCustomerInputs() {
         const saved = localStorage.getItem("sandeepCustomer");
         if (saved) {
             const data = JSON.parse(saved);
-            if (data.name) document.getElementById("customerName").value = data.name;
-            if (data.phone) document.getElementById("customerPhone").value = data.phone;
-            if (data.message) document.getElementById("customerMessage").value = data.message;
+            if (data.name && document.getElementById("customerName")) document.getElementById("customerName").value = data.name;
+            if (data.phone && document.getElementById("customerPhone")) document.getElementById("customerPhone").value = data.phone;
+            if (data.location && document.getElementById("customerLocation")) document.getElementById("customerLocation").value = data.location;
+            if (data.message && document.getElementById("customerMessage")) document.getElementById("customerMessage").value = data.message;
         }
     } catch(e) {}
+}
+
+// 1-Click Live GPS Location Fetcher for Quote Form
+function getQuoteLiveLocation() {
+    const locInput = document.getElementById("customerLocation");
+    const gpsBtn = document.getElementById("btnGpsDetect");
+    const gpsBtnText = document.getElementById("gpsBtnText");
+
+    if (!navigator.geolocation) {
+        alert(currentLang === "hi" ? "आपके ब्राउज़र में GPS सपोर्ट नहीं है।" : "Geolocation is not supported by your browser.");
+        return;
+    }
+
+    if (gpsBtnText) gpsBtnText.innerText = "...";
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude.toFixed(5);
+            const lng = position.coords.longitude.toFixed(5);
+            const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
+            
+            if (locInput) {
+                locInput.value = `${lat}, ${lng} (${mapUrl})`;
+                saveCustomerInputs();
+            }
+            if (gpsBtn) gpsBtn.classList.add("active-loc");
+            if (gpsBtnText) gpsBtnText.innerText = currentLang === "hi" ? "मिल गया ✓" : "Fetched ✓";
+        },
+        () => {
+            alert(currentLang === "hi" ? "लोकेशन की परमिशन नहीं मिली। कृपया हाथ से पता टाइप करें।" : "Location permission denied. Please type address manually.");
+            if (gpsBtnText) gpsBtnText.innerText = "GPS";
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
 }
 
 // Show/Hide Elements based on MASTER_CONFIG
@@ -177,9 +213,10 @@ function setLanguage(lang) {
 
     // Estimate
     document.getElementById("quoteHeading").innerText = isHi ? "कोटेशन व अनुमानित खर्च" : "Estimate & Quotation";
-    document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
-    document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
-    document.getElementById("customerMessage").placeholder = isHi ? "पता / कार्य का विवरण..." : "Address / Work details...";
+    if (document.getElementById("customerName")) document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
+    if (document.getElementById("customerPhone")) document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
+    if (document.getElementById("customerLocation")) document.getElementById("customerLocation").placeholder = isHi ? "आपका पता / एरिया *" : "Your Address / Area *";
+    if (document.getElementById("customerMessage")) document.getElementById("customerMessage").placeholder = isHi ? "कार्य का अतिरिक्त विवरण (वैकल्पिक)..." : "Additional work details (optional)...";
     document.getElementById("lblSubtotal").innerText = isHi ? "कुल राशि:" : "Subtotal:";
     document.getElementById("lblGrandTotal").innerText = isHi ? "अंतिम राशि:" : "Grand Total:";
     document.getElementById("discountLabel").innerText = isHi ? `विशेष छूट (${ctrl.discountPercent}% OFF):` : `Special Discount (${ctrl.discountPercent}% OFF):`;
@@ -556,12 +593,14 @@ END:VCARD`;
 function sendWhatsappQuote() {
     const name = document.getElementById("customerName")?.value.trim();
     const phone = document.getElementById("customerPhone")?.value.trim();
+    const location = document.getElementById("customerLocation")?.value.trim();
     const note = document.getElementById("customerMessage")?.value.trim();
     const items = Object.values(selectedItemsMap);
     const ctrl = window.MASTER_CONFIG?.controls;
     const biz = window.MASTER_CONFIG?.business;
 
     if (!name || !phone) return alert(currentLang === 'hi' ? "कृपया अपना नाम और मोबाइल नंबर दर्ज करें।" : "Please enter Name and Phone.");
+    if (!location) return alert(currentLang === 'hi' ? "कृपया अपना पता या लोकेशन दर्ज करें।" : "Please provide your address/location.");
     if (items.length === 0) return alert(currentLang === 'hi' ? "कृपया + बटन दबाकर कम से कम एक सेवा चुनें।" : "Please add at least one service.");
 
     const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
@@ -572,7 +611,8 @@ function sendWhatsappQuote() {
     let msg = `⚡ *${biz.name} - Estimate Request* ⚡\n\n`;
     msg += `👤 *${currentLang === 'hi' ? 'नाम' : 'Name'}:* ${name}\n`;
     msg += `📞 *${currentLang === 'hi' ? 'फोन' : 'Phone'}:* ${phone}\n`;
-    if (note) msg += `📍 *${currentLang === 'hi' ? 'पता/नोट' : 'Address/Note'}:* ${note}\n`;
+    msg += `📍 *${currentLang === 'hi' ? 'पता / लोकेशन' : 'Location'}:* ${location}\n`;
+    if (note) msg += `📝 *${currentLang === 'hi' ? 'अतिरिक्त नोट' : 'Note'}:* ${note}\n`;
     msg += `\n📋 *${currentLang === 'hi' ? 'चुनी गई सेवाएँ' : 'Selected Services'}:*\n`;
 
     items.forEach((itm, i) => {
@@ -593,6 +633,7 @@ function downloadEstimatePDF() {
 
     const name = document.getElementById("customerName")?.value.trim() || "Customer";
     const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
+    const location = document.getElementById("customerLocation")?.value.trim() || "N/A";
     const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
     const items = Object.values(selectedItemsMap);
     const ctrl = window.MASTER_CONFIG?.controls;
@@ -619,8 +660,10 @@ function downloadEstimatePDF() {
 
     doc.setFontSize(9);
     doc.text(`Client: ${name}  |  Phone: ${phone}`, 14, 53);
-    doc.text(`Address / Note: ${note}`, 14, 59);
+    doc.text(`Location: ${location}`, 14, 59);
+    if (note !== "N/A") doc.text(`Note: ${note}`, 14, 65);
 
+    const startTableY = note !== "N/A" ? 71 : 65;
     const rows = items.map((itm, i) => [i + 1, itm.name_en, `Rs. ${itm.price}`, itm.qty, `Rs. ${itm.price * itm.qty}`]);
     const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
     const isDiscountActive = ctrl.showDiscount && (ctrl.discountPercent > 0);
@@ -628,7 +671,7 @@ function downloadEstimatePDF() {
     const total = subtotal - discount;
 
     doc.autoTable({
-        startY: 65,
+        startY: startTableY,
         head: [["#", "Service Item", "Rate", "Qty", "Total Amount"]],
         body: rows,
         theme: "grid",
