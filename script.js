@@ -780,6 +780,78 @@ function shareWebsite() {
     }
 }
 
+// =========================================================
+// 📱 PWA SHORTCUT ACTION HANDLER
+// Handles: Call / WhatsApp / Our Services
+// =========================================================
+function handlePWAShortcutAction() {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get("pwaAction");
+
+    if (!action) return;
+
+    const ctrl = window.MASTER_CONFIG?.controls?.pwaShortcuts || {};
+    const biz = window.MASTER_CONFIG?.business || {};
+
+    // -------------------------
+    // 📞 CALL ELECTRICIAN
+    // -------------------------
+    if (action === "call") {
+        if (ctrl.enabled === false || ctrl.call === false) return;
+
+        const phone = biz.phone || "+919026036445";
+
+        setTimeout(() => {
+            window.location.href = `tel:${phone}`;
+        }, 300);
+
+        return;
+    }
+
+    // -------------------------
+    // 💬 WHATSAPP
+    // -------------------------
+    if (action === "whatsapp") {
+        if (ctrl.enabled === false || ctrl.whatsapp === false) return;
+
+        const whatsappNumber = biz.whatsapp || "919026036445";
+
+        const message = currentLang === "hi"
+            ? `नमस्ते ${biz.name || "Sandeep ElectroFix"}, मुझे इलेक्ट्रिकल सर्विस की जानकारी चाहिए।`
+            : `Hello ${biz.name || "Sandeep ElectroFix"}, I need information about your electrical services.`;
+
+        setTimeout(() => {
+            window.location.href =
+                `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        }, 300);
+
+        return;
+    }
+
+    // -------------------------
+    // 🔧 OUR SERVICES
+    // -------------------------
+    if (action === "services") {
+        if (ctrl.enabled === false || ctrl.services === false) return;
+
+        setTimeout(() => {
+            const servicesSection = document.getElementById("servicesSection");
+
+            if (servicesSection) {
+                servicesSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            } else {
+                window.location.hash = "servicesSection";
+            }
+        }, 300);
+
+        return;
+    }
+}
+
+
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
     history.pushState({ page: "app" }, "");
@@ -806,4 +878,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     restoreCustomerInputs();
     setLanguage(currentLang);
+
+    handlePWAShortcutAction();
+   
 });
