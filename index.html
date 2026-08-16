@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=41.0">
+    <link rel="stylesheet" href="style.css?v=42.0">
     
     <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -30,7 +30,7 @@
               <button type="button" class="language-btn active" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
               <button type="button" class="language-btn" data-lang="en" onclick="setLanguage('en')">English</button>
             </div>
-            <!-- 🔄 TOP RESET BUTTON -->
+            <!-- 🔄 TOP PILL RESET BUTTON -->
             <button id="btnResetAll" class="reset-app-btn" type="button" onclick="resetAllToDefault()" title="डिफ़ॉल्ट सेटिंग्स पर रीसेट करें">
               <span>🔄</span> <span id="resetBtnText">रीसेट</span>
             </button>
@@ -209,11 +209,7 @@
               <textarea id="customerMessage" rows="2" placeholder="कार्य का अतिरिक्त विवरण (वैकल्पिक)..." oninput="saveCustomerInputs()"></textarea>
               
               <div id="estimateSummaryBox" class="estimate-summary-box">
-                  <div class="summary-heading" id="summaryHeader">
-                    <span>चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</span>
-                    <!-- 🔄 RESET CART BUTTON -->
-                    <button type="button" class="btn-clear-summary" onclick="resetAllToDefault()" title="सभी सेवाएं और डेटा रीसेट करें">🔄 रीसेट करें</button>
-                  </div>
+                  <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
                   <div id="selectedServicesList" class="selected-services-list">
                     <p class="no-selection-hint" id="noSelHint">अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।</p>
                   </div>
@@ -268,7 +264,7 @@
         <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">कॉल</small></a>
      </nav>
 
-     <script src="config.js?v=2.0"></script>
-     <script src="script.js?v=2.0"></script>
+     <script src="config.js?v=3.0"></script>
+     <script src="script.js?v=3.0"></script>
 </body>
 </html>
