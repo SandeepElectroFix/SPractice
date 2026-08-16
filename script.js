@@ -37,7 +37,7 @@ function restoreCustomerInputs() {
     } catch(e) {}
 }
 
-// 🔄 MASTER RESET TO DEFAULT FUNCTION
+// 🔄 MASTER RESET FUNCTION
 function resetAllToDefault() {
     const confirmMsg = currentLang === "hi" 
         ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?" 
@@ -45,7 +45,7 @@ function resetAllToDefault() {
         
     if (!confirm(confirmMsg)) return;
 
-    // 1. Clear LocalStorage
+    // 1. Clear Storage
     localStorage.removeItem("sandeepCart");
     localStorage.removeItem("sandeepCustomer");
     localStorage.removeItem("sandeepTheme");
@@ -53,10 +53,10 @@ function resetAllToDefault() {
     localStorage.removeItem("sandeepQuickLayout");
     localStorage.removeItem("sandeepServiceLayout");
 
-    // 2. Reset Internal Data
+    // 2. Reset Data
     selectedItemsMap = {};
 
-    // 3. Clear Input Fields
+    // 3. Clear Inputs
     if (document.getElementById("customerName")) document.getElementById("customerName").value = "";
     if (document.getElementById("customerPhone")) document.getElementById("customerPhone").value = "";
     if (document.getElementById("customerLocation")) document.getElementById("customerLocation").value = "";
@@ -67,17 +67,17 @@ function resetAllToDefault() {
     if (gpsBtn) gpsBtn.classList.remove("active-loc");
     if (gpsBtnText) gpsBtnText.innerText = "GPS";
 
-    // 4. Reset Theme to Dark Mode
+    // 4. Reset Theme
     document.documentElement.classList.remove("saved-light-theme");
 
     // 5. Reset Layouts
     applyQuickLayout("grid-2");
     applyServiceLayout("list");
 
-    // 6. Reset Language to Hindi
+    // 6. Reset Language
     setLanguage("hi");
 
-    // 7. Toast Alert
+    // 7. Toast Notification
     showExitToast(currentLang === "hi" ? "✅ सब कुछ रीसेट हो गया है" : "✅ Reset to default successfully");
 }
 
@@ -145,6 +145,7 @@ function applyVisibilityControls() {
     // Hero Elements
     toggle("themeToggle", ctrl.showThemeToggle);
     toggle("languageSwitcher", ctrl.showLanguageSwitcher);
+    toggle("btnResetAll", ctrl.showResetBtn !== false);
     toggle("businessLogo", ctrl.showLogo);
     toggle("businessTagline", ctrl.showTagline);
     toggle("businessLocation", ctrl.showHeroLocation);
@@ -264,6 +265,16 @@ function setLanguage(lang) {
     if (document.getElementById("customerPhone")) document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
     if (document.getElementById("customerLocation")) document.getElementById("customerLocation").placeholder = isHi ? "आपका पता / एरिया *" : "Your Address / Area *";
     if (document.getElementById("customerMessage")) document.getElementById("customerMessage").placeholder = isHi ? "कार्य का अतिरिक्त विवरण (वैकल्पिक)..." : "Additional work details (optional)...";
+    
+    // Clean Summary Heading without duplicate reset button
+    const count = Object.values(selectedItemsMap).reduce((acc, itm) => acc + itm.qty, 0);
+    const summaryHeader = document.getElementById("summaryHeader");
+    if (summaryHeader) {
+        summaryHeader.innerHTML = isHi 
+            ? `चुनी गई सेवाएँ (<span id="selectedCount">${count}</span>)` 
+            : `Selected Services (<span id="selectedCount">${count}</span>)`;
+    }
+
     document.getElementById("lblSubtotal").innerText = isHi ? "कुल राशि:" : "Subtotal:";
     document.getElementById("lblGrandTotal").innerText = isHi ? "अंतिम राशि:" : "Grand Total:";
     document.getElementById("discountLabel").innerText = isHi ? `विशेष छूट (${ctrl.discountPercent}% OFF):` : `Special Discount (${ctrl.discountPercent}% OFF):`;
