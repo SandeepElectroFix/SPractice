@@ -3,17 +3,7 @@
    Reads directly from window.MASTER_CONFIG
 ========================================================= */
 
-// 📱 Phone / System Preference Helpers
-function getSystemLanguage() {
-    const navLang = (navigator.language || navigator.userLanguage || "").toLowerCase();
-    return navLang.startsWith("en") ? "en" : "hi";
-}
-
-function getSystemTheme() {
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-}
-
-let currentLang = localStorage.getItem("sandeepLang") || getSystemLanguage();
+let currentLang = localStorage.getItem("sandeepLang") || "hi";
 let selectedItemsMap = {};
 let lastBackPressTime = 0;
 
@@ -47,19 +37,17 @@ function restoreCustomerInputs() {
     } catch(e) {}
 }
 
-// 🔄 MASTER RESET FUNCTION (Phone Settings ke Anusaar Reset)
+// 🔄 MASTER RESET FUNCTION (English + Light Mode)
 function resetAllToDefault() {
     const confirmMsg = currentLang === "hi" 
-        ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को फ़ोन की डिफ़ॉल्ट सेटिंग्स पर रीसेट करना चाहते हैं?" 
-        : "Are you sure you want to reset all selected services, inputs, and settings to phone default settings?";
+        ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को रीसेट करना चाहते हैं?" 
+        : "Are you sure you want to reset all selected services, inputs, and settings to default?";
         
     if (!confirm(confirmMsg)) return;
 
     // 1. Clear Storage
     localStorage.removeItem("sandeepCart");
     localStorage.removeItem("sandeepCustomer");
-    localStorage.removeItem("sandeepTheme");
-    localStorage.removeItem("sandeepLang");
     localStorage.removeItem("sandeepQuickLayout");
     localStorage.removeItem("sandeepServiceLayout");
 
@@ -77,24 +65,19 @@ function resetAllToDefault() {
     if (gpsBtn) gpsBtn.classList.remove("active-loc");
     if (gpsBtnText) gpsBtnText.innerText = "GPS";
 
-    // 4. Phone ke Theme ke Anusaar Theme Reset
-    const sysTheme = getSystemTheme();
-    if (sysTheme === "light") {
-        document.documentElement.classList.add("saved-light-theme");
-    } else {
-        document.documentElement.classList.remove("saved-light-theme");
-    }
+    // 4. Force Light Mode
+    document.documentElement.classList.add("saved-light-theme");
+    localStorage.setItem("sandeepTheme", "light");
 
     // 5. Reset Layouts
     applyQuickLayout("grid-2");
     applyServiceLayout("list");
 
-    // 6. Phone ke Language ke Anusaar Language Reset
-    const sysLang = getSystemLanguage();
-    setLanguage(sysLang);
+    // 6. Force Language to English
+    setLanguage("en");
 
     // 7. Toast Notification
-    showExitToast(currentLang === "hi" ? "✅ फ़ोन सेटिंग्स के अनुसार रीसेट हो गया" : "✅ Reset to phone defaults successfully");
+    showExitToast("✅ Reset to English & Light Mode successfully");
 }
 
 // 1-Click Live GPS Location Fetcher for Quote Form
@@ -282,7 +265,6 @@ function setLanguage(lang) {
     if (document.getElementById("customerLocation")) document.getElementById("customerLocation").placeholder = isHi ? "आपका पता / एरिया *" : "Your Address / Area *";
     if (document.getElementById("customerMessage")) document.getElementById("customerMessage").placeholder = isHi ? "कार्य का अतिरिक्त विवरण (वैकल्पिक)..." : "Additional work details (optional)...";
     
-    // Clean Summary Heading without duplicate reset button
     const count = Object.values(selectedItemsMap).reduce((acc, itm) => acc + itm.qty, 0);
     const summaryHeader = document.getElementById("summaryHeader");
     if (summaryHeader) {
@@ -802,9 +784,8 @@ function shareWebsite() {
 document.addEventListener("DOMContentLoaded", () => {
     history.pushState({ page: "app" }, "");
 
-    // 📱 Initial Theme check: Storage ya Phone Preferences
     const savedTheme = localStorage.getItem("sandeepTheme");
-    if (savedTheme === "light" || (!savedTheme && getSystemTheme() === "light")) {
+    if (savedTheme === "light") {
         document.documentElement.classList.add("saved-light-theme");
     } else {
         document.documentElement.classList.remove("saved-light-theme");
