@@ -38,6 +38,7 @@ function restoreCustomerInputs() {
 // Show/Hide Elements based on MASTER_CONFIG
 function applyVisibilityControls() {
     const ctrl = window.MASTER_CONFIG?.controls;
+    const biz = window.MASTER_CONFIG?.business;
     if (!ctrl) return;
 
     const toggle = (id, show) => {
@@ -49,6 +50,7 @@ function applyVisibilityControls() {
     toggle("heroSection", ctrl.showHero);
     toggle("discountSection", ctrl.showDiscount);
     toggle("quickAccessBar", ctrl.showQuickAccess);
+    toggle("socialSection", ctrl.showSocialLinks);
     toggle("aboutSection", ctrl.showAbout);
     toggle("locationSection", ctrl.showLocation);
     toggle("servicesSection", ctrl.showServices);
@@ -72,11 +74,26 @@ function applyVisibilityControls() {
     // Quick Access Buttons
     toggle("btnQuickCall", ctrl.showQuickCall);
     toggle("btnQuickWhatsapp", ctrl.showQuickWhatsapp);
+    toggle("btnQuickEmail", ctrl.showQuickEmail);
     toggle("btnQuickWebsite", ctrl.showQuickWebsite);
     toggle("btnQuickMaps", ctrl.showQuickMaps);
+    toggle("btnQuickSaveContact", ctrl.showQuickSaveContact);
     toggle("btnQuickShare", ctrl.showQuickShare);
     toggle("btnQuickWork", ctrl.showQuickWork);
     toggle("btnQuickCatalogue", ctrl.showQuickCatalogue);
+
+    // Social Buttons
+    toggle("btnFacebook", ctrl.showFacebook);
+    toggle("btnInstagram", ctrl.showInstagram);
+    toggle("btnYoutube", ctrl.showYoutube);
+
+    // Sync URLs with Config
+    if (biz) {
+        if (document.getElementById("btnFacebook")) document.getElementById("btnFacebook").href = biz.facebook;
+        if (document.getElementById("btnInstagram")) document.getElementById("btnInstagram").href = biz.instagram;
+        if (document.getElementById("btnYoutube")) document.getElementById("btnYoutube").href = biz.youtube;
+        if (document.getElementById("btnQuickEmail")) document.getElementById("btnQuickEmail").href = `mailto:${biz.email}`;
+    }
 
     // Quote Buttons
     toggle("sendWhatsappBtn", ctrl.showQuoteWhatsappBtn);
@@ -129,11 +146,14 @@ function setLanguage(lang) {
     document.getElementById("quickHeading").innerText = isHi ? "त्वरित सेवाएँ" : "Quick Access";
     document.getElementById("labelCall").innerText = isHi ? "कॉल करें" : "Call";
     document.getElementById("labelWhatsapp").innerText = isHi ? "व्हाट्सएप" : "WhatsApp";
+    document.getElementById("labelEmail").innerText = isHi ? "ईमेल" : "Email";
     document.getElementById("labelWeb").innerText = isHi ? "वेबसाइट" : "Website";
     document.getElementById("labelMap").innerText = isHi ? "गूगल मैप्स" : "Google Maps";
+    document.getElementById("labelSaveContact").innerText = isHi ? "नंबर सेव करें" : "Save Contact";
     document.getElementById("labelShare").innerText = isHi ? "शेयर करें" : "Share";
     document.getElementById("labelWork").innerText = isHi ? "हमारे कार्य" : "Our Work";
     document.getElementById("labelCatalogue").innerText = isHi ? "सामग्री सूची" : "Catalogue";
+    document.getElementById("socialHeading").innerText = isHi ? "हमसे सोशल मीडिया पर जुड़ें" : "Connect on Social Media";
 
     // About
     document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
@@ -214,7 +234,6 @@ function renderServices() {
     });
 }
 
-// ⚡ 1. Floating Service Modal Open
 function openServiceModal(sIdx) {
     const service = window.MASTER_CONFIG.services[sIdx];
     const title = currentLang === "hi" ? service.title_hi : service.title_en;
@@ -251,7 +270,6 @@ function openServiceModal(sIdx) {
     setTimeout(() => overlay.classList.add("active"), 10);
     document.body.style.overflow = "hidden";
 
-    // Push history for back button trapping
     history.pushState({ isModalOpen: true }, "");
 }
 
@@ -266,7 +284,6 @@ function changeQtyModal(sIdx, subIdx, change) {
     if (mRow) mRow.classList.toggle("has-qty", currentQty > 0);
 }
 
-// ⚡ 2. Floating Service Modal Close
 function closeServiceModal(isFromHistory = false) {
     const overlay = document.getElementById("serviceModalOverlay");
     if (overlay && overlay.style.display === "flex") {
@@ -283,7 +300,6 @@ function closeServiceModal(isFromHistory = false) {
     }
 }
 
-// ⚡ 3. Gallery Lightbox Open & Close with History
 function openLightboxModal(src) {
     const box = document.getElementById("lightbox");
     const img = document.getElementById("lightboxImage");
@@ -304,7 +320,6 @@ function closeLightboxModal(isFromHistory = false) {
     }
 }
 
-// ⚡ 4. App Exit Toast Message
 function showExitToast(msg) {
     let toast = document.getElementById("appExitToast");
     if (!toast) {
@@ -337,7 +352,6 @@ function showExitToast(msg) {
     }, 2000);
 }
 
-// ⚡ 5. Master Back Button Handler
 window.addEventListener("popstate", () => {
     const lightbox = document.getElementById("lightbox");
     const isLightboxOpen = lightbox && lightbox.style.display === "flex";
@@ -388,7 +402,6 @@ function changeQty(sIdx, subIdx, change) {
     updateCalculations();
 }
 
-// ⚡ DIRECT EDIT FROM ESTIMATE SUMMARY BOX (+ / − / 🗑️)
 function changeQtyDirect(key, change) {
     if (!selectedItemsMap[key]) return;
     const parts = key.split('_');
@@ -407,7 +420,6 @@ function removeItemDirect(key) {
     renderServices();
 }
 
-// ⚡ SUMMARY BOX RENDERER WITH INLINE CONTROLS
 function updateCalculations() {
     const entries = Object.entries(selectedItemsMap);
     const countEl = document.getElementById("selectedCount");
@@ -513,6 +525,32 @@ function applyServiceLayout(layout) {
         b.classList.toggle("active", b.getAttribute("data-sl") === layout);
     });
     localStorage.setItem("sandeepServiceLayout", layout);
+}
+
+// ⚡ Save Contact vCard (.vcf) Generator
+function saveContactVCard() {
+    const biz = window.MASTER_CONFIG?.business;
+    if (!biz) return;
+
+    const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:${biz.name} (${biz.owner})
+ORG:${biz.name}
+TEL;TYPE=CELL,VOICE:${biz.phone}
+EMAIL:${biz.email}
+URL:${biz.website}
+ADR;TYPE=WORK:;;${biz.location_en};;;;
+END:VCARD`;
+
+    const blob = new Blob([vCardData], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${biz.name.replace(/\s+/g, "_")}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
 function sendWhatsappQuote() {
