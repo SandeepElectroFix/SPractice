@@ -191,29 +191,38 @@
         <h2 id="quoteHeading">कोटेशन व अनुमानित खर्च</h2>
         <div class="quote-card card" style="padding:16px;">
           <div class="quote-form">
-              <input type="text" id="customerName" placeholder="आपका नाम *" oninput="saveCustomerInputs()">
-              <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *" oninput="saveCustomerInputs()">
-              <textarea id="customerMessage" rows="2" placeholder="पता / कार्य का विवरण..." oninput="saveCustomerInputs()"></textarea>
-              
-              <div id="estimateSummaryBox" class="estimate-summary-box">
-                  <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
-                  <div id="selectedServicesList" class="selected-services-list">
-                    <p class="no-selection-hint" id="noSelHint">अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।</p>
-                  </div>
+    <input type="text" id="customerName" placeholder="आपका नाम *" oninput="saveCustomerInputs()">
+    <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *" oninput="saveCustomerInputs()">
+    
+    <!-- लोकेशन इनपुट + ऑटो GPS बटन -->
+    <div class="quote-location-wrapper">
+        <input type="text" id="customerLocation" placeholder="आपका पता / एरिया *" oninput="saveCustomerInputs()">
+        <button type="button" class="btn-gps-detect" id="btnGpsDetect" onclick="getQuoteLiveLocation()" title="करेंट लोकेशन प्राप्त करें">
+            <span id="gpsBtnIcon">📍</span> <span id="gpsBtnText">GPS</span>
+        </button>
+    </div>
 
-                  <div class="calc-row"><span id="lblSubtotal">कुल राशि:</span> <strong id="calcSubtotal">₹0</strong></div>
-                  <div class="calc-row discount-row" id="calcDiscountRow" style="display:none;">
-                    <span id="discountLabel">विशेष छूट:</span> <strong id="calcDiscount">-₹0</strong>
-                  </div>
-                  <div class="calc-row total-row"><span id="lblGrandTotal">अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
-              </div>
-
-              <div class="quote-action-buttons">
-                <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
-                <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
-              </div>
-          </div>
+    <textarea id="customerMessage" rows="2" placeholder="कार्य का अतिरिक्त विवरण (वैकल्पिक)..." oninput="saveCustomerInputs()"></textarea>
+    
+    <div id="estimateSummaryBox" class="estimate-summary-box">
+        <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
+        <div id="selectedServicesList" class="selected-services-list">
+          <p class="no-selection-hint" id="noSelHint">अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।</p>
         </div>
+
+        <div class="calc-row"><span id="lblSubtotal">कुल राशि:</span> <strong id="calcSubtotal">₹0</strong></div>
+        <div class="calc-row discount-row" id="calcDiscountRow" style="display:none;">
+          <span id="discountLabel">विशेष छूट:</span> <strong id="calcDiscount">-₹0</strong>
+        </div>
+        <div class="calc-row total-row"><span id="lblGrandTotal">अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
+    </div>
+
+    <div class="quote-action-buttons">
+      <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
+      <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
+    </div>
+</div>
+
      </section>
 
      <!-- FAQ -->
