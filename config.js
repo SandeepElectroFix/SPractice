@@ -14,7 +14,7 @@ window.MASTER_CONFIG = {
         showAbout: true,
         showLocation: true,
         showServices: true,
-        showGallery: true,
+        showGallery: false,
         showQR: true,
         showReviews: false,
         showQuoteForm: true,
