@@ -990,50 +990,69 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
 .bottom-nav-item span { font-size: 1.1rem; }
 
 /* =========================================
-   🖥️ DESKTOP & TABLET ADAPTIVE QUERIES
-   (Bigger screen me full width grid layout)
+   🖥️ DESKTOP / TABLET FULL WIDTH ENGINE
 ========================================= */
-
-@media (min-width: 768px) {
-  /* Expand Container Widths */
-  section, .hero, .discount-section {
-    width: min(100% - 48px, 1050px) !important;
-    max-width: 1050px !important;
+@media screen and (min-width: 768px) {
+  /* 1. Containers ko 1100px tak failayein */
+  .hero,
+  section,
+  .discount-section,
+  .location-box,
+  .about,
+  .qr-section,
+  .quote-section {
+    width: 92% !important;
+    max-width: 1100px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
-  body { padding-bottom: 30px; }
-  .mobile-bottom-nav { display: none; }
-
-  /* Quick Actions 4 Columns on Desktop */
-  #quickGridContainer.layout-grid-2 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 14px !important;
+  body {
+    padding-bottom: 40px !important;
   }
 
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  /* 2. Quick Access Buttons 4 Columns me */
+  #quickGridContainer.layout-grid-2,
   #quickGridContainer.layout-grid-3 {
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
   }
 
-  /* Services 3 & 4 Columns on Desktop */
-  #serviceContainer.layout-grid-2 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 14px !important;
+  #quickGridContainer .card {
+    min-height: 110px !important;
+    padding: 16px 12px !important;
   }
 
+  /* 3. Services Grid Desktop me 3 ya 4 Columns */
+  #serviceContainer.layout-grid-2,
   #serviceContainer.layout-grid-3 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 12px !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
   }
 
-  /* Gallery 4 Columns on Desktop */
-  .gallery-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  #serviceContainer.layout-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 14px !important;
   }
-  .gallery-grid img { height: 180px !important; }
 
-  /* Quote Form Two Column Layout */
+  /* 4. Gallery 4 Columns */
+  .gallery-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .gallery-grid img {
+    height: 180px !important;
+  }
+
+  /* 5. Quotation Form Side-by-Side */
   .quote-form {
     display: grid !important;
     grid-template-columns: 1fr 1.2fr !important;
@@ -1041,7 +1060,8 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
     align-items: start !important;
   }
 
-  .quote-form > input, .quote-form > textarea {
+  .quote-form > input,
+  .quote-form > textarea {
     grid-column: 1 / 2 !important;
   }
 
@@ -1053,19 +1073,23 @@ footer { padding: 20px 15px 90px; text-align: center; color: var(--muted); font-
 
   .quote-action-buttons {
     grid-column: 1 / 3 !important;
+    display: flex !important;
     flex-direction: row !important;
+    gap: 14px !important;
   }
+
   .quote-action-buttons .btn {
     flex: 1 !important;
   }
 
-  /* Modal Centered on Desktop */
+  /* 6. Service Popup Center me */
   .service-modal-overlay {
     align-items: center !important;
   }
+
   .service-modal-content {
-    border-radius: 20px !important;
+    border-radius: 24px !important;
     max-height: 75vh !important;
-    max-width: 580px !important;
+    max-width: 600px !important;
   }
 }
