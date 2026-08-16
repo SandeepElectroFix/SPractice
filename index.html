@@ -30,7 +30,6 @@
               <button type="button" class="language-btn active" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
               <button type="button" class="language-btn" data-lang="en" onclick="setLanguage('en')">English</button>
             </div>
-            <!-- 🔄 TOP PILL RESET BUTTON -->
             <button id="btnResetAll" class="reset-app-btn" type="button" onclick="resetAllToDefault()" title="डिफ़ॉल्ट सेटिंग्स पर रीसेट करें">
               <span>🔄</span> <span id="resetBtnText">रीसेट</span>
             </button>
@@ -62,7 +61,7 @@
             <div class="discount-percent"><span id="discountPercentage">10</span>% OFF</div>
             <p id="discountMessage"></p>
             <div class="discount-validity" id="discountValidity">⏳ सीमित समय के लिए</div>
-            <a href="#quoteFormSection" class="discount-btn" id="discountBtnText">⚡ छूट प्राप्त करें</a>
+            <a href="#servicesSection" class="discount-btn" id="discountBtnText">⚡ छूट प्राप्त करें</a>
         </div>
      </section> 
 
@@ -198,7 +197,6 @@
               <input type="text" id="customerName" placeholder="आपका नाम *" oninput="saveCustomerInputs()">
               <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *" oninput="saveCustomerInputs()">
               
-              <!-- लोकेशन इनपुट + ऑटो GPS बटन -->
               <div class="quote-location-wrapper">
                   <input type="text" id="customerLocation" placeholder="आपका पता / एरिया *" oninput="saveCustomerInputs()">
                   <button type="button" class="btn-gps-detect" id="btnGpsDetect" onclick="getQuoteLiveLocation()" title="करेंट लोकेशन प्राप्त करें">
