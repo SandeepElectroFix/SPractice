@@ -25,7 +25,7 @@ window.MASTER_CONFIG = {
     // 📱 PWA SHORTCUTS - INDIVIDUAL SHOW / HIDE
     pwaShortcuts: {
         enabled: true,
-        call: true,
+        call: false,
         whatsapp: true,
         services: true
     },
