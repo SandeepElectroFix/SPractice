@@ -8,13 +8,11 @@
   "background_color": "#050816",
   "theme_color": "#0ea5e9",
   "orientation": "portrait-primary",
-
   "categories": [
     "business",
     "utilities",
     "lifestyle"
   ],
-
   "icons": [
     {
       "src": "assets/pwa-icon-192.png",
@@ -29,7 +27,6 @@
       "purpose": "any maskable"
     }
   ],
-
   "shortcuts": [
     {
       "name": "Call Electrician",
@@ -44,7 +41,6 @@
         }
       ]
     },
-
     {
       "name": "Book on WhatsApp",
       "short_name": "WhatsApp",
@@ -58,7 +54,6 @@
         }
       ]
     },
-
     {
       "name": "Our Services",
       "short_name": "Services",
