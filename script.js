@@ -5,6 +5,7 @@
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
 let selectedItemsMap = {};
+let lastBackPressTime = 0;
 
 // Load Cart Persistence
 try {
@@ -213,6 +214,7 @@ function renderServices() {
     });
 }
 
+// ⚡ 1. Floating Service Modal Open
 function openServiceModal(sIdx) {
     const service = window.MASTER_CONFIG.services[sIdx];
     const title = currentLang === "hi" ? service.title_hi : service.title_en;
@@ -249,7 +251,7 @@ function openServiceModal(sIdx) {
     setTimeout(() => overlay.classList.add("active"), 10);
     document.body.style.overflow = "hidden";
 
-    // ⚡ Back button support: Push temporary state to browser history
+    // Push history for single-back interception
     history.pushState({ isModalOpen: true }, "");
 }
 
@@ -264,9 +266,10 @@ function changeQtyModal(sIdx, subIdx, change) {
     if (mRow) mRow.classList.toggle("has-qty", currentQty > 0);
 }
 
-function closeServiceModal(isFromHistoryBack = false) {
+// ⚡ 2. Floating Service Modal Close
+function closeServiceModal(isFromHistory = false) {
     const overlay = document.getElementById("serviceModalOverlay");
-    if (overlay && overlay.classList.contains("active")) {
+    if (overlay && overlay.style.display === "flex") {
         overlay.classList.remove("active");
         setTimeout(() => {
             overlay.style.display = "none";
@@ -274,18 +277,98 @@ function closeServiceModal(isFromHistoryBack = false) {
             renderServices();
         }, 300);
 
-        // Agar user ne 'X' ya bahar click karke close kiya hai, toh history clear karein
-        if (!isFromHistoryBack && history.state && history.state.isModalOpen) {
+        if (!isFromHistory && history.state && history.state.isModalOpen) {
             history.back();
         }
     }
 }
 
-// ⚡ Hardware / Mobile Browser Back Button Event Listener
+// ⚡ 3. Gallery Lightbox Open & Close with History
+function openLightboxModal(src) {
+    const box = document.getElementById("lightbox");
+    const img = document.getElementById("lightboxImage");
+    if (box && img) {
+        img.src = src;
+        box.style.display = "flex";
+        history.pushState({ isLightboxOpen: true }, "");
+    }
+}
+
+function closeLightboxModal(isFromHistory = false) {
+    const box = document.getElementById("lightbox");
+    if (box && box.style.display === "flex") {
+        box.style.display = "none";
+        if (!isFromHistory && history.state && history.state.isLightboxOpen) {
+            history.back();
+        }
+    }
+}
+
+// ⚡ 4. App Exit Toast Message
+function showExitToast(msg) {
+    let toast = document.getElementById("appExitToast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "appExitToast";
+        toast.style.position = "fixed";
+        toast.style.bottom = "85px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.background = "rgba(5, 8, 22, 0.95)";
+        toast.style.color = "#f5c542";
+        toast.style.padding = "10px 22px";
+        toast.style.borderRadius = "30px";
+        toast.style.fontSize = "13px";
+        toast.style.fontWeight = "600";
+        toast.style.zIndex = "9999999";
+        toast.style.boxShadow = "0 8px 30px rgba(0,0,0,0.7)";
+        toast.style.border = "1px solid rgba(245, 197, 66, 0.5)";
+        toast.style.transition = "opacity 0.3s ease";
+        toast.style.pointerEvents = "none";
+        document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = "1";
+    toast.style.display = "block";
+    clearTimeout(window.exitToastTimer);
+    window.exitToastTimer = setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => { toast.style.display = "none"; }, 300);
+    }, 2000);
+}
+
+// ⚡ 5. Master Back Button Handler (Modal -> Lightbox -> Double Tap to Exit)
 window.addEventListener("popstate", () => {
-    const overlay = document.getElementById("serviceModalOverlay");
-    if (overlay && overlay.classList.contains("active")) {
+    const lightbox = document.getElementById("lightbox");
+    const isLightboxOpen = lightbox && lightbox.style.display === "flex";
+
+    const modalOverlay = document.getElementById("serviceModalOverlay");
+    const isModalOpen = modalOverlay && (modalOverlay.classList.contains("active") || modalOverlay.style.display === "flex");
+
+    // 1st Priority: Close Lightbox
+    if (isLightboxOpen) {
+        closeLightboxModal(true);
+        return;
+    }
+
+    // 2nd Priority: Close Service Floating Modal
+    if (isModalOpen) {
         closeServiceModal(true);
+        return;
+    }
+
+    // 3rd Priority: Double Back Press to Exit App
+    const currentTime = Date.now();
+    if (currentTime - lastBackPressTime < 2000) {
+        // Double press verified: exit allowed
+        history.back();
+    } else {
+        lastBackPressTime = currentTime;
+        history.pushState({ page: "app" }, "");
+        const msg = currentLang === "hi" 
+            ? "ऐप बंद करने के लिए दोबारा Back दबाएं" 
+            : "Press Back again to exit app";
+        showExitToast(msg);
     }
 });
 
@@ -362,20 +445,6 @@ function renderGallery() {
             </div>
         `;
     }).join("");
-}
-
-function openLightboxModal(src) {
-    const box = document.getElementById("lightbox");
-    const img = document.getElementById("lightboxImage");
-    if (box && img) {
-        img.src = src;
-        box.style.display = "flex";
-    }
-}
-
-function closeLightboxModal() {
-    const box = document.getElementById("lightbox");
-    if (box) box.style.display = "none";
 }
 
 function renderReviews() {
@@ -549,6 +618,9 @@ function shareWebsite() {
 
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
+    // Initialize root state for back button trapping
+    history.pushState({ page: "app" }, "");
+
     const savedTheme = localStorage.getItem("sandeepTheme");
     if (savedTheme === "light") document.documentElement.classList.add("saved-light-theme");
 
