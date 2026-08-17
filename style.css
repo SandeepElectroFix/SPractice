@@ -1019,16 +1019,73 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
 }
 
 /* =========================================================
-   LIGHT THEME SIDE MENU
+   LIGHT MODE - HAMBURGER MENU TEXT FIX
 ========================================================= */
 
 html.saved-light-theme .app-side-menu {
-    background: rgba(255, 255, 255, 0.94) !important;
+    color: #101827 !important;
+}
 
-    border-left: 2px solid rgba(0, 114, 255, 0.25);
+/* Main menu items */
+html.saved-light-theme .app-menu-item {
+    color: #101827 !important;
+}
 
-    box-shadow:
-        -10px 0 35px rgba(15, 23, 42, 0.15);
+/* Settings items */
+html.saved-light-theme .app-setting-item {
+    color: #101827 !important;
+}
+
+/* Menu header brand */
+html.saved-light-theme #appMenuBrandName,
+html.saved-light-theme .app-menu-brand strong {
+    color: #b8860b !important;
+}
+
+/* Location / subtitle */
+html.saved-light-theme #appMenuBrandLocation,
+html.saved-light-theme .app-menu-brand small {
+    color: #5f6b7a !important;
+}
+
+/* Settings heading */
+html.saved-light-theme .app-settings-title,
+html.saved-light-theme .app-settings-heading {
+    color: #b8860b !important;
+}
+
+/* Icons */
+html.saved-light-theme .app-menu-icon,
+html.saved-light-theme .menu-item-icon,
+html.saved-light-theme .app-setting-icon,
+html.saved-light-theme .setting-icon {
+    color: #101827 !important;
+}
+
+/* Arrows */
+html.saved-light-theme .menu-arrow,
+html.saved-light-theme .app-setting-arrow {
+    color: #b8860b !important;
+}
+
+/* Close button */
+html.saved-light-theme .app-menu-close,
+html.saved-light-theme .app-close-btn {
+    color: #b8860b !important;
+    background: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Reset item */
+html.saved-light-theme .app-reset-item {
+    color: #dc2626 !important;
+}
+
+/* Hover */
+html.saved-light-theme .app-menu-item:hover,
+html.saved-light-theme .app-menu-item:active,
+html.saved-light-theme .app-setting-item:hover,
+html.saved-light-theme .app-setting-item:active {
+    background: rgba(15, 23, 42, 0.06) !important;
 }
 
 /* MENU HEADER */
