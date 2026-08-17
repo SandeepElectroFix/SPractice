@@ -27,9 +27,9 @@ window.MASTER_CONFIG = {
             services: true
         },
 
-        showThemeToggle: true,
-        showLanguageSwitcher: true,
-        showResetBtn: true,
+        showThemeToggle: false,
+        showLanguageSwitcher: false,
+        showResetBtn: false,
         showLogo: true,
         showTagline: true,
         showHeroLocation: true,
