@@ -19,7 +19,223 @@
 </head>
 <body id="top">
      <div class="background-glow"></div>
-     
+     <!-- =========================================================
+     PROJECT 2.1 - PREMIUM NAVBAR
+========================================================= -->
+<nav class="main-navbar" id="mainNavbar">
+
+    <div class="navbar-inner">
+
+        <!-- LOGO + BRAND -->
+        <a href="#top" class="navbar-brand" aria-label="Sandeep ElectroFix Home">
+
+            <div class="navbar-logo">
+                <img src="assets/logo.png"
+                     alt="Sandeep ElectroFix Logo">
+            </div>
+
+            <div class="navbar-brand-text">
+                <span class="brand-sandeep">SANDEEP</span>
+                <span class="brand-electrofix">ELECTROFIX</span>
+            </div>
+
+        </a>
+
+
+        <!-- HAMBURGER -->
+        <button
+            type="button"
+            class="navbar-menu-btn"
+            id="navbarMenuBtn"
+            aria-label="Open Menu"
+            aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         HAMBURGER SIDE MENU
+    ====================================================== -->
+    <div class="navbar-overlay" id="navbarOverlay"></div>
+
+    <aside class="side-menu" id="sideMenu">
+
+        <!-- MENU HEADER -->
+        <div class="side-menu-header">
+
+            <div class="side-menu-brand">
+
+                <img src="assets/logo.png"
+                     alt="Sandeep ElectroFix Logo">
+
+                <div>
+                    <strong>SANDEEP</strong>
+                    <span>ELECTROFIX</span>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="side-menu-close"
+                id="sideMenuClose"
+                aria-label="Close Menu">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- MAIN MENU -->
+        <div class="side-menu-content">
+
+            <div class="menu-group">
+
+                <a href="#top" class="menu-item">
+                    <span class="menu-icon">🏠</span>
+                    <span>Home</span>
+                </a>
+
+                <a href="#aboutSection" class="menu-item">
+                    <span class="menu-icon">👤</span>
+                    <span>About Us</span>
+                </a>
+
+                <a href="#socialSection" class="menu-item">
+                    <span class="menu-icon">📱</span>
+                    <span>Social Media</span>
+                </a>
+
+                <a href="#locationSection" class="menu-item">
+                    <span class="menu-icon">📍</span>
+                    <span>Service Location</span>
+                </a>
+
+                <a href="#servicesSection" class="menu-item">
+                    <span class="menu-icon">⚡</span>
+                    <span>Our Services</span>
+                </a>
+
+                <a href="#gallerySection" class="menu-item">
+                    <span class="menu-icon">🖼️</span>
+                    <span>Our Work</span>
+                </a>
+
+                <a href="#reviewsSection" class="menu-item">
+                    <span class="menu-icon">⭐</span>
+                    <span>Customer Reviews</span>
+                </a>
+
+                <a href="#quoteFormSection" class="menu-item">
+                    <span class="menu-icon">💰</span>
+                    <span>Estimate &amp; Quotation</span>
+                </a>
+
+                <a href="#faqSection" class="menu-item">
+                    <span class="menu-icon">❓</span>
+                    <span>FAQ</span>
+                </a>
+
+                <a href="#cardQRContainer" class="menu-item">
+                    <span class="menu-icon">📱</span>
+                    <span>QR Code</span>
+                </a>
+
+            </div>
+
+
+            <!-- APP SETTINGS -->
+            <div class="menu-settings">
+
+                <div class="menu-settings-title">
+                    ⚙️ APP SETTINGS
+                </div>
+
+
+                <!-- INSTALL -->
+                <button
+                    type="button"
+                    class="menu-item menu-action"
+                    id="menuInstallApp">
+
+                    <span class="menu-icon">📲</span>
+                    <span>Install App</span>
+
+                </button>
+
+
+                <!-- THEME -->
+                <button
+                    type="button"
+                    class="menu-item menu-action"
+                    id="menuThemeToggle">
+
+                    <span class="menu-icon" id="menuThemeIcon">🌙</span>
+
+                    <span id="menuThemeText">
+                        Dark / Light Mode
+                    </span>
+
+                </button>
+
+
+                <!-- LANGUAGE -->
+                <div class="menu-language">
+
+                    <div class="menu-language-title">
+                        🌐 Language
+                    </div>
+
+                    <div class="menu-language-buttons">
+
+                        <button
+                            type="button"
+                            class="menu-lang-btn active"
+                            data-menu-lang="hi"
+                            onclick="setLanguage('hi')">
+                            हिंदी
+                        </button>
+
+                        <button
+                            type="button"
+                            class="menu-lang-btn"
+                            data-menu-lang="en"
+                            onclick="setLanguage('en')">
+                            English
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESET -->
+                <button
+                    type="button"
+                    class="menu-item menu-action reset-menu-btn"
+                    id="menuResetApp">
+
+                    <span class="menu-icon">🔄</span>
+
+                    <span>
+                        Reset App
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+</nav>
      <!-- HERO SECTION -->
      <header class="hero" id="heroSection">
           <div class="top-controls-bar">
