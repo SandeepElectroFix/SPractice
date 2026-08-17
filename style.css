@@ -979,36 +979,33 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
 /* =========================================================
    PREMIUM HAMBURGER SIDE MENU
 ========================================================= */
+/* =========================================================
+   HAMBURGER SIDE MENU - CLEAR PREMIUM GLASS
+========================================================= */
 
 .app-side-menu {
     position: fixed;
     top: 0;
     right: 0;
+
     width: min(88vw, 360px);
     height: 100dvh;
 
-    /* PREMIUM GLASS BACKGROUND */
-    background:
-        linear-gradient(
-            180deg,
-            rgba(11, 18, 36, 0.96) 0%,
-            rgba(5, 8, 22, 0.94) 100%
-        );
+    background: rgba(15, 23, 42, 0.88) !important;
 
-    border-left: 1px solid rgba(245, 197, 66, 0.30);
+    border-left: 2px solid rgba(0, 191, 255, 0.45);
 
     box-shadow:
-        -10px 0 40px rgba(0, 0, 0, 0.55),
-        inset 1px 0 0 rgba(255, 255, 255, 0.04);
+        -10px 0 40px rgba(0, 0, 0, 0.45),
+        inset 1px 0 0 rgba(0, 191, 255, 0.12);
 
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
 
     z-index: 99992;
 
     transform: translateX(105%);
-    transition:
-        transform .3s cubic-bezier(.4, 0, .2, 1);
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
 
     display: flex;
     flex-direction: column;
@@ -1017,7 +1014,6 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
     overscroll-behavior: contain;
 }
 
-/* OPEN */
 .app-side-menu.active {
     transform: translateX(0);
 }
@@ -1027,18 +1023,12 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
 ========================================================= */
 
 html.saved-light-theme .app-side-menu {
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.97) 0%,
-            rgba(244, 247, 251, 0.97) 100%
-        );
+    background: rgba(255, 255, 255, 0.94) !important;
 
-    border-left-color: rgba(15, 23, 42, 0.12);
+    border-left: 2px solid rgba(0, 114, 255, 0.25);
 
     box-shadow:
-        -10px 0 35px rgba(15, 23, 42, 0.16),
-        inset 1px 0 0 rgba(255, 255, 255, 0.8);
+        -10px 0 35px rgba(15, 23, 42, 0.15);
 }
 
 /* MENU HEADER */
