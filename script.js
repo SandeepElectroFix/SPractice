@@ -179,7 +179,1525 @@ function applyVisibilityControls() {
     toggle("sendWhatsappBtn", ctrl.showQuoteWhatsappBtn);
     toggle("downloadPdfBtn", ctrl.showQuotePdfBtn);
 }
+/* =========================================================
+   📱 PROJECT 2.1 - PREMIUM NAVBAR SYSTEM
+   Logo + Brand Name + Hamburger Menu + App Settings
+========================================================= */
 
+function initializeProjectNavbar() {
+
+    // Prevent duplicate navbar
+    if (document.getElementById("project21Navbar")) return;
+
+    const cfg = window.MASTER_CONFIG || {};
+    const biz = cfg.business || {};
+    const ctrl = cfg.controls || {};
+
+    /* ---------------------------------------------------------
+       NAVBAR HTML
+    --------------------------------------------------------- */
+
+    const navbar = document.createElement("header");
+    navbar.id = "project21Navbar";
+    navbar.className = "project21-navbar";
+
+    navbar.innerHTML = `
+        <div class="project21-nav-inner">
+
+            <!-- LEFT: LOGO + BRAND -->
+            <a href="#heroSection"
+               class="project21-brand"
+               onclick="closeProjectNavbarMenu()">
+
+                <div class="project21-logo-wrap">
+                    <img
+                        id="project21NavLogo"
+                        src="${biz.logo || 'assets/logo.png'}"
+                        alt="${biz.name || 'Sandeep ElectroFix'}"
+                        onerror="this.style.display='none'"
+                    >
+                </div>
+
+                <div class="project21-brand-text">
+                    <span id="project21BrandName">
+                        ${biz.name || "Sandeep ElectroFix"}
+                    </span>
+                    <small id="project21BrandTagline">
+                        ${currentLang === "hi"
+                            ? (biz.tagline_hi || "")
+                            : (biz.tagline_en || "")}
+                    </small>
+                </div>
+
+            </a>
+
+
+            <!-- RIGHT: HAMBURGER -->
+            <button
+                type="button"
+                id="project21MenuBtn"
+                class="project21-menu-btn"
+                aria-label="Open Menu"
+                aria-expanded="false">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+        </div>
+
+
+        <!-- =====================================================
+             HAMBURGER PANEL
+        ====================================================== -->
+
+        <div id="project21MenuOverlay"
+             class="project21-menu-overlay"
+             onclick="closeProjectNavbarMenu()">
+        </div>
+
+
+        <aside id="project21SideMenu"
+               class="project21-side-menu"
+               aria-hidden="true">
+
+            <!-- MENU HEADER -->
+            <div class="project21-menu-header">
+
+                <div class="project21-menu-brand">
+
+                    <img
+                        src="${biz.logo || 'assets/logo.png'}"
+                        alt="${biz.name || 'Sandeep ElectroFix'}"
+                        onerror="this.style.display='none'"
+                    >
+
+                    <div>
+                        <strong id="project21MenuBrandName">
+                            ${biz.name || "Sandeep ElectroFix"}
+                        </strong>
+
+                        <small id="project21MenuBrandLocation">
+                            📍 ${
+                                currentLang === "hi"
+                                ? (biz.location_hi || "")
+                                : (biz.location_en || "")
+                            }
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-close"
+                    onclick="closeProjectNavbarMenu()"
+                    aria-label="Close Menu">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- MENU ITEMS -->
+            <nav class="project21-menu-list">
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('heroSection')">
+
+                    <span class="menu-item-icon">🏠</span>
+                    <span id="project21NavHome">Home</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('servicesSection')">
+
+                    <span class="menu-item-icon">⚡</span>
+                    <span id="project21NavServices">Services</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('gallerySection')">
+
+                    <span class="menu-item-icon">🖼️</span>
+                    <span id="project21NavWork">Our Work</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('quoteFormSection')">
+
+                    <span class="menu-item-icon">🧾</span>
+                    <span id="project21NavQuote">Quote</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('aboutSection')">
+
+                    <span class="menu-item-icon">ℹ️</span>
+                    <span id="project21NavAbout">About Us</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('locationSection')">
+
+                    <span class="menu-item-icon">📍</span>
+                    <span id="project21NavLocation">Location</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('reviewsSection')">
+
+                    <span class="menu-item-icon">⭐</span>
+                    <span id="project21NavReviews">Reviews</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('faqSection')">
+
+                    <span class="menu-item-icon">❓</span>
+                    <span id="project21NavFAQ">FAQ</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Navigate('socialSection')">
+
+                    <span class="menu-item-icon">📱</span>
+                    <span id="project21NavSocial">Social Media</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="project21-menu-item"
+                    onclick="project21Call()">
+
+                    <span class="menu-item-icon">📞</span>
+                    <span id="project21NavContact">Contact</span>
+                    <span class="menu-arrow">›</span>
+
+                </button>
+
+            </nav>
+
+
+            <!-- =================================================
+                 APP SETTINGS
+            ================================================== -->
+
+            <div class="project21-settings">
+
+                <div class="project21-settings-title">
+                    <span>⚙️</span>
+                    <span id="project21SettingsTitle">
+                        App Settings
+                    </span>
+                </div>
+
+
+                <!-- THEME -->
+                <button
+                    type="button"
+                    id="project21ThemeBtn"
+                    class="project21-setting-item"
+                    onclick="project21ToggleTheme()">
+
+                    <span
+                        class="setting-icon"
+                        id="project21ThemeIcon">
+                        🌙
+                    </span>
+
+                    <span
+                        id="project21ThemeText">
+                        Dark Mode
+                    </span>
+
+                    <span class="setting-arrow">›</span>
+
+                </button>
+
+
+                <!-- LANGUAGE -->
+                <button
+                    type="button"
+                    id="project21LanguageBtn"
+                    class="project21-setting-item"
+                    onclick="project21ToggleLanguage()">
+
+                    <span class="setting-icon">
+                        🌐
+                    </span>
+
+                    <span id="project21LanguageText">
+                        हिन्दी / English
+                    </span>
+
+                    <span class="setting-arrow">›</span>
+
+                </button>
+
+
+                <!-- RESET -->
+                <button
+                    type="button"
+                    id="project21ResetBtn"
+                    class="project21-setting-item project21-reset-item"
+                    onclick="project21ResetApp()">
+
+                    <span class="setting-icon">
+                        🔄
+                    </span>
+
+                    <span id="project21ResetText">
+                        Reset App
+                    </span>
+
+                    <span class="setting-arrow">›</span>
+
+                </button>
+
+            </div>
+
+
+            <!-- MENU FOOTER -->
+            <div class="project21-menu-footer">
+
+                <span>
+                    ${biz.name || "Sandeep ElectroFix"}
+                </span>
+
+                <small>
+                    Project 2.1
+                </small>
+
+            </div>
+
+        </aside>
+    `;
+
+    document.body.prepend(navbar);
+
+
+    /* ---------------------------------------------------------
+       NAVBAR CSS
+    --------------------------------------------------------- */
+
+    if (!document.getElementById("project21NavbarCSS")) {
+
+        const style = document.createElement("style");
+        style.id = "project21NavbarCSS";
+
+        style.textContent = `
+
+        /* =====================================================
+           PROJECT 2.1 NAVBAR
+        ====================================================== */
+
+        :root {
+            --p21-nav-bg: rgba(5, 8, 22, 0.96);
+            --p21-nav-border: rgba(245, 197, 66, 0.25);
+            --p21-gold: #f5c542;
+            --p21-blue: #38bdf8;
+            --p21-text: #ffffff;
+            --p21-muted: #aab4c8;
+            --p21-panel: #080d1f;
+        }
+
+
+        /* MAIN NAVBAR */
+
+        #project21Navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 68px;
+
+            z-index: 99990;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(5,8,22,.98),
+                    rgba(9,18,42,.97)
+                );
+
+            border-bottom:
+                1px solid
+                var(--p21-nav-border);
+
+            box-shadow:
+                0 5px 25px rgba(0,0,0,.35);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+
+        .project21-nav-inner {
+
+            width: 100%;
+            height: 68px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding:
+                0 14px;
+
+            box-sizing: border-box;
+        }
+
+
+        /* BRAND */
+
+        .project21-brand {
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            text-decoration: none;
+
+            min-width: 0;
+
+            color: white;
+
+            -webkit-tap-highlight-color:
+                transparent;
+        }
+
+
+        .project21-logo-wrap {
+
+            width: 44px;
+            height: 44px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            border:
+                2px solid
+                var(--p21-gold);
+
+            box-shadow:
+                0 0 8px rgba(245,197,66,.35),
+                inset 0 0 8px rgba(245,197,66,.12);
+
+            overflow: hidden;
+
+            background: #050816;
+        }
+
+
+        .project21-logo-wrap img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+
+        .project21-brand-text {
+
+            display: flex;
+            flex-direction: column;
+
+            min-width: 0;
+        }
+
+
+        #project21BrandName {
+
+            font-size: 16px;
+            font-weight: 800;
+
+            line-height: 1.1;
+
+            color: var(--p21-gold);
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        #project21BrandTagline {
+
+            margin-top: 3px;
+
+            font-size: 9px;
+
+            color: var(--p21-muted);
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        /* HAMBURGER */
+
+        .project21-menu-btn {
+
+            width: 46px;
+            height: 46px;
+
+            flex-shrink: 0;
+
+            border: 1px solid
+                rgba(245,197,66,.25);
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 5px;
+
+            cursor: pointer;
+
+            padding: 0;
+
+            -webkit-tap-highlight-color:
+                transparent;
+        }
+
+
+        .project21-menu-btn span {
+
+            display: block;
+
+            width: 22px;
+            height: 2px;
+
+            border-radius: 5px;
+
+            background:
+                var(--p21-gold);
+
+            transition:
+                transform .25s ease,
+                opacity .25s ease;
+        }
+
+
+        .project21-menu-btn.active span:nth-child(1) {
+            transform:
+                translateY(7px)
+                rotate(45deg);
+        }
+
+        .project21-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .project21-menu-btn.active span:nth-child(3) {
+            transform:
+                translateY(-7px)
+                rotate(-45deg);
+        }
+
+
+        /* OVERLAY */
+
+        .project21-menu-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,.65);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transition:
+                opacity .25s ease,
+                visibility .25s ease;
+
+            z-index: 99991;
+        }
+
+
+        .project21-menu-overlay.active {
+
+            opacity: 1;
+
+            visibility: visible;
+        }
+
+
+        /* SIDE MENU */
+
+        .project21-side-menu {
+
+            position: fixed;
+
+            top: 0;
+            right: 0;
+
+            width: min(88vw, 360px);
+            height: 100dvh;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #080d1f 0%,
+                    #050816 100%
+                );
+
+            border-left:
+                1px solid
+                rgba(245,197,66,.25);
+
+            box-shadow:
+                -10px 0 40px rgba(0,0,0,.55);
+
+            z-index: 99992;
+
+            transform:
+                translateX(105%);
+
+            transition:
+                transform .3s cubic-bezier(.4,0,.2,1);
+
+            display: flex;
+            flex-direction: column;
+
+            overflow-y: auto;
+
+            overscroll-behavior:
+                contain;
+        }
+
+
+        .project21-side-menu.active {
+
+            transform:
+                translateX(0);
+        }
+
+
+        /* MENU HEADER */
+
+        .project21-menu-header {
+
+            min-height: 78px;
+
+            padding:
+                14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+
+            flex-shrink: 0;
+        }
+
+
+        .project21-menu-brand {
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: 0;
+        }
+
+
+        .project21-menu-brand img {
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border:
+                2px solid
+                var(--p21-gold);
+        }
+
+
+        .project21-menu-brand div {
+
+            display: flex;
+            flex-direction: column;
+
+            min-width: 0;
+        }
+
+
+        #project21MenuBrandName {
+
+            color: var(--p21-gold);
+
+            font-size: 14px;
+            font-weight: 800;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        #project21MenuBrandLocation {
+
+            margin-top: 3px;
+
+            color: var(--p21-muted);
+
+            font-size: 10px;
+        }
+
+
+        .project21-menu-close {
+
+            width: 38px;
+            height: 38px;
+
+            border: 1px solid
+                rgba(245,197,66,.25);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            color: var(--p21-gold);
+
+            font-size: 19px;
+
+            cursor: pointer;
+
+            flex-shrink: 0;
+        }
+
+
+        /* MENU LIST */
+
+        .project21-menu-list {
+
+            padding:
+                10px;
+
+            flex: 1;
+        }
+
+
+        .project21-menu-item {
+
+            width: 100%;
+
+            min-height: 50px;
+
+            border: 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.045);
+
+            background:
+                transparent;
+
+            color:
+                var(--p21-text);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding:
+                10px 8px;
+
+            font-size: 14px;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            border-radius: 10px;
+
+            transition:
+                background .2s ease,
+                padding-left .2s ease;
+        }
+
+
+        .project21-menu-item:hover,
+        .project21-menu-item:active {
+
+            background:
+                rgba(245,197,66,.08);
+
+            padding-left: 13px;
+        }
+
+
+        .menu-item-icon {
+
+            width: 30px;
+
+            text-align: center;
+
+            font-size: 19px;
+        }
+
+
+        .project21-menu-item > span:nth-child(2) {
+
+            flex: 1;
+
+            font-weight: 600;
+        }
+
+
+        .menu-arrow {
+
+            color:
+                var(--p21-gold);
+
+            font-size: 22px;
+        }
+
+
+        /* APP SETTINGS */
+
+        .project21-settings {
+
+            margin:
+                5px 10px 10px;
+
+            padding:
+                10px;
+
+            border:
+                1px solid
+                rgba(245,197,66,.18);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+
+        .project21-settings-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color:
+                var(--p21-gold);
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .7px;
+
+            padding:
+                4px 6px 9px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.07);
+
+            margin-bottom: 4px;
+        }
+
+
+        .project21-setting-item {
+
+            width: 100%;
+
+            min-height: 46px;
+
+            border: 0;
+
+            background:
+                transparent;
+
+            color:
+                white;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                8px 6px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            text-align: left;
+        }
+
+
+        .project21-setting-item:hover,
+        .project21-setting-item:active {
+
+            background:
+                rgba(255,255,255,.06);
+        }
+
+
+        .setting-icon {
+
+            width: 28px;
+
+            text-align: center;
+
+            font-size: 18px;
+        }
+
+
+        .project21-setting-item span:nth-child(2) {
+
+            flex: 1;
+        }
+
+
+        .setting-arrow {
+
+            color:
+                var(--p21-muted);
+
+            font-size: 20px;
+        }
+
+
+        .project21-reset-item {
+
+            color:
+                #ffb4b4;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.06);
+
+            margin-top: 3px;
+
+            padding-top: 10px;
+        }
+
+
+        /* FOOTER */
+
+        .project21-menu-footer {
+
+            padding:
+                12px 16px 18px;
+
+            text-align: center;
+
+            color:
+                var(--p21-gold);
+
+            font-size: 11px;
+
+            flex-shrink: 0;
+        }
+
+
+        .project21-menu-footer small {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color:
+                var(--p21-muted);
+
+            font-size: 9px;
+        }
+
+
+        /* BODY OFFSET */
+
+        body {
+
+            padding-top: 68px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 480px) {
+
+            .project21-brand-text #project21BrandName {
+
+                font-size: 15px;
+            }
+
+            .project21-logo-wrap {
+
+                width: 42px;
+                height: 42px;
+            }
+
+            .project21-menu-btn {
+
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+
+        /* DESKTOP */
+
+        @media (min-width: 768px) {
+
+            .project21-nav-inner {
+
+                padding-left: 22px;
+                padding-right: 22px;
+            }
+
+            .project21-side-menu {
+
+                width: 380px;
+            }
+        }
+
+        `;
+
+        document.head.appendChild(style);
+    }
+
+
+    /* ---------------------------------------------------------
+       HAMBURGER EVENTS
+    --------------------------------------------------------- */
+
+    const menuBtn =
+        document.getElementById("project21MenuBtn");
+
+    const sideMenu =
+        document.getElementById("project21SideMenu");
+
+    const overlay =
+        document.getElementById("project21MenuOverlay");
+
+
+    if (menuBtn) {
+
+        menuBtn.addEventListener("click", function (e) {
+
+            e.stopPropagation();
+
+            toggleProjectNavbarMenu();
+
+        });
+
+    }
+
+
+    if (overlay) {
+
+        overlay.addEventListener("click", function () {
+
+            closeProjectNavbarMenu();
+
+        });
+
+    }
+
+
+    updateProjectNavbarLanguage();
+    updateProjectNavbarTheme();
+}
+
+
+/* =========================================================
+   OPEN / CLOSE NAVBAR
+========================================================= */
+
+function toggleProjectNavbarMenu() {
+
+    const btn =
+        document.getElementById("project21MenuBtn");
+
+    const menu =
+        document.getElementById("project21SideMenu");
+
+    const overlay =
+        document.getElementById("project21MenuOverlay");
+
+    if (!btn || !menu) return;
+
+    const isOpen =
+        menu.classList.contains("active");
+
+    if (isOpen) {
+
+        closeProjectNavbarMenu();
+
+    } else {
+
+        menu.classList.add("active");
+
+        overlay?.classList.add("active");
+
+        btn.classList.add("active");
+
+        btn.setAttribute("aria-expanded", "true");
+
+        menu.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+    }
+}
+
+
+function closeProjectNavbarMenu() {
+
+    const btn =
+        document.getElementById("project21MenuBtn");
+
+    const menu =
+        document.getElementById("project21SideMenu");
+
+    const overlay =
+        document.getElementById("project21MenuOverlay");
+
+    menu?.classList.remove("active");
+
+    overlay?.classList.remove("active");
+
+    btn?.classList.remove("active");
+
+    btn?.setAttribute("aria-expanded", "false");
+
+    menu?.setAttribute("aria-hidden", "true");
+
+    document.body.style.overflow = "";
+}
+
+
+/* =========================================================
+   NAVBAR SECTION NAVIGATION
+========================================================= */
+
+function project21Navigate(sectionId) {
+
+    closeProjectNavbarMenu();
+
+    setTimeout(() => {
+
+        const section =
+            document.getElementById(sectionId);
+
+        if (!section) {
+
+            showExitToast(
+                currentLang === "hi"
+                    ? "यह सेक्शन उपलब्ध नहीं है।"
+                    : "This section is not available."
+            );
+
+            return;
+        }
+
+        const navbar =
+            document.getElementById("project21Navbar");
+
+        const offset =
+            navbar
+                ? navbar.offsetHeight + 10
+                : 78;
+
+        const y =
+            section.getBoundingClientRect().top +
+            window.pageYOffset -
+            offset;
+
+        window.scrollTo({
+            top: Math.max(0, y),
+            behavior: "smooth"
+        });
+
+    }, 150);
+}
+
+
+/* =========================================================
+   NAVBAR CONTACT
+========================================================= */
+
+function project21Call() {
+
+    closeProjectNavbarMenu();
+
+    const phone =
+        window.MASTER_CONFIG?.business?.phone;
+
+    if (!phone) return;
+
+    window.location.href =
+        `tel:${phone}`;
+}
+
+
+/* =========================================================
+   NAVBAR THEME
+========================================================= */
+
+function project21ToggleTheme() {
+
+    const root =
+        document.documentElement;
+
+    root.classList.toggle("saved-light-theme");
+
+    const isLight =
+        root.classList.contains("saved-light-theme");
+
+    localStorage.setItem(
+        "sandeepTheme",
+        isLight ? "light" : "dark"
+    );
+
+    updateThemeButtonText();
+    updateProjectNavbarTheme();
+
+    showExitToast(
+        isLight
+            ? (currentLang === "hi"
+                ? "☀️ लाइट मोड चालू"
+                : "☀️ Light Mode enabled")
+            : (currentLang === "hi"
+                ? "🌙 डार्क मोड चालू"
+                : "🌙 Dark Mode enabled")
+    );
+}
+
+
+/* =========================================================
+   NAVBAR LANGUAGE
+========================================================= */
+
+function project21ToggleLanguage() {
+
+    const newLang =
+        currentLang === "hi"
+            ? "en"
+            : "hi";
+
+    setLanguage(newLang);
+
+    updateProjectNavbarLanguage();
+
+    showExitToast(
+        newLang === "hi"
+            ? "🇮🇳 हिन्दी भाषा चुनी गई"
+            : "🇬🇧 English language selected"
+    );
+}
+
+
+/* =========================================================
+   NAVBAR RESET
+========================================================= */
+
+function project21ResetApp() {
+
+    closeProjectNavbarMenu();
+
+    setTimeout(() => {
+
+        resetAllToDefault();
+
+    }, 150);
+}
+
+
+/* =========================================================
+   NAVBAR LANGUAGE TEXT
+========================================================= */
+
+function updateProjectNavbarLanguage() {
+
+    const isHi =
+        currentLang === "hi";
+
+    const cfg =
+        window.MASTER_CONFIG || {};
+
+    const biz =
+        cfg.business || {};
+
+
+    const setText = (id, text) => {
+
+        const el =
+            document.getElementById(id);
+
+        if (el) el.innerText = text;
+    };
+
+
+    setText(
+        "project21BrandName",
+        biz.name || "Sandeep ElectroFix"
+    );
+
+
+    setText(
+        "project21BrandTagline",
+        isHi
+            ? (biz.tagline_hi || "")
+            : (biz.tagline_en || "")
+    );
+
+
+    setText(
+        "project21MenuBrandName",
+        biz.name || "Sandeep ElectroFix"
+    );
+
+
+    setText(
+        "project21MenuBrandLocation",
+        `📍 ${
+            isHi
+                ? (biz.location_hi || "")
+                : (biz.location_en || "")
+        }`
+    );
+
+
+    /* MAIN MENU */
+
+    setText(
+        "project21NavHome",
+        isHi ? "होम" : "Home"
+    );
+
+    setText(
+        "project21NavServices",
+        isHi ? "सेवाएँ" : "Services"
+    );
+
+    setText(
+        "project21NavWork",
+        isHi ? "हमारे कार्य" : "Our Work"
+    );
+
+    setText(
+        "project21NavQuote",
+        isHi ? "कोटेशन" : "Quote"
+    );
+
+    setText(
+        "project21NavAbout",
+        isHi ? "हमारे बारे में" : "About Us"
+    );
+
+    setText(
+        "project21NavLocation",
+        isHi ? "लोकेशन" : "Location"
+    );
+
+    setText(
+        "project21NavReviews",
+        isHi ? "ग्राहकों की राय" : "Reviews"
+    );
+
+    setText(
+        "project21NavFAQ",
+        isHi ? "अक्सर पूछे जाने वाले सवाल" : "FAQ"
+    );
+
+    setText(
+        "project21NavSocial",
+        isHi ? "सोशल मीडिया" : "Social Media"
+    );
+
+    setText(
+        "project21NavContact",
+        isHi ? "संपर्क करें" : "Contact"
+    );
+
+
+    /* SETTINGS */
+
+    setText(
+        "project21SettingsTitle",
+        isHi
+            ? "ऐप सेटिंग्स"
+            : "App Settings"
+    );
+
+
+    setText(
+        "project21LanguageText",
+        isHi
+            ? "भाषा बदलें (हिन्दी / English)"
+            : "Change Language (English / हिन्दी)"
+    );
+
+
+    setText(
+        "project21ResetText",
+        isHi
+            ? "ऐप रीसेट करें"
+            : "Reset App"
+    );
+
+
+    updateProjectNavbarTheme();
+}
+
+
+/* =========================================================
+   NAVBAR THEME TEXT
+========================================================= */
+
+function updateProjectNavbarTheme() {
+
+    const isLight =
+        document.documentElement
+            .classList
+            .contains("saved-light-theme");
+
+
+    const icon =
+        document.getElementById("project21ThemeIcon");
+
+    const text =
+        document.getElementById("project21ThemeText");
+
+
+    if (icon) {
+
+        icon.innerText =
+            isLight ? "🌙" : "☀️";
+    }
+
+
+    if (text) {
+
+        text.innerText =
+            isLight
+                ? (
+                    currentLang === "hi"
+                        ? "डार्क मोड"
+                        : "Dark Mode"
+                )
+                : (
+                    currentLang === "hi"
+                        ? "लाइट मोड"
+                        : "Light Mode"
+                );
+    }
+}
+
+
+/* =========================================================
+   NAVBAR ESC KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeProjectNavbarMenu();
+
+        }
+
+    }
+);
 function updateThemeButtonText() {
     const isLight = document.documentElement.classList.contains("saved-light-theme");
     const themeIcon = document.getElementById("themeIcon");
@@ -288,12 +1806,16 @@ function setLanguage(lang) {
     document.getElementById("navCall").innerText = isHi ? "कॉल" : "Call";
 
     updateThemeButtonText();
+   
     applyVisibilityControls();
+   
     renderServices();
     renderGallery();
     renderReviews();
     renderFAQ();
     updateCalculations();
+   updateProjectNavbarLanguage();
+updateProjectNavbarTheme();
 }
 
 function renderServices() {
@@ -782,7 +2304,8 @@ function shareWebsite() {
 
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
-    history.pushState({ page: "app" }, "");
+ initializeProjectNavbar();
+   history.pushState({ page: "app" }, "");
 
     const savedTheme = localStorage.getItem("sandeepTheme");
     if (savedTheme === "light") {
