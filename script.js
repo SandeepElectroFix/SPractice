@@ -1615,69 +1615,442 @@ function sendWhatsappQuote() {
 
 function downloadEstimatePDF() {
     const { jsPDF } = window.jspdf || {};
-    if (!jsPDF) return alert("PDF library is loading, please try in 2 seconds.");
+    if (!jsPDF) {
+        return alert("PDF library is loading, please try in 2 seconds.");
+    }
 
-    const name = document.getElementById("customerName")?.value.trim() || "Customer";
-    const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
-    const location = document.getElementById("customerLocation")?.value.trim() || "N/A";
-    const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
+    const name =
+        document.getElementById("customerName")?.value.trim() || "Customer";
+
+    const phone =
+        document.getElementById("customerPhone")?.value.trim() || "N/A";
+
+    const location =
+        document.getElementById("customerLocation")?.value.trim() || "N/A";
+
+    const note =
+        document.getElementById("customerMessage")?.value.trim() || "N/A";
+
     const items = Object.values(selectedItemsMap);
-    const ctrl = window.MASTER_CONFIG?.controls;
-    const biz = window.MASTER_CONFIG?.business;
 
-    if (items.length === 0) return alert(currentLang === 'hi' ? "कृपया पहले + से कोई सेवा जोड़ें।" : "Please add services first.");
+    const ctrl = window.MASTER_CONFIG?.controls || {};
+    const biz = window.MASTER_CONFIG?.business || {};
 
-    const doc = new jsPDF();
-    doc.setFillColor(5, 8, 22);
-    doc.rect(0, 0, 210, 36, "F");
+    if (items.length === 0) {
+        return alert(
+            currentLang === "hi"
+                ? "कृपया पहले + से कोई सेवा जोड़ें।"
+                : "Please add services first."
+        );
+    }
 
-    doc.setTextColor(245, 197, 66);
-    doc.setFontSize(18);
-    doc.text(biz.name, 14, 16);
+    // =========================================================
+    // 📅 DATE + 🕐 TIME
+    // =========================================================
+    const now = new Date();
 
-    doc.setFontSize(10);
-    doc.setTextColor(255, 255, 255);
-    doc.text(`Phone: ${biz.phone} | Lucknow, UP`, 14, 25);
-    doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 160, 25);
-
-    doc.setTextColor(16, 24, 39);
-    doc.setFontSize(11);
-    doc.text("CUSTOMER ESTIMATE", 14, 46);
-
-    doc.setFontSize(9);
-    doc.text(`Client: ${name}  |  Phone: ${phone}`, 14, 53);
-    doc.text(`Location: ${location}`, 14, 59);
-    if (note !== "N/A") doc.text(`Note: ${note}`, 14, 65);
-
-    const startTableY = note !== "N/A" ? 71 : 65;
-    const rows = items.map((itm, i) => [i + 1, itm.name_en, `Rs. ${itm.price}`, itm.qty, `Rs. ${itm.price * itm.qty}`]);
-    const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
-    const isDiscountActive = ctrl.showDiscount && (ctrl.discountPercent > 0);
-    const discount = isDiscountActive ? Math.round(subtotal * (ctrl.discountPercent / 100)) : 0;
-    const total = subtotal - discount;
-
-    doc.autoTable({
-        startY: startTableY,
-        head: [["#", "Service Item", "Rate", "Qty", "Total Amount"]],
-        body: rows,
-        theme: "grid",
-        headStyles: { fillColor: [5, 8, 22], textColor: [245, 197, 66] }
+    const dateText = now.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
     });
 
-    const finalY = doc.lastAutoTable.finalY + 8;
-    doc.setFontSize(9.5);
-    doc.text(`Subtotal: Rs. ${subtotal}`, 140, finalY);
-    let nextY = finalY + 5;
-    if (isDiscountActive) {
-        doc.setTextColor(37, 211, 102);
-        doc.text(`Discount (${ctrl.discountPercent}%): -Rs. ${discount}`, 140, nextY);
-        nextY += 5;
-    }
-    doc.setFontSize(11);
-    doc.setTextColor(16, 24, 39);
-    doc.text(`Grand Total: Rs. ${total}`, 140, nextY);
+    const timeText = now.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
+    });
 
-    doc.save(`Estimate_${name.replace(/\s+/g, "_")}.pdf`);
+    // =========================================================
+    // 🌐 WEBSITE
+    // =========================================================
+    const website =
+        biz.cardWebsite ||
+        biz.website ||
+        "https://sandeepelectrofix.github.io/SPractice/";
+
+    // =========================================================
+    // 📄 CREATE PDF
+    // =========================================================
+    const doc = new jsPDF();
+
+    // =========================================================
+    // 🎨 HEADER
+    // =========================================================
+    doc.setFillColor(5, 8, 22);
+    doc.rect(0, 0, 210, 42, "F");
+
+    // =========================================================
+    // 🖼️ LOGO
+    // =========================================================
+    const logoPath = "assets/logo.png";
+
+    const logoImage = new Image();
+
+    logoImage.onload = function () {
+
+        // Logo
+        try {
+            doc.addImage(
+                logoImage,
+                "PNG",
+                10,
+                6,
+                25,
+                25
+            );
+        } catch (e) {
+            console.warn("Logo could not be added:", e);
+        }
+
+        createEstimatePDFContent();
+
+    };
+
+    logoImage.onerror = function () {
+
+        console.warn("Logo not found:", logoPath);
+
+        // PDF logo ke bina bhi generate hoga
+        createEstimatePDFContent();
+
+    };
+
+    logoImage.src = logoPath;
+
+
+    // =========================================================
+    // 📄 MAIN PDF CONTENT
+    // =========================================================
+    function createEstimatePDFContent() {
+
+        // -----------------------------------------------------
+        // BUSINESS NAME
+        // -----------------------------------------------------
+        doc.setTextColor(245, 197, 66);
+        doc.setFontSize(18);
+
+        doc.text(
+            biz.name || "Sandeep ElectroFix",
+            40,
+            16
+        );
+
+
+        // -----------------------------------------------------
+        // PHONE + LOCATION
+        // -----------------------------------------------------
+        doc.setFontSize(9);
+        doc.setTextColor(255, 255, 255);
+
+        doc.text(
+            `Phone: ${biz.phone || "N/A"} | Lucknow, UP`,
+            40,
+            24
+        );
+
+
+        // -----------------------------------------------------
+        // DATE + TIME
+        // -----------------------------------------------------
+        doc.text(
+            `Date: ${dateText}`,
+            140,
+            17
+        );
+
+        doc.text(
+            `Time: ${timeText}`,
+            140,
+            24
+        );
+
+
+        // -----------------------------------------------------
+        // WEBSITE LINK
+        // -----------------------------------------------------
+        doc.setTextColor(100, 200, 255);
+        doc.setFontSize(8);
+
+        doc.textWithLink(
+            website,
+            40,
+            32,
+            {
+                url: website
+            }
+        );
+
+
+        // -----------------------------------------------------
+        // TITLE
+        // -----------------------------------------------------
+        doc.setTextColor(16, 24, 39);
+        doc.setFontSize(11);
+
+        doc.text(
+            "CUSTOMER ESTIMATE",
+            14,
+            52
+        );
+
+
+        // -----------------------------------------------------
+        // CUSTOMER DETAILS
+        // -----------------------------------------------------
+        doc.setFontSize(9);
+
+        doc.text(
+            `Client: ${name}  |  Phone: ${phone}`,
+            14,
+            59
+        );
+
+        doc.text(
+            `Location: ${location}`,
+            14,
+            65
+        );
+
+        if (note !== "N/A") {
+            doc.text(
+                `Note: ${note}`,
+                14,
+                71
+            );
+        }
+
+
+        // -----------------------------------------------------
+        // TABLE START POSITION
+        // -----------------------------------------------------
+        const startTableY =
+            note !== "N/A"
+                ? 77
+                : 71;
+
+
+        // -----------------------------------------------------
+        // SERVICE ROWS
+        // -----------------------------------------------------
+        const rows = items.map((itm, i) => {
+
+            const price = Number(itm.price) || 0;
+            const qty = Number(itm.qty) || 0;
+            const amount = price * qty;
+
+            return [
+                i + 1,
+                itm.name_en || itm.name_hi || "Service",
+                `Rs. ${price}`,
+                qty,
+                `Rs. ${amount}`
+            ];
+
+        });
+
+
+        // -----------------------------------------------------
+        // CALCULATIONS
+        // -----------------------------------------------------
+        const subtotal = items.reduce(
+            (acc, itm) => {
+
+                const price = Number(itm.price) || 0;
+                const qty = Number(itm.qty) || 0;
+
+                return acc + (price * qty);
+
+            },
+            0
+        );
+
+
+        const isDiscountActive =
+            ctrl.showDiscount &&
+            Number(ctrl.discountPercent) > 0;
+
+
+        const discount =
+            isDiscountActive
+                ? Math.round(
+                    subtotal *
+                    (Number(ctrl.discountPercent) / 100)
+                )
+                : 0;
+
+
+        const total =
+            subtotal - discount;
+
+
+        // =====================================================
+        // 📊 ESTIMATE TABLE
+        // =====================================================
+        doc.autoTable({
+
+            startY: startTableY,
+
+            head: [
+                [
+                    "#",
+                    "Service Item",
+                    "Rate",
+                    "Qty",
+                    "Total Amount"
+                ]
+            ],
+
+            body: rows,
+
+            theme: "grid",
+
+            headStyles: {
+                fillColor: [5, 8, 22],
+                textColor: [245, 197, 66]
+            },
+
+            styles: {
+                fontSize: 9
+            },
+
+            margin: {
+                left: 14,
+                right: 14
+            }
+
+        });
+
+
+        // =====================================================
+        // 💰 TOTAL SECTION
+        // =====================================================
+        const finalY =
+            doc.lastAutoTable.finalY + 8;
+
+
+        doc.setFontSize(9.5);
+
+        doc.setTextColor(16, 24, 39);
+
+        doc.text(
+            `Subtotal: Rs. ${subtotal}`,
+            140,
+            finalY
+        );
+
+
+        let nextY =
+            finalY + 5;
+
+
+        // -----------------------------------------------------
+        // DISCOUNT
+        // -----------------------------------------------------
+        if (isDiscountActive) {
+
+            doc.setTextColor(
+                37,
+                211,
+                102
+            );
+
+            doc.text(
+                `Discount (${ctrl.discountPercent}%): -Rs. ${discount}`,
+                140,
+                nextY
+            );
+
+            nextY += 5;
+
+        }
+
+
+        // -----------------------------------------------------
+        // GRAND TOTAL
+        // -----------------------------------------------------
+        doc.setFontSize(11);
+
+        doc.setTextColor(
+            16,
+            24,
+            39
+        );
+
+        doc.text(
+            `Grand Total: Rs. ${total}`,
+            140,
+            nextY
+        );
+
+
+        // =====================================================
+        // 🌐 FOOTER WEBSITE
+        // =====================================================
+        const pageHeight =
+            doc.internal.pageSize.getHeight();
+
+
+        doc.setDrawColor(
+            220,
+            220,
+            220
+        );
+
+        doc.line(
+            14,
+            pageHeight - 20,
+            196,
+            pageHeight - 20
+        );
+
+
+        doc.setFontSize(8);
+
+        doc.setTextColor(
+            90,
+            90,
+            90
+        );
+
+        doc.text(
+            "Thank you for choosing Sandeep ElectroFix",
+            14,
+            pageHeight - 13
+        );
+
+
+        // Clickable website link
+        doc.setTextColor(
+            14,
+            130,
+            200
+        );
+
+        doc.textWithLink(
+            website,
+            14,
+            pageHeight - 7,
+            {
+                url: website
+            }
+        );
+
+
+        // =====================================================
+        // 💾 SAVE PDF
+        // =====================================================
+        const safeName =
+            name
+                .replace(/[^\w\s-]/g, "")
+                .replace(/\s+/g, "_");
+
+
+        doc.save(
+            `Estimate_${safeName || "Customer"}.pdf`
+        );
+
+    }
 }
 
 function getUserLocation() {
