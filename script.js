@@ -1,75 +1,110 @@
 /* =========================================================
-   SANDEEP ELECTROFIX - PROJECT 2.1
-   CORE JAVASCRIPT ENGINE
-   =========================================================
-   ✅ Cart Persistence
-   ✅ Customer Data Persistence
-   ✅ Hindi / English
-   ✅ Dark / Light Mode
-   ✅ Services + Quantity
-   ✅ Service Modal
-   ✅ Gallery + Lightbox
-   ✅ Reviews
-   ✅ FAQ
-   ✅ GPS
-   ✅ WhatsApp Quote
-   ✅ PDF Estimate
-   ✅ Quick Layout
-   ✅ Service Layout
-   ✅ PWA Shortcuts
-   ✅ Mobile Navbar
-   ✅ Android Back Button
-   ✅ ESC / Overlay Close
-   ✅ Install App
-   ✅ Master Reset
-   ✅ Centralized History Handling
-========================================================= */
-
+   SANDEEP ELECTROFIX
+   PROJECT 2.1 — FINAL CORE JAVASCRIPT ENGINE
+   VERSION: 2.1.0
+   ========================================================= */
 
 /* =========================================================
    GLOBAL STATE
 ========================================================= */
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
-
 let selectedItemsMap = {};
-
 let lastBackPressTime = 0;
-
-let currentOverlayState = null;
-
+let menuHistoryAdded = false;
+let modalHistoryAdded = false;
+let lightboxHistoryAdded = false;
 
 /* =========================================================
-   CART RESTORE
+   SAFE HELPERS
+========================================================= */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function exists(id) {
+    return !!$(id);
+}
+
+function safeText(id, text) {
+    const el = $(id);
+    if (el) el.innerText = text ?? "";
+}
+
+function safeHTML(id, html) {
+    const el = $(id);
+    if (el) el.innerHTML = html ?? "";
+}
+
+function safeValue(id, value) {
+    const el = $(id);
+    if (el) el.value = value ?? "";
+}
+
+function getConfig() {
+    return window.MASTER_CONFIG || {};
+}
+
+function getControls() {
+    return getConfig().controls || {};
+}
+
+function getBusiness() {
+    return getConfig().business || {};
+}
+
+function getServices() {
+    return Array.isArray(getConfig().services)
+        ? getConfig().services
+        : [];
+}
+
+function getGallery() {
+    return Array.isArray(getConfig().gallery)
+        ? getConfig().gallery
+        : [];
+}
+
+function getReviews() {
+    return Array.isArray(getConfig().reviews)
+        ? getConfig().reviews
+        : [];
+}
+
+function getFAQ() {
+    return Array.isArray(getConfig().faq)
+        ? getConfig().faq
+        : [];
+}
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* =========================================================
+   CART LOAD
 ========================================================= */
 
 try {
-
     const savedCart = localStorage.getItem("sandeepCart");
 
     if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
 
-        selectedItemsMap = JSON.parse(savedCart);
-
+        if (parsedCart && typeof parsedCart === "object") {
+            selectedItemsMap = parsedCart;
+        }
     }
-
 } catch (error) {
-
+    console.warn("Cart restore failed:", error);
     selectedItemsMap = {};
-
 }
-
-
-/* =========================================================
-   SAFE ELEMENT HELPER
-========================================================= */
-
-function getEl(id) {
-
-    return document.getElementById(id);
-
-}
-
 
 /* =========================================================
    CUSTOMER INPUT STORAGE
@@ -78,22 +113,20 @@ function getEl(id) {
 function saveCustomerInputs() {
 
     const data = {
-
-        name: getEl("customerName")?.value || "",
-
-        phone: getEl("customerPhone")?.value || "",
-
-        location: getEl("customerLocation")?.value || "",
-
-        message: getEl("customerMessage")?.value || ""
-
+        name: $("customerName")?.value || "",
+        phone: $("customerPhone")?.value || "",
+        location: $("customerLocation")?.value || "",
+        message: $("customerMessage")?.value || ""
     };
 
-    localStorage.setItem(
-        "sandeepCustomer",
-        JSON.stringify(data)
-    );
-
+    try {
+        localStorage.setItem(
+            "sandeepCustomer",
+            JSON.stringify(data)
+        );
+    } catch (error) {
+        console.warn("Customer storage failed:", error);
+    }
 }
 
 
@@ -108,31 +141,27 @@ function restoreCustomerInputs() {
 
         const data = JSON.parse(saved);
 
-        if (getEl("customerName"))
-            getEl("customerName").value =
-                data.name || "";
+        if ($("customerName")) {
+            $("customerName").value = data.name || "";
+        }
 
-        if (getEl("customerPhone"))
-            getEl("customerPhone").value =
-                data.phone || "";
+        if ($("customerPhone")) {
+            $("customerPhone").value = data.phone || "";
+        }
 
-        if (getEl("customerLocation"))
-            getEl("customerLocation").value =
+        if ($("customerLocation")) {
+            $("customerLocation").value =
                 data.location || "";
+        }
 
-        if (getEl("customerMessage"))
-            getEl("customerMessage").value =
+        if ($("customerMessage")) {
+            $("customerMessage").value =
                 data.message || "";
+        }
 
     } catch (error) {
-
-        console.warn(
-            "Customer data restore failed:",
-            error
-        );
-
+        console.warn("Customer restore failed:", error);
     }
-
 }
 
 
@@ -140,78 +169,43 @@ function restoreCustomerInputs() {
    MASTER RESET
 ========================================================= */
 
-function resetAllToDefault(skipConfirm = false) {
+function resetAllToDefault() {
 
     const confirmMsg =
         currentLang === "hi"
-
             ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को रीसेट करना चाहते हैं?"
-
             : "Are you sure you want to reset all selected services, inputs and settings to default?";
 
+    if (!confirm(confirmMsg)) return;
 
-    if (!skipConfirm) {
+    try {
 
-        if (!confirm(confirmMsg)) return;
+        localStorage.removeItem("sandeepCart");
+        localStorage.removeItem("sandeepCustomer");
+        localStorage.removeItem("sandeepQuickLayout");
+        localStorage.removeItem("sandeepServiceLayout");
 
+    } catch (error) {
+        console.warn("Reset storage error:", error);
     }
-
-
-    /* -----------------------------
-       Remove saved data
-    ----------------------------- */
-
-    localStorage.removeItem("sandeepCart");
-
-    localStorage.removeItem("sandeepCustomer");
-
-    localStorage.removeItem("sandeepQuickLayout");
-
-    localStorage.removeItem("sandeepServiceLayout");
-
-
-    /* -----------------------------
-       Reset memory
-    ----------------------------- */
 
     selectedItemsMap = {};
 
+    safeValue("customerName", "");
+    safeValue("customerPhone", "");
+    safeValue("customerLocation", "");
+    safeValue("customerMessage", "");
 
-    /* -----------------------------
-       Reset customer fields
-    ----------------------------- */
+    const gpsBtn = $("btnGpsDetect");
+    const gpsBtnText = $("gpsBtnText");
 
-    if (getEl("customerName"))
-        getEl("customerName").value = "";
-
-    if (getEl("customerPhone"))
-        getEl("customerPhone").value = "";
-
-    if (getEl("customerLocation"))
-        getEl("customerLocation").value = "";
-
-    if (getEl("customerMessage"))
-        getEl("customerMessage").value = "";
-
-
-    /* -----------------------------
-       Reset GPS
-    ----------------------------- */
-
-    const gpsBtn = getEl("btnGpsDetect");
-
-    const gpsBtnText = getEl("gpsBtnText");
-
-    if (gpsBtn)
+    if (gpsBtn) {
         gpsBtn.classList.remove("active-loc");
+    }
 
-    if (gpsBtnText)
+    if (gpsBtnText) {
         gpsBtnText.innerText = "GPS";
-
-
-    /* -----------------------------
-       Reset Theme
-    ----------------------------- */
+    }
 
     document.documentElement.classList.add(
         "saved-light-theme"
@@ -222,87 +216,45 @@ function resetAllToDefault(skipConfirm = false) {
         "light"
     );
 
-
-    /* -----------------------------
-       Reset Layout
-    ----------------------------- */
-
-    applyQuickLayout(
-        "grid-2",
-        false
-    );
-
-    applyServiceLayout(
-        "list",
-        false
-    );
-
-
-    /* -----------------------------
-       Reset Language
-    ----------------------------- */
+    applyQuickLayout("grid-2");
+    applyServiceLayout("list");
 
     setLanguage("en");
-
-
-    /* -----------------------------
-       Update UI
-    ----------------------------- */
-
-    updateThemeButtonText();
-
-    updateCalculations();
-
-    renderServices();
-
 
     showExitToast(
         "✅ Reset to English & Light Mode successfully"
     );
-
 }
 
 
 /* =========================================================
-   LIVE GPS LOCATION
+   GPS — QUOTE LOCATION
 ========================================================= */
 
 function getQuoteLiveLocation() {
 
-    const locInput =
-        getEl("customerLocation");
-
-    const gpsBtn =
-        getEl("btnGpsDetect");
-
-    const gpsBtnText =
-        getEl("gpsBtnText");
-
+    const locInput = $("customerLocation");
+    const gpsBtn = $("btnGpsDetect");
+    const gpsBtnText = $("gpsBtnText");
 
     if (!navigator.geolocation) {
 
         alert(
-
             currentLang === "hi"
-
                 ? "आपके ब्राउज़र में GPS सपोर्ट नहीं है।"
-
                 : "Geolocation is not supported by your browser."
-
         );
 
         return;
-
     }
 
-
-    if (gpsBtnText)
+    if (gpsBtnText) {
         gpsBtnText.innerText = "...";
-
+    }
 
     navigator.geolocation.getCurrentPosition(
 
-        function (position) {
+        function(position) {
 
             const lat =
                 position.coords.latitude.toFixed(5);
@@ -310,10 +262,8 @@ function getQuoteLiveLocation() {
             const lng =
                 position.coords.longitude.toFixed(5);
 
-
             const mapUrl =
                 `https://maps.google.com/?q=${lat},${lng}`;
-
 
             if (locInput) {
 
@@ -321,60 +271,40 @@ function getQuoteLiveLocation() {
                     `${lat}, ${lng} (${mapUrl})`;
 
                 saveCustomerInputs();
-
             }
 
-
-            if (gpsBtn)
+            if (gpsBtn) {
                 gpsBtn.classList.add("active-loc");
-
+            }
 
             if (gpsBtnText) {
 
                 gpsBtnText.innerText =
-
                     currentLang === "hi"
-
                         ? "मिल गया ✓"
-
                         : "Fetched ✓";
-
             }
-
         },
 
-
-        function () {
+        function() {
 
             alert(
-
                 currentLang === "hi"
-
                     ? "लोकेशन की परमिशन नहीं मिली। कृपया हाथ से पता टाइप करें।"
-
                     : "Location permission denied. Please type address manually."
-
             );
 
-
-            if (gpsBtnText)
+            if (gpsBtnText) {
                 gpsBtnText.innerText = "GPS";
-
+            }
         },
 
-
         {
-
             enableHighAccuracy: true,
-
             timeout: 10000,
-
             maximumAge: 0
-
         }
-
     );
-
 }
 
 
@@ -384,136 +314,45 @@ function getQuoteLiveLocation() {
 
 function applyVisibilityControls() {
 
-    const cfg =
-        window.MASTER_CONFIG;
+    const ctrl = getControls();
+    const biz = getBusiness();
 
-    if (!cfg) return;
+    const toggle = function(id, show) {
 
-
-    const ctrl =
-        cfg.controls || {};
-
-    const biz =
-        cfg.business || {};
-
-
-    function toggle(id, show) {
-
-        const el = getEl(id);
+        const el = $(id);
 
         if (!el) return;
 
         el.style.display =
             show ? "" : "none";
+    };
 
-    }
+    toggle("heroSection", ctrl.showHero);
+    toggle("discountSection", ctrl.showDiscount);
+    toggle("quickAccessBar", ctrl.showQuickAccess);
+    toggle("socialSection", ctrl.showSocialLinks);
+    toggle("aboutSection", ctrl.showAbout);
+    toggle("locationSection", ctrl.showLocation);
+    toggle("servicesSection", ctrl.showServices);
+    toggle("gallerySection", ctrl.showGallery);
+    toggle("cardQRContainer", ctrl.showQR);
+    toggle("reviewsSection", ctrl.showReviews);
+    toggle("quoteFormSection", ctrl.showQuoteForm);
+    toggle("faqSection", ctrl.showFAQ);
+    toggle("footerSection", ctrl.showFooter);
+    toggle("mobileBottomNav", ctrl.showBottomNav);
 
-
-    toggle(
-        "heroSection",
-        ctrl.showHero
-    );
-
-    toggle(
-        "discountSection",
-        ctrl.showDiscount
-    );
-
-    toggle(
-        "quickAccessBar",
-        ctrl.showQuickAccess
-    );
-
-    toggle(
-        "socialSection",
-        ctrl.showSocialLinks
-    );
-
-    toggle(
-        "aboutSection",
-        ctrl.showAbout
-    );
-
-    toggle(
-        "locationSection",
-        ctrl.showLocation
-    );
-
-    toggle(
-        "servicesSection",
-        ctrl.showServices
-    );
-
-    toggle(
-        "gallerySection",
-        ctrl.showGallery
-    );
-
-    toggle(
-        "cardQRContainer",
-        ctrl.showQR
-    );
-
-    toggle(
-        "reviewsSection",
-        ctrl.showReviews
-    );
-
-    toggle(
-        "quoteFormSection",
-        ctrl.showQuoteForm
-    );
-
-    toggle(
-        "faqSection",
-        ctrl.showFAQ
-    );
-
-    toggle(
-        "footerSection",
-        ctrl.showFooter
-    );
-
-    toggle(
-        "mobileBottomNav",
-        ctrl.showBottomNav
-    );
-
-
-    /* Top controls */
-
-    toggle(
-        "themeToggle",
-        ctrl.showThemeToggle
-    );
-
-    toggle(
-        "languageSwitcher",
-        ctrl.showLanguageSwitcher
-    );
+    toggle("themeToggle", ctrl.showThemeToggle);
+    toggle("languageSwitcher", ctrl.showLanguageSwitcher);
 
     toggle(
         "btnResetAll",
         ctrl.showResetBtn !== false
     );
 
-
-    /* Hero */
-
-    toggle(
-        "businessLogo",
-        ctrl.showLogo
-    );
-
-    toggle(
-        "businessTagline",
-        ctrl.showTagline
-    );
-
-    toggle(
-        "businessLocation",
-        ctrl.showHeroLocation
-    );
+    toggle("businessLogo", ctrl.showLogo);
+    toggle("businessTagline", ctrl.showTagline);
+    toggle("businessLocation", ctrl.showHeroLocation);
 
     toggle(
         "callBtn",
@@ -524,9 +363,6 @@ function applyVisibilityControls() {
         "whatsappBtn",
         ctrl.showHeroWhatsappBtn
     );
-
-
-    /* Quick Access */
 
     toggle(
         "btnQuickCall",
@@ -573,9 +409,6 @@ function applyVisibilityControls() {
         ctrl.showQuickCatalogue
     );
 
-
-    /* Social */
-
     toggle(
         "btnFacebook",
         ctrl.showFacebook
@@ -591,9 +424,6 @@ function applyVisibilityControls() {
         ctrl.showYoutube
     );
 
-
-    /* Quote */
-
     toggle(
         "sendWhatsappBtn",
         ctrl.showQuoteWhatsappBtn
@@ -604,28 +434,56 @@ function applyVisibilityControls() {
         ctrl.showQuotePdfBtn
     );
 
+    /* =====================================================
+       BUSINESS LINKS
+    ===================================================== */
 
-    /* Business links */
+    if ($("btnFacebook") && biz.facebook) {
+        $("btnFacebook").href = biz.facebook;
+    }
 
-    if (getEl("btnFacebook"))
-        getEl("btnFacebook").href =
-            biz.facebook || "#";
+    if ($("btnInstagram") && biz.instagram) {
+        $("btnInstagram").href = biz.instagram;
+    }
 
+    if ($("btnYoutube") && biz.youtube) {
+        $("btnYoutube").href = biz.youtube;
+    }
 
-    if (getEl("btnInstagram"))
-        getEl("btnInstagram").href =
-            biz.instagram || "#";
+    if ($("btnQuickEmail") && biz.email) {
+        $("btnQuickEmail").href =
+            `mailto:${biz.email}`;
+    }
 
+    if ($("btnQuickWebsite") && biz.website) {
+        $("btnQuickWebsite").href =
+            biz.website;
+    }
 
-    if (getEl("btnYoutube"))
-        getEl("btnYoutube").href =
-            biz.youtube || "#";
+    if ($("btnQuickMaps") && biz.googleMaps) {
+        $("btnQuickMaps").href =
+            biz.googleMaps;
+    }
 
+    if ($("callBtn") && biz.phone) {
+        $("callBtn").href =
+            `tel:${biz.phone}`;
+    }
 
-    if (getEl("btnQuickEmail"))
-        getEl("btnQuickEmail").href =
-            `mailto:${biz.email || ""}`;
+    if ($("btnQuickCall") && biz.phone) {
+        $("btnQuickCall").href =
+            `tel:${biz.phone}`;
+    }
 
+    if ($("whatsappBtn") && biz.whatsapp) {
+        $("whatsappBtn").href =
+            `https://wa.me/${biz.whatsapp}`;
+    }
+
+    if ($("btnQuickWhatsapp") && biz.whatsapp) {
+        $("btnQuickWhatsapp").href =
+            `https://wa.me/${biz.whatsapp}`;
+    }
 }
 
 
@@ -636,42 +494,30 @@ function applyVisibilityControls() {
 function updateThemeButtonText() {
 
     const isLight =
-        document.documentElement
-            .classList
-            .contains("saved-light-theme");
+        document.documentElement.classList.contains(
+            "saved-light-theme"
+        );
 
+    const themeIcon = $("themeIcon");
+    const themeText = $("themeText");
 
-    const themeIcon =
-        getEl("themeIcon");
-
-    const themeText =
-        getEl("themeText");
-
-
-    if (!themeIcon || !themeText)
-        return;
-
+    if (!themeIcon || !themeText) return;
 
     themeIcon.innerText =
         isLight ? "🌙" : "☀️";
 
-
     themeText.innerText =
-
         isLight
-
             ? (
                 currentLang === "hi"
                     ? "डार्क मोड"
                     : "Dark Mode"
             )
-
             : (
                 currentLang === "hi"
                     ? "लाइट मोड"
                     : "Light Mode"
             );
-
 }
 
 
@@ -681,477 +527,421 @@ function updateThemeButtonText() {
 
 function setLanguage(lang) {
 
-    currentLang = lang;
+    currentLang =
+        lang === "en" ? "en" : "hi";
 
     localStorage.setItem(
         "sandeepLang",
         currentLang
     );
 
-
-    const cfg =
-        window.MASTER_CONFIG;
-
-    if (!cfg) return;
-
-
-    const biz =
-        cfg.business || {};
-
-    const ctrl =
-        cfg.controls || {};
-
-
     document
         .querySelectorAll(".language-btn")
-        .forEach(function (button) {
+        .forEach(function(button) {
 
             button.classList.toggle(
                 "active",
-                button.getAttribute("data-lang") === lang
+                button.getAttribute("data-lang") ===
+                currentLang
             );
 
         });
 
-
     const isHi =
-        lang === "hi";
+        currentLang === "hi";
 
+    const cfg = getConfig();
+    const biz = cfg.business || {};
+    const ctrl = cfg.controls || {};
 
-    function setText(id, value) {
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-        const el = getEl(id);
-
-        if (el)
-            el.innerText = value;
-
-    }
-
-
-    /* Hero */
-
-    setText(
-        "businessTitle",
-        biz.name || ""
+    safeText(
+        "resetBtnText",
+        isHi ? "रीसेट" : "Reset"
     );
 
+    safeText(
+        "businessTitle",
+        biz.name || "Sandeep ElectroFix"
+    );
 
-    setText(
+    safeText(
         "businessTagline",
         isHi
-            ? biz.tagline_hi
-            : biz.tagline_en
+            ? (biz.tagline_hi || "")
+            : (biz.tagline_en || "")
     );
 
-
-    setText(
+    safeText(
         "businessLocation",
         isHi
-            ? `📍 ${biz.location_hi}`
-            : `📍 ${biz.location_en}`
+            ? `📍 ${biz.location_hi || ""}`
+            : `📍 ${biz.location_en || ""}`
     );
 
-
-    setText(
+    safeText(
         "callBtnText",
         isHi
             ? "📞 अभी कॉल करें"
             : "📞 Call Now"
     );
 
-
-    setText(
+    safeText(
         "whatsappBtnText",
         isHi
             ? "💬 व्हाट्सएप करें"
             : "💬 WhatsApp"
     );
 
+    /* =====================================================
+       DISCOUNT
+    ===================================================== */
 
-    /* Discount */
+    const discountPercent =
+        Number(ctrl.discountPercent || 0);
 
-    setText(
+    safeText(
         "discountBadge",
         isHi
             ? "🔥 विशेष ऑफर"
             : "🔥 SPECIAL OFFER"
     );
 
-
-    setText(
+    safeText(
         "discountTitle",
         isHi
             ? "विशेष छूट"
             : "Special Discount"
     );
 
-
-    setText(
+    safeText(
         "discountPercentage",
-        ctrl.discountPercent || 10
+        discountPercent
     );
 
-
-    setText(
+    safeText(
         "discountMessage",
         isHi
-
-            ? `इलेक्ट्रिकल सेवाओं पर ${ctrl.discountPercent}% की भारी छूट पाएं`
-
-            : `Get ${ctrl.discountPercent}% OFF on selected electrical services.`
+            ? `इलेक्ट्रिकल सेवाओं पर ${discountPercent}% की भारी छूट पाएं`
+            : `Get ${discountPercent}% OFF on selected electrical services.`
     );
 
-
-    setText(
+    safeText(
         "discountValidity",
         isHi
             ? "⏳ सीमित समय के लिए"
             : "⏳ Limited Time Offer"
     );
 
-
-    setText(
+    safeText(
         "discountBtnText",
         isHi
             ? "⚡ छूट प्राप्त करें"
             : "⚡ Get Discount"
     );
 
+    /* =====================================================
+       QUICK ACCESS
+    ===================================================== */
 
-    /* Quick Access */
-
-    setText(
+    safeText(
         "quickHeading",
-        isHi
-            ? "त्वरित सेवाएँ"
-            : "Quick Access"
+        isHi ? "त्वरित सेवाएँ" : "Quick Access"
     );
 
-
-    setText(
+    safeText(
         "labelCall",
         isHi ? "कॉल करें" : "Call"
     );
 
-    setText(
+    safeText(
         "labelWhatsapp",
         isHi ? "व्हाट्सएप" : "WhatsApp"
     );
 
-    setText(
+    safeText(
         "labelEmail",
         isHi ? "ईमेल" : "Email"
     );
 
-    setText(
+    safeText(
         "labelWeb",
         isHi ? "वेबसाइट" : "Website"
     );
 
-    setText(
+    safeText(
         "labelMap",
         isHi ? "गूगल मैप्स" : "Google Maps"
     );
 
-    setText(
+    safeText(
         "labelSaveContact",
         isHi ? "नंबर सेव करें" : "Save Contact"
     );
 
-    setText(
+    safeText(
         "labelShare",
         isHi ? "शेयर करें" : "Share"
     );
 
-    setText(
+    safeText(
         "labelWork",
         isHi ? "हमारे कार्य" : "Our Work"
     );
 
-    setText(
+    safeText(
         "labelCatalogue",
         isHi ? "सामग्री सूची" : "Catalogue"
     );
 
-
-    setText(
+    safeText(
         "socialHeading",
         isHi
             ? "हमसे सोशल मीडिया पर जुड़ें"
             : "Connect on Social Media"
     );
 
+    /* =====================================================
+       ABOUT
+    ===================================================== */
 
-    /* About */
-
-    setText(
+    safeText(
         "aboutHeading",
-        isHi
-            ? "हमारे बारे में"
-            : "About Us"
+        isHi ? "हमारे बारे में" : "About Us"
     );
 
+    safeHTML(
+        "aboutText",
+        isHi
+            ? `<strong>${escapeHTML(biz.name || "Sandeep ElectroFix")}</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।`
+            : `Welcome to <strong>${escapeHTML(biz.name || "Sandeep ElectroFix")}</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.`
+    );
 
-    const aboutText =
-        getEl("aboutText");
+    /* =====================================================
+       LOCATION
+    ===================================================== */
 
-    if (aboutText) {
-
-        aboutText.innerHTML =
-
-            isHi
-
-                ? `<strong>${biz.name}</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।`
-
-                : `Welcome to <strong>${biz.name}</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.`;
-
-    }
-
-
-    /* Location */
-
-    setText(
+    safeText(
         "locHeading",
         isHi
             ? "📍 सेवा क्षेत्र एवं लोकेशन"
             : "📍 Service Location"
     );
 
-
-    setText(
+    safeText(
         "locDesc",
         isHi
             ? "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।"
             : "Providing on-site electrical services across Lucknow."
     );
 
-
-    setText(
+    safeText(
         "distBtnText",
         isHi
             ? "हमारे यहाँ से अपनी दूरी चेक करें"
             : "Check Your Distance from Us"
     );
 
-
-    setText(
+    safeText(
         "mapBtnText",
         isHi
             ? "गूगल मैप्स पर रास्ता देखें"
             : "Get Directions on Google Maps"
     );
 
+    /* =====================================================
+       SERVICES
+    ===================================================== */
 
-    /* Services */
-
-    setText(
+    safeText(
         "servicesHeading",
-        isHi
-            ? "हमारी सेवाएँ"
-            : "Our Services"
+        isHi ? "हमारी सेवाएँ" : "Our Services"
     );
 
+    /* =====================================================
+       GALLERY
+    ===================================================== */
 
-    setText(
+    safeText(
         "galleryHeading",
         isHi
             ? "हमारे द्वारा किए गए कार्य"
             : "Our Work"
     );
 
+    /* =====================================================
+       QR
+    ===================================================== */
 
-    setText(
+    safeText(
         "qrHeading",
         isHi
             ? "क्यूआर कोड स्कैन करें"
             : "Scan QR Code"
     );
 
-
-    setText(
+    safeText(
         "qrDesc",
         isHi
             ? "हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।"
             : "Scan this QR code to quickly save our digital card or pay."
     );
 
-
-    setText(
+    safeText(
         "qrBtnText",
         isHi
             ? "📥 क्यूआर कोड डाउनलोड करें"
             : "📥 Download QR Code"
     );
 
+    /* =====================================================
+       REVIEWS
+    ===================================================== */
 
-    setText(
+    safeText(
         "reviewsHeading",
         isHi
             ? "ग्राहकों की राय"
             : "Customer Reviews"
     );
 
+    /* =====================================================
+       QUOTE
+    ===================================================== */
 
-    /* Quote */
-
-    setText(
+    safeText(
         "quoteHeading",
         isHi
             ? "कोटेशन व अनुमानित खर्च"
             : "Estimate & Quotation"
     );
 
-
-    if (getEl("customerName"))
-        getEl("customerName").placeholder =
+    if ($("customerName")) {
+        $("customerName").placeholder =
             isHi
                 ? "आपका नाम *"
                 : "Your Name *";
+    }
 
-
-    if (getEl("customerPhone"))
-        getEl("customerPhone").placeholder =
+    if ($("customerPhone")) {
+        $("customerPhone").placeholder =
             isHi
                 ? "मोबाइल नंबर *"
                 : "Mobile Number *";
+    }
 
-
-    if (getEl("customerLocation"))
-        getEl("customerLocation").placeholder =
+    if ($("customerLocation")) {
+        $("customerLocation").placeholder =
             isHi
                 ? "आपका पता / एरिया *"
                 : "Your Address / Area *";
+    }
 
-
-    if (getEl("customerMessage"))
-        getEl("customerMessage").placeholder =
+    if ($("customerMessage")) {
+        $("customerMessage").placeholder =
             isHi
                 ? "कार्य का अतिरिक्त विवरण (वैकल्पिक)..."
                 : "Additional work details (optional)...";
-
-
-    /* Summary */
+    }
 
     const count =
         Object.values(selectedItemsMap)
             .reduce(
                 (acc, item) =>
-                    acc + item.qty,
+                    acc + Number(item.qty || 0),
                 0
             );
 
+    if ($("summaryHeader")) {
 
-    const summaryHeader =
-        getEl("summaryHeader");
-
-
-    if (summaryHeader) {
-
-        summaryHeader.innerHTML =
-
+        $("summaryHeader").innerHTML =
             isHi
-
                 ? `चुनी गई सेवाएँ (<span id="selectedCount">${count}</span>)`
-
                 : `Selected Services (<span id="selectedCount">${count}</span>)`;
-
     }
 
-
-    setText(
+    safeText(
         "lblSubtotal",
         isHi ? "कुल राशि:" : "Subtotal:"
     );
 
-
-    setText(
+    safeText(
         "lblGrandTotal",
         isHi ? "अंतिम राशि:" : "Grand Total:"
     );
 
-
-    setText(
+    safeText(
         "discountLabel",
         isHi
-            ? `विशेष छूट (${ctrl.discountPercent}% OFF):`
-            : `Special Discount (${ctrl.discountPercent}% OFF):`
+            ? `विशेष छूट (${discountPercent}% OFF):`
+            : `Special Discount (${discountPercent}% OFF):`
     );
 
-
-    setText(
+    safeText(
         "sendWhatsappBtn",
         isHi
             ? "💬 व्हाट्सएप पर भेजें"
             : "💬 Send on WhatsApp"
     );
 
-
-    setText(
+    safeText(
         "downloadPdfBtn",
         isHi
             ? "📄 पीडीएफ एस्टीमेट डाउनलोड करें"
             : "📄 Download PDF Estimate"
     );
 
+    /* =====================================================
+       FAQ
+    ===================================================== */
 
-    /* FAQ */
-
-    setText(
+    safeText(
         "faqHeading",
         isHi
             ? "अक्सर पूछे जाने वाले सवाल"
             : "Frequently Asked Questions"
     );
 
+    /* =====================================================
+       BOTTOM NAV
+    ===================================================== */
 
-    /* Bottom Nav */
-
-    setText(
+    safeText(
         "navHome",
         isHi ? "होम" : "Home"
     );
 
-    setText(
+    safeText(
         "navServices",
         isHi ? "सेवाएं" : "Services"
     );
 
-    setText(
+    safeText(
         "navWork",
         isHi ? "कार्य" : "Work"
     );
 
-    setText(
+    safeText(
         "navQuote",
         isHi ? "कोट" : "Quote"
     );
 
-    setText(
+    safeText(
         "navCall",
         isHi ? "कॉल" : "Call"
     );
 
-
-    setText(
-        "resetBtnText",
-        isHi ? "रीसेट" : "Reset"
-    );
-
-
     updateThemeButtonText();
-
     applyVisibilityControls();
 
     renderServices();
-
     renderGallery();
-
     renderReviews();
-
     renderFAQ();
-
     updateCalculations();
-
 }
 
 
@@ -1162,116 +952,132 @@ function setLanguage(lang) {
 function renderServices() {
 
     const container =
-        getEl("serviceContainer");
+        $("serviceContainer");
 
     const services =
-        window.MASTER_CONFIG?.services;
+        getServices();
 
-
-    if (!container || !services)
+    if (!container) {
+        console.warn(
+            "serviceContainer not found."
+        );
         return;
+    }
 
+    if (!services.length) {
+
+        container.innerHTML =
+            `<p class="no-selection-hint">
+                ${currentLang === "hi"
+                    ? "कोई सेवा उपलब्ध नहीं है।"
+                    : "No services available."}
+             </p>`;
+
+        return;
+    }
 
     container.innerHTML = "";
 
+    services.forEach(
+        function(service, sIdx) {
 
-    services.forEach(function (service, sIdx) {
+            if (service.show === false) return;
 
-        if (service.show === false)
-            return;
+            const title =
+                currentLang === "hi"
+                    ? service.title_hi
+                    : service.title_en;
 
+            let activeCount = 0;
 
-        const title =
-            currentLang === "hi"
-                ? service.title_hi
-                : service.title_en;
+            const subServices =
+                Array.isArray(service.subServices)
+                    ? service.subServices
+                    : [];
 
+            subServices.forEach(
+                function(_, subIdx) {
 
-        let activeCount = 0;
+                    const item =
+                        selectedItemsMap[
+                            `${sIdx}_${subIdx}`
+                        ];
 
-
-        (service.subServices || [])
-            .forEach(function (_, subIdx) {
-
-                const item =
-                    selectedItemsMap[
-                        `${sIdx}_${subIdx}`
-                    ];
-
-
-                if (item?.qty > 0) {
-
-                    activeCount += item.qty;
-
+                    if (item) {
+                        activeCount +=
+                            Number(item.qty || 0);
+                    }
                 }
+            );
 
-            });
+            const card =
+                document.createElement("div");
 
+            card.className =
+                `service-card ${
+                    activeCount > 0
+                        ? "has-active-items"
+                        : ""
+                }`;
 
-        const card =
-            document.createElement("div");
+            card.innerHTML = `
+                <div
+                    class="service-header"
+                    role="button"
+                    tabindex="0"
+                    data-service-index="${sIdx}"
+                >
+                    <div class="service-title-wrap">
 
+                        <span class="service-icon">
+                            ${escapeHTML(service.icon || "⚡")}
+                        </span>
 
-        card.className =
-            `service-card ${
-                activeCount > 0
-                    ? "has-active-items"
-                    : ""
-            }`;
+                        <h3 class="service-title">
+                            ${escapeHTML(title || "Service")}
+                        </h3>
 
+                    </div>
 
-        card.innerHTML = `
-
-            <div
-                class="service-header"
-                data-service-index="${sIdx}"
-            >
-
-                <div class="service-title-wrap">
-
-                    <span class="service-icon">
-                        ${service.icon || ""}
+                    <span class="toggle-arrow">
+                        ➔
                     </span>
 
-                    <h3 class="service-title">
-                        ${title}
-                    </h3>
-
                 </div>
+            `;
 
-                <span class="toggle-arrow">
-                    ➔
-                </span>
+            const header =
+                card.querySelector(".service-header");
 
-            </div>
+            if (header) {
 
-        `;
+                header.addEventListener(
+                    "click",
+                    function() {
+                        openServiceModal(sIdx);
+                    }
+                );
 
+                header.addEventListener(
+                    "keydown",
+                    function(event) {
 
-        const header =
-            card.querySelector(
-                ".service-header"
-            );
+                        if (
+                            event.key === "Enter" ||
+                            event.key === " "
+                        ) {
 
+                            event.preventDefault();
 
-        if (header) {
+                            openServiceModal(sIdx);
+                        }
+                    }
+                );
+            }
 
-            header.addEventListener(
-                "click",
-                function () {
-
-                    openServiceModal(sIdx);
-
-                }
-            );
-
+            container.appendChild(card);
         }
-
-
-        container.appendChild(card);
-
-    });
-
+    );
 }
 
 
@@ -1281,109 +1087,100 @@ function renderServices() {
 
 function openServiceModal(sIdx) {
 
-    const services =
-        window.MASTER_CONFIG?.services;
+    const services = getServices();
+    const service = services[sIdx];
 
-
-    if (!services || !services[sIdx])
-        return;
-
-
-    const service =
-        services[sIdx];
-
+    if (!service) return;
 
     const title =
         currentLang === "hi"
             ? service.title_hi
             : service.title_en;
 
-
     const desc =
         currentLang === "hi"
             ? service.desc_hi
             : service.desc_en;
 
+    safeText(
+        "modalServiceIcon",
+        service.icon || "⚡"
+    );
 
-    if (getEl("modalServiceIcon"))
-        getEl("modalServiceIcon").innerText =
-            service.icon || "";
+    safeText(
+        "modalServiceTitle",
+        title || "Service"
+    );
 
-
-    if (getEl("modalServiceTitle"))
-        getEl("modalServiceTitle").innerText =
-            title;
-
-
-    if (getEl("modalServiceDesc"))
-        getEl("modalServiceDesc").innerText =
-            desc;
-
+    safeText(
+        "modalServiceDesc",
+        desc || ""
+    );
 
     const itemsContainer =
-        getEl("modalItemsContainer");
+        $("modalItemsContainer");
 
-
-    if (!itemsContainer)
+    if (!itemsContainer) {
+        console.warn(
+            "modalItemsContainer not found."
+        );
         return;
+    }
 
+    const subServices =
+        Array.isArray(service.subServices)
+            ? service.subServices
+            : [];
 
     itemsContainer.innerHTML = "";
 
+    subServices.forEach(
+        function(sub, subIdx) {
 
-    (service.subServices || [])
-        .forEach(function (sub, subIdx) {
-
-            if (sub.show === false)
-                return;
-
+            if (sub.show === false) return;
 
             const key =
                 `${sIdx}_${subIdx}`;
 
+            const selected =
+                selectedItemsMap[key];
 
             const qty =
-                selectedItemsMap[key]?.qty || 0;
-
+                selected
+                    ? Number(selected.qty || 0)
+                    : 0;
 
             const name =
                 currentLang === "hi"
                     ? sub.name_hi
                     : sub.name_en;
 
-
             const rate =
                 currentLang === "hi"
                     ? sub.rate_hi
                     : sub.rate_en;
 
-
             const row =
                 document.createElement("div");
 
-
             row.className =
                 `sub-service-item ${
-                    qty > 0
-                        ? "has-qty"
-                        : ""
+                    qty > 0 ? "has-qty" : ""
                 }`;
-
 
             row.id =
                 `modal_row_${key}`;
-
 
             row.innerHTML = `
 
                 <div class="sub-service-info">
 
                     <span class="sub-name">
-                        ${name}
+                        ${escapeHTML(name || "Service")}
                     </span>
 
                     <span class="sub-rate">
-                        ${rate}
+                        ${escapeHTML(rate || "")}
                     </span>
 
                 </div>
@@ -1414,99 +1211,90 @@ function openServiceModal(sIdx) {
                     </button>
 
                 </div>
-
             `;
 
-
-            const minusBtn =
+            const minus =
                 row.querySelector(
                     '[data-action="minus"]'
                 );
 
-
-            const plusBtn =
+            const plus =
                 row.querySelector(
                     '[data-action="plus"]'
                 );
 
+            if (minus) {
 
-            if (minusBtn) {
-
-                minusBtn.addEventListener(
+                minus.addEventListener(
                     "click",
-                    function () {
+                    function(event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
 
                         changeQtyModal(
                             sIdx,
                             subIdx,
                             -1
                         );
-
                     }
                 );
-
             }
 
+            if (plus) {
 
-            if (plusBtn) {
-
-                plusBtn.addEventListener(
+                plus.addEventListener(
                     "click",
-                    function () {
+                    function(event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
 
                         changeQtyModal(
                             sIdx,
                             subIdx,
                             1
                         );
-
                     }
                 );
-
             }
 
-
             itemsContainer.appendChild(row);
-
-        });
-
+        }
+    );
 
     const overlay =
-        getEl("serviceModalOverlay");
+        $("serviceModalOverlay");
 
-
-    if (!overlay)
-        return;
-
+    if (!overlay) return;
 
     overlay.style.display = "flex";
 
-
-    requestAnimationFrame(function () {
-
-        overlay.classList.add("active");
-
-    });
-
-
-    document.body.classList.add(
-        "modal-open"
+    requestAnimationFrame(
+        function() {
+            overlay.classList.add("active");
+        }
     );
 
+    document.body.style.overflow = "hidden";
 
-    document.body.style.overflow =
-        "hidden";
+    if (!modalHistoryAdded) {
 
+        history.pushState(
+            {
+                project21Modal: true
+            },
+            "",
+            window.location.href
+        );
 
-    pushOverlayHistory(
-        "serviceModal"
-    );
-
+        modalHistoryAdded = true;
+    }
 }
 
 
 /* =========================================================
-   CHANGE MODAL QUANTITY
+   MODAL QUANTITY
 ========================================================= */
 
 function changeQtyModal(
@@ -1521,34 +1309,32 @@ function changeQtyModal(
         change
     );
 
-
     const key =
         `${sIdx}_${subIdx}`;
 
-
     const currentQty =
-        selectedItemsMap[key]?.qty || 0;
+        selectedItemsMap[key]
+            ? Number(selectedItemsMap[key].qty || 0)
+            : 0;
 
+    const mQty =
+        $(`modal_qty_${key}`);
 
-    const qtyEl =
-        getEl(`modal_qty_${key}`);
+    const mRow =
+        $(`modal_row_${key}`);
 
-
-    const rowEl =
-        getEl(`modal_row_${key}`);
-
-
-    if (qtyEl)
-        qtyEl.innerText =
+    if (mQty) {
+        mQty.innerText =
             currentQty;
+    }
 
+    if (mRow) {
 
-    if (rowEl)
-        rowEl.classList.toggle(
+        mRow.classList.toggle(
             "has-qty",
             currentQty > 0
         );
-
+    }
 }
 
 
@@ -1557,59 +1343,48 @@ function changeQtyModal(
 ========================================================= */
 
 function closeServiceModal(
-    fromHistory = false
+    isFromHistory = false
 ) {
 
     const overlay =
-        getEl("serviceModalOverlay");
+        $("serviceModalOverlay");
 
-
-    if (!overlay)
-        return;
-
+    if (!overlay) return;
 
     const isOpen =
-        overlay.classList.contains("active") ||
-        overlay.style.display === "flex";
+        overlay.style.display === "flex" ||
+        overlay.classList.contains("active");
 
+    if (!isOpen) return;
 
-    if (!isOpen)
-        return;
+    overlay.classList.remove("active");
 
+    setTimeout(
+        function() {
 
-    overlay.classList.remove(
-        "active"
+            overlay.style.display = "none";
+
+            document.body.style.overflow = "";
+
+            renderServices();
+
+        },
+        250
     );
-
-
-    setTimeout(function () {
-
-        overlay.style.display =
-            "none";
-
-    }, 250);
-
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
-
-    document.body.style.overflow =
-        "";
-
 
     if (
-        !fromHistory &&
-        currentOverlayState === "serviceModal"
+        !isFromHistory &&
+        modalHistoryAdded
     ) {
 
-        currentOverlayState = null;
+        modalHistoryAdded = false;
 
         history.back();
 
-    }
+    } else if (isFromHistory) {
 
+        modalHistoryAdded = false;
+    }
 }
 
 
@@ -1620,105 +1395,68 @@ function closeServiceModal(
 function openLightboxModal(src) {
 
     const box =
-        getEl("lightbox");
+        $("lightbox");
 
     const img =
-        getEl("lightboxImage");
+        $("lightboxImage");
 
-
-    if (!box || !img)
-        return;
-
+    if (!box || !img || !src) return;
 
     img.src = src;
 
+    box.style.display = "flex";
 
-    box.style.display =
-        "flex";
-
-
-    requestAnimationFrame(function () {
-
-        box.classList.add("active");
-
-    });
-
-
-    pushOverlayHistory(
-        "lightbox"
+    requestAnimationFrame(
+        function() {
+            box.classList.add("active");
+        }
     );
 
+    document.body.style.overflow = "hidden";
+
+    if (!lightboxHistoryAdded) {
+
+        history.pushState(
+            {
+                project21Lightbox: true
+            },
+            "",
+            window.location.href
+        );
+
+        lightboxHistoryAdded = true;
+    }
 }
 
 
-/* =========================================================
-   CLOSE LIGHTBOX
-========================================================= */
-
 function closeLightboxModal(
-    fromHistory = false
+    isFromHistory = false
 ) {
 
     const box =
-        getEl("lightbox");
+        $("lightbox");
 
+    if (!box) return;
 
-    if (!box)
-        return;
+    box.classList.remove("active");
 
+    box.style.display = "none";
 
-    const isOpen =
-        box.style.display === "flex";
-
-
-    if (!isOpen)
-        return;
-
-
-    box.classList.remove(
-        "active"
-    );
-
-
-    setTimeout(function () {
-
-        box.style.display =
-            "none";
-
-    }, 200);
-
+    document.body.style.overflow = "";
 
     if (
-        !fromHistory &&
-        currentOverlayState === "lightbox"
+        !isFromHistory &&
+        lightboxHistoryAdded
     ) {
 
-        currentOverlayState = null;
+        lightboxHistoryAdded = false;
 
         history.back();
 
+    } else if (isFromHistory) {
+
+        lightboxHistoryAdded = false;
     }
-
-}
-
-
-/* =========================================================
-   CENTRAL HISTORY
-========================================================= */
-
-function pushOverlayHistory(type) {
-
-    currentOverlayState = type;
-
-
-    history.pushState(
-        {
-            project21Overlay: type
-        },
-        "",
-        window.location.href
-    );
-
 }
 
 
@@ -1729,114 +1467,104 @@ function pushOverlayHistory(type) {
 function showExitToast(msg) {
 
     let toast =
-        getEl("appExitToast");
-
+        $("appExitToast");
 
     if (!toast) {
 
         toast =
             document.createElement("div");
 
-
         toast.id =
             "appExitToast";
 
+        toast.style.position =
+            "fixed";
 
-        Object.assign(
-            toast.style,
-            {
+        toast.style.bottom =
+            "85px";
 
-                position: "fixed",
+        toast.style.left =
+            "50%";
 
-                bottom: "85px",
+        toast.style.transform =
+            "translateX(-50%)";
 
-                left: "50%",
+        toast.style.background =
+            "rgba(5,8,22,0.95)";
 
-                transform:
-                    "translateX(-50%)",
+        toast.style.color =
+            "#f5c542";
 
-                background:
-                    "rgba(5, 8, 22, 0.95)",
+        toast.style.padding =
+            "10px 22px";
 
-                color:
-                    "#f5c542",
+        toast.style.borderRadius =
+            "30px";
 
-                padding:
-                    "10px 22px",
+        toast.style.fontSize =
+            "13px";
 
-                borderRadius:
-                    "30px",
+        toast.style.fontWeight =
+            "600";
 
-                fontSize:
-                    "13px",
+        toast.style.zIndex =
+            "9999999";
 
-                fontWeight:
-                    "600",
+        toast.style.boxShadow =
+            "0 8px 30px rgba(0,0,0,0.7)";
 
-                zIndex:
-                    "9999999",
+        toast.style.border =
+            "1px solid rgba(245,197,66,0.5)";
 
-                boxShadow:
-                    "0 8px 30px rgba(0,0,0,0.7)",
+        toast.style.transition =
+            "opacity .3s ease";
 
-                border:
-                    "1px solid rgba(245,197,66,0.5)",
-
-                transition:
-                    "opacity 0.3s ease",
-
-                pointerEvents:
-                    "none"
-
-            }
-        );
-
+        toast.style.pointerEvents =
+            "none";
 
         document.body.appendChild(
             toast
         );
-
     }
-
 
     toast.innerText =
         msg;
 
-
     toast.style.opacity =
         "1";
 
-
     toast.style.display =
         "block";
-
 
     clearTimeout(
         window.exitToastTimer
     );
 
-
     window.exitToastTimer =
-        setTimeout(function () {
+        setTimeout(
+            function() {
 
-            toast.style.opacity =
-                "0";
+                toast.style.opacity =
+                    "0";
 
+                setTimeout(
+                    function() {
 
-            setTimeout(function () {
+                        toast.style.display =
+                            "none";
 
-                toast.style.display =
-                    "none";
+                    },
+                    300
+                );
 
-            }, 300);
-
-        }, 2000);
-
+            },
+            2000
+        );
 }
 
 
 /* =========================================================
-   QUANTITY ENGINE
+   CART QUANTITY
 ========================================================= */
 
 function changeQty(
@@ -1846,100 +1574,91 @@ function changeQty(
 ) {
 
     const services =
-        window.MASTER_CONFIG?.services;
+        getServices();
 
+    const service =
+        services[sIdx];
 
-    if (
-        !services ||
-        !services[sIdx] ||
-        !services[sIdx].subServices[subIdx]
-    )
-        return;
+    if (!service) return;
 
+    const sub =
+        Array.isArray(service.subServices)
+            ? service.subServices[subIdx]
+            : null;
+
+    if (!sub) return;
 
     const key =
         `${sIdx}_${subIdx}`;
-
-
-    const sub =
-        services[sIdx]
-            .subServices[subIdx];
-
 
     if (!selectedItemsMap[key]) {
 
         selectedItemsMap[key] = {
 
             name_hi:
-                sub.name_hi,
+                sub.name_hi || "",
 
             name_en:
-                sub.name_en,
+                sub.name_en || "",
 
             price:
-                Number(sub.price) || 0,
+                Number(sub.price || 0),
 
-            qty:
-                0
-
+            qty: 0
         };
-
     }
 
-
     selectedItemsMap[key].qty +=
-        change;
-
+        Number(change || 0);
 
     if (
         selectedItemsMap[key].qty <= 0
     ) {
 
         delete selectedItemsMap[key];
-
     }
 
+    try {
 
-    localStorage.setItem(
-        "sandeepCart",
-        JSON.stringify(
-            selectedItemsMap
-        )
-    );
+        localStorage.setItem(
+            "sandeepCart",
+            JSON.stringify(
+                selectedItemsMap
+            )
+        );
 
+    } catch (error) {
+
+        console.warn(
+            "Cart save failed:",
+            error
+        );
+    }
 
     updateCalculations();
-
-
-    renderServices();
-
 }
 
-
-/* =========================================================
-   DIRECT QUANTITY
-========================================================= */
 
 function changeQtyDirect(
     key,
     change
 ) {
 
-    if (!selectedItemsMap[key])
-        return;
-
+    if (!selectedItemsMap[key]) return;
 
     const parts =
         key.split("_");
 
-
     const sIdx =
         parseInt(parts[0], 10);
-
 
     const subIdx =
         parseInt(parts[1], 10);
 
+    if (
+        Number.isNaN(sIdx) ||
+        Number.isNaN(subIdx)
+    ) return;
 
     changeQty(
         sIdx,
@@ -1947,21 +1666,15 @@ function changeQtyDirect(
         change
     );
 
+    renderServices();
 }
 
 
-/* =========================================================
-   REMOVE ITEM
-========================================================= */
-
 function removeItemDirect(key) {
 
-    if (!selectedItemsMap[key])
-        return;
-
+    if (!selectedItemsMap[key]) return;
 
     delete selectedItemsMap[key];
-
 
     localStorage.setItem(
         "sandeepCart",
@@ -1970,11 +1683,8 @@ function removeItemDirect(key) {
         )
     );
 
-
     updateCalculations();
-
     renderServices();
-
 }
 
 
@@ -1989,117 +1699,104 @@ function updateCalculations() {
             selectedItemsMap
         );
 
-
     const countEl =
-        getEl("selectedCount");
+        $("selectedCount");
 
     const listEl =
-        getEl("selectedServicesList");
+        $("selectedServicesList");
 
     const subtotalEl =
-        getEl("calcSubtotal");
+        $("calcSubtotal");
 
     const discRow =
-        getEl("calcDiscountRow");
+        $("calcDiscountRow");
 
     const discEl =
-        getEl("calcDiscount");
+        $("calcDiscount");
 
     const totalEl =
-        getEl("calcGrandTotal");
-
+        $("calcGrandTotal");
 
     const ctrl =
-        window.MASTER_CONFIG?.controls || {};
-
+        getControls();
 
     const count =
         entries.reduce(
-            function (acc, [, item]) {
+            function(total, [, item]) {
 
-                return acc +
+                return total +
                     Number(item.qty || 0);
 
             },
             0
         );
 
-
-    if (countEl)
+    if (countEl) {
         countEl.innerText =
             count;
-
+    }
 
     if (entries.length === 0) {
 
         if (listEl) {
 
             listEl.innerHTML =
-
                 `<p class="no-selection-hint">
-
                     ${
                         currentLang === "hi"
-
                             ? "अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।"
-
                             : "No services selected yet. Use + / − above."
-
                     }
-
-                </p>`;
-
+                 </p>`;
         }
 
-
-        if (subtotalEl)
+        if (subtotalEl) {
             subtotalEl.innerText =
                 "₹0";
+        }
 
-
-        if (discRow)
+        if (discRow) {
             discRow.style.display =
                 "none";
+        }
 
+        if (discEl) {
+            discEl.innerText =
+                "-₹0";
+        }
 
-        if (totalEl)
+        if (totalEl) {
             totalEl.innerText =
                 "₹0";
-
+        }
 
         return;
-
     }
-
 
     if (listEl) {
 
         listEl.innerHTML =
             entries.map(
-                function ([key, item]) {
+                function([key, item]) {
 
                     const name =
                         currentLang === "hi"
                             ? item.name_hi
                             : item.name_en;
 
-
                     const price =
-                        Number(item.price) || 0;
-
+                        Number(item.price || 0);
 
                     const qty =
-                        Number(item.qty) || 0;
-
+                        Number(item.qty || 0);
 
                     return `
-
                         <div class="summary-item-row">
 
                             <div class="summary-item-left">
 
                                 <span class="summary-item-name">
-                                    • ${name}
+                                    • ${escapeHTML(name)}
                                 </span>
 
                                 <span class="summary-item-price">
@@ -2109,36 +1806,35 @@ function updateCalculations() {
 
                             </div>
 
-
                             <div class="summary-qty-actions">
 
                                 <button
                                     type="button"
                                     class="summary-btn minus"
                                     onclick="changeQtyDirect('${key}', -1)"
+                                    title="कम करें"
                                 >
                                     −
                                 </button>
-
 
                                 <span class="summary-qty-val">
                                     ${qty}
                                 </span>
 
-
                                 <button
                                     type="button"
                                     class="summary-btn plus"
                                     onclick="changeQtyDirect('${key}', 1)"
+                                    title="बढ़ाएं"
                                 >
                                     +
                                 </button>
-
 
                                 <button
                                     type="button"
                                     class="summary-btn remove"
                                     onclick="removeItemDirect('${key}')"
+                                    title="हटाएं"
                                 >
                                     🗑️
                                 </button>
@@ -2146,75 +1842,71 @@ function updateCalculations() {
                             </div>
 
                         </div>
-
                     `;
-
                 }
             ).join("");
-
     }
-
 
     const subtotal =
         entries.reduce(
-            function (acc, [, item]) {
+            function(total, [, item]) {
 
-                return acc +
+                return total +
                     (
-                        (Number(item.price) || 0) *
-                        (Number(item.qty) || 0)
+                        Number(item.price || 0) *
+                        Number(item.qty || 0)
                     );
 
             },
             0
         );
 
+    const discountPercent =
+        Number(
+            ctrl.discountPercent || 0
+        );
 
     const isDiscountActive =
-        ctrl.showDiscount &&
-        Number(ctrl.discountPercent) > 0;
-
+        ctrl.showDiscount === true &&
+        discountPercent > 0;
 
     const discount =
         isDiscountActive
-
             ? Math.round(
                 subtotal *
                 (
-                    Number(ctrl.discountPercent) /
-                    100
+                    discountPercent / 100
                 )
             )
-
             : 0;
 
-
     const total =
-        subtotal -
-        discount;
+        subtotal - discount;
 
-
-    if (subtotalEl)
+    if (subtotalEl) {
         subtotalEl.innerText =
             `₹${subtotal}`;
+    }
 
+    if (discRow) {
 
-    if (discRow)
         discRow.style.display =
             isDiscountActive
                 ? "flex"
                 : "none";
+    }
 
+    if (discEl) {
 
-    if (discEl)
         discEl.innerText =
             `-₹${discount}`;
+    }
 
+    if (totalEl) {
 
-    if (totalEl)
         totalEl.innerText =
             `₹${total}`;
-
+    }
 }
 
 
@@ -2225,91 +1917,90 @@ function updateCalculations() {
 function renderGallery() {
 
     const container =
-        getEl("galleryContainer");
+        $("galleryContainer");
 
+    if (!container) return;
 
     const gallery =
-        window.MASTER_CONFIG?.gallery;
+        getGallery().filter(
+            function(item) {
+                return item.show !== false;
+            }
+        );
 
+    if (!gallery.length) {
 
-    if (!container || !gallery)
+        container.innerHTML =
+            `<p class="no-selection-hint">
+                ${
+                    currentLang === "hi"
+                        ? "अभी कोई कार्य फोटो उपलब्ध नहीं है।"
+                        : "No work photos available."
+                }
+             </p>`;
+
         return;
-
+    }
 
     container.innerHTML = "";
 
-
-    gallery
-        .filter(
-            g => g.show !== false
-        )
-        .forEach(function (g) {
+    gallery.forEach(
+        function(item) {
 
             const title =
                 currentLang === "hi"
-                    ? g.title_hi
-                    : g.title_en;
+                    ? item.title_hi
+                    : item.title_en;
 
-
-            const item =
+            const galleryItem =
                 document.createElement("div");
 
-
-            item.className =
+            galleryItem.className =
                 "gallery-item";
 
-
-            item.innerHTML = `
+            galleryItem.innerHTML = `
 
                 <img
-                    src="${g.image}"
-                    alt="${title || "Electrical Work"}"
+                    src="${escapeHTML(item.image || "")}"
+                    alt="${escapeHTML(title || "Our Work")}"
+                    loading="lazy"
                 >
 
                 <div class="gallery-title">
-                    ${title || ""}
+                    ${escapeHTML(title || "")}
                 </div>
-
             `;
 
+            const img =
+                galleryItem.querySelector("img");
 
-            const image =
-                item.querySelector("img");
+            if (img) {
 
-
-            if (image) {
-
-                image.addEventListener(
+                img.addEventListener(
                     "error",
-                    function () {
+                    function() {
 
-                        item.style.display =
+                        galleryItem.style.display =
                             "none";
-
                     }
                 );
 
+                img.addEventListener(
+                    "click",
+                    function() {
+
+                        openLightboxModal(
+                            item.image
+                        );
+                    }
+                );
             }
 
-
-            item.addEventListener(
-                "click",
-                function () {
-
-                    openLightboxModal(
-                        g.image
-                    );
-
-                }
-            );
-
-
             container.appendChild(
-                item
+                galleryItem
             );
-
-        });
-
+        }
+    );
 }
 
 
@@ -2320,74 +2011,80 @@ function renderGallery() {
 function renderReviews() {
 
     const container =
-        getEl("reviewContainer");
+        $("reviewContainer");
 
+    if (!container) return;
 
     const reviews =
-        window.MASTER_CONFIG?.reviews;
+        getReviews().filter(
+            function(review) {
+                return review.show !== false;
+            }
+        );
 
+    if (!reviews.length) {
 
-    if (!container || !reviews)
+        container.innerHTML =
+            `<p class="no-selection-hint">
+                ${
+                    currentLang === "hi"
+                        ? "अभी कोई समीक्षा उपलब्ध नहीं है।"
+                        : "No reviews available."
+                }
+             </p>`;
+
         return;
-
+    }
 
     container.innerHTML =
-        reviews
-            .filter(
-                r => r.show !== false
-            )
-            .map(
-                function (r) {
+        reviews.map(
+            function(review) {
 
-                    const rating =
+                const rating =
+                    Math.max(
+                        0,
                         Math.min(
                             5,
-                            Math.max(
-                                0,
-                                Number(r.rating) || 5
+                            Number(
+                                review.rating || 5
                             )
-                        );
+                        )
+                    );
 
-
-                    return `
+                return `
+                    <div
+                        class="card review-card"
+                        style="padding:12px;margin-bottom:8px;"
+                    >
 
                         <div
-                            class="card review-card"
-                            style="padding:12px; margin-bottom:8px;"
+                            style="color:#f5c542;"
                         >
-
-                            <div
-                                style="color:#f5c542;"
-                            >
-                                ${"★".repeat(rating)}
-                            </div>
-
-
-                            <p
-                                style="margin:4px 0; font-size:0.85rem;"
-                            >
-                                "${
-                                    currentLang === "hi"
-                                        ? r.text_hi
-                                        : r.text_en
-                                }"
-                            </p>
-
-
-                            <small
-                                style="color:#aab4c8;"
-                            >
-                                — ${r.name}
-                            </small>
-
+                            ${"★".repeat(rating)}
                         </div>
 
-                    `;
+                        <p
+                            style="margin:4px 0;font-size:.85rem;"
+                        >
+                            "${escapeHTML(
+                                currentLang === "hi"
+                                    ? review.text_hi
+                                    : review.text_en
+                            )}"
+                        </p>
 
-                }
-            )
-            .join("");
+                        <small
+                            style="color:#aab4c8;"
+                        >
+                            — ${escapeHTML(
+                                review.name || "Customer"
+                            )}
+                        </small>
 
+                    </div>
+                `;
+            }
+        ).join("");
 }
 
 
@@ -2398,44 +2095,60 @@ function renderReviews() {
 function renderFAQ() {
 
     const container =
-        getEl("faqContainer");
+        $("faqContainer");
 
+    if (!container) return;
 
     const faq =
-        window.MASTER_CONFIG?.faq;
+        getFAQ().filter(
+            function(item) {
+                return item.show !== false;
+            }
+        );
 
+    if (!faq.length) {
 
-    if (!container || !faq)
+        container.innerHTML =
+            `<p class="no-selection-hint">
+                ${
+                    currentLang === "hi"
+                        ? "अभी कोई FAQ उपलब्ध नहीं है।"
+                        : "No FAQ available."
+                }
+             </p>`;
+
         return;
-
+    }
 
     container.innerHTML = "";
 
+    faq.forEach(
+        function(item) {
 
-    faq
-        .filter(
-            f => f.show !== false
-        )
-        .forEach(function (f) {
+            const question =
+                currentLang === "hi"
+                    ? item.q_hi
+                    : item.q_en;
 
-            const item =
+            const answer =
+                currentLang === "hi"
+                    ? item.a_hi
+                    : item.a_en;
+
+            const faqItem =
                 document.createElement("div");
 
-
-            item.className =
+            faqItem.className =
                 "faq-item";
 
-
-            item.innerHTML = `
+            faqItem.innerHTML = `
 
                 <div class="faq-question">
 
                     <span>
-                        ${
-                            currentLang === "hi"
-                                ? f.q_hi
-                                : f.q_en
-                        }
+                        ${escapeHTML(
+                            question || "Question"
+                        )}
                     </span>
 
                     <span class="faq-icon">
@@ -2444,38 +2157,28 @@ function renderFAQ() {
 
                 </div>
 
-
                 <div class="faq-answer">
-
-                    ${
-                        currentLang === "hi"
-                            ? f.a_hi
-                            : f.a_en
-                    }
-
+                    ${escapeHTML(
+                        answer || ""
+                    )}
                 </div>
-
             `;
 
-
-            item.addEventListener(
+            faqItem.addEventListener(
                 "click",
-                function () {
+                function() {
 
-                    item.classList.toggle(
+                    faqItem.classList.toggle(
                         "active"
                     );
-
                 }
             );
 
-
             container.appendChild(
-                item
+                faqItem
             );
-
-        });
-
+        }
+    );
 }
 
 
@@ -2483,47 +2186,48 @@ function renderFAQ() {
    QUICK LAYOUT
 ========================================================= */
 
-function applyQuickLayout(
-    layout,
-    save = true
-) {
+function applyQuickLayout(layout) {
+
+    const allowed = [
+        "grid-2",
+        "slider",
+        "list",
+        "mini"
+    ];
+
+    if (!allowed.includes(layout)) {
+        layout = "grid-2";
+    }
 
     const container =
-        getEl("quickGridContainer");
-
+        $("quickGridContainer");
 
     if (container) {
 
         container.className =
             `grid layout-${layout}`;
-
     }
-
 
     document
         .querySelectorAll(
             "#quickLayoutBar .layout-btn"
         )
-        .forEach(function (button) {
+        .forEach(
+            function(button) {
 
-            button.classList.toggle(
-                "active",
-                button.getAttribute("data-ql") ===
-                layout
-            );
-
-        });
-
-
-    if (save) {
-
-        localStorage.setItem(
-            "sandeepQuickLayout",
-            layout
+                button.classList.toggle(
+                    "active",
+                    button.getAttribute(
+                        "data-ql"
+                    ) === layout
+                );
+            }
         );
 
-    }
-
+    localStorage.setItem(
+        "sandeepQuickLayout",
+        layout
+    );
 }
 
 
@@ -2531,47 +2235,108 @@ function applyQuickLayout(
    SERVICE LAYOUT
 ========================================================= */
 
-function applyServiceLayout(
-    layout,
-    save = true
-) {
+function applyServiceLayout(layout) {
+
+    const allowed = [
+        "list",
+        "grid",
+        "slider",
+        "mini"
+    ];
+
+    if (!allowed.includes(layout)) {
+        layout = "list";
+    }
 
     const container =
-        getEl("serviceContainer");
-
+        $("serviceContainer");
 
     if (container) {
 
         container.className =
             `service-grid layout-${layout}`;
-
     }
-
 
     document
         .querySelectorAll(
             "#servicesLayoutBar .layout-btn"
         )
-        .forEach(function (button) {
+        .forEach(
+            function(button) {
 
-            button.classList.toggle(
-                "active",
-                button.getAttribute("data-sl") ===
-                layout
-            );
-
-        });
-
-
-    if (save) {
-
-        localStorage.setItem(
-            "sandeepServiceLayout",
-            layout
+                button.classList.toggle(
+                    "active",
+                    button.getAttribute(
+                        "data-sl"
+                    ) === layout
+                );
+            }
         );
 
-    }
+    localStorage.setItem(
+        "sandeepServiceLayout",
+        layout
+    );
+}
 
+
+/* =========================================================
+   LAYOUT BUTTON INITIALIZATION
+========================================================= */
+
+function initializeLayoutButtons() {
+
+    document
+        .querySelectorAll(
+            "#quickLayoutBar .layout-btn"
+        )
+        .forEach(
+            function(button) {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        const layout =
+                            button.getAttribute(
+                                "data-ql"
+                            );
+
+                        if (layout) {
+                            applyQuickLayout(
+                                layout
+                            );
+                        }
+                    }
+                );
+            }
+        );
+
+    document
+        .querySelectorAll(
+            "#servicesLayoutBar .layout-btn"
+        )
+        .forEach(
+            function(button) {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        const layout =
+                            button.getAttribute(
+                                "data-sl"
+                            );
+
+                        if (layout) {
+                            applyServiceLayout(
+                                layout
+                            );
+                        }
+                    }
+                );
+            }
+        );
 }
 
 
@@ -2582,25 +2347,20 @@ function applyServiceLayout(
 function saveContactVCard() {
 
     const biz =
-        window.MASTER_CONFIG?.business;
+        getBusiness();
 
-
-    if (!biz)
-        return;
-
+    if (!biz) return;
 
     const vCardData =
-
 `BEGIN:VCARD
 VERSION:3.0
-FN:${biz.name} (${biz.owner})
-ORG:${biz.name}
-TEL;TYPE=CELL,VOICE:${biz.phone}
-EMAIL:${biz.email}
-URL:${biz.website}
-ADR;TYPE=WORK:;;${biz.location_en};;;;
+FN:${biz.name || "Sandeep ElectroFix"} (${biz.owner || ""})
+ORG:${biz.name || "Sandeep ElectroFix"}
+TEL;TYPE=CELL,VOICE:${biz.phone || ""}
+EMAIL:${biz.email || ""}
+URL:${biz.website || ""}
+ADR;TYPE=WORK:;;${biz.location_en || ""};;;;
 END:VCARD`;
-
 
     const blob =
         new Blob(
@@ -2611,47 +2371,102 @@ END:VCARD`;
             }
         );
 
-
     const url =
-        URL.createObjectURL(
-            blob
-        );
-
+        URL.createObjectURL(blob);
 
     const link =
         document.createElement("a");
 
-
-    link.href =
-        url;
-
+    link.href = url;
 
     link.download =
-        `${biz.name.replace(
+        `${(
+            biz.name ||
+            "Sandeep_ElectroFix"
+        ).replace(
             /\s+/g,
             "_"
         )}.vcf`;
-
 
     document.body.appendChild(
         link
     );
 
-
     link.click();
 
+    document.body.removeChild(
+        link
+    );
 
-    link.remove();
+    setTimeout(
+        function() {
+            URL.revokeObjectURL(url);
+        },
+        1000
+    );
+}
 
 
-    setTimeout(function () {
+/* =========================================================
+   SHARE WEBSITE
+========================================================= */
 
-        URL.revokeObjectURL(
-            url
+async function shareWebsite() {
+
+    const biz =
+        getBusiness();
+
+    try {
+
+        if (navigator.share) {
+
+            await navigator.share({
+
+                title:
+                    biz.name ||
+                    "Sandeep ElectroFix",
+
+                text:
+                    currentLang === "hi"
+                        ? "Sandeep ElectroFix - Electrical Services"
+                        : "Sandeep ElectroFix - Electrical Services",
+
+                url:
+                    window.location.href
+            });
+
+            return;
+        }
+
+        if (
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+        ) {
+
+            await navigator.clipboard.writeText(
+                window.location.href
+            );
+
+            showExitToast(
+                currentLang === "hi"
+                    ? "✅ लिंक कॉपी हो गया"
+                    : "✅ Link copied"
+            );
+
+            return;
+        }
+
+        alert(
+            window.location.href
         );
 
-    }, 1000);
+    } catch (error) {
 
+        console.log(
+            "Share cancelled:",
+            error
+        );
+    }
 }
 
 
@@ -2662,42 +2477,27 @@ END:VCARD`;
 function sendWhatsappQuote() {
 
     const name =
-        getEl("customerName")
-            ?.value
-            .trim();
-
+        $("customerName")?.value.trim();
 
     const phone =
-        getEl("customerPhone")
-            ?.value
-            .trim();
-
+        $("customerPhone")?.value.trim();
 
     const location =
-        getEl("customerLocation")
-            ?.value
-            .trim();
-
+        $("customerLocation")?.value.trim();
 
     const note =
-        getEl("customerMessage")
-            ?.value
-            .trim();
-
+        $("customerMessage")?.value.trim();
 
     const items =
         Object.values(
             selectedItemsMap
         );
 
-
     const ctrl =
-        window.MASTER_CONFIG?.controls || {};
-
+        getControls();
 
     const biz =
-        window.MASTER_CONFIG?.business || {};
-
+        getBusiness();
 
     if (!name) {
 
@@ -2708,9 +2508,7 @@ function sendWhatsappQuote() {
         );
 
         return;
-
     }
-
 
     if (!phone) {
 
@@ -2721,9 +2519,7 @@ function sendWhatsappQuote() {
         );
 
         return;
-
     }
-
 
     if (!location) {
 
@@ -2734,11 +2530,9 @@ function sendWhatsappQuote() {
         );
 
         return;
-
     }
 
-
-    if (items.length === 0) {
+    if (!items.length) {
 
         alert(
             currentLang === "hi"
@@ -2747,55 +2541,46 @@ function sendWhatsappQuote() {
         );
 
         return;
-
     }
-
-
-    saveCustomerInputs();
-
 
     const subtotal =
         items.reduce(
-            function (acc, item) {
+            function(total, item) {
 
-                return acc +
+                return total +
                     (
-                        Number(item.price) *
-                        Number(item.qty)
+                        Number(item.price || 0) *
+                        Number(item.qty || 0)
                     );
 
             },
             0
         );
 
+    const discountPercent =
+        Number(
+            ctrl.discountPercent || 0
+        );
 
     const isDiscountActive =
-        ctrl.showDiscount &&
-        Number(ctrl.discountPercent) > 0;
-
+        ctrl.showDiscount === true &&
+        discountPercent > 0;
 
     const discount =
         isDiscountActive
-
             ? Math.round(
                 subtotal *
                 (
-                    Number(ctrl.discountPercent) /
-                    100
+                    discountPercent / 100
                 )
             )
-
             : 0;
 
-
     const total =
-        subtotal -
-        discount;
-
+        subtotal - discount;
 
     let msg =
-        `⚡ *${biz.name} - Estimate Request* ⚡\n\n`;
-
+        `⚡ *${biz.name || "Sandeep ElectroFix"} - Estimate Request* ⚡\n\n`;
 
     msg +=
         `👤 *${
@@ -2804,7 +2589,6 @@ function sendWhatsappQuote() {
                 : "Name"
         }:* ${name}\n`;
 
-
     msg +=
         `📞 *${
             currentLang === "hi"
@@ -2812,14 +2596,12 @@ function sendWhatsappQuote() {
                 : "Phone"
         }:* ${phone}\n`;
 
-
     msg +=
         `📍 *${
             currentLang === "hi"
                 ? "पता / लोकेशन"
                 : "Location"
         }:* ${location}\n`;
-
 
     if (note) {
 
@@ -2829,9 +2611,7 @@ function sendWhatsappQuote() {
                     ? "अतिरिक्त नोट"
                     : "Note"
             }:* ${note}\n`;
-
     }
-
 
     msg +=
         `\n📋 *${
@@ -2840,77 +2620,65 @@ function sendWhatsappQuote() {
                 : "Selected Services"
         }:*\n`;
 
-
     items.forEach(
-        function (item, index) {
+        function(item, index) {
+
+            const itemName =
+                currentLang === "hi"
+                    ? item.name_hi
+                    : item.name_en;
+
+            const qty =
+                Number(item.qty || 0);
+
+            const price =
+                Number(item.price || 0);
 
             msg +=
-
-                `${index + 1}. ${
-                    currentLang === "hi"
-                        ? item.name_hi
-                        : item.name_en
-                } [Qty: ${item.qty}] - ₹${
-                    Number(item.price) *
-                    Number(item.qty)
-                }\n`;
-
+                `${index + 1}. ${itemName} [Qty: ${qty}] - ₹${price * qty}\n`;
         }
     );
-
 
     msg +=
         `\n💵 *Subtotal:* ₹${subtotal}\n`;
 
-
     if (isDiscountActive) {
 
         msg +=
-            `🎁 *Discount (${ctrl.discountPercent}%):* -₹${discount}\n`;
-
+            `🎁 *Discount (${discountPercent}%):* -₹${discount}\n`;
     }
-
 
     msg +=
         `✅ *Grand Total:* ₹${total}\n\n`;
 
-
     msg +=
         `_Please confirm visit/booking._`;
 
+    const whatsapp =
+        biz.whatsapp ||
+        biz.phone ||
+        "";
 
-    const whatsappNumber =
-        String(
-            biz.whatsapp || ""
-        ).replace(
-            /\D/g,
-            ""
-        );
-
-
-    if (!whatsappNumber) {
+    if (!whatsapp) {
 
         alert(
             "WhatsApp number is not configured."
         );
 
         return;
-
     }
 
-
     const url =
-        `https://wa.me/${whatsappNumber}?text=${
-            encodeURIComponent(msg)
-        }`;
-
+        `https://wa.me/${String(whatsapp).replace(
+            /\D/g,
+            ""
+        )}?text=${encodeURIComponent(msg)}`;
 
     window.open(
         url,
         "_blank",
         "noopener"
     );
-
 }
 
 
@@ -2923,65 +2691,45 @@ function downloadEstimatePDF() {
     const jsPDF =
         window.jspdf?.jsPDF;
 
-
     if (!jsPDF) {
 
         alert(
             currentLang === "hi"
-
-                ? "PDF library loading हो रही है। कृपया 2 सेकंड बाद फिर प्रयास करें।"
-
+                ? "PDF library अभी load हो रही है। कृपया 2 सेकंड बाद फिर कोशिश करें।"
                 : "PDF library is loading. Please try again in 2 seconds."
         );
 
         return;
-
     }
 
-
     const name =
-        getEl("customerName")
-            ?.value
-            .trim() ||
+        $("customerName")?.value.trim() ||
         "Customer";
 
-
     const phone =
-        getEl("customerPhone")
-            ?.value
-            .trim() ||
+        $("customerPhone")?.value.trim() ||
         "N/A";
-
 
     const location =
-        getEl("customerLocation")
-            ?.value
-            .trim() ||
+        $("customerLocation")?.value.trim() ||
         "N/A";
-
 
     const note =
-        getEl("customerMessage")
-            ?.value
-            .trim() ||
+        $("customerMessage")?.value.trim() ||
         "N/A";
-
 
     const items =
         Object.values(
             selectedItemsMap
         );
 
-
     const ctrl =
-        window.MASTER_CONFIG?.controls || {};
-
+        getControls();
 
     const biz =
-        window.MASTER_CONFIG?.business || {};
+        getBusiness();
 
-
-    if (items.length === 0) {
+    if (!items.length) {
 
         alert(
             currentLang === "hi"
@@ -2990,23 +2738,20 @@ function downloadEstimatePDF() {
         );
 
         return;
-
     }
-
-
-    saveCustomerInputs();
-
 
     const doc =
         new jsPDF();
 
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
     doc.setFillColor(
         5,
         8,
         22
     );
-
 
     doc.rect(
         0,
@@ -3016,30 +2761,26 @@ function downloadEstimatePDF() {
         "F"
     );
 
-
     doc.setTextColor(
         245,
         197,
         66
     );
 
-
     doc.setFontSize(
         18
     );
 
-
     doc.text(
-        biz.name || "Sandeep ElectroFix",
+        biz.name ||
+            "Sandeep ElectroFix",
         14,
         16
     );
 
-
     doc.setFontSize(
         10
     );
-
 
     doc.setTextColor(
         255,
@@ -3047,25 +2788,21 @@ function downloadEstimatePDF() {
         255
     );
 
-
     doc.text(
-        `Phone: ${biz.phone || ""} | Lucknow, UP`,
+        `Phone: ${biz.phone || ""} | ${biz.location_en || "Lucknow, UP"}`,
         14,
         25
     );
 
-
     doc.text(
-        `Date: ${
-            new Date()
-                .toLocaleDateString(
-                    "en-IN"
-                )
-        }`,
+        `Date: ${new Date().toLocaleDateString("en-IN")}`,
         160,
         25
     );
 
+    /* =====================================================
+       CUSTOMER
+    ===================================================== */
 
     doc.setTextColor(
         16,
@@ -3073,11 +2810,9 @@ function downloadEstimatePDF() {
         39
     );
 
-
     doc.setFontSize(
         11
     );
-
 
     doc.text(
         "CUSTOMER ESTIMATE",
@@ -3085,106 +2820,131 @@ function downloadEstimatePDF() {
         46
     );
 
-
     doc.setFontSize(
         9
     );
 
-
     doc.text(
-        `Client: ${name}  |  Phone: ${phone}`,
+        `Client: ${name} | Phone: ${phone}`,
         14,
         53
     );
 
+    const locationText =
+        `Location: ${location}`;
+
+    const locationLines =
+        doc.splitTextToSize(
+            locationText,
+            180
+        );
 
     doc.text(
-        `Location: ${location}`,
+        locationLines,
         14,
         59
     );
 
+    let startTableY =
+        59 +
+        (
+            locationLines.length *
+            4
+        ) +
+        4;
 
     if (note !== "N/A") {
 
+        const noteLines =
+            doc.splitTextToSize(
+                `Note: ${note}`,
+                180
+            );
+
         doc.text(
-            `Note: ${note}`,
+            noteLines,
             14,
-            65
+            startTableY
         );
 
+        startTableY +=
+            (
+                noteLines.length *
+                4
+            ) +
+            5;
     }
 
-
-    const startTableY =
-        note !== "N/A"
-            ? 71
-            : 65;
-
+    /* =====================================================
+       TABLE
+    ===================================================== */
 
     const rows =
         items.map(
-            function (item, index) {
+            function(item, index) {
 
                 return [
-
                     index + 1,
 
-                    item.name_en,
+                    item.name_en ||
+                        item.name_hi ||
+                        "Service",
 
-                    `Rs. ${item.price}`,
+                    `Rs. ${Number(
+                        item.price || 0
+                    )}`,
 
-                    item.qty,
+                    Number(
+                        item.qty || 0
+                    ),
 
                     `Rs. ${
-                        item.price *
-                        item.qty
+                        Number(
+                            item.price || 0
+                        ) *
+                        Number(
+                            item.qty || 0
+                        )
                     }`
-
                 ];
-
             }
         );
 
-
     const subtotal =
         items.reduce(
-            function (acc, item) {
+            function(total, item) {
 
-                return acc +
+                return total +
                     (
-                        Number(item.price) *
-                        Number(item.qty)
+                        Number(item.price || 0) *
+                        Number(item.qty || 0)
                     );
 
             },
             0
         );
 
+    const discountPercent =
+        Number(
+            ctrl.discountPercent || 0
+        );
 
     const isDiscountActive =
-        ctrl.showDiscount &&
-        Number(ctrl.discountPercent) > 0;
-
+        ctrl.showDiscount === true &&
+        discountPercent > 0;
 
     const discount =
         isDiscountActive
-
             ? Math.round(
                 subtotal *
                 (
-                    Number(ctrl.discountPercent) /
-                    100
+                    discountPercent / 100
                 )
             )
-
             : 0;
 
-
     const total =
-        subtotal -
-        discount;
-
+        subtotal - discount;
 
     if (
         typeof doc.autoTable ===
@@ -3193,33 +2953,35 @@ function downloadEstimatePDF() {
 
         doc.autoTable({
 
-            startY:
-                startTableY,
+            startY: startTableY,
 
-            head:
-                [[
+            head: [
+                [
                     "#",
                     "Service Item",
                     "Rate",
                     "Qty",
                     "Total Amount"
-                ]],
+                ]
+            ],
 
-            body:
-                rows,
+            body: rows,
 
-            theme:
-                "grid",
+            theme: "grid",
 
-            headStyles:
-                {
-                    fillColor:
-                        [5, 8, 22],
+            headStyles: {
+                fillColor: [
+                    5,
+                    8,
+                    22
+                ],
 
-                    textColor:
-                        [245, 197, 66]
-                }
-
+                textColor: [
+                    245,
+                    197,
+                    66
+                ]
+            }
         });
 
     } else {
@@ -3227,37 +2989,43 @@ function downloadEstimatePDF() {
         let y =
             startTableY;
 
+        doc.setFontSize(
+            8
+        );
 
         rows.forEach(
-            function (row) {
+            function(row) {
 
                 doc.text(
-                    `${row[0]}. ${row[1]} | ${row[2]} | Qty: ${row[3]} | ${row[4]}`,
+                    `${row[0]}. ${row[1]} | ${row[2]} | Qty ${row[3]} | ${row[4]}`,
                     14,
                     y
                 );
 
-
                 y += 6;
-
             }
         );
 
+        doc.lastAutoTable = {
+            finalY: y
+        };
     }
 
-
     const finalY =
-        doc.lastAutoTable
-            ? doc.lastAutoTable.finalY + 8
-            : startTableY +
-              rows.length * 6 +
-              8;
-
+        (
+            doc.lastAutoTable?.finalY ||
+            startTableY + 20
+        ) + 8;
 
     doc.setFontSize(
         9.5
     );
 
+    doc.setTextColor(
+        16,
+        24,
+        39
+    );
 
     doc.text(
         `Subtotal: Rs. ${subtotal}`,
@@ -3265,10 +3033,8 @@ function downloadEstimatePDF() {
         finalY
     );
 
-
     let nextY =
         finalY + 5;
-
 
     if (isDiscountActive) {
 
@@ -3278,23 +3044,18 @@ function downloadEstimatePDF() {
             102
         );
 
-
         doc.text(
-            `Discount (${ctrl.discountPercent}%): -Rs. ${discount}`,
+            `Discount (${discountPercent}%): -Rs. ${discount}`,
             140,
             nextY
         );
 
-
         nextY += 5;
-
     }
-
 
     doc.setFontSize(
         11
     );
-
 
     doc.setTextColor(
         16,
@@ -3302,112 +3063,106 @@ function downloadEstimatePDF() {
         39
     );
 
-
     doc.text(
         `Grand Total: Rs. ${total}`,
         140,
         nextY
     );
 
+    const fileName =
+        `Estimate_${name
+            .replace(
+                /[^a-zA-Z0-9_-]/g,
+                "_"
+            )}.pdf`;
 
     doc.save(
-        `Estimate_${
-            name.replace(
-                /\s+/g,
-                "_"
-            )
-        }.pdf`
+        fileName
     );
-
 }
 
 
 /* =========================================================
-   DISTANCE / USER LOCATION
+   DISTANCE CHECK
 ========================================================= */
 
 function getUserLocation() {
 
     const status =
-        getEl("locationStatus");
-
+        $("locationStatus");
 
     if (!navigator.geolocation) {
 
-        if (status)
+        if (status) {
+
             status.innerText =
                 "Geolocation not supported.";
+        }
 
         return;
-
     }
 
-
-    if (status)
+    if (status) {
         status.innerText =
-            "Locating...";
-
+            currentLang === "hi"
+                ? "लोकेशन खोजी जा रही है..."
+                : "Locating...";
+    }
 
     navigator.geolocation.getCurrentPosition(
 
-        function (pos) {
+        function(pos) {
+
+            /*
+             * Lucknow approximate center
+             */
+
+            const businessLat =
+                26.8467;
+
+            const businessLng =
+                80.9462;
+
+            const userLat =
+                pos.coords.latitude;
+
+            const userLng =
+                pos.coords.longitude;
 
             const R =
                 6371;
 
-
-            const targetLat =
-                26.8467;
-
-
-            const targetLng =
-                80.9462;
-
-
             const dLat =
                 (
-                    pos.coords.latitude -
-                    targetLat
+                    userLat -
+                    businessLat
                 ) *
                 (
                     Math.PI / 180
                 );
-
 
             const dLon =
                 (
-                    pos.coords.longitude -
-                    targetLng
+                    userLng -
+                    businessLng
                 ) *
                 (
                     Math.PI / 180
                 );
 
-
             const a =
-
-                Math.sin(dLat / 2) *
-                Math.sin(dLat / 2)
-
-                +
-
+                Math.sin(dLat / 2) ** 2 +
                 Math.cos(
-                    targetLat *
-                    Math.PI / 180
-                )
-
-                *
-
+                    businessLat *
+                    Math.PI /
+                    180
+                ) *
                 Math.cos(
-                    pos.coords.latitude *
-                    Math.PI / 180
-                )
-
-                *
-
-                Math.sin(dLon / 2) *
-                Math.sin(dLon / 2);
-
+                    userLat *
+                    Math.PI /
+                    180
+                ) *
+                Math.sin(dLon / 2) ** 2;
 
             const dist =
                 (
@@ -3421,95 +3176,37 @@ function getUserLocation() {
                     )
                 ).toFixed(1);
 
-
             if (status) {
 
                 status.innerHTML =
-
-                    `✅ ${
-                        currentLang === "hi"
-                            ? "आप हमारे केंद्र से लगभग"
-                            : "You are approx"
-                    } <strong>${dist} km</strong> ${
-                        currentLang === "hi"
-                            ? "दूर हैं।"
-                            : "away from Lucknow center."
-                    }`;
-
+                    currentLang === "hi"
+                        ? `✅ आप हमारे केंद्र से लगभग <strong>${dist} km</strong> दूर हैं।`
+                        : `✅ You are approx <strong>${dist} km</strong> away from Lucknow center.`;
             }
-
         },
 
+        function() {
 
-        function () {
+            if (status) {
 
-            if (status)
                 status.innerText =
-                    "Location permission denied.";
+                    currentLang === "hi"
+                        ? "लोकेशन परमिशन नहीं मिली।"
+                        : "Location permission denied.";
+            }
+        },
 
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
         }
-
     );
-
 }
 
 
 /* =========================================================
-   SHARE
-========================================================= */
-
-async function shareWebsite() {
-
-    const title =
-        window.MASTER_CONFIG
-            ?.business
-            ?.name ||
-        "Sandeep ElectroFix";
-
-
-    try {
-
-        if (navigator.share) {
-
-            await navigator.share({
-
-                title:
-                    title,
-
-                url:
-                    window.location.href
-
-            });
-
-        } else {
-
-            await navigator.clipboard.writeText(
-                window.location.href
-            );
-
-
-            alert(
-                currentLang === "hi"
-                    ? "लिंक कॉपी हो गया!"
-                    : "Link copied!"
-            );
-
-        }
-
-    } catch (error) {
-
-        console.log(
-            "Share cancelled:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   PWA SHORTCUT ACTION
+   PWA SHORTCUT
 ========================================================= */
 
 function handlePWAShortcutAction() {
@@ -3519,43 +3216,39 @@ function handlePWAShortcutAction() {
             window.location.search
         );
 
-
     const action =
-        params.get("pwaAction");
+        params.get(
+            "pwaAction"
+        );
 
-
-    if (!action)
-        return;
-
+    if (!action) return;
 
     const ctrl =
-        window.MASTER_CONFIG
-            ?.controls
-            ?.pwaShortcuts || {};
-
+        getControls().pwaShortcuts || {};
 
     const biz =
-        window.MASTER_CONFIG
-            ?.business || {};
+        getBusiness();
 
-
-    if (ctrl.enabled === false)
+    if (ctrl.enabled === false) {
         return;
+    }
 
+    /* =====================================================
+       CALL
+    ===================================================== */
 
     if (action === "call") {
 
-        if (ctrl.call === false)
+        if (ctrl.call === false) {
             return;
-
+        }
 
         const phone =
             biz.phone ||
             "+919026036445";
 
-
         setTimeout(
-            function () {
+            function() {
 
                 window.location.href =
                     `tel:${phone}`;
@@ -3564,774 +3257,335 @@ function handlePWAShortcutAction() {
             300
         );
 
-
         return;
-
     }
 
+    /* =====================================================
+       WHATSAPP
+    ===================================================== */
 
     if (action === "whatsapp") {
 
-        if (ctrl.whatsapp === false)
+        if (ctrl.whatsapp === false) {
             return;
+        }
 
-
-        const number =
+        const whatsappNumber =
             biz.whatsapp ||
             "919026036445";
 
-
         const message =
-
             currentLang === "hi"
-
-                ? `नमस्ते ${
-                    biz.name ||
-                    "Sandeep ElectroFix"
-                }, मुझे इलेक्ट्रिकल सर्विस की जानकारी चाहिए।`
-
-                : `Hello ${
-                    biz.name ||
-                    "Sandeep ElectroFix"
-                }, I need information about your electrical services.`;
-
+                ? `नमस्ते ${biz.name || "Sandeep ElectroFix"}, मुझे इलेक्ट्रिकल सर्विस की जानकारी चाहिए।`
+                : `Hello ${biz.name || "Sandeep ElectroFix"}, I need information about your electrical services.`;
 
         setTimeout(
-            function () {
+            function() {
 
                 window.location.href =
-
-                    `https://wa.me/${number}?text=${
-                        encodeURIComponent(
-                            message
-                        )
-                    }`;
+                    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                        message
+                    )}`;
 
             },
             300
         );
 
-
         return;
-
     }
 
+    /* =====================================================
+       SERVICES
+    ===================================================== */
 
     if (action === "services") {
 
-        if (ctrl.services === false)
+        if (ctrl.services === false) {
             return;
-
+        }
 
         setTimeout(
-            function () {
+            function() {
 
-                const section =
-                    getEl(
-                        "servicesSection"
-                    );
+                const servicesSection =
+                    $("servicesSection");
 
+                if (servicesSection) {
 
-                if (section) {
-
-                    section.scrollIntoView({
-
-                        behavior:
-                            "smooth",
-
-                        block:
-                            "start"
-
+                    servicesSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
                     });
 
                 } else {
 
                     window.location.hash =
                         "servicesSection";
-
                 }
 
             },
             300
         );
-
     }
-
 }
 
 
 /* =========================================================
-   MOBILE NAVBAR
+   QR DOWNLOAD
 ========================================================= */
 
-function initProject21Navbar() {
+function initializeQR() {
 
-    const menuBtn =
-        getEl("navbarMenuBtn");
+    const qrImage =
+        $("cardQR");
 
-    const sideMenu =
-        getEl("sideMenu");
+    const downloadBtn =
+        $("qrBtnText");
 
-    const overlay =
-        getEl("navbarOverlay");
-
-    const closeBtn =
-        getEl("sideMenuClose");
-
-
-    if (
-        !menuBtn ||
-        !sideMenu ||
-        !overlay
-    ) {
-
-        console.warn(
-            "Project 2.1 Navbar elements missing."
-        );
-
+    if (!qrImage || !downloadBtn) {
         return;
-
     }
 
+    downloadBtn.style.cursor =
+        "pointer";
 
-    let menuIsOpen =
-        false;
-
-
-    let menuHistoryAdded =
-        false;
-
-
-    /* ---------------------------------------------
-       OPEN
-    --------------------------------------------- */
-
-    function openMenu() {
-
-        if (menuIsOpen)
-            return;
-
-
-        menuIsOpen =
-            true;
-
-
-        sideMenu.classList.add(
-            "active"
-        );
-
-
-        overlay.classList.add(
-            "active"
-        );
-
-
-        menuBtn.classList.add(
-            "active"
-        );
-
-
-        document.body.classList.add(
-            "menu-open"
-        );
-
-
-        menuBtn.setAttribute(
-            "aria-expanded",
-            "true"
-        );
-
-
-        menuBtn.setAttribute(
-            "aria-label",
-            "Close Menu"
-        );
-
-
-        if (!menuHistoryAdded) {
-
-            history.pushState(
-
-                {
-                    project21Menu:
-                        true
-                },
-
-                "",
-
-                window.location.href
-
-            );
-
-
-            menuHistoryAdded =
-                true;
-
-        }
-
-    }
-
-
-    /* ---------------------------------------------
-       CLOSE
-    --------------------------------------------- */
-
-    function closeMenu(
-        fromHistory = false
-    ) {
-
-        if (!menuIsOpen)
-            return;
-
-
-        menuIsOpen =
-            false;
-
-
-        sideMenu.classList.remove(
-            "active"
-        );
-
-
-        overlay.classList.remove(
-            "active"
-        );
-
-
-        menuBtn.classList.remove(
-            "active"
-        );
-
-
-        document.body.classList.remove(
-            "menu-open"
-        );
-
-
-        menuBtn.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-
-
-        menuBtn.setAttribute(
-            "aria-label",
-            "Open Menu"
-        );
-
-
-        if (
-            !fromHistory &&
-            menuHistoryAdded
-        ) {
-
-            menuHistoryAdded =
-                false;
-
-
-            history.back();
-
-
-        } else {
-
-            menuHistoryAdded =
-                false;
-
-        }
-
-    }
-
-
-    /* ---------------------------------------------
-       MENU BUTTON
-    --------------------------------------------- */
-
-    menuBtn.addEventListener(
+    downloadBtn.addEventListener(
         "click",
-        function (event) {
+        async function(event) {
 
             event.preventDefault();
 
-            event.stopPropagation();
+            try {
 
+                const response =
+                    await fetch(
+                        qrImage.src
+                    );
 
-            if (menuIsOpen) {
+                const blob =
+                    await response.blob();
 
-                closeMenu();
+                const url =
+                    URL.createObjectURL(
+                        blob
+                    );
 
-            } else {
+                const link =
+                    document.createElement("a");
 
-                openMenu();
+                link.href =
+                    url;
 
-            }
+                link.download =
+                    "Sandeep_ElectroFix_QR.png";
 
-        }
-    );
-
-
-    /* ---------------------------------------------
-       CLOSE BUTTON
-    --------------------------------------------- */
-
-    if (closeBtn) {
-
-        closeBtn.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                closeMenu();
-
-            }
-        );
-
-    }
-
-
-    /* ---------------------------------------------
-       OVERLAY
-    --------------------------------------------- */
-
-    overlay.addEventListener(
-        "click",
-        function () {
-
-            closeMenu();
-
-        }
-    );
-
-
-    /* ---------------------------------------------
-       MENU LINKS
-    --------------------------------------------- */
-
-    sideMenu
-        .querySelectorAll(
-            "a, button"
-        )
-        .forEach(
-            function (item) {
-
-                if (item === closeBtn)
-                    return;
-
-
-                /*
-                 * Install / Theme / Reset
-                 * have their own handlers.
-                 */
-
-                if (
-                    item.id ===
-                    "menuInstallApp" ||
-
-                    item.id ===
-                    "menuThemeToggle" ||
-
-                    item.id ===
-                    "menuResetApp"
-                ) {
-
-                    return;
-
-                }
-
-
-                item.addEventListener(
-                    "click",
-                    function () {
-
-                        setTimeout(
-                            function () {
-
-                                closeMenu();
-
-                            },
-                            80
-                        );
-
-                    }
+                document.body.appendChild(
+                    link
                 );
 
-            }
-        );
+                link.click();
 
-
-    /* ---------------------------------------------
-       INSTALL
-    --------------------------------------------- */
-
-    const installBtn =
-        getEl("menuInstallApp");
-
-
-    if (installBtn) {
-
-        installBtn.addEventListener(
-            "click",
-            async function (event) {
-
-                event.preventDefault();
-
-                closeMenu();
-
-
-                if (
-                    typeof window.installApp ===
-                    "function"
-                ) {
-
-                    try {
-
-                        await window.installApp();
-
-                    } catch (error) {
-
-                        console.log(
-                            error
-                        );
-
-                    }
-
-                    return;
-
-                }
-
-
-                if (
-                    window.deferredPrompt
-                ) {
-
-                    try {
-
-                        window.deferredPrompt.prompt();
-
-                        await window.deferredPrompt
-                            .userChoice;
-
-                    } catch (error) {
-
-                        console.log(
-                            error
-                        );
-
-                    }
-
-
-                    window.deferredPrompt =
-                        null;
-
-
-                    return;
-
-                }
-
-
-                alert(
-
-                    currentLang === "hi"
-
-                        ? "Install option अभी उपलब्ध नहीं है।\n\nअगर App पहले से installed है, तो यह option काम नहीं करेगा।"
-
-                        : "Install option is not currently available.\n\nIf the app is already installed, this option may not appear."
-
+                document.body.removeChild(
+                    link
                 );
-
-            }
-        );
-
-    }
-
-
-    /* ---------------------------------------------
-       THEME
-    --------------------------------------------- */
-
-    const menuThemeBtn =
-        getEl("menuThemeToggle");
-
-
-    const originalThemeBtn =
-        getEl("themeToggle");
-
-
-    if (menuThemeBtn) {
-
-        menuThemeBtn.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                closeMenu();
-
-
-                if (originalThemeBtn) {
-
-                    originalThemeBtn.click();
-
-                } else if (
-                    typeof window.toggleTheme ===
-                    "function"
-                ) {
-
-                    window.toggleTheme();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* ---------------------------------------------
-       RESET
-    --------------------------------------------- */
-
-    const resetBtn =
-        getEl("menuResetApp");
-
-
-    if (resetBtn) {
-
-        resetBtn.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                closeMenu();
-
 
                 setTimeout(
-                    function () {
-
-                        const firstConfirm =
-                            confirm(
-
-                                currentLang === "hi"
-
-                                    ? "⚠️ Reset App?\n\nक्या आप App को Default Settings पर Reset करना चाहते हैं?"
-
-                                    : "⚠️ Reset App?\n\nDo you want to reset the App to default settings?"
-
-                            );
-
-
-                        if (!firstConfirm)
-                            return;
-
-
-                        /*
-                         * IMPORTANT:
-                         * केवल ONE confirmation.
-                         */
-
-                        if (
-                            typeof window.resetAllToDefault ===
-                            "function"
-                        ) {
-
-                            window.resetAllToDefault(
-                                true
-                            );
-
-                        } else {
-
-                            localStorage.clear();
-
-                            sessionStorage.clear();
-
-                            location.reload();
-
-                        }
-
+                    function() {
+                        URL.revokeObjectURL(
+                            url
+                        );
                     },
-                    150
+                    1000
                 );
 
+            } catch (error) {
+
+                /*
+                 * Fallback for GitHub Pages /
+                 * cross-origin situations
+                 */
+
+                const link =
+                    document.createElement("a");
+
+                link.href =
+                    qrImage.src;
+
+                link.download =
+                    "Sandeep_ElectroFix_QR.png";
+
+                link.target =
+                    "_blank";
+
+                document.body.appendChild(
+                    link
+                );
+
+                link.click();
+
+                document.body.removeChild(
+                    link
+                );
             }
-        );
-
-    }
-
-
-    /* ---------------------------------------------
-       EXPOSE CLOSE
-    --------------------------------------------- */
-
-    window.closeProject21Menu =
-        function () {
-
-            closeMenu();
-
-        };
-
-
-    /* ---------------------------------------------
-       GLOBAL ESC
-    --------------------------------------------- */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Escape" &&
-                menuIsOpen
-            ) {
-
-                closeMenu();
-
-            }
-
         }
     );
-
-
-    console.log(
-        "✅ Project 2.1 Navbar Ready"
-    );
-
 }
 
 
 /* =========================================================
-   CENTRAL POPSTATE
-   IMPORTANT:
-   केवल एक popstate handler
+   INPUT AUTO SAVE
 ========================================================= */
 
-window.addEventListener(
-    "popstate",
-    function () {
+function initializeCustomerAutoSave() {
 
-        const lightbox =
-            getEl("lightbox");
+    [
+        "customerName",
+        "customerPhone",
+        "customerLocation",
+        "customerMessage"
+    ].forEach(
+        function(id) {
 
+            const el =
+                $(id);
 
-        const modal =
-            getEl("serviceModalOverlay");
+            if (!el) return;
 
-
-        /* ---------------------------------------------
-           1. Navbar
-           --------------------------------------------- */
-
-        if (
-            window.closeProject21Menu &&
-            document.body.classList.contains(
-                "menu-open"
-            )
-        ) {
-
-            window.closeProject21Menu();
-
-            return;
-
-        }
-
-
-        /* ---------------------------------------------
-           2. Lightbox
-           --------------------------------------------- */
-
-        if (
-            lightbox &&
-            lightbox.style.display === "flex"
-        ) {
-
-            currentOverlayState =
-                null;
-
-            closeLightboxModal(
-                true
+            el.addEventListener(
+                "input",
+                saveCustomerInputs
             );
-
-            return;
-
         }
+    );
+}
 
 
-        /* ---------------------------------------------
-           3. Service Modal
-           --------------------------------------------- */
+/* =========================================================
+   BASIC BUTTONS
+========================================================= */
 
-        if (
-            modal &&
-            (
-                modal.classList.contains(
-                    "active"
-                ) ||
-                modal.style.display ===
-                    "flex"
-            )
-        ) {
+function initializeBasicButtons() {
 
-            currentOverlayState =
-                null;
+    /* =====================================================
+       GPS
+    ===================================================== */
 
-            closeServiceModal(
-                true
-            );
+    const gpsBtn =
+        $("btnGpsDetect");
 
-            return;
+    if (gpsBtn) {
 
-        }
+        gpsBtn.addEventListener(
+            "click",
+            function(event) {
 
+                event.preventDefault();
 
-        /* ---------------------------------------------
-           4. Normal App Back
-           --------------------------------------------- */
-
-        const now =
-            Date.now();
-
-
-        if (
-            now -
-            lastBackPressTime <
-            2000
-        ) {
-
-            /*
-             * Allow browser/PWA to exit naturally.
-             */
-
-            return;
-
-        }
-
-
-        lastBackPressTime =
-            now;
-
-
-        history.pushState(
-            {
-                page:
-                    "app"
-            },
-            "",
-            window.location.href
+                getQuoteLiveLocation();
+            }
         );
-
-
-        showExitToast(
-
-            currentLang === "hi"
-
-                ? "ऐप बंद करने के लिए दोबारा Back दबाएं"
-
-                : "Press Back again to exit app"
-
-        );
-
     }
-);
+
+    /* =====================================================
+       SAVE CONTACT
+    ===================================================== */
+
+    const saveBtn =
+        $("btnQuickSaveContact");
+
+    if (saveBtn) {
+
+        saveBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                saveContactVCard();
+            }
+        );
+    }
+
+    /* =====================================================
+       SHARE
+    ===================================================== */
+
+    const shareBtn =
+        $("btnQuickShare");
+
+    if (shareBtn) {
+
+        shareBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                shareWebsite();
+            }
+        );
+    }
+
+    /* =====================================================
+       WHATSAPP QUOTE
+    ===================================================== */
+
+    const whatsappQuote =
+        $("sendWhatsappBtn");
+
+    if (whatsappQuote) {
+
+        whatsappQuote.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                sendWhatsappQuote();
+            }
+        );
+    }
+
+    /* =====================================================
+       PDF
+    ===================================================== */
+
+    const pdfBtn =
+        $("downloadPdfBtn");
+
+    if (pdfBtn) {
+
+        pdfBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                downloadEstimatePDF();
+            }
+        );
+    }
+
+    /* =====================================================
+       DISTANCE
+    ===================================================== */
+
+    const distanceBtn =
+        $("distanceBtn");
+
+    if (distanceBtn) {
+
+        distanceBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                getUserLocation();
+            }
+        );
+    }
+}
 
 
 /* =========================================================
@@ -4345,59 +3599,38 @@ function initializeTheme() {
             "sandeepTheme"
         );
 
+    if (savedTheme === "light") {
 
-    if (
-        savedTheme === "light"
-    ) {
-
-        document.documentElement
-            .classList
-            .add(
-                "saved-light-theme"
-            );
+        document.documentElement.classList.add(
+            "saved-light-theme"
+        );
 
     } else {
 
-        document.documentElement
-            .classList
-            .remove(
-                "saved-light-theme"
-            );
-
+        document.documentElement.classList.remove(
+            "saved-light-theme"
+        );
     }
 
-
     const themeToggle =
-        getEl("themeToggle");
+        $("themeToggle");
 
-
-    if (
-        themeToggle &&
-        !themeToggle.dataset.bound
-    ) {
-
-        themeToggle.dataset.bound =
-            "true";
-
+    if (themeToggle) {
 
         themeToggle.addEventListener(
             "click",
-            function () {
+            function(event) {
 
-                document.documentElement
-                    .classList
-                    .toggle(
-                        "saved-light-theme"
-                    );
+                event.preventDefault();
 
+                document.documentElement.classList.toggle(
+                    "saved-light-theme"
+                );
 
                 const isLight =
-                    document.documentElement
-                        .classList
-                        .contains(
-                            "saved-light-theme"
-                        );
-
+                    document.documentElement.classList.contains(
+                        "saved-light-theme"
+                    );
 
                 localStorage.setItem(
                     "sandeepTheme",
@@ -4406,141 +3639,12 @@ function initializeTheme() {
                         : "dark"
                 );
 
-
                 updateThemeButtonText();
-
             }
         );
-
     }
 
-
     updateThemeButtonText();
-
-}
-
-
-/* =========================================================
-   LAYOUT BUTTONS
-========================================================= */
-
-function initializeLayoutButtons() {
-
-    document
-        .querySelectorAll(
-            "#quickLayoutBar .layout-btn"
-        )
-        .forEach(
-            function (button) {
-
-                if (button.dataset.bound)
-                    return;
-
-
-                button.dataset.bound =
-                    "true";
-
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        const layout =
-                            button.getAttribute(
-                                "data-ql"
-                            );
-
-
-                        if (layout)
-                            applyQuickLayout(
-                                layout
-                            );
-
-                    }
-                );
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            "#servicesLayoutBar .layout-btn"
-        )
-        .forEach(
-            function (button) {
-
-                if (button.dataset.bound)
-                    return;
-
-
-                button.dataset.bound =
-                    "true";
-
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        const layout =
-                            button.getAttribute(
-                                "data-sl"
-                            );
-
-
-                        if (layout)
-                            applyServiceLayout(
-                                layout
-                            );
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   CUSTOMER INPUT AUTO SAVE
-========================================================= */
-
-function initializeCustomerAutoSave() {
-
-    [
-        "customerName",
-        "customerPhone",
-        "customerLocation",
-        "customerMessage"
-    ]
-        .forEach(
-            function (id) {
-
-                const input =
-                    getEl(id);
-
-
-                if (!input)
-                    return;
-
-
-                if (input.dataset.autosave)
-                    return;
-
-
-                input.dataset.autosave =
-                    "true";
-
-
-                input.addEventListener(
-                    "input",
-                    saveCustomerInputs
-                );
-
-            }
-        );
-
 }
 
 
@@ -4555,123 +3659,832 @@ function initializeLanguageButtons() {
             ".language-btn"
         )
         .forEach(
-            function (button) {
-
-                if (button.dataset.bound)
-                    return;
-
-
-                button.dataset.bound =
-                    "true";
-
+            function(button) {
 
                 button.addEventListener(
                     "click",
-                    function () {
+                    function(event) {
+
+                        event.preventDefault();
 
                         const lang =
                             button.getAttribute(
                                 "data-lang"
                             );
 
-
-                        if (
-                            lang === "hi" ||
-                            lang === "en"
-                        ) {
-
+                        if (lang) {
                             setLanguage(
                                 lang
                             );
-
                         }
-
                     }
                 );
-
             }
         );
-
 }
 
 
 /* =========================================================
-   OPTIONAL RESET BUTTON
+   MODAL / LIGHTBOX CLOSE BUTTONS
 ========================================================= */
 
-function initializeResetButton() {
+function initializeModalButtons() {
 
-    const resetBtn =
-        getEl("btnResetAll");
+    const modalClose =
+        $("serviceModalClose");
 
+    if (modalClose) {
+
+        modalClose.addEventListener(
+            "click",
+            function() {
+
+                closeServiceModal();
+            }
+        );
+    }
+
+    const modalOverlay =
+        $("serviceModalOverlay");
+
+    if (modalOverlay) {
+
+        modalOverlay.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target ===
+                    modalOverlay
+                ) {
+
+                    closeServiceModal();
+                }
+            }
+        );
+    }
+
+    const lightboxClose =
+        $("lightboxClose");
+
+    if (lightboxClose) {
+
+        lightboxClose.addEventListener(
+            "click",
+            function() {
+
+                closeLightboxModal();
+            }
+        );
+    }
+
+    const lightbox =
+        $("lightbox");
+
+    if (lightbox) {
+
+        lightbox.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target ===
+                    lightbox
+                ) {
+
+                    closeLightboxModal();
+                }
+            }
+        );
+    }
+}
+
+
+/* =========================================================
+   GLOBAL POPSTATE
+========================================================= */
+
+window.addEventListener(
+    "popstate",
+    function() {
+
+        /* =================================================
+           LIGHTBOX
+        ================================================= */
+
+        const lightbox =
+            $("lightbox");
+
+        const isLightboxOpen =
+            lightbox &&
+            (
+                lightbox.style.display === "flex" ||
+                lightbox.classList.contains("active")
+            );
+
+        if (isLightboxOpen) {
+
+            closeLightboxModal(
+                true
+            );
+
+            return;
+        }
+
+        /* =================================================
+           SERVICE MODAL
+        ================================================= */
+
+        const modalOverlay =
+            $("serviceModalOverlay");
+
+        const isModalOpen =
+            modalOverlay &&
+            (
+                modalOverlay.style.display === "flex" ||
+                modalOverlay.classList.contains("active")
+            );
+
+        if (isModalOpen) {
+
+            closeServiceModal(
+                true
+            );
+
+            return;
+        }
+
+        /* =================================================
+           SIDE MENU
+        ================================================= */
+
+        if (
+            window.project21MenuIsOpen &&
+            typeof window.closeProject21Menu ===
+                "function"
+        ) {
+
+            window.closeProject21Menu(
+                true
+            );
+
+            return;
+        }
+
+        /* =================================================
+           EXIT PROTECTION
+        ================================================= */
+
+        const currentTime =
+            Date.now();
+
+        if (
+            currentTime -
+            lastBackPressTime <
+            2000
+        ) {
+
+            /*
+             * Allow actual browser/app exit
+             */
+
+            lastBackPressTime = 0;
+
+            return;
+        }
+
+        lastBackPressTime =
+            currentTime;
+
+        history.pushState(
+            {
+                page: "app"
+            },
+            "",
+            window.location.href
+        );
+
+        showExitToast(
+            currentLang === "hi"
+                ? "ऐप बंद करने के लिए दोबारा Back दबाएं"
+                : "Press Back again to exit app"
+        );
+    }
+);
+
+
+/* =========================================================
+   PROJECT 2.1 MOBILE NAVBAR
+========================================================= */
+
+function initializeProject21Navbar() {
+
+    const menuBtn =
+        $("navbarMenuBtn");
+
+    const sideMenu =
+        $("sideMenu");
+
+    const overlay =
+        $("navbarOverlay");
+
+    const closeBtn =
+        $("sideMenuClose");
 
     if (
-        !resetBtn ||
-        resetBtn.dataset.bound
-    )
+        !menuBtn ||
+        !sideMenu ||
+        !overlay
+    ) {
+
+        console.warn(
+            "Project 2.1 Navbar elements missing."
+        );
+
         return;
+    }
+
+    let menuIsOpen =
+        false;
+
+    function openMenu() {
+
+        if (menuIsOpen) return;
+
+        menuIsOpen =
+            true;
+
+        window.project21MenuIsOpen =
+            true;
+
+        sideMenu.classList.add(
+            "active"
+        );
+
+        overlay.classList.add(
+            "active"
+        );
+
+        menuBtn.classList.add(
+            "active"
+        );
+
+        document.body.classList.add(
+            "menu-open"
+        );
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        menuBtn.setAttribute(
+            "aria-label",
+            "Close Menu"
+        );
+
+        if (!menuHistoryAdded) {
+
+            history.pushState(
+                {
+                    project21Menu: true
+                },
+                "",
+                window.location.href
+            );
+
+            menuHistoryAdded =
+                true;
+        }
+    }
 
 
-    resetBtn.dataset.bound =
-        "true";
+    function closeMenu(
+        fromPopState = false
+    ) {
+
+        if (!menuIsOpen) return;
+
+        menuIsOpen =
+            false;
+
+        window.project21MenuIsOpen =
+            false;
+
+        sideMenu.classList.remove(
+            "active"
+        );
+
+        overlay.classList.remove(
+            "active"
+        );
+
+        menuBtn.classList.remove(
+            "active"
+        );
+
+        document.body.classList.remove(
+            "menu-open"
+        );
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        menuBtn.setAttribute(
+            "aria-label",
+            "Open Menu"
+        );
+
+        if (
+            !fromPopState &&
+            menuHistoryAdded
+        ) {
+
+            menuHistoryAdded =
+                false;
+
+            history.back();
+
+        } else {
+
+            menuHistoryAdded =
+                false;
+        }
+    }
 
 
-    resetBtn.addEventListener(
+    window.closeProject21Menu =
+        closeMenu;
+
+
+    /* =====================================================
+       HAMBURGER
+    ===================================================== */
+
+    menuBtn.addEventListener(
         "click",
-        function (event) {
+        function(event) {
 
             event.preventDefault();
+            event.stopPropagation();
 
-            resetAllToDefault();
+            if (menuIsOpen) {
 
+                closeMenu();
+
+            } else {
+
+                openMenu();
+            }
         }
     );
 
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                closeMenu();
+            }
+        );
+    }
+
+
+    /* =====================================================
+       OVERLAY
+    ===================================================== */
+
+    overlay.addEventListener(
+        "click",
+        function() {
+
+            closeMenu();
+        }
+    );
+
+
+    /* =====================================================
+       MENU LINKS
+    ===================================================== */
+
+    sideMenu
+        .querySelectorAll(
+            "a, button"
+        )
+        .forEach(
+            function(item) {
+
+                if (
+                    item === closeBtn
+                ) return;
+
+                /*
+                 * Theme / Reset / Install buttons
+                 * have their own logic.
+                 */
+
+                if (
+                    item.id ===
+                        "menuThemeToggle" ||
+                    item.id ===
+                        "menuResetApp" ||
+                    item.id ===
+                        "menuInstallApp"
+                ) {
+                    return;
+                }
+
+                item.addEventListener(
+                    "click",
+                    function() {
+
+                        setTimeout(
+                            function() {
+                                closeMenu();
+                            },
+                            100
+                        );
+                    }
+                );
+            }
+        );
+
+
+    /* =====================================================
+       ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Escape" &&
+                menuIsOpen
+            ) {
+
+                closeMenu();
+            }
+        }
+    );
+
+
+    /* =====================================================
+       INSTALL APP
+    ===================================================== */
+
+    const installBtn =
+        $("menuInstallApp");
+
+    if (installBtn) {
+
+        installBtn.addEventListener(
+            "click",
+            async function(event) {
+
+                event.preventDefault();
+
+                closeMenu();
+
+                await new Promise(
+                    function(resolve) {
+                        setTimeout(
+                            resolve,
+                            100
+                        );
+                    }
+                );
+
+                if (
+                    typeof window.installApp ===
+                    "function"
+                ) {
+
+                    try {
+
+                        await window.installApp();
+
+                    } catch (error) {
+
+                        console.log(
+                            "Install error:",
+                            error
+                        );
+                    }
+
+                    return;
+                }
+
+                if (window.deferredPrompt) {
+
+                    try {
+
+                        window.deferredPrompt.prompt();
+
+                        await window.deferredPrompt
+                            .userChoice;
+
+                    } catch (error) {
+
+                        console.log(
+                            error
+                        );
+                    }
+
+                    window.deferredPrompt =
+                        null;
+
+                    return;
+                }
+
+                alert(
+                    "Install option अभी उपलब्ध नहीं है।\n\n" +
+                    "अगर App पहले से installed है, तो यह option उपलब्ध नहीं होगा।"
+                );
+            }
+        );
+    }
+
+
+    /* =====================================================
+       THEME
+    ===================================================== */
+
+    const menuThemeBtn =
+        $("menuThemeToggle");
+
+    if (menuThemeBtn) {
+
+        menuThemeBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                closeMenu();
+
+                const originalThemeBtn =
+                    $("themeToggle");
+
+                if (originalThemeBtn) {
+
+                    originalThemeBtn.click();
+
+                } else {
+
+                    document.documentElement.classList.toggle(
+                        "saved-light-theme"
+                    );
+
+                    const isLight =
+                        document.documentElement.classList.contains(
+                            "saved-light-theme"
+                        );
+
+                    localStorage.setItem(
+                        "sandeepTheme",
+                        isLight
+                            ? "light"
+                            : "dark"
+                    );
+
+                    updateThemeButtonText();
+                }
+            }
+        );
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    const resetBtn =
+        $("menuResetApp");
+
+    if (resetBtn) {
+
+        resetBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                closeMenu();
+
+                setTimeout(
+                    function() {
+
+                        /*
+                         * resetAllToDefault()
+                         * already has confirmation.
+                         * इसलिए double confirmation नहीं।
+                         */
+
+                        resetAllToDefault();
+
+                    },
+                    100
+                );
+            }
+        );
+    }
+
+    console.log(
+        "✅ Project 2.1 Navbar Ready"
+    );
 }
 
 
 /* =========================================================
-   INITIALIZATION
+   FIX: QUICK ACTION LINKS
+========================================================= */
+
+function initializeQuickActions() {
+
+    const biz =
+        getBusiness();
+
+    /* =====================================================
+       WORK
+    ===================================================== */
+
+    const workBtn =
+        $("btnQuickWork");
+
+    if (workBtn) {
+
+        workBtn.addEventListener(
+            "click",
+            function(event) {
+
+                /*
+                 * अगर href already configured है,
+                 * उसे browser handle करने दें।
+                 */
+
+                if (
+                    !workBtn.getAttribute("href")
+                ) {
+
+                    event.preventDefault();
+
+                    $("gallerySection")
+                        ?.scrollIntoView({
+                            behavior: "smooth"
+                        });
+                }
+            }
+        );
+    }
+
+
+    /* =====================================================
+       CATALOGUE
+    ===================================================== */
+
+    const catalogueBtn =
+        $("btnQuickCatalogue");
+
+    if (
+        catalogueBtn &&
+        !catalogueBtn.getAttribute("href")
+    ) {
+
+        catalogueBtn.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                showExitToast(
+                    currentLang === "hi"
+                        ? "📋 Catalogue जल्द उपलब्ध होगा"
+                        : "📋 Catalogue coming soon"
+                );
+            }
+        );
+    }
+
+
+    /* =====================================================
+       MAP
+    ===================================================== */
+
+    if (
+        $("btnQuickMaps") &&
+        biz.googleMaps
+    ) {
+
+        $("btnQuickMaps").href =
+            biz.googleMaps;
+    }
+}
+
+
+/* =========================================================
+   SERVICE / GALLERY IMAGE SAFE LOAD
+========================================================= */
+
+function initializeGlobalImageFallback() {
+
+    document
+        .querySelectorAll(
+            "img"
+        )
+        .forEach(
+            function(img) {
+
+                img.addEventListener(
+                    "error",
+                    function() {
+
+                        /*
+                         * Do not break entire layout.
+                         */
+
+                        img.classList.add(
+                            "image-load-error"
+                        );
+                    }
+                );
+            }
+        );
+}
+
+
+/* =========================================================
+   PWA INSTALL EVENT
+========================================================= */
+
+window.deferredPrompt =
+    window.deferredPrompt || null;
+
+window.addEventListener(
+    "beforeinstallprompt",
+    function(event) {
+
+        event.preventDefault();
+
+        window.deferredPrompt =
+            event;
+
+        console.log(
+            "✅ PWA install prompt ready"
+        );
+    }
+);
+
+
+/* =========================================================
+   APP INITIALIZATION
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    function() {
 
-        /*
-         * Base history state
-         *
-         * IMPORTANT:
-         * केवल एक initial app state.
-         */
+        console.log(
+            "⚡ Sandeep ElectroFix Project 2.1 Initializing..."
+        );
+
+        /* =================================================
+           BASE HISTORY
+        ================================================= */
 
         if (
             !history.state ||
-            !history.state.project21Base
+            !history.state.page
         ) {
 
             history.replaceState(
-
                 {
-                    project21Base:
-                        true
+                    page: "app"
                 },
-
                 "",
-
                 window.location.href
-
             );
-
         }
 
-
-        /* Theme */
+        /* =================================================
+           THEME
+        ================================================= */
 
         initializeTheme();
 
-
-        /* Layout */
+        /* =================================================
+           LAYOUT
+        ================================================= */
 
         const qLayout =
             localStorage.getItem(
@@ -4679,79 +4492,88 @@ document.addEventListener(
             ) ||
             "grid-2";
 
-
-        applyQuickLayout(
-            qLayout,
-            false
-        );
-
-
         const sLayout =
             localStorage.getItem(
                 "sandeepServiceLayout"
             ) ||
             "list";
 
-
-        applyServiceLayout(
-            sLayout,
-            false
+        applyQuickLayout(
+            qLayout
         );
 
+        applyServiceLayout(
+            sLayout
+        );
 
-        /* Customer */
+        /* =================================================
+           RESTORE INPUTS
+        ================================================= */
 
         restoreCustomerInputs();
 
-        initializeCustomerAutoSave();
-
-
-        /* Language */
-
-        initializeLanguageButtons();
+        /* =================================================
+           LANGUAGE
+        ================================================= */
 
         setLanguage(
             currentLang
         );
 
+        /* =================================================
+           BUTTONS
+        ================================================= */
 
-        /* Layout buttons */
+        initializeLanguageButtons();
 
         initializeLayoutButtons();
 
+        initializeCustomerAutoSave();
 
-        /* Reset */
+        initializeBasicButtons();
 
-        initializeResetButton();
+        initializeModalButtons();
 
+        initializeQuickActions();
 
-        /* Navbar */
+        initializeQR();
 
-        initProject21Navbar();
+        initializeGlobalImageFallback();
 
+        /* =================================================
+           NAVBAR
+        ================================================= */
 
-        /* PWA */
+        initializeProject21Navbar();
+
+        /* =================================================
+           PWA SHORTCUT
+        ================================================= */
 
         handlePWAShortcutAction();
 
+        /* =================================================
+           FINAL CALCULATION
+        ================================================= */
 
-        /* Prevent horizontal overflow */
+        updateCalculations();
 
-        document.documentElement.style.overflowX =
-            "hidden";
+        /* =================================================
+           FINAL VISIBILITY
+        ================================================= */
 
+        applyVisibilityControls();
 
         console.log(
-            "⚡ Sandeep ElectroFix Project 2.1 Engine Ready"
+            "✅ Sandeep ElectroFix Project 2.1 Ready"
         );
-
     }
 );
 
 
 /* =========================================================
-   GLOBAL EXPORTS
-   HTML onclick compatibility
+   GLOBAL FUNCTIONS
+   HTML onclick / external access compatibility
 ========================================================= */
 
 window.setLanguage =
@@ -4787,6 +4609,18 @@ window.openLightboxModal =
 window.closeLightboxModal =
     closeLightboxModal;
 
+window.applyQuickLayout =
+    applyQuickLayout;
+
+window.applyServiceLayout =
+    applyServiceLayout;
+
+window.saveContactVCard =
+    saveContactVCard;
+
+window.shareWebsite =
+    shareWebsite;
+
 window.sendWhatsappQuote =
     sendWhatsappQuote;
 
@@ -4796,22 +4630,17 @@ window.downloadEstimatePDF =
 window.getUserLocation =
     getUserLocation;
 
-window.shareWebsite =
-    shareWebsite;
+window.handlePWAShortcutAction =
+    handlePWAShortcutAction;
 
-window.saveContactVCard =
-    saveContactVCard;
-
-window.applyQuickLayout =
-    applyQuickLayout;
-
-window.applyServiceLayout =
-    applyServiceLayout;
-
-window.updateCalculations =
-    updateCalculations;
+window.showExitToast =
+    showExitToast;
 
 
 /* =========================================================
    END
 ========================================================= */
+
+console.log(
+    "⚡ Sandeep ElectroFix — script.js loaded"
+);
