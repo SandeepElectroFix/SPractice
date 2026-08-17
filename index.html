@@ -11,19 +11,19 @@
     <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=99.0">
+    <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body id="top">
     <div class="background-glow"></div>
 
     <!-- ==========================================
-         NAVBAR & HAMBURGER MENU
+         NAVBAR & RIGHT-SIDE HAMBURGER MENU
     =========================================== -->
     <nav class="main-navbar" id="mainNavbar">
         <div class="navbar-inner">
             <a href="#top" class="navbar-brand" aria-label="Sandeep ElectroFix Home">
                 <div class="navbar-logo">
-                    <img src="assets/logo.png" alt="Sandeep ElectroFix Logo">
+                    <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" onerror="this.style.display='none'">
                 </div>
                 <div class="navbar-brand-text">
                     <span class="brand-sandeep">SANDEEP</span>
@@ -43,7 +43,7 @@
         <aside class="side-menu" id="sideMenu">
             <div class="side-menu-header">
                 <div class="side-menu-brand">
-                    <img src="assets/logo.png" alt="Sandeep ElectroFix Logo">
+                    <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
                     <div>
                         <strong>SANDEEP</strong>
                         <span>ELECTROFIX</span>
@@ -52,26 +52,24 @@
                 <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close Menu">×</button>
             </div>
 
-            <!-- MENU ITEMS (ORDER 1 to 9) -->
             <div class="side-menu-content">
                 <div class="menu-group">
-                    <a href="#top" class="menu-item"><span class="menu-icon">🏠</span><span>Home</span><span class="menu-arrow">›</span></a>
-                    <a href="#aboutSection" class="menu-item"><span class="menu-icon">👤</span><span>About Us</span><span class="menu-arrow">›</span></a>
-                    <a href="#locationSection" class="menu-item"><span class="menu-icon">📍</span><span>Service Location</span><span class="menu-arrow">›</span></a>
-                    <a href="#servicesSection" class="menu-item"><span class="menu-icon">⚡</span><span>Our Services</span><span class="menu-arrow">›</span></a>
-                    <a href="#gallerySection" class="menu-item"><span class="menu-icon">🖼️</span><span>Our Work</span><span class="menu-arrow">›</span></a>
-                    <a href="#reviewsSection" class="menu-item"><span class="menu-icon">⭐</span><span>Customer Reviews</span><span class="menu-arrow">›</span></a>
-                    <a href="#quoteFormSection" class="menu-item"><span class="menu-icon">💰</span><span>Estimate &amp; Quotation</span><span class="menu-arrow">›</span></a>
-                    <a href="#faqSection" class="menu-item"><span class="menu-icon">❓</span><span>FAQ</span><span class="menu-arrow">›</span></a>
-                    <a href="#cardQRContainer" class="menu-item"><span class="menu-icon">📱</span><span>QR Code</span><span class="menu-arrow">›</span></a>
+                    <a href="#top" class="menu-item"><span class="menu-icon">🏠</span><span id="menuHomeText">Home</span><span class="menu-arrow">›</span></a>
+                    <a href="#aboutSection" class="menu-item"><span class="menu-icon">👤</span><span id="menuAboutText">About Us</span><span class="menu-arrow">›</span></a>
+                    <a href="#locationSection" class="menu-item"><span class="menu-icon">📍</span><span id="menuLocationText">Service Location</span><span class="menu-arrow">›</span></a>
+                    <a href="#servicesSection" class="menu-item"><span class="menu-icon">⚡</span><span id="menuServicesText">Our Services</span><span class="menu-arrow">›</span></a>
+                    <a href="#gallerySection" class="menu-item"><span class="menu-icon">🖼️</span><span id="menuWorkText">Our Work</span><span class="menu-arrow">›</span></a>
+                    <a href="#reviewsSection" class="menu-item"><span class="menu-icon">⭐</span><span id="menuReviewsText">Customer Reviews</span><span class="menu-arrow">›</span></a>
+                    <a href="#quoteFormSection" class="menu-item"><span class="menu-icon">💰</span><span id="menuQuoteText">Estimate &amp; Quotation</span><span class="menu-arrow">›</span></a>
+                    <a href="#faqSection" class="menu-item"><span class="menu-icon">❓</span><span id="menuFaqText">FAQ</span><span class="menu-arrow">›</span></a>
+                    <a href="#cardQRContainer" class="menu-item"><span class="menu-icon">📱</span><span id="menuQrText">QR Code</span><span class="menu-arrow">›</span></a>
                 </div>
 
-                <!-- APP SETTINGS -->
                 <div class="menu-settings">
-                    <div class="menu-settings-title">⚙️ APP SETTINGS</div>
+                    <div class="menu-settings-title" id="menuAppSettingsTitle">⚙️ APP SETTINGS</div>
                     
                     <button type="button" class="menu-item menu-action" id="menuInstallApp">
-                        <span class="menu-icon">📲</span><span>Install App</span>
+                        <span class="menu-icon">📲</span><span id="menuInstallAppText">Install App</span>
                     </button>
 
                     <button type="button" class="menu-item menu-action" id="menuThemeToggle">
@@ -79,15 +77,15 @@
                     </button>
 
                     <div class="menu-language">
-                        <div class="menu-language-title">🌐 Language</div>
+                        <div class="menu-language-title" id="menuLangHeading">🌐 Language</div>
                         <div class="menu-language-buttons">
-                            <button type="button" class="menu-lang-btn active" data-menu-lang="hi" onclick="setLanguage('hi')">हिन्दी</button>
+                            <button type="button" class="menu-lang-btn active" data-menu-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
                             <button type="button" class="menu-lang-btn" data-menu-lang="en" onclick="setLanguage('en')">English</button>
                         </div>
                     </div>
 
                     <button type="button" class="menu-item menu-action reset-menu-btn" id="menuResetApp" onclick="openResetModal()">
-                        <span class="menu-icon">🔄</span><span>Reset App (2-Step)</span>
+                        <span class="menu-icon">🔄</span><span id="menuResetText">Reset App (2-Step)</span>
                     </button>
                 </div>
             </div>
@@ -97,29 +95,36 @@
     <!-- ==========================================
          1. HERO SECTION (HOME)
     =========================================== -->
-    <header class="hero-section-card" id="top">
-        <div class="hero-content">
-            <h1 class="hero-title" id="businessTitle">Powering Your Trust</h1>
-            <p class="hero-subtitle" id="businessTagline">Professional Electrical Services in Lucknow</p>
-            <p class="hero-location" id="businessLocation">📍 Lucknow, Uttar Pradesh</p>
-            <div class="hero-buttons">
-                <a href="tel:+919026036445" class="btn call-btn" id="callBtn">📞 <span id="callBtnText">Call Now</span></a>
-                <a href="https://wa.me/919026036445" class="btn whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">💬 <span id="whatsappBtnText">WhatsApp</span></a>
+    <header class="hero" id="heroSection">
+        <div class="hero-card">
+            <div class="hero-content">
+                <h1 id="businessTitle">Powering Your Trust</h1>
+                <p class="tagline" id="businessTagline">Professional Electrical Services in Lucknow</p>
+                <p class="location" id="businessLocation">📍 Lucknow, Uttar Pradesh</p>
+                <div class="hero-buttons">
+                    <a href="tel:+919026036445" class="btn call-btn" id="callBtn">
+                        <span id="callBtnText">📞 Call Now</span>
+                    </a>
+                    <a href="https://wa.me/919026036445" class="btn whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">
+                        <span id="whatsappBtnText">💬 WhatsApp</span>
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="hero-graphic">
-            <img src="assets/electrician-hero.png" alt="Sandeep Electrofix Electrician" onerror="this.src='assets/logo.png'">
+            <div class="hero-image-wrap">
+                <img src="assets/hero-electrician.png" alt="Electrician" onerror="this.style.display='none'">
+            </div>
         </div>
     </header>
 
     <!-- ==========================================
-         2. SPECIAL OFFER / DISCOUNT
+         2. SPECIAL OFFER (DISCOUNT)
     =========================================== -->
     <section id="discountSection" class="discount-section">
         <div class="discount-card">
             <div class="discount-badge" id="discountBadge">🔥 SPECIAL OFFER</div>
             <div class="discount-percent"><span id="discountPercentage">10</span>% OFF</div>
             <h2 id="discountTitle">on Selected Electrical Services</h2>
+            <p id="discountMessage">Get 10% OFF on Selected Electrical Services</p>
             <div class="discount-validity" id="discountValidity">⏳ Limited Time Offer</div>
             <a href="#servicesSection" class="discount-btn" id="discountBtnText">⚡ Get Discount</a>
         </div>
@@ -169,17 +174,15 @@
     <!-- ==========================================
          4. ABOUT US
     =========================================== -->
-    <section class="about-card-section" id="aboutSection">
+    <section class="about" id="aboutSection">
         <h2 id="aboutHeading">About Us</h2>
-        <div class="about-flex-container">
+        <div class="about-card">
             <div class="about-text-wrap">
-                <p id="aboutText">
-                    Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB &amp; DB Installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.
-                </p>
+                <p id="aboutText">Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB Installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.</p>
                 <a href="#servicesSection" class="read-more-link" id="aboutReadMore">Read More →</a>
             </div>
             <div class="about-img-wrap">
-                <img src="assets/about-work.jpg" alt="Sandeep ElectroFix Interior & Lighting" onerror="this.parentElement.style.display='none'">
+                <img src="assets/about-work.jpg" alt="About Sandeep ElectroFix" onerror="this.parentElement.style.display='none'">
             </div>
         </div>
     </section>
@@ -212,8 +215,8 @@
             <button type="button" class="layout-btn" data-sl="carousel" onclick="applyServiceLayout('carousel')">⇆ Slider</button>
         </div>
         <div class="service-grid layout-grid-2" id="serviceContainer"></div>
-        <div class="view-all-wrapper" style="text-align: center; margin-top: 15px;">
-            <a href="#quoteFormSection" class="btn primary-btn">View All Services →</a>
+        <div class="view-all-wrapper">
+            <a href="#quoteFormSection" class="btn-view-all" id="btnViewAllServices">View All Services →</a>
         </div>
     </section>
 
@@ -222,9 +225,7 @@
     =========================================== -->
     <section id="gallerySection" class="gallery">
         <h2 id="galleryHeading">Our Work</h2>
-        <div class="gallery-slider-wrap">
-            <div class="gallery-grid" id="galleryContainer"></div>
-        </div>
+        <div class="gallery-grid" id="galleryContainer"></div>
     </section>
 
     <div id="lightbox" onclick="closeLightboxModal()">
@@ -235,7 +236,7 @@
     <!-- ==========================================
          8. CUSTOMER REVIEWS
     =========================================== -->
-    <section id="reviewsSection">
+    <section id="reviewsSection" class="reviews-section">
         <h2 id="reviewsHeading">Customer Reviews</h2>
         <div class="review-grid" id="reviewContainer"></div>
     </section>
@@ -245,37 +246,37 @@
     =========================================== -->
     <section id="quoteFormSection" class="quote-section">
         <h2 id="quoteHeading">Estimate &amp; Quotation</h2>
-        <p class="quote-sub-hint">Get instant estimate for your electrical work.</p>
-        <div class="quote-card card" style="padding:16px;">
+        <p class="quote-sub-hint" id="quoteSubHint">Get instant estimate for your electrical work.</p>
+        <div class="quote-card card">
             <div class="quote-form">
-                <input type="text" id="customerName" placeholder="आपका नाम / Your Name *" oninput="saveCustomerInputs()">
-                <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर / Phone *" oninput="saveCustomerInputs()">
+                <input type="text" id="customerName" placeholder="Your Name *" oninput="saveCustomerInputs()">
+                <input type="tel" id="customerPhone" placeholder="Mobile Number *" oninput="saveCustomerInputs()">
                 
                 <div class="quote-location-wrapper">
-                    <input type="text" id="customerLocation" placeholder="आपका पता / Area *" oninput="saveCustomerInputs()">
-                    <button type="button" class="btn-gps-detect" id="btnGpsDetect" onclick="getQuoteLiveLocation()" title="GPS Location">
+                    <input type="text" id="customerLocation" placeholder="Your Address / Area *" oninput="saveCustomerInputs()">
+                    <button type="button" class="btn-gps-detect" id="btnGpsDetect" onclick="getQuoteLiveLocation()" title="GPS">
                         <span id="gpsBtnIcon">📍</span> <span id="gpsBtnText">GPS</span>
                     </button>
                 </div>
 
-                <textarea id="customerMessage" rows="2" placeholder="कार्य का विवरण (वैकल्पिक)..." oninput="saveCustomerInputs()"></textarea>
+                <textarea id="customerMessage" rows="2" placeholder="Additional work details (optional)..." oninput="saveCustomerInputs()"></textarea>
                 
                 <div id="estimateSummaryBox" class="estimate-summary-box">
-                    <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
+                    <div class="summary-heading" id="summaryHeader">Selected Services (<span id="selectedCount">0</span>)</div>
                     <div id="selectedServicesList" class="selected-services-list">
-                        <p class="no-selection-hint" id="noSelHint">Select services from list to calculate estimate.</p>
+                        <p class="no-selection-hint" id="noSelHint">No services selected yet. Use + / − above.</p>
                     </div>
 
-                    <div class="calc-row"><span id="lblSubtotal">कुल राशि:</span> <strong id="calcSubtotal">₹0</strong></div>
+                    <div class="calc-row"><span id="lblSubtotal">Subtotal:</span> <strong id="calcSubtotal">₹0</strong></div>
                     <div class="calc-row discount-row" id="calcDiscountRow" style="display:none;">
-                        <span id="discountLabel">विशेष छूट:</span> <strong id="calcDiscount">-₹0</strong>
+                        <span id="discountLabel">Special Discount:</span> <strong id="calcDiscount">-₹0</strong>
                     </div>
-                    <div class="calc-row total-row"><span id="lblGrandTotal">अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
+                    <div class="calc-row total-row"><span id="lblGrandTotal">Grand Total:</span> <strong id="calcGrandTotal">₹0</strong></div>
                 </div>
 
                 <div class="quote-action-buttons">
-                    <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
-                    <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 Download PDF</button>
+                    <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 Send on WhatsApp</button>
+                    <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 Download PDF Estimate</button>
                 </div>
             </div>
         </div>
@@ -284,9 +285,12 @@
     <!-- ==========================================
          10. FAQ
     =========================================== -->
-    <section id="faqSection">
+    <section id="faqSection" class="faq-section">
         <h2 id="faqHeading">Frequently Asked Questions</h2>
         <div class="faq-container" id="faqContainer"></div>
+        <div class="view-all-wrapper">
+            <button type="button" class="btn-view-all" id="btnViewAllFaq" onclick="toggleAllFAQ()">View All FAQ →</button>
+        </div>
     </section>
 
     <!-- ==========================================
@@ -306,51 +310,70 @@
          FOOTER (SOCIAL LINKS + COPYRIGHT)
     =========================================== -->
     <footer id="footerSection">
-        <div class="social-links-grid" style="display:flex; justify-content:center; gap:12px; margin-bottom:12px;">
-            <a href="https://www.facebook.com/SandeepElectroFix" target="_blank" rel="noopener" class="social-btn facebook">📘 Facebook</a>
-            <a href="https://www.instagram.com/sandeep_electrofix" target="_blank" rel="noopener" class="social-btn instagram">📸 Instagram</a>
-            <a href="https://youtube.com/@sandeepelectrofix" target="_blank" rel="noopener" class="social-btn youtube">▶️ YouTube</a>
+        <div class="social-links-grid">
+            <a href="https://www.facebook.com/SandeepElectroFix" target="_blank" rel="noopener" id="btnFacebook" class="social-btn facebook">📘 Facebook</a>
+            <a href="https://www.instagram.com/sandeep_electrofix" target="_blank" rel="noopener" id="btnInstagram" class="social-btn instagram">📸 Instagram</a>
+            <a href="https://youtube.com/@sandeepelectrofix" target="_blank" rel="noopener" id="btnYoutube" class="social-btn youtube">▶️ YouTube</a>
         </div>
         <p id="footerText">&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
     </footer>
 
     <!-- ==========================================
-         2-STEP RESET MODAL POPUP
+         2-STEP RESET SAFETY MODAL
     =========================================== -->
     <div id="resetModalOverlay" class="reset-modal-overlay" style="display:none;">
         <div class="reset-modal-content">
             <div id="resetStep1">
-                <h3>Reset App?</h3>
-                <p>क्या आप ऐप का डेटा रिसेट करना चाहते हैं?</p>
+                <h3 id="resetStep1Title">Reset App?</h3>
+                <p id="resetStep1Desc">Do you want to reset all selections and settings to default?</p>
                 <div class="reset-modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeResetModal()">Cancel</button>
-                    <button type="button" class="btn-continue" onclick="goToResetStep2()">Continue</button>
+                    <button type="button" class="btn-cancel" onclick="closeResetModal()" id="btnResetCancel1">Cancel</button>
+                    <button type="button" class="btn-continue" onclick="goToResetStep2()" id="btnResetCont">Continue</button>
                 </div>
             </div>
             <div id="resetStep2" style="display:none;">
-                <h3 style="color:#ef4444;">Step 2: Are you sure?</h3>
-                <p>यह प्रक्रिया वापस नहीं ली जा सकती।</p>
+                <h3 style="color:#ef4444;" id="resetStep2Title">Step 2: Are you sure?</h3>
+                <p id="resetStep2Desc">This action cannot be undone.</p>
                 <div class="reset-modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeResetModal()">Cancel</button>
-                    <button type="button" class="btn-danger" onclick="executeAppReset()">RESET</button>
+                    <button type="button" class="btn-cancel" onclick="closeResetModal()" id="btnResetCancel2">Cancel</button>
+                    <button type="button" class="btn-danger" onclick="executeAppReset()" id="btnResetExec">RESET</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- BOTTOM MOBILE NAV -->
+    <!-- ==========================================
+         SERVICE MODAL POPUP
+    =========================================== -->
+    <div id="serviceModalOverlay" class="service-modal-overlay" onclick="closeServiceModal()">
+        <div class="service-modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span id="modalServiceIcon">⚡</span>
+                    <h3 id="modalServiceTitle">Service Title</h3>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeServiceModal()">&times;</button>
+            </div>
+            <p id="modalServiceDesc" class="modal-desc"></p>
+            <div id="modalItemsContainer" class="modal-items-list"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MOBILE BOTTOM NAV
+    =========================================== -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <a href="#top" class="bottom-nav-item"><span>🏠</span><small>Home</small></a>
-        <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small>Services</small></a>
-        <a href="#gallerySection" class="bottom-nav-item"><span>📸</span><small>Work</small></a>
-        <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small>Quote</small></a>
-        <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small>Call</small></a>
+        <a href="#top" class="bottom-nav-item"><span>🏠</span><small id="navHome">Home</small></a>
+        <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small id="navServices">Services</small></a>
+        <a href="#gallerySection" class="bottom-nav-item"><span>📸</span><small id="navWork">Work</small></a>
+        <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small id="navQuote">Quote</small></a>
+        <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">Call</small></a>
     </nav>
 
     <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js" defer></script>
-    <script src="config.js?v=3.0"></script>
-    <script src="script.js?v=3.0"></script>
+    <script src="config.js?v=2.1"></script>
+    <script src="script.js?v=2.1"></script>
 </body>
 </html>
