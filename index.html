@@ -1,517 +1,2557 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0ea5e9">
-    <meta name="robots" content="index, follow">
-    <meta name="google-site-verification" content="DcSvRpMWr7K4Mmvy0rl2-ZxAklY5g_b_017f0wl-LKU">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#0ea5e9">
+
+    <meta name="robots"
+          content="index, follow">
+
+    <meta name="google-site-verification"
+          content="DcSvRpMWr7K4Mmvy0rl2-ZxAklY5g_b_017f0wl-LKU">
+
     <title>Sandeep ElectroFix | Electrician in Lucknow</title>
-    <meta name="description" content="Professional Electrician and Electrical Services in Lucknow, Uttar Pradesh.">
-    <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
-    <link rel="icon" type="image/png" href="assets/logo.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=99.0">
-    
-    <!-- PDF Libraries -->
+
+    <meta name="description"
+          content="Professional Electrician and Electrical Services in Lucknow, Uttar Pradesh.">
+
+    <link rel="canonical"
+          href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
+
+    <link rel="icon"
+          type="image/png"
+          href="assets/logo.png">
+
+    <link rel="manifest"
+          href="manifest.json">
+
+    <link rel="stylesheet"
+          href="style.css?v=99.0">
+
+
+    <!-- =========================================================
+         PDF LIBRARIES
+    ========================================================== -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+
+    <!-- =========================================================
+         NAVBAR STYLE
+         Existing page ko disturb nahi karega
+    ========================================================== -->
+
+    <style>
+
+        /* =====================================================
+           MAIN NAVBAR
+        ===================================================== */
+
+        .main-navbar {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 64px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 8px 14px;
+
+            background: rgba(15, 23, 42, 0.94);
+            border-bottom: 1px solid rgba(245, 197, 66, 0.25);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            z-index: 9999;
+
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            text-decoration: none;
+
+            min-width: 0;
+        }
+
+
+        .navbar-brand-logo {
+            width: 44px;
+            height: 44px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+        }
+
+
+        .navbar-brand-text {
+            display: flex;
+            flex-direction: column;
+
+            min-width: 0;
+        }
+
+
+        .navbar-brand-name {
+            color: #f5c542;
+
+            font-size: 0.98rem;
+            font-weight: 800;
+
+            line-height: 1.15;
+
+            white-space: nowrap;
+        }
+
+
+        .navbar-brand-sub {
+            color: #cbd5e1;
+
+            font-size: 0.68rem;
+            font-weight: 500;
+
+            margin-top: 2px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           MENU BUTTON
+        ===================================================== */
+
+        .navbar-menu-button {
+            width: 44px;
+            height: 44px;
+
+            border: 1px solid rgba(245, 197, 66, 0.35);
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 5px;
+
+            cursor: pointer;
+
+            flex-shrink: 0;
+
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        .navbar-menu-button span {
+            width: 22px;
+            height: 2px;
+
+            border-radius: 10px;
+
+            background: #f5c542;
+
+            transition: 0.25s ease;
+        }
+
+
+        .navbar-menu-button.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .navbar-menu-button.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-menu-button.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+
+        /* =====================================================
+           MENU OVERLAY
+        ===================================================== */
+
+        .navbar-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.58);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition: 0.25s ease;
+
+            z-index: 10000;
+        }
+
+
+        .navbar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* =====================================================
+           SIDE MENU
+        ===================================================== */
+
+        .navbar-side-menu {
+            position: fixed;
+
+            top: 0;
+            right: 0;
+
+            width: min(340px, 88vw);
+            height: 100dvh;
+
+            background: #0f172a;
+
+            border-left: 1px solid rgba(245, 197, 66, 0.25);
+
+            box-shadow: -10px 0 35px rgba(0, 0, 0, 0.35);
+
+            transform: translateX(105%);
+
+            transition: transform 0.3s ease;
+
+            z-index: 10001;
+
+            overflow-y: auto;
+
+            box-sizing: border-box;
+        }
+
+
+        .navbar-side-menu.active {
+            transform: translateX(0);
+        }
+
+
+        /* =====================================================
+           SIDE MENU HEADER
+        ===================================================== */
+
+        .navbar-menu-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 16px;
+
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+
+        .navbar-menu-brand {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: 0;
+        }
+
+
+        .navbar-menu-brand img {
+            width: 44px;
+            height: 44px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+        }
+
+
+        .navbar-menu-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .navbar-menu-brand-text strong {
+            color: #f5c542;
+
+            font-size: 0.95rem;
+        }
+
+
+        .navbar-menu-brand-text small {
+            color: #94a3b8;
+
+            font-size: 0.68rem;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           CLOSE BUTTON
+        ===================================================== */
+
+        .navbar-close-button {
+            width: 38px;
+            height: 38px;
+
+            border: 1px solid rgba(245, 197, 66, 0.3);
+
+            border-radius: 10px;
+
+            background: rgba(255,255,255,0.05);
+
+            color: #f5c542;
+
+            font-size: 26px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            flex-shrink: 0;
+        }
+
+
+        /* =====================================================
+           MENU LINKS
+        ===================================================== */
+
+        .navbar-menu-links {
+            padding: 12px;
+        }
+
+
+        .navbar-menu-links a {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            width: 100%;
+
+            padding: 12px 13px;
+
+            margin-bottom: 5px;
+
+            box-sizing: border-box;
+
+            text-decoration: none;
+
+            color: #e2e8f0;
+
+            border-radius: 11px;
+
+            transition: 0.2s ease;
+
+            font-size: 0.9rem;
+
+            font-weight: 600;
+        }
+
+
+        .navbar-menu-links a:hover,
+        .navbar-menu-links a:active {
+            background: rgba(245, 197, 66, 0.10);
+
+            color: #f5c542;
+        }
+
+
+        .navbar-menu-icon {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: rgba(255,255,255,0.06);
+
+            font-size: 17px;
+
+            flex-shrink: 0;
+        }
+
+
+        /* =====================================================
+           MENU DIVIDER
+        ========================================================== */
+
+        .navbar-menu-divider {
+            height: 1px;
+
+            background: rgba(255,255,255,0.08);
+
+            margin: 5px 16px 15px;
+        }
+
+
+        /* =====================================================
+           QUICK ACTIONS
+        ========================================================== */
+
+        .navbar-quick-title {
+            padding: 0 16px 10px;
+
+            color: #94a3b8;
+
+            font-size: 0.7rem;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+        }
+
+
+        .navbar-quick-actions {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 9px;
+
+            padding: 0 14px;
+        }
+
+
+        .navbar-quick-actions a {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 7px;
+
+            padding: 11px 8px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-size: 0.78rem;
+
+            font-weight: 700;
+        }
+
+
+        .navbar-call-action {
+            background: rgba(245,197,66,0.13);
+
+            border: 1px solid rgba(245,197,66,0.35);
+
+            color: #f5c542;
+        }
+
+
+        .navbar-whatsapp-action {
+            background: rgba(37,211,102,0.12);
+
+            border: 1px solid rgba(37,211,102,0.35);
+
+            color: #25d366;
+        }
+
+
+        /* =====================================================
+           SETTINGS AREA
+        ========================================================== */
+
+        .navbar-settings {
+            padding: 16px 14px 8px;
+        }
+
+
+        .navbar-settings-title {
+            color: #94a3b8;
+
+            font-size: 0.7rem;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .navbar-setting-button {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 12px;
+
+            margin-bottom: 6px;
+
+            border: 1px solid rgba(255,255,255,0.07);
+
+            border-radius: 11px;
+
+            background: rgba(255,255,255,0.035);
+
+            color: #e2e8f0;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            box-sizing: border-box;
+        }
+
+
+        .navbar-setting-icon {
+            font-size: 18px;
+
+            width: 28px;
+
+            text-align: center;
+        }
+
+
+        .navbar-setting-text {
+            display: flex;
+
+            flex-direction: column;
+
+            flex: 1;
+        }
+
+
+        .navbar-setting-text strong {
+            font-size: 0.82rem;
+        }
+
+
+        .navbar-setting-text small {
+            color: #94a3b8;
+
+            font-size: 0.68rem;
+
+            margin-top: 2px;
+        }
+
+
+        .navbar-setting-arrow {
+            color: #64748b;
+
+            font-size: 20px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ========================================================== */
+
+        .navbar-menu-footer {
+            padding: 18px 16px 25px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 0.72rem;
+        }
+
+
+        .navbar-menu-footer strong {
+            display: block;
+
+            color: #f5c542;
+
+            margin-bottom: 3px;
+        }
+
+
+        /* =====================================================
+           BODY LOCK
+        ========================================================== */
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ========================================================== */
+
+        @media (max-width: 480px) {
+
+            .main-navbar {
+                min-height: 60px;
+
+                padding: 7px 11px;
+            }
+
+            .navbar-brand-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .navbar-brand-name {
+                font-size: 0.9rem;
+            }
+
+            .navbar-brand-sub {
+                font-size: 0.62rem;
+            }
+
+            .navbar-menu-button {
+                width: 42px;
+                height: 42px;
+            }
+
+        }
+
+
+        /* =====================================================
+           DESKTOP
+        ========================================================== */
+
+        @media (min-width: 768px) {
+
+            .main-navbar {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body id="top">
-     <div class="background-glow"></div>
-<!-- =========================================================
-     PROJECT 2.1 — PREMIUM NAVBAR
-========================================================= -->
 
-<header class="p21-navbar">
-
-    <!-- LEFT : LOGO + BRAND -->
-    <a href="#heroSection" class="p21-brand">
-
-        <img
-            src="assets/logo.png"
-            alt="Sandeep ElectroFix Logo"
-            class="p21-logo"
-        >
-
-        <div class="p21-brand-text">
-            <span class="p21-brand-name">Sandeep ElectroFix</span>
-            <span class="p21-brand-sub">Electrical Services</span>
-        </div>
-
-    </a>
+    <div class="background-glow"></div>
 
 
-    <!-- RIGHT : HAMBURGER -->
-    <button
-        type="button"
-        id="p21MenuBtn"
-        class="p21-menu-btn"
-        aria-label="Open Menu"
-        aria-expanded="false"
-    >
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    <!-- =========================================================
+         MAIN NAVBAR
+    ========================================================== -->
 
-</header>
+    <nav class="main-navbar"
+         id="mainNavbar">
 
+        <!-- BRAND -->
 
-<!-- =========================================================
-     NAVBAR OVERLAY
-========================================================= -->
-
-<div
-    id="p21Overlay"
-    class="p21-overlay"
-></div>
-
-
-<!-- =========================================================
-     SIDE MENU
-========================================================= -->
-
-<aside
-    id="p21SideMenu"
-    class="p21-side-menu"
-    aria-hidden="true"
->
-
-    <!-- MENU HEADER -->
-    <div class="p21-menu-header">
-
-        <div class="p21-menu-brand">
+        <a href="#heroSection"
+           class="navbar-brand"
+           onclick="closeMainMenu()">
 
             <img
                 src="assets/logo.png"
-                alt="Sandeep ElectroFix"
+                alt="Sandeep ElectroFix Logo"
+                class="navbar-brand-logo"
             >
 
-            <div>
-                <strong>Sandeep ElectroFix</strong>
-                <small>Premium Electrical Services</small>
-            </div>
+            <span class="navbar-brand-text">
 
-        </div>
+                <span class="navbar-brand-name">
+                    Sandeep ElectroFix
+                </span>
+
+                <span class="navbar-brand-sub">
+                    Electrical Services
+                </span>
+
+            </span>
+
+        </a>
+
+
+        <!-- MENU BUTTON -->
 
         <button
             type="button"
-            id="p21CloseBtn"
-            class="p21-close-btn"
-            aria-label="Close Menu"
+            id="mainMenuButton"
+            class="navbar-menu-button"
+            aria-label="Menu"
+            aria-expanded="false"
+            onclick="toggleMainMenu()"
         >
-            ×
+
+            <span></span>
+            <span></span>
+            <span></span>
+
         </button>
+
+    </nav>
+
+
+
+    <!-- =========================================================
+         MENU OVERLAY
+    ========================================================== -->
+
+    <div
+        id="mainMenuOverlay"
+        class="navbar-overlay"
+        onclick="closeMainMenu()"
+    ></div>
+
+
+
+    <!-- =========================================================
+         SIDE MENU
+    ========================================================== -->
+
+    <aside
+        id="mainSideMenu"
+        class="navbar-side-menu"
+        aria-hidden="true"
+    >
+
+
+        <!-- MENU HEADER -->
+
+        <div class="navbar-menu-header">
+
+            <div class="navbar-menu-brand">
+
+                <img
+                    src="assets/logo.png"
+                    alt="Sandeep ElectroFix"
+                >
+
+                <div class="navbar-menu-brand-text">
+
+                    <strong>
+                        Sandeep ElectroFix
+                    </strong>
+
+                    <small>
+                        Electrical Services
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="navbar-close-button"
+                onclick="closeMainMenu()"
+                aria-label="Close Menu"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             MENU LINKS
+        ====================================================== -->
+
+        <nav class="navbar-menu-links">
+
+            <a
+                href="#heroSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">🏠</span>
+                <span>Home</span>
+            </a>
+
+
+            <a
+                href="#quickAccessBar"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">⚡</span>
+                <span>Quick Services</span>
+            </a>
+
+
+            <a
+                href="#servicesSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">🔧</span>
+                <span>Our Services</span>
+            </a>
+
+
+            <a
+                href="#gallerySection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">🖼️</span>
+                <span>Our Work</span>
+            </a>
+
+
+            <a
+                href="#quoteFormSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">📋</span>
+                <span>Get Estimate</span>
+            </a>
+
+
+            <a
+                href="#aboutSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">ℹ️</span>
+                <span>About Us</span>
+            </a>
+
+
+            <a
+                href="#locationSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">📍</span>
+                <span>Service Location</span>
+            </a>
+
+
+            <a
+                href="#reviewsSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">⭐</span>
+                <span>Customer Reviews</span>
+            </a>
+
+
+            <a
+                href="#faqSection"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">❓</span>
+                <span>FAQ</span>
+            </a>
+
+
+            <a
+                href="#cardQRContainer"
+                onclick="closeMainMenu()"
+            >
+                <span class="navbar-menu-icon">🔳</span>
+                <span>QR Code</span>
+            </a>
+
+        </nav>
+
+
+
+        <!-- DIVIDER -->
+
+        <div class="navbar-menu-divider"></div>
+
+
+
+        <!-- =====================================================
+             QUICK ACTIONS
+        ====================================================== -->
+
+        <div class="navbar-quick-title">
+            QUICK ACTIONS
+        </div>
+
+
+        <div class="navbar-quick-actions">
+
+            <a
+                href="tel:+919026036445"
+                class="navbar-call-action"
+                onclick="closeMainMenu()"
+            >
+                📞 Call
+            </a>
+
+
+            <a
+                href="https://wa.me/919026036445"
+                target="_blank"
+                rel="noopener"
+                class="navbar-whatsapp-action"
+                onclick="closeMainMenu()"
+            >
+                💬 WhatsApp
+            </a>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             APP SETTINGS
+        ====================================================== -->
+
+        <div class="navbar-settings">
+
+            <div class="navbar-settings-title">
+                APP SETTINGS
+            </div>
+
+
+            <!-- THEME -->
+
+            <button
+                type="button"
+                class="navbar-setting-button"
+                onclick="closeMainMenu(); document.getElementById('themeToggle').click();"
+            >
+
+                <span class="navbar-setting-icon">
+                    🌙
+                </span>
+
+                <span class="navbar-setting-text">
+
+                    <strong>
+                        Theme
+                    </strong>
+
+                    <small id="navbarThemeStatus">
+                        Dark / Light Mode
+                    </small>
+
+                </span>
+
+                <span class="navbar-setting-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+
+            <!-- LANGUAGE -->
+
+            <button
+                type="button"
+                class="navbar-setting-button"
+                onclick="closeMainMenu(); document.getElementById('languageSwitcher').scrollIntoView({behavior:'smooth'});"
+            >
+
+                <span class="navbar-setting-icon">
+                    🌐
+                </span>
+
+                <span class="navbar-setting-text">
+
+                    <strong>
+                        Language
+                    </strong>
+
+                    <small>
+                        हिंदी / English
+                    </small>
+
+                </span>
+
+                <span class="navbar-setting-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+
+            <!-- RESET -->
+
+            <button
+                type="button"
+                class="navbar-setting-button"
+                onclick="closeMainMenu(); document.getElementById('btnResetAll').click();"
+            >
+
+                <span class="navbar-setting-icon">
+                    ♻️
+                </span>
+
+                <span class="navbar-setting-text">
+
+                    <strong>
+                        Reset App
+                    </strong>
+
+                    <small>
+                        Restore default settings
+                    </small>
+
+                </span>
+
+                <span class="navbar-setting-arrow">
+                    ›
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="navbar-menu-footer">
+
+            <strong>
+                ⚡ Sandeep ElectroFix
+            </strong>
+
+            Digital Electrical Services
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================== -->
+
+    <header class="hero" id="heroSection">
+
+        <div class="top-controls-bar">
+
+            <button
+                id="themeToggle"
+                class="theme-toggle"
+                type="button"
+            >
+                <span id="themeIcon">☀️</span>
+                <span id="themeText">लाइट मोड</span>
+            </button>
+
+
+            <div
+                class="language-switcher"
+                id="languageSwitcher"
+            >
+
+                <button
+                    type="button"
+                    class="language-btn active"
+                    data-lang="hi"
+                    onclick="setLanguage('hi')"
+                >
+                    हिंदी
+                </button>
+
+                <button
+                    type="button"
+                    class="language-btn"
+                    data-lang="en"
+                    onclick="setLanguage('en')"
+                >
+                    English
+                </button>
+
+            </div>
+
+
+            <!-- RESET -->
+
+            <button
+                id="btnResetAll"
+                class="reset-app-btn"
+                type="button"
+                onclick="resetAllToDefault()"
+                title="डिफ़ॉल्ट सेटिंग्स पर रीसेट करें"
+            >
+
+                <span>🔄</span>
+
+                <span id="resetBtnText">
+                    रीसेट
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- HERO LOGO -->
+
+        <div
+            class="hero-logo"
+            id="businessLogo"
+        >
+
+            <img
+                src="assets/logo.png"
+                alt="Sandeep ElectroFix Logo"
+                onerror="this.parentElement.style.display='none'"
+            >
+
+        </div>
+
+
+        <h1 id="businessTitle">
+            Sandeep ElectroFix
+        </h1>
+
+
+        <p
+            class="tagline"
+            id="businessTagline"
+        ></p>
+
+
+        <p
+            class="location"
+            id="businessLocation"
+        ></p>
+
+
+        <div
+            class="hero-buttons"
+            id="heroButtonsWrap"
+        >
+
+            <a
+                href="tel:+919026036445"
+                class="btn call-btn"
+                id="callBtn"
+            >
+
+                <span id="callBtnText">
+                    📞 अभी कॉल करें
+                </span>
+
+            </a>
+
+
+            <a
+                href="https://wa.me/919026036445"
+                class="btn whatsapp-btn"
+                id="whatsappBtn"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <span id="whatsappBtnText">
+                    💬 व्हाट्सएप करें
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         SPECIAL DISCOUNT
+    ========================================================== -->
+
+    <section
+        id="discountSection"
+        class="discount-section"
+    >
+
+        <div class="discount-card">
+
+            <div
+                class="discount-badge"
+                id="discountBadge"
+            >
+                🔥 विशेष ऑफर
+            </div>
+
+
+            <h2 id="discountTitle">
+                विशेष छूट
+            </h2>
+
+
+            <div class="discount-percent">
+
+                <span id="discountPercentage">
+                    10
+                </span>
+
+                % OFF
+
+            </div>
+
+
+            <p id="discountMessage"></p>
+
+
+            <div
+                class="discount-validity"
+                id="discountValidity"
+            >
+                ⏳ सीमित समय के लिए
+            </div>
+
+
+            <a
+                href="#quoteFormSection"
+                class="discount-btn"
+                id="discountBtnText"
+            >
+                ⚡ छूट प्राप्त करें
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         QUICK ACCESS BAR
+    ========================================================== -->
+
+    <section
+        class="quick-actions"
+        id="quickAccessBar"
+    >
+
+        <h2 id="quickHeading">
+            त्वरित सेवाएँ
+        </h2>
+
+
+        <div
+            class="service-layout-bar"
+            id="quickLayoutBar"
+        >
+
+            <button
+                type="button"
+                class="layout-btn active"
+                data-ql="grid-2"
+                onclick="applyQuickLayout('grid-2')"
+            >
+                ⊞ Grid
+            </button>
+
+
+            <button
+                type="button"
+                class="layout-btn"
+                data-ql="carousel"
+                onclick="applyQuickLayout('carousel')"
+            >
+                ⇆ Slider
+            </button>
+
+
+            <button
+                type="button"
+                class="layout-btn"
+                data-ql="list"
+                onclick="applyQuickLayout('list')"
+            >
+                ☰ List
+            </button>
+
+
+            <button
+                type="button"
+                class="layout-btn"
+                data-ql="grid-3"
+                onclick="applyQuickLayout('grid-3')"
+            >
+                ☷ Mini
+            </button>
+
+        </div>
+
+
+
+        <div
+            class="grid layout-grid-2"
+            id="quickGridContainer"
+        >
+
+
+            <!-- CALL -->
+
+            <a
+                href="tel:+919026036445"
+                class="card"
+                id="btnQuickCall"
+            >
+
+                <span class="icon call-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#F5C542"
+                        />
+
+                        <path
+                            fill="#111827"
+                            d="M33.2 28.5l-4.1-1.7c-.5-.2-1.1 0-1.5.4l-1.8 2.2c-3.1-1.6-5.6-4.1-7.2-7.2l2.2-1.8c.4-.4.6-1 .4-1.5l-1.7-4.1c-.2-.6-.9-1-1.6-1h-3.4c-.9 0-1.7.8-1.6 1.7 1.2 8.7 8.1 15.6 16.8 16.8.9.1 1.7-.7 1.7-1.6v-3.4c0-.7-.4-1.4-1.2-1.8z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelCall">
+                    कॉल करें
+                </strong>
+
+            </a>
+
+
+
+            <!-- WHATSAPP -->
+
+            <a
+                href="https://wa.me/919026036445"
+                class="card"
+                target="_blank"
+                rel="noopener"
+                id="btnQuickWhatsapp"
+            >
+
+                <span class="icon whatsapp-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <path
+                            fill="#25D366"
+                            d="M24 4C12.95 4 4 12.95 4 24c0 3.82 1.07 7.39 2.92 10.43L4 44l9.84-2.85C16.8 43.02 20.3 44 24 44c11.05 0 20-8.95 20-20S35.05 4 24 4z"
+                        />
+
+                        <path
+                            fill="#FFFFFF"
+                            d="M34.6 28.9c-.48-.24-2.82-1.39-3.26-1.55-.44-.16-.76-.24-1.08.24-.32.48-1.24 1.55-1.52 1.87-.28.32-.56.36-1.04.12-2.92-1.25-5.11-3.69-6.38-5.88-.28-.48 0-.74.2-.98.2-.24.48-.56.72-.84.24-.28.32-.48.48-.8.16-.32 0-.6-.08-.84-.08-.24-1.04-2.51-1.43-3.44-.38-.91-.77-.79-1.06-.8h-.91c-.32 0-.84.12-1.28.6-.44.48-1.68 1.64-1.68 4s1.72 4.64 1.96 4.96c.24.32 3.39 5.18 8.21 7.26 3.12 1.35 4.34 1.48 5.88 1.25 1.04-.16 2.48-.96 2.83-1.89.35-.93.35-1.73.25-1.89-.1-.16-.38-.28-.84-.52z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelWhatsapp">
+                    व्हाट्सएप
+                </strong>
+
+            </a>
+
+
+
+            <!-- EMAIL -->
+
+            <a
+                href="mailto:SandeepElectroFix@gmail.com"
+                class="card"
+                id="btnQuickEmail"
+            >
+
+                <span class="icon email-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#EA4335"
+                        />
+
+                        <path
+                            fill="#FFFFFF"
+                            d="M12 16c0-1.1.9-2 2-2h20c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H14c-1.1 0-2-.9-2-2V16zm4 2l8 5 8-5h-16zm16 12V20.5l-8 5-8-5V30h16z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelEmail">
+                    ईमेल
+                </strong>
+
+            </a>
+
+
+
+            <!-- WEBSITE -->
+
+            <a
+                href="https://sandeepelectrofix.github.io/"
+                class="card"
+                target="_blank"
+                rel="noopener"
+                id="btnQuickWebsite"
+            >
+
+                <span class="icon website-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#0066FF"
+                        />
+
+                        <ellipse
+                            cx="24"
+                            cy="24"
+                            rx="10"
+                            ry="21"
+                            fill="none"
+                            stroke="#FFFFFF"
+                            stroke-width="2.5"
+                        />
+
+                        <line
+                            x1="3"
+                            y1="24"
+                            x2="45"
+                            y2="24"
+                            stroke="#FFFFFF"
+                            stroke-width="2.5"
+                        />
+
+                        <line
+                            x1="24"
+                            y1="1"
+                            x2="24"
+                            y2="47"
+                            stroke="#FFFFFF"
+                            stroke-width="2.5"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelWeb">
+                    वेबसाइट
+                </strong>
+
+            </a>
+
+
+
+            <!-- MAP -->
+
+            <a
+                href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7"
+                class="card"
+                target="_blank"
+                rel="noopener"
+                id="btnQuickMaps"
+            >
+
+                <span class="icon maps-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <path
+                            fill="#4285F4"
+                            d="M24 4C15.2 4 8 11.2 8 20c0 10.5 13.5 22.8 15.2 24.3.5.4 1.1.4 1.6 0C26.5 42.8 40 30.5 40 20c0-8.8-7.2-16-16-16z"
+                        />
+
+                        <circle
+                            cx="24"
+                            cy="19"
+                            r="6"
+                            fill="#FFFFFF"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelMap">
+                    गूगल मैप्स
+                </strong>
+
+            </a>
+
+
+
+            <!-- SAVE CONTACT -->
+
+            <a
+                href="javascript:void(0)"
+                class="card"
+                onclick="saveContactVCard()"
+                id="btnQuickSaveContact"
+            >
+
+                <span class="icon contact-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#10B981"
+                        />
+
+                        <path
+                            fill="#FFFFFF"
+                            d="M24 14a6 6 0 100 12 6 6 0 000-12zm0 15c-6 0-12 3-12 7v2h24v-2c0-4-6-7-12-7z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelSaveContact">
+                    नंबर सेव करें
+                </strong>
+
+            </a>
+
+
+
+            <!-- SHARE -->
+
+            <a
+                href="javascript:void(0)"
+                class="card"
+                onclick="shareWebsite()"
+                id="btnQuickShare"
+            >
+
+                <span class="icon share-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#25D366"
+                        />
+
+                        <path
+                            fill="#FFFFFF"
+                            d="M34 16c0-2.2-1.8-4-4-4s-4 1.8-4 4c0 .3 0 .7.1 1L17.5 21.3c-.7-.8-1.8-1.3-3-1.3-2.2 0-4 1.8-4 4s1.8 4 4 4c1.2 0 2.3-.5 3-1.3l8.6 4.3c-.1.3-.1.7-.1 1 0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1.2 0-2.3.5-3 1.3L17.5 25c.1-.3.1-.7.1-1s0-.7-.1-1l8.6-4.3c.7.8 1.8 1.3 3 1.3 2.2 0 4-1.8 4-4z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelShare">
+                    शेयर करें
+                </strong>
+
+            </a>
+
+
+
+            <!-- WORK -->
+
+            <a
+                href="our-work.html"
+                class="card"
+                id="btnQuickWork"
+            >
+
+                <span class="icon work-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#FF5500"
+                        />
+
+                        <path
+                            fill="#FFFFFF"
+                            d="M18 14l-2 3h-4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2V19c0-1.1-.9-2-2-2h-4l-2-3H18zm6 18c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelWork">
+                    हमारे कार्य
+                </strong>
+
+            </a>
+
+
+
+            <!-- CATALOGUE -->
+
+            <a
+                href="material-catalogue.html"
+                class="card catalogue-card-highlight"
+                id="btnQuickCatalogue"
+            >
+
+                <span class="icon catalogue-icon">
+
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="32"
+                        height="32"
+                    >
+
+                        <circle
+                            cx="24"
+                            cy="24"
+                            r="23"
+                            fill="#F5C542"
+                        />
+
+                        <path
+                            fill="#111827"
+                            d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm-22-24l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <strong id="labelCatalogue">
+                    सामग्री सूची
+                </strong>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         SOCIAL MEDIA
+    ========================================================== -->
+
+    <section
+        id="socialSection"
+        class="social-section"
+        style="text-align:center;"
+    >
+
+        <h2 id="socialHeading">
+            हमसे सोशल मीडिया पर जुड़ें
+        </h2>
+
+
+        <div
+            class="social-links-grid"
+            style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:12px;"
+        >
+
+            <a
+                href="https://www.facebook.com/SandeepElectroFix"
+                target="_blank"
+                rel="noopener"
+                id="btnFacebook"
+                class="social-btn facebook"
+                style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:30px; background:rgba(24, 119, 242, 0.15); border:1px solid rgba(24, 119, 242, 0.4); color:#1877f2; font-size:0.85rem; font-weight:600;"
+            >
+                <span>📘</span>
+                Facebook
+            </a>
+
+
+            <a
+                href="https://www.instagram.com/sandeep_electrofix"
+                target="_blank"
+                rel="noopener"
+                id="btnInstagram"
+                class="social-btn instagram"
+                style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:30px; background:rgba(225, 48, 108, 0.15); border:1px solid rgba(225, 48, 108, 0.4); color:#e1306c; font-size:0.85rem; font-weight:600;"
+            >
+                <span>📸</span>
+                Instagram
+            </a>
+
+
+            <a
+                href="https://youtube.com/@sandeepelectrofix"
+                target="_blank"
+                rel="noopener"
+                id="btnYoutube"
+                class="social-btn youtube"
+                style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:30px; background:rgba(255, 0, 0, 0.15); border:1px solid rgba(255, 0, 0, 0.4); color:#ff4444; font-size:0.85rem; font-weight:600;"
+            >
+                <span>▶️</span>
+                YouTube
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         ABOUT
+    ========================================================== -->
+
+    <section
+        class="about"
+        id="aboutSection"
+    >
+
+        <h2 id="aboutHeading">
+            हमारे बारे में
+        </h2>
+
+        <p id="aboutText"></p>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         LOCATION
+    ========================================================== -->
+
+    <section
+        id="locationSection"
+        class="location-box"
+    >
+
+        <h2 id="locHeading">
+            📍 सेवा क्षेत्र एवं लोकेशन
+        </h2>
+
+
+        <p id="locDesc">
+            पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।
+        </p>
+
+
+        <button
+            type="button"
+            class="location-btn"
+            id="checkLocationBtn"
+            onclick="getUserLocation()"
+        >
+
+            <span>📡</span>
+
+            <span id="distBtnText">
+                हमारे यहाँ से अपनी दूरी चेक करें
+            </span>
+
+        </button>
+
+
+        <a
+            href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7"
+            class="location-btn maps-btn"
+            id="btnDirectionsMap"
+            target="_blank"
+            rel="noopener"
+        >
+
+            <span>🗺️</span>
+
+            <span id="mapBtnText">
+                गूगल मैप्स पर रास्ता देखें
+            </span>
+
+        </a>
+
+
+        <div
+            id="locationStatus"
+            class="location-status"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         SERVICES
+    ========================================================== -->
+
+    <section
+        id="servicesSection"
+        class="services"
+    >
+
+        <h2 id="servicesHeading">
+            हमारी सेवाएँ
+        </h2>
+
+
+        <div
+            class="service-layout-bar"
+            id="servicesLayoutBar"
+        >
+
+            <button
+                type="button"
+                class="layout-btn active"
+                data-sl="list"
+                onclick="applyServiceLayout('list')"
+            >
+                ☰ List
+            </button>
+
+
+            <button
+                type="button"
+                class="layout-btn"
+                data-sl="grid-2"
+                onclick="applyServiceLayout('grid-2')"
+            >
+                ⊞ Grid
+            </button>
+
+
+            <button
+                type="button"
+                class="layout-btn"
+                data-sl="carousel"
+                onclick="applyServiceLayout('carousel')"
+            >
+                ⇆ Slider
+            </button>
+
+
+            <button
+                type="button"
+                class="layout-btn"
+                data-sl="grid-3"
+                onclick="applyServiceLayout('grid-3')"
+            >
+                ☷ Mini
+            </button>
+
+        </div>
+
+
+        <div
+            class="service-grid layout-list"
+            id="serviceContainer"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         GALLERY
+    ========================================================== -->
+
+    <section
+        id="gallerySection"
+        class="gallery"
+    >
+
+        <h2 id="galleryHeading">
+            हमारे द्वारा किए गए कार्य
+        </h2>
+
+
+        <div
+            class="gallery-grid"
+            id="galleryContainer"
+        ></div>
+
+    </section>
+
+
+
+    <!-- LIGHTBOX -->
+
+    <div
+        id="lightbox"
+        onclick="closeLightboxModal()"
+    >
+
+        <span id="closeLightbox">
+            &times;
+        </span>
+
+        <img
+            id="lightboxImage"
+            src=""
+            alt="Work"
+        >
 
     </div>
 
 
-    <!-- =====================================================
-         MAIN MENU
-    ===================================================== -->
 
-    <nav class="p21-menu-list">
+    <!-- =========================================================
+         QR CODE
+    ========================================================== -->
 
-        <a href="#heroSection" class="p21-menu-item">
-            <span class="p21-menu-icon">🏠</span>
-            <span>Home</span>
+    <section
+        id="cardQRContainer"
+        class="qr-section"
+    >
+
+        <h2 id="qrHeading">
+            क्यूआर कोड स्कैन करें
+        </h2>
+
+
+        <p id="qrDesc">
+            हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।
+        </p>
+
+
+        <div class="qr-container">
+
+            <img
+                src="assets/qr.png"
+                alt="QR Code"
+                id="cardQR"
+                onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sandeepelectrofix.github.io/SandeepElectroFix-Card/'"
+            >
+
+        </div>
+
+
+        <br>
+
+
+        <a
+            href="assets/qr.png"
+            download="SandeepElectroFix_QR.png"
+            class="btn download-qr-btn"
+            id="qrBtnText"
+        >
+            📥 क्यूआर कोड डाउनलोड करें
         </a>
 
-        <a href="#servicesSection" class="p21-menu-item">
-            <span class="p21-menu-icon">⚡</span>
-            <span>Our Services</span>
+    </section>
+
+
+
+    <!-- =========================================================
+         REVIEWS
+    ========================================================== -->
+
+    <section id="reviewsSection">
+
+        <h2 id="reviewsHeading">
+            ग्राहकों की राय
+        </h2>
+
+
+        <div
+            class="review-grid"
+            id="reviewContainer"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         ESTIMATE / QUOTE
+    ========================================================== -->
+
+    <section
+        id="quoteFormSection"
+        class="quote-section"
+    >
+
+        <h2 id="quoteHeading">
+            कोटेशन व अनुमानित खर्च
+        </h2>
+
+
+        <div
+            class="quote-card card"
+            style="padding:16px;"
+        >
+
+            <div class="quote-form">
+
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="आपका नाम *"
+                    oninput="saveCustomerInputs()"
+                >
+
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    placeholder="मोबाइल नंबर *"
+                    oninput="saveCustomerInputs()"
+                >
+
+
+
+                <!-- LOCATION -->
+
+                <div class="quote-location-wrapper">
+
+                    <input
+                        type="text"
+                        id="customerLocation"
+                        placeholder="आपका पता / एरिया *"
+                        oninput="saveCustomerInputs()"
+                    >
+
+
+                    <button
+                        type="button"
+                        class="btn-gps-detect"
+                        id="btnGpsDetect"
+                        onclick="getQuoteLiveLocation()"
+                        title="करेंट लोकेशन प्राप्त करें"
+                    >
+
+                        <span id="gpsBtnIcon">
+                            📍
+                        </span>
+
+                        <span id="gpsBtnText">
+                            GPS
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <textarea
+                    id="customerMessage"
+                    rows="2"
+                    placeholder="कार्य का अतिरिक्त विवरण (वैकल्पिक)..."
+                    oninput="saveCustomerInputs()"
+                ></textarea>
+
+
+
+                <!-- ESTIMATE SUMMARY -->
+
+                <div
+                    id="estimateSummaryBox"
+                    class="estimate-summary-box"
+                >
+
+                    <div
+                        class="summary-heading"
+                        id="summaryHeader"
+                    >
+
+                        चुनी गई सेवाएँ
+                        (
+                        <span id="selectedCount">
+                            0
+                        </span>
+                        )
+
+                    </div>
+
+
+                    <div
+                        id="selectedServicesList"
+                        class="selected-services-list"
+                    >
+
+                        <p
+                            class="no-selection-hint"
+                            id="noSelHint"
+                        >
+                            अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।
+                        </p>
+
+                    </div>
+
+
+                    <div class="calc-row">
+
+                        <span id="lblSubtotal">
+                            कुल राशि:
+                        </span>
+
+                        <strong id="calcSubtotal">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        class="calc-row discount-row"
+                        id="calcDiscountRow"
+                        style="display:none;"
+                    >
+
+                        <span id="discountLabel">
+                            विशेष छूट:
+                        </span>
+
+                        <strong id="calcDiscount">
+                            -₹0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="calc-row total-row">
+
+                        <span id="lblGrandTotal">
+                            अंतिम राशि:
+                        </span>
+
+                        <strong id="calcGrandTotal">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTION BUTTONS -->
+
+                <div class="quote-action-buttons">
+
+                    <button
+                        type="button"
+                        class="btn whatsapp-btn"
+                        id="sendWhatsappBtn"
+                        onclick="sendWhatsappQuote()"
+                    >
+                        💬 व्हाट्सएप पर भेजें
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn pdf-download-btn"
+                        id="downloadPdfBtn"
+                        onclick="downloadEstimatePDF()"
+                    >
+                        📄 पीडीएफ एस्टीमेट डाउनलोड करें
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         FAQ
+    ========================================================== -->
+
+    <section id="faqSection">
+
+        <h2 id="faqHeading">
+            अक्सर पूछे जाने वाले सवाल
+        </h2>
+
+
+        <div
+            class="faq-container"
+            id="faqContainer"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         SERVICE MODAL
+    ========================================================== -->
+
+    <div
+        id="serviceModalOverlay"
+        class="service-modal-overlay"
+        onclick="closeServiceModal()"
+    >
+
+        <div
+            class="service-modal-content"
+            onclick="event.stopPropagation()"
+        >
+
+            <div class="modal-header">
+
+                <div class="modal-title-wrap">
+
+                    <span
+                        id="modalServiceIcon"
+                        style="font-size: 1.4rem;"
+                    >
+                        ⚡
+                    </span>
+
+
+                    <h3
+                        id="modalServiceTitle"
+                        class="modal-title"
+                    >
+                        Service Title
+                    </h3>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close-btn"
+                    onclick="closeServiceModal()"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+
+            <p
+                id="modalServiceDesc"
+                class="modal-desc"
+            ></p>
+
+
+            <div
+                id="modalItemsContainer"
+                class="modal-items-list"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer id="footerSection">
+
+        <p id="footerText">
+            &copy; 2026 Sandeep ElectroFix. All rights reserved.
+        </p>
+
+    </footer>
+
+
+
+    <!-- =========================================================
+         BOTTOM NAV
+    ========================================================== -->
+
+    <nav
+        class="mobile-bottom-nav"
+        id="mobileBottomNav"
+    >
+
+        <a
+            href="#top"
+            class="bottom-nav-item"
+        >
+
+            <span>🏠</span>
+
+            <small id="navHome">
+                होम
+            </small>
+
         </a>
 
-        <a href="#gallerySection" class="p21-menu-item">
-            <span class="p21-menu-icon">🖼️</span>
-            <span>Our Work</span>
+
+        <a
+            href="#servicesSection"
+            class="bottom-nav-item"
+        >
+
+            <span>⚡</span>
+
+            <small id="navServices">
+                सेवाएं
+            </small>
+
         </a>
 
-        <a href="#quoteFormSection" class="p21-menu-item">
-            <span class="p21-menu-icon">📋</span>
-            <span>Get Estimate</span>
+
+        <a
+            href="#gallerySection"
+            class="bottom-nav-item"
+        >
+
+            <span>📸</span>
+
+            <small id="navWork">
+                कार्य
+            </small>
+
         </a>
 
-        <a href="#aboutSection" class="p21-menu-item">
-            <span class="p21-menu-icon">ℹ️</span>
-            <span>About Us</span>
+
+        <a
+            href="#quoteFormSection"
+            class="bottom-nav-item"
+        >
+
+            <span>💬</span>
+
+            <small id="navQuote">
+                कोट
+            </small>
+
         </a>
 
-        <a href="#locationSection" class="p21-menu-item">
-            <span class="p21-menu-icon">📍</span>
-            <span>Service Location</span>
-        </a>
 
-        <a href="#reviewsSection" class="p21-menu-item">
-            <span class="p21-menu-icon">⭐</span>
-            <span>Customer Reviews</span>
-        </a>
+        <a
+            href="tel:+919026036445"
+            class="bottom-nav-item"
+        >
 
-        <a href="#faqSection" class="p21-menu-item">
-            <span class="p21-menu-icon">❓</span>
-            <span>FAQ</span>
-        </a>
+            <span>📞</span>
 
-        <a href="#cardQRContainer" class="p21-menu-item">
-            <span class="p21-menu-icon">🔳</span>
-            <span>QR Code</span>
+            <small id="navCall">
+                कॉल
+            </small>
+
         </a>
 
     </nav>
 
 
-    <!-- =====================================================
-         QUICK ACTIONS
-    ===================================================== -->
 
-    <div class="p21-menu-divider"></div>
+    <!-- =========================================================
+         NAVBAR JAVASCRIPT
+    ========================================================== -->
 
-    <div class="p21-menu-title">
-        QUICK ACTIONS
-    </div>
+    <script>
 
-    <div class="p21-quick-actions">
+        function toggleMainMenu() {
 
-        <a
-            href="tel:+919026036445"
-            class="p21-action-btn call"
-        >
-            📞
-            <span>Call Now</span>
-        </a>
+            const menu =
+                document.getElementById("mainSideMenu");
 
-        <a
-            href="https://wa.me/919026036445"
-            target="_blank"
-            rel="noopener"
-            class="p21-action-btn whatsapp"
-        >
-            💬
-            <span>WhatsApp</span>
-        </a>
+            const overlay =
+                document.getElementById("mainMenuOverlay");
 
-    </div>
+            const button =
+                document.getElementById("mainMenuButton");
 
+            if (!menu || !overlay || !button) return;
 
-    <!-- =====================================================
-         APP SETTINGS
-    ===================================================== -->
+            const isOpen =
+                menu.classList.contains("active");
 
-    <div class="p21-settings-section">
+            if (isOpen) {
 
-        <div class="p21-settings-heading">
-            ⚙️ APP SETTINGS
-        </div>
+                closeMainMenu();
 
+            } else {
 
-        <!-- THEME -->
-        <button
-            type="button"
-            id="p21ThemeBtn"
-            class="p21-setting-item"
-        >
-            <span class="p21-setting-icon">🌙</span>
+                menu.classList.add("active");
 
-            <span class="p21-setting-text">
-                <strong>Theme</strong>
-                <small id="p21ThemeStatus">Dark Mode</small>
-            </span>
+                overlay.classList.add("active");
 
-            <span class="p21-setting-arrow">›</span>
-        </button>
+                button.classList.add("active");
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+                menu.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+                document.body.classList.add(
+                    "menu-open"
+                );
+
+            }
+
+        }
 
 
-        <!-- LANGUAGE -->
-        <button
-            type="button"
-            id="p21LanguageBtn"
-            class="p21-setting-item"
-        >
-            <span class="p21-setting-icon">🌐</span>
 
-            <span class="p21-setting-text">
-                <strong>Language</strong>
-                <small id="p21LanguageStatus">English</small>
-            </span>
+        function closeMainMenu() {
 
-            <span class="p21-setting-arrow">›</span>
-        </button>
+            const menu =
+                document.getElementById("mainSideMenu");
+
+            const overlay =
+                document.getElementById("mainMenuOverlay");
+
+            const button =
+                document.getElementById("mainMenuButton");
+
+            if (!menu || !overlay || !button) return;
+
+            menu.classList.remove("active");
+
+            overlay.classList.remove("active");
+
+            button.classList.remove("active");
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            menu.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            document.body.classList.remove(
+                "menu-open"
+            );
+
+        }
 
 
-        <!-- RESET -->
-        <button
-            type="button"
-            id="p21ResetBtn"
-            class="p21-setting-item reset"
-        >
-            <span class="p21-setting-icon">♻️</span>
 
-            <span class="p21-setting-text">
-                <strong>Reset App</strong>
-                <small>Restore default settings</small>
-            </span>
+        /* ESC KEY */
 
-            <span class="p21-setting-arrow">›</span>
-        </button>
+        document.addEventListener(
+            "keydown",
+            function(event) {
 
-    </div>
+                if (event.key === "Escape") {
+                    closeMainMenu();
+                }
+
+            }
+        );
 
 
-    <!-- FOOTER -->
-    <div class="p21-menu-footer">
-        <span>⚡</span>
-        Sandeep ElectroFix
-        <small>Project 2.1</small>
-    </div>
 
-</aside>
-    
-     <!-- HERO SECTION -->
-     <header class="hero" id="heroSection">
-          <div class="top-controls-bar">
-            <button id="themeToggle" class="theme-toggle" type="button">
-              <span id="themeIcon">☀️</span> <span id="themeText">लाइट मोड</span>
-            </button>
-            <div class="language-switcher" id="languageSwitcher">
-              <button type="button" class="language-btn active" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
-              <button type="button" class="language-btn" data-lang="en" onclick="setLanguage('en')">English</button>
-            </div>
-            <!-- 🔄 TOP PILL RESET BUTTON -->
-            <button id="btnResetAll" class="reset-app-btn" type="button" onclick="resetAllToDefault()" title="डिफ़ॉल्ट सेटिंग्स पर रीसेट करें">
-              <span>🔄</span> <span id="resetBtnText">रीसेट</span>
-            </button>
-          </div>
+        /* MENU LINKS */
 
-          <div class="hero-logo" id="businessLogo">
-            <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" onerror="this.parentElement.style.display='none'">
-          </div>
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
 
-          <h1 id="businessTitle">Sandeep ElectroFix</h1>
-          <p class="tagline" id="businessTagline"></p>
-          <p class="location" id="businessLocation"></p>
+                const menuLinks =
+                    document.querySelectorAll(
+                        ".navbar-menu-links a"
+                    );
 
-          <div class="hero-buttons" id="heroButtonsWrap">
-            <a href="tel:+919026036445" class="btn call-btn" id="callBtn">
-                <span id="callBtnText">📞 अभी कॉल करें</span>
-            </a>
-            <a href="https://wa.me/919026036445" class="btn whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">
-                <span id="whatsappBtnText">💬 व्हाट्सएप करें</span>
-            </a>
-          </div>
-     </header>
+                menuLinks.forEach(
+                    function(link) {
 
-     <!-- SPECIAL DISCOUNT -->
-     <section id="discountSection" class="discount-section">
-        <div class="discount-card">
-            <div class="discount-badge" id="discountBadge">🔥 विशेष ऑफर</div>
-            <h2 id="discountTitle">विशेष छूट</h2>
-            <div class="discount-percent"><span id="discountPercentage">10</span>% OFF</div>
-            <p id="discountMessage"></p>
-            <div class="discount-validity" id="discountValidity">⏳ सीमित समय के लिए</div>
-            <a href="#quoteFormSection" class="discount-btn" id="discountBtnText">⚡ छूट प्राप्त करें</a>
-        </div>
-     </section> 
+                        link.addEventListener(
+                            "click",
+                            function() {
+                                closeMainMenu();
+                            }
+                        );
 
-     <!-- QUICK ACCESS BAR -->
-     <section class="quick-actions" id="quickAccessBar">
-         <h2 id="quickHeading">त्वरित सेवाएँ</h2>
-         
-         <div class="service-layout-bar" id="quickLayoutBar">
-            <button type="button" class="layout-btn active" data-ql="grid-2" onclick="applyQuickLayout('grid-2')">⊞ Grid</button>
-            <button type="button" class="layout-btn" data-ql="carousel" onclick="applyQuickLayout('carousel')">⇆ Slider</button>
-            <button type="button" class="layout-btn" data-ql="list" onclick="applyQuickLayout('list')">☰ List</button>
-            <button type="button" class="layout-btn" data-ql="grid-3" onclick="applyQuickLayout('grid-3')">☷ Mini</button>
-         </div>
+                    }
+                );
 
-         <div class="grid layout-grid-2" id="quickGridContainer">
-            <a href="tel:+919026036445" class="card" id="btnQuickCall">
-                <span class="icon call-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#F5C542"/><path fill="#111827" d="M33.2 28.5l-4.1-1.7c-.5-.2-1.1 0-1.5.4l-1.8 2.2c-3.1-1.6-5.6-4.1-7.2-7.2l2.2-1.8c.4-.4.6-1 .4-1.5l-1.7-4.1c-.2-.6-.9-1-1.6-1h-3.4c-.9 0-1.7.8-1.6 1.7 1.2 8.7 8.1 15.6 16.8 16.8.9.1 1.7-.7 1.7-1.6v-3.4c0-.7-.4-1.4-1.2-1.8z"/></svg></span>
-                <strong id="labelCall">कॉल करें</strong>
-            </a>
-            <a href="https://wa.me/919026036445" class="card" target="_blank" rel="noopener" id="btnQuickWhatsapp">
-                <span class="icon whatsapp-icon"><svg viewBox="0 0 48 48" width="32" height="32"><path fill="#25D366" d="M24 4C12.95 4 4 12.95 4 24c0 3.82 1.07 7.39 2.92 10.43L4 44l9.84-2.85C16.8 43.02 20.3 44 24 44c11.05 0 20-8.95 20-20S35.05 4 24 4z"/><path fill="#FFFFFF" d="M34.6 28.9c-.48-.24-2.82-1.39-3.26-1.55-.44-.16-.76-.24-1.08.24-.32.48-1.24 1.55-1.52 1.87-.28.32-.56.36-1.04.12-2.92-1.25-5.11-3.69-6.38-5.88-.28-.48 0-.74.2-.98.2-.24.48-.56.72-.84.24-.28.32-.48.48-.8.16-.32 0-.6-.08-.84-.08-.24-1.04-2.51-1.43-3.44-.38-.91-.77-.79-1.06-.8h-.91c-.32 0-.84.12-1.28.6-.44.48-1.68 1.64-1.68 4s1.72 4.64 1.96 4.96c.24.32 3.39 5.18 8.21 7.26 3.12 1.35 4.34 1.48 5.88 1.25 1.04-.16 2.48-.96 2.83-1.89.35-.93.35-1.73.25-1.89-.1-.16-.38-.28-.84-.52z"/></svg></span>
-                <strong id="labelWhatsapp">व्हाट्सएप</strong>
-            </a>
-            <a href="mailto:SandeepElectroFix@gmail.com" class="card" id="btnQuickEmail">
-                <span class="icon email-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#EA4335"/><path fill="#FFFFFF" d="M12 16c0-1.1.9-2 2-2h20c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H14c-1.1 0-2-.9-2-2V16zm4 2l8 5 8-5h-16zm16 12V20.5l-8 5-8-5V30h16z"/></svg></span>
-                <strong id="labelEmail">ईमेल</strong>
-            </a>
-            <a href="https://sandeepelectrofix.github.io/" class="card" target="_blank" rel="noopener" id="btnQuickWebsite">
-                <span class="icon website-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#0066FF"/><ellipse cx="24" cy="24" rx="10" ry="21" fill="none" stroke="#FFFFFF" stroke-width="2.5"/><line x1="3" y1="24" x2="45" y2="24" stroke="#FFFFFF" stroke-width="2.5"/><line x1="24" y1="1" x2="24" y2="47" stroke="#FFFFFF" stroke-width="2.5"/></svg></span>
-                <strong id="labelWeb">वेबसाइट</strong>
-            </a>
-            <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="card" target="_blank" rel="noopener" id="btnQuickMaps">
-                <span class="icon maps-icon"><svg viewBox="0 0 48 48" width="32" height="32"><path fill="#4285F4" d="M24 4C15.2 4 8 11.2 8 20c0 10.5 13.5 22.8 15.2 24.3.5.4 1.1.4 1.6 0C26.5 42.8 40 30.5 40 20c0-8.8-7.2-16-16-16z"/><circle cx="24" cy="19" r="6" fill="#FFFFFF"/></svg></span>
-                <strong id="labelMap">गूगल मैप्स</strong>
-            </a>
-            <a href="javascript:void(0)" class="card" onclick="saveContactVCard()" id="btnQuickSaveContact">
-                <span class="icon contact-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#10B981"/><path fill="#FFFFFF" d="M24 14a6 6 0 100 12 6 6 0 000-12zm0 15c-6 0-12 3-12 7v2h24v-2c0-4-6-7-12-7z"/></svg></span>
-                <strong id="labelSaveContact">नंबर सेव करें</strong>
-            </a>
-            <a href="javascript:void(0)" class="card" onclick="shareWebsite()" id="btnQuickShare">
-                <span class="icon share-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#25D366"/><path fill="#FFFFFF" d="M34 16c0-2.2-1.8-4-4-4s-4 1.8-4 4c0 .3 0 .7.1 1L17.5 21.3c-.7-.8-1.8-1.3-3-1.3-2.2 0-4 1.8-4 4s1.8 4 4 4c1.2 0 2.3-.5 3-1.3l8.6 4.3c-.1.3-.1.7-.1 1 0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1.2 0-2.3.5-3 1.3L17.5 25c.1-.3.1-.7.1-1s0-.7-.1-1l8.6-4.3c.7.8 1.8 1.3 3 1.3 2.2 0 4-1.8 4-4z"/></svg></span>
-                <strong id="labelShare">शेयर करें</strong>
-            </a>
-            <a href="our-work.html" class="card" id="btnQuickWork">
-                <span class="icon work-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#FF5500"/><path fill="#FFFFFF" d="M18 14l-2 3h-4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2V19c0-1.1-.9-2-2-2h-4l-2-3H18zm6 18c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/></svg></span>
-                <strong id="labelWork">हमारे कार्य</strong>
-            </a>
-            <a href="material-catalogue.html" class="card catalogue-card-highlight" id="btnQuickCatalogue">
-                <span class="icon catalogue-icon"><svg viewBox="0 0 48 48" width="32" height="32"><circle cx="24" cy="24" r="23" fill="#F5C542"/><path fill="#111827" d="M14 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm22 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm-22-24l2.4 12h21.8l3.6-12H14.2zM8 6H4v4h3.1l6.3 21.1c-.8 1.4-1.4 3-1.4 4.9 0 4.4 3.6 8 8 8h22v-4H20c-2.2 0-4-1.8-4-4 0-.4.1-.7.2-1l1.8-3h20.4c1.6 0 3-1 3.6-2.5l5.8-17.5c.3-.8.1-1.7-.4-2.3-.5-.7-1.3-1.2-2.2-1.2H10.8L9.5 6H8z"/></svg></span>
-                <strong id="labelCatalogue">सामग्री सूची</strong>
-            </a>
-         </div>
-     </section>
+            }
+        );
 
-     <!-- SOCIAL MEDIA CONNECT SECTION -->
-     <section id="socialSection" class="social-section" style="text-align:center;">
-         <h2 id="socialHeading">हमसे सोशल मीडिया पर जुड़ें</h2>
-         <div class="social-links-grid" style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:12px;">
-             <a href="https://www.facebook.com/SandeepElectroFix" target="_blank" rel="noopener" id="btnFacebook" class="social-btn facebook" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:30px; background:rgba(24, 119, 242, 0.15); border:1px solid rgba(24, 119, 242, 0.4); color:#1877f2; font-size:0.85rem; font-weight:600;">
-                 <span>📘</span> Facebook
-             </a>
-             <a href="https://www.instagram.com/sandeep_electrofix" target="_blank" rel="noopener" id="btnInstagram" class="social-btn instagram" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:30px; background:rgba(225, 48, 108, 0.15); border:1px solid rgba(225, 48, 108, 0.4); color:#e1306c; font-size:0.85rem; font-weight:600;">
-                 <span>📸</span> Instagram
-             </a>
-             <a href="https://youtube.com/@sandeepelectrofix" target="_blank" rel="noopener" id="btnYoutube" class="social-btn youtube" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:30px; background:rgba(255, 0, 0, 0.15); border:1px solid rgba(255, 0, 0, 0.4); color:#ff4444; font-size:0.85rem; font-weight:600;">
-                 <span>▶️</span> YouTube
-             </a>
-         </div>
-     </section>
+    </script>
 
-     <!-- ABOUT SECTION -->
-     <section class="about" id="aboutSection">
-         <h2 id="aboutHeading">हमारे बारे में</h2>
-         <p id="aboutText"></p>
-     </section>  
 
-     <!-- LOCATION -->
-     <section id="locationSection" class="location-box">
-        <h2 id="locHeading">📍 सेवा क्षेत्र एवं लोकेशन</h2>
-        <p id="locDesc">पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।</p>
-        <button type="button" class="location-btn" id="checkLocationBtn" onclick="getUserLocation()">
-            <span>📡</span> <span id="distBtnText">हमारे यहाँ से अपनी दूरी चेक करें</span>
-        </button>
-        <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="location-btn maps-btn" id="btnDirectionsMap" target="_blank" rel="noopener">
-            <span>🗺️</span> <span id="mapBtnText">गूगल मैप्स पर रास्ता देखें</span>
-        </a>
-        <div id="locationStatus" class="location-status"></div>
-     </section>
-     
-     <!-- SERVICES -->
-     <section id="servicesSection" class="services">
-        <h2 id="servicesHeading">हमारी सेवाएँ</h2>
-        <div class="service-layout-bar" id="servicesLayoutBar">
-          <button type="button" class="layout-btn active" data-sl="list" onclick="applyServiceLayout('list')">☰ List</button>
-          <button type="button" class="layout-btn" data-sl="grid-2" onclick="applyServiceLayout('grid-2')">⊞ Grid</button>
-          <button type="button" class="layout-btn" data-sl="carousel" onclick="applyServiceLayout('carousel')">⇆ Slider</button>
-          <button type="button" class="layout-btn" data-sl="grid-3" onclick="applyServiceLayout('grid-3')">☷ Mini</button>
-        </div>
-        <div class="service-grid layout-list" id="serviceContainer"></div>
-     </section>
 
-     <!-- GALLERY -->
-     <section id="gallerySection" class="gallery">
-        <h2 id="galleryHeading">हमारे द्वारा किए गए कार्य</h2>
-        <div class="gallery-grid" id="galleryContainer"></div>
-     </section>
+    <!-- =========================================================
+         EXISTING PROJECT SCRIPTS
+    ========================================================== -->
 
-     <!-- LIGHTBOX -->
-     <div id="lightbox" onclick="closeLightboxModal()"><span id="closeLightbox">&times;</span><img id="lightboxImage" src="" alt="Work"></div>
+    <script src="config.js?v=3.0"></script>
 
-     <!-- SCAN QR -->
-     <section id="cardQRContainer" class="qr-section">
-        <h2 id="qrHeading">क्यूआर कोड स्कैन करें</h2>
-        <p id="qrDesc">हमारा डिजिटल कार्ड सेव करने या भुगतान के लिए यह क्यूआर कोड स्कैन करें।</p>
-        <div class="qr-container">
-            <img src="assets/qr.png" alt="QR Code" id="cardQR" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sandeepelectrofix.github.io/SandeepElectroFix-Card/'">
-        </div>
-        <br>
-        <a href="assets/qr.png" download="SandeepElectroFix_QR.png" class="btn download-qr-btn" id="qrBtnText">📥 क्यूआर कोड डाउनलोड करें</a>
-     </section>
+    <script src="script.js?v=3.0"></script>
 
-     <!-- REVIEWS -->
-     <section id="reviewsSection">
-        <h2 id="reviewsHeading">ग्राहकों की राय</h2>
-        <div class="review-grid" id="reviewContainer"></div>
-     </section>
-
-     <!-- ESTIMATE / QUOTE -->
-     <section id="quoteFormSection" class="quote-section">
-        <h2 id="quoteHeading">कोटेशन व अनुमानित खर्च</h2>
-        <div class="quote-card card" style="padding:16px;">
-          <div class="quote-form">
-              <input type="text" id="customerName" placeholder="आपका नाम *" oninput="saveCustomerInputs()">
-              <input type="tel" id="customerPhone" placeholder="मोबाइल नंबर *" oninput="saveCustomerInputs()">
-              
-              <!-- लोकेशन इनपुट + ऑटो GPS बटन -->
-              <div class="quote-location-wrapper">
-                  <input type="text" id="customerLocation" placeholder="आपका पता / एरिया *" oninput="saveCustomerInputs()">
-                  <button type="button" class="btn-gps-detect" id="btnGpsDetect" onclick="getQuoteLiveLocation()" title="करेंट लोकेशन प्राप्त करें">
-                      <span id="gpsBtnIcon">📍</span> <span id="gpsBtnText">GPS</span>
-                  </button>
-              </div>
-
-              <textarea id="customerMessage" rows="2" placeholder="कार्य का अतिरिक्त विवरण (वैकल्पिक)..." oninput="saveCustomerInputs()"></textarea>
-              
-              <div id="estimateSummaryBox" class="estimate-summary-box">
-                  <div class="summary-heading" id="summaryHeader">चुनी गई सेवाएँ (<span id="selectedCount">0</span>)</div>
-                  <div id="selectedServicesList" class="selected-services-list">
-                    <p class="no-selection-hint" id="noSelHint">अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।</p>
-                  </div>
-
-                  <div class="calc-row"><span id="lblSubtotal">कुल राशि:</span> <strong id="calcSubtotal">₹0</strong></div>
-                  <div class="calc-row discount-row" id="calcDiscountRow" style="display:none;">
-                    <span id="discountLabel">विशेष छूट:</span> <strong id="calcDiscount">-₹0</strong>
-                  </div>
-                  <div class="calc-row total-row"><span id="lblGrandTotal">अंतिम राशि:</span> <strong id="calcGrandTotal">₹0</strong></div>
-              </div>
-
-              <div class="quote-action-buttons">
-                <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 व्हाट्सएप पर भेजें</button>
-                <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 पीडीएफ एस्टीमेट डाउनलोड करें</button>
-              </div>
-          </div>
-        </div>
-     </section>
-
-     <!-- FAQ -->
-     <section id="faqSection">
-        <h2 id="faqHeading">अक्सर पूछे जाने वाले सवाल</h2>
-        <div class="faq-container" id="faqContainer"></div>
-     </section>
-
-     <!-- SERVICE MODAL -->
-     <div id="serviceModalOverlay" class="service-modal-overlay" onclick="closeServiceModal()">
-       <div class="service-modal-content" onclick="event.stopPropagation()">
-         <div class="modal-header">
-           <div class="modal-title-wrap">
-             <span id="modalServiceIcon" style="font-size: 1.4rem;">⚡</span>
-             <h3 id="modalServiceTitle" class="modal-title">Service Title</h3>
-           </div>
-           <button type="button" class="modal-close-btn" onclick="closeServiceModal()">&times;</button>
-         </div>
-         <p id="modalServiceDesc" class="modal-desc"></p>
-         <div id="modalItemsContainer" class="modal-items-list"></div>
-       </div>
-     </div>
-    
-     <!-- FOOTER -->
-     <footer id="footerSection">
-        <p id="footerText">&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
-     </footer>
-
-     <!-- BOTTOM NAV -->
-     <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <a href="#top" class="bottom-nav-item"><span>🏠</span><small id="navHome">होम</small></a>
-        <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small id="navServices">सेवाएं</small></a>
-        <a href="#gallerySection" class="bottom-nav-item"><span>📸</span><small id="navWork">कार्य</small></a>
-        <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small id="navQuote">कोट</small></a>
-        <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">कॉल</small></a>
-     </nav>
-
-     <script src="config.js?v=3.0"></script>
-     <script src="script.js?v=3.0"></script>
 </body>
+
 </html>
