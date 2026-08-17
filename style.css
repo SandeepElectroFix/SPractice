@@ -1312,3 +1312,184 @@ body {
         width: 380px;
     }
 }
+/* =========================================================
+   ☰ HAMBURGER MENU - LIGHT MODE FIX
+   Same look as APP SETTINGS background
+========================================================= */
+
+/* ---------------------------------------------------------
+   LIGHT MODE - SIDE MENU
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-side-menu {
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #101827 !important;
+    border-left: 1px solid rgba(15, 23, 42, 0.12) !important;
+    box-shadow: -10px 0 40px rgba(15, 23, 42, 0.18) !important;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+
+/* ---------------------------------------------------------
+   MENU HEADER
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-menu-header {
+    border-bottom-color: rgba(15, 23, 42, 0.10) !important;
+}
+
+html.saved-light-theme #appMenuBrandName,
+html.saved-light-theme .app-menu-brand strong {
+    color: #b88900 !important;
+}
+
+html.saved-light-theme #appMenuBrandLocation,
+html.saved-light-theme .app-menu-brand small {
+    color: #64748b !important;
+}
+
+
+/* ---------------------------------------------------------
+   CLOSE BUTTON
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-menu-close,
+html.saved-light-theme .app-close-btn {
+    background: rgba(15, 23, 42, 0.06) !important;
+    color: #b88900 !important;
+    border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+
+/* ---------------------------------------------------------
+   MENU ITEMS
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-menu-item {
+    color: #101827 !important;
+    border-bottom-color: rgba(15, 23, 42, 0.07) !important;
+    background: transparent !important;
+}
+
+html.saved-light-theme .app-menu-item:hover,
+html.saved-light-theme .app-menu-item:active {
+    background: rgba(245, 197, 66, 0.12) !important;
+    color: #101827 !important;
+}
+
+html.saved-light-theme .app-menu-icon,
+html.saved-light-theme .menu-item-icon {
+    color: #101827 !important;
+}
+
+html.saved-light-theme .menu-arrow,
+html.saved-light-theme .app-setting-arrow {
+    color: #b88900 !important;
+}
+
+
+/* ---------------------------------------------------------
+   APP SETTINGS BOX
+   Same premium light background
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-settings,
+html.saved-light-theme .app-settings-section {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(15, 23, 42, 0.12) !important;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.saved-light-theme .app-settings-title,
+html.saved-light-theme .app-settings-heading {
+    color: #b88900 !important;
+    border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+
+/* ---------------------------------------------------------
+   SETTINGS ITEMS
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-setting-item {
+    color: #101827 !important;
+    background: transparent !important;
+}
+
+html.saved-light-theme .app-setting-item:hover,
+html.saved-light-theme .app-setting-item:active {
+    background: rgba(15, 23, 42, 0.05) !important;
+    color: #101827 !important;
+}
+
+html.saved-light-theme .app-setting-icon,
+html.saved-light-theme .setting-icon {
+    color: #101827 !important;
+}
+
+
+/* ---------------------------------------------------------
+   RESET APP
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-reset-item {
+    color: #dc2626 !important;
+    border-top-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+
+/* ---------------------------------------------------------
+   MENU FOOTER
+--------------------------------------------------------- */
+
+html.saved-light-theme .app-menu-footer {
+    color: #b88900 !important;
+}
+
+html.saved-light-theme .app-menu-footer small {
+    color: #64748b !important;
+}
+
+
+/* =========================================================
+   🌙 DARK MODE - ORIGINAL LOOK
+========================================================= */
+
+html:not(.saved-light-theme) .app-side-menu {
+    background: linear-gradient(
+        180deg,
+        #080d1f 0%,
+        #050816 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   🎯 IMPORTANT - MENU OVERLAY
+   Light mode me black/dark overlay kam rakha
+========================================================= */
+
+html.saved-light-theme .app-menu-overlay,
+html.saved-light-theme .app-overlay {
+    background: rgba(15, 23, 42, 0.28) !important;
+}
+
+
+/* =========================================================
+   📱 MOBILE - SETTINGS STYLE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    html.saved-light-theme .app-side-menu {
+        width: min(88vw, 360px);
+        background: rgba(255, 255, 255, 0.97) !important;
+    }
+
+    html.saved-light-theme .app-menu-item {
+        min-height: 54px;
+        font-size: 14px;
+    }
+
+}
