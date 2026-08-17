@@ -5,16 +5,16 @@
 window.MASTER_CONFIG = {
     controls: {
         showHero: true,
-        showDiscount: true,
+        showDiscount: false,
         discountPercent: 5,
         showQuickAccess: true,
         showSocialLinks: true,
         showAbout: true,
         showLocation: true,
-        showServices: true,
+        showServices: false,
         showGallery: true,
         showQR: true,
-        showReviews: true,
+        showReviews: false,
         showQuoteForm: true,
         showFAQ: true,
         showFooter: true,
@@ -22,8 +22,8 @@ window.MASTER_CONFIG = {
 
         pwaShortcuts: {
             enabled: true,
-            call: true,
-            whatsapp: true,
+            call: false,
+            whatsapp: false,
             services: true
         },
 
@@ -71,7 +71,7 @@ window.MASTER_CONFIG = {
         instagram: "https://www.instagram.com/sandeep_electrofix",
         youtube: "https://youtube.com/@sandeepelectrofix",
         logo: "assets/logo.png",
-        qrCode: "assets/qr.png"
+        qrCode: "assets/qr-card.png"
     },
 
     services: [
