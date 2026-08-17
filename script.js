@@ -1561,13 +1561,9 @@ function updateProjectNavbarLanguage() {
 
 
     setText(
-        "project21MenuBrandLocation",
-        `📍 ${
-            isHi
-                ? (biz.location_hi || "")
-                : (biz.location_en || "")
-        }`
-    );
+    "project21MenuBrandLocation",
+    "⚡ Powering Your Trust"
+);
 
 
     /* MAIN MENU */
