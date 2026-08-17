@@ -1296,7 +1296,6 @@ function initializeProjectNavbar() {
     updateProjectNavbarTheme();
 }
 
-
 /* =========================================================
    OPEN / CLOSE NAVBAR
 ========================================================= */
@@ -1334,11 +1333,17 @@ function toggleProjectNavbarMenu() {
         menu.setAttribute("aria-hidden", "false");
 
         document.body.style.overflow = "hidden";
+
+        // 🔙 Add browser history state for hamburger menu
+        history.pushState(
+            { isNavbarMenuOpen: true },
+            ""
+        );
     }
 }
 
 
-function closeProjectNavbarMenu() {
+function closeProjectNavbarMenu(isFromHistory = false) {
 
     const btn =
         document.getElementById("project21MenuBtn");
@@ -1348,6 +1353,9 @@ function closeProjectNavbarMenu() {
 
     const overlay =
         document.getElementById("project21MenuOverlay");
+
+    const wasOpen =
+        menu?.classList.contains("active");
 
     menu?.classList.remove("active");
 
@@ -1360,6 +1368,17 @@ function closeProjectNavbarMenu() {
     menu?.setAttribute("aria-hidden", "true");
 
     document.body.style.overflow = "";
+
+    // 🔙 If user closed menu manually,
+    // remove the menu history state
+    if (
+        wasOpen &&
+        !isFromHistory &&
+        history.state &&
+        history.state.isNavbarMenuOpen
+    ) {
+        history.back();
+    }
 }
 
 
@@ -1967,32 +1986,103 @@ function showExitToast(msg) {
     }, 2000);
 }
 
-window.addEventListener("popstate", () => {
-    const lightbox = document.getElementById("lightbox");
-    const isLightboxOpen = lightbox && lightbox.style.display === "flex";
+/* =========================================================
+   🔙 SMART BACK BUTTON SYSTEM
+   Priority:
+   1. Hamburger Menu
+   2. Lightbox
+   3. Service Modal
+   4. Exit App
+========================================================= */
 
-    const modalOverlay = document.getElementById("serviceModalOverlay");
-    const isModalOpen = modalOverlay && (modalOverlay.classList.contains("active") || modalOverlay.style.display === "flex");
+window.addEventListener("popstate", () => {
+
+    /* -----------------------------------------------------
+       1️⃣ HAMBURGER MENU
+    ----------------------------------------------------- */
+
+    const navbarMenu =
+        document.getElementById("project21SideMenu");
+
+    const isNavbarMenuOpen =
+        navbarMenu &&
+        navbarMenu.classList.contains("active");
+
+    if (isNavbarMenuOpen) {
+
+        closeProjectNavbarMenu(true);
+
+        return;
+    }
+
+
+    /* -----------------------------------------------------
+       2️⃣ LIGHTBOX
+    ----------------------------------------------------- */
+
+    const lightbox =
+        document.getElementById("lightbox");
+
+    const isLightboxOpen =
+        lightbox &&
+        lightbox.style.display === "flex";
 
     if (isLightboxOpen) {
+
         closeLightboxModal(true);
+
         return;
     }
+
+
+    /* -----------------------------------------------------
+       3️⃣ SERVICE MODAL
+    ----------------------------------------------------- */
+
+    const modalOverlay =
+        document.getElementById("serviceModalOverlay");
+
+    const isModalOpen =
+        modalOverlay &&
+        (
+            modalOverlay.classList.contains("active") ||
+            modalOverlay.style.display === "flex"
+        );
 
     if (isModalOpen) {
+
         closeServiceModal(true);
+
         return;
     }
 
+
+    /* -----------------------------------------------------
+       4️⃣ APP EXIT / DOUBLE BACK
+    ----------------------------------------------------- */
+
     const currentTime = Date.now();
-    if (currentTime - lastBackPressTime < 2000) {
+
+    if (
+        currentTime - lastBackPressTime < 2000
+    ) {
+
         history.back();
+
     } else {
+
         lastBackPressTime = currentTime;
-        history.pushState({ page: "app" }, "");
-        const msg = currentLang === "hi" 
-            ? "ऐप बंद करने के लिए दोबारा Back दबाएं" 
-            : "Press Back again to exit app";
+
+        history.pushState(
+            { page: "app" },
+            ""
+        );
+
+        const msg =
+            currentLang === "hi"
+                ? "ऐप बंद करने के लिए दोबारा Back दबाएं"
+                : "Press Back again to exit app";
+
         showExitToast(msg);
     }
 });
