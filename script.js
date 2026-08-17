@@ -179,15 +179,15 @@ function applyVisibilityControls() {
     toggle("sendWhatsappBtn", ctrl.showQuoteWhatsappBtn);
     toggle("downloadPdfBtn", ctrl.showQuotePdfBtn);
 }
+
 /* =========================================================
-   📱 PROJECT 2.1 - PREMIUM NAVBAR SYSTEM
+   📱 PREMIUM NAVBAR SYSTEM
    Logo + Brand Name + Hamburger Menu + App Settings
 ========================================================= */
 
-function initializeProjectNavbar() {
-
+function initializeNavbar() {
     // Prevent duplicate navbar
-    if (document.getElementById("project21Navbar")) return;
+    if (document.getElementById("appNavbar")) return;
 
     const cfg = window.MASTER_CONFIG || {};
     const biz = cfg.business || {};
@@ -196,33 +196,32 @@ function initializeProjectNavbar() {
     /* ---------------------------------------------------------
        NAVBAR HTML
     --------------------------------------------------------- */
-
     const navbar = document.createElement("header");
-    navbar.id = "project21Navbar";
-    navbar.className = "project21-navbar";
+    navbar.id = "appNavbar";
+    navbar.className = "app-navbar";
 
     navbar.innerHTML = `
-        <div class="project21-nav-inner">
+        <div class="app-nav-inner">
 
             <!-- LEFT: LOGO + BRAND -->
             <a href="#heroSection"
-               class="project21-brand"
-               onclick="closeProjectNavbarMenu()">
+               class="app-brand"
+               onclick="closeNavbarMenu()">
 
-                <div class="project21-logo-wrap">
+                <div class="app-logo-wrap">
                     <img
-                        id="project21NavLogo"
+                        id="appNavLogo"
                         src="${biz.logo || 'assets/logo.png'}"
                         alt="${biz.name || 'Sandeep ElectroFix'}"
                         onerror="this.style.display='none'"
                     >
                 </div>
 
-                <div class="project21-brand-text">
-                    <span id="project21BrandName">
+                <div class="app-brand-text">
+                    <span id="appBrandName">
                         ${biz.name || "Sandeep ElectroFix"}
                     </span>
-                    <small id="project21BrandTagline">
+                    <small id="appBrandTagline">
                         ${currentLang === "hi"
                             ? (biz.tagline_hi || "")
                             : (biz.tagline_en || "")}
@@ -231,12 +230,11 @@ function initializeProjectNavbar() {
 
             </a>
 
-
             <!-- RIGHT: HAMBURGER -->
             <button
                 type="button"
-                id="project21MenuBtn"
-                class="project21-menu-btn"
+                id="appMenuBtn"
+                class="app-menu-btn"
                 aria-label="Open Menu"
                 aria-expanded="false">
 
@@ -248,25 +246,23 @@ function initializeProjectNavbar() {
 
         </div>
 
-
         <!-- =====================================================
              HAMBURGER PANEL
         ====================================================== -->
 
-        <div id="project21MenuOverlay"
-             class="project21-menu-overlay"
-             onclick="closeProjectNavbarMenu()">
+        <div id="appMenuOverlay"
+             class="app-menu-overlay"
+             onclick="closeNavbarMenu()">
         </div>
 
-
-        <aside id="project21SideMenu"
-               class="project21-side-menu"
+        <aside id="appSideMenu"
+               class="app-side-menu"
                aria-hidden="true">
 
             <!-- MENU HEADER -->
-            <div class="project21-menu-header">
+            <div class="app-menu-header">
 
-                <div class="project21-menu-brand">
+                <div class="app-menu-brand">
 
                     <img
                         src="${biz.logo || 'assets/logo.png'}"
@@ -275,246 +271,173 @@ function initializeProjectNavbar() {
                     >
 
                     <div>
-                        <strong id="project21MenuBrandName">
+                        <strong id="appMenuBrandName">
                             ${biz.name || "Sandeep ElectroFix"}
                         </strong>
 
-                        <small id="project21MenuBrandLocation">
-    ⚡ Powering Your Trust
-</small>
+                        <small id="appMenuBrandLocation">
+                            ⚡ Powering Your Trust
+                        </small>
                     </div>
 
                 </div>
 
-
                 <button
                     type="button"
-                    class="project21-menu-close"
-                    onclick="closeProjectNavbarMenu()"
+                    class="app-menu-close"
+                    onclick="closeNavbarMenu()"
                     aria-label="Close Menu">
-
                     ✕
-
                 </button>
 
             </div>
 
-
             <!-- MENU ITEMS -->
-            <nav class="project21-menu-list">
+            <nav class="app-menu-list">
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('heroSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('heroSection')">
                     <span class="menu-item-icon">🏠</span>
-                    <span id="project21NavHome">Home</span>
+                    <span id="appNavHome">Home</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('servicesSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('servicesSection')">
                     <span class="menu-item-icon">⚡</span>
-                    <span id="project21NavServices">Services</span>
+                    <span id="appNavServices">Services</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('gallerySection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('gallerySection')">
                     <span class="menu-item-icon">🖼️</span>
-                    <span id="project21NavWork">Our Work</span>
+                    <span id="appNavWork">Our Work</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('quoteFormSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('quoteFormSection')">
                     <span class="menu-item-icon">🧾</span>
-                    <span id="project21NavQuote">Quote</span>
+                    <span id="appNavQuote">Quote</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('aboutSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('aboutSection')">
                     <span class="menu-item-icon">ℹ️</span>
-                    <span id="project21NavAbout">About Us</span>
+                    <span id="appNavAbout">About Us</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('locationSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('locationSection')">
                     <span class="menu-item-icon">📍</span>
-                    <span id="project21NavLocation">Location</span>
+                    <span id="appNavLocation">Location</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('reviewsSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('reviewsSection')">
                     <span class="menu-item-icon">⭐</span>
-                    <span id="project21NavReviews">Reviews</span>
+                    <span id="appNavReviews">Reviews</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('faqSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('faqSection')">
                     <span class="menu-item-icon">❓</span>
-                    <span id="project21NavFAQ">FAQ</span>
+                    <span id="appNavFAQ">FAQ</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Navigate('socialSection')">
-
+                    class="app-menu-item"
+                    onclick="appNavigate('socialSection')">
                     <span class="menu-item-icon">📱</span>
-                    <span id="project21NavSocial">Social Media</span>
+                    <span id="appNavSocial">Social Media</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
-
 
                 <button
                     type="button"
-                    class="project21-menu-item"
-                    onclick="project21Call()">
-
+                    class="app-menu-item"
+                    onclick="appCall()">
                     <span class="menu-item-icon">📞</span>
-                    <span id="project21NavContact">Contact</span>
+                    <span id="appNavContact">Contact</span>
                     <span class="menu-arrow">›</span>
-
                 </button>
 
             </nav>
 
-
             <!-- =================================================
                  APP SETTINGS
             ================================================== -->
+            <div class="app-settings">
 
-            <div class="project21-settings">
-
-                <div class="project21-settings-title">
+                <div class="app-settings-title">
                     <span>⚙️</span>
-                    <span id="project21SettingsTitle">
+                    <span id="appSettingsTitle">
                         App Settings
                     </span>
                 </div>
 
-
                 <!-- THEME -->
                 <button
                     type="button"
-                    id="project21ThemeBtn"
-                    class="project21-setting-item"
-                    onclick="project21ToggleTheme()">
-
-                    <span
-                        class="setting-icon"
-                        id="project21ThemeIcon">
-                        🌙
-                    </span>
-
-                    <span
-                        id="project21ThemeText">
-                        Dark Mode
-                    </span>
-
+                    id="appThemeBtn"
+                    class="app-setting-item"
+                    onclick="toggleAppTheme()">
+                    <span class="setting-icon" id="appThemeIcon">🌙</span>
+                    <span id="appThemeText">Dark Mode</span>
                     <span class="setting-arrow">›</span>
-
                 </button>
-
 
                 <!-- LANGUAGE -->
                 <button
                     type="button"
-                    id="project21LanguageBtn"
-                    class="project21-setting-item"
-                    onclick="project21ToggleLanguage()">
-
-                    <span class="setting-icon">
-                        🌐
-                    </span>
-
-                    <span id="project21LanguageText">
-                        हिन्दी / English
-                    </span>
-
+                    id="appLanguageBtn"
+                    class="app-setting-item"
+                    onclick="toggleAppLanguage()">
+                    <span class="setting-icon">🌐</span>
+                    <span id="appLanguageText">हिन्दी / English</span>
                     <span class="setting-arrow">›</span>
-
                 </button>
-
 
                 <!-- RESET -->
                 <button
                     type="button"
-                    id="project21ResetBtn"
-                    class="project21-setting-item project21-reset-item"
-                    onclick="project21ResetApp()">
-
-                    <span class="setting-icon">
-                        🔄
-                    </span>
-
-                    <span id="project21ResetText">
-                        Reset App
-                    </span>
-
+                    id="appResetBtn"
+                    class="app-setting-item app-reset-item"
+                    onclick="resetAppAction()">
+                    <span class="setting-icon">🔄</span>
+                    <span id="appResetText">Reset App</span>
                     <span class="setting-arrow">›</span>
-
                 </button>
 
             </div>
 
-
             <!-- MENU FOOTER -->
-            <div class="project21-menu-footer">
-
-                <span>
-                    ${biz.name || "Sandeep ElectroFix"}
-                </span>
-
-                <small>
-                    Powering Your Trust
-                </small>
-
+            <div class="app-menu-footer">
+                <span>${biz.name || "Sandeep ElectroFix"}</span>
+                <small>Powering Your Trust</small>
             </div>
 
         </aside>
@@ -522,974 +445,548 @@ function initializeProjectNavbar() {
 
     document.body.prepend(navbar);
 
-
     /* ---------------------------------------------------------
        NAVBAR CSS
     --------------------------------------------------------- */
-
-    if (!document.getElementById("project21NavbarCSS")) {
-
+    if (!document.getElementById("appNavbarCSS")) {
         const style = document.createElement("style");
-        style.id = "project21NavbarCSS";
+        style.id = "appNavbarCSS";
 
         style.textContent = `
-
         /* =====================================================
-           PROJECT 2.1 NAVBAR
+           NAVBAR STYLES
         ====================================================== */
-
         :root {
-            --p21-nav-bg: rgba(5, 8, 22, 0.96);
-            --p21-nav-border: rgba(245, 197, 66, 0.25);
-            --p21-gold: #f5c542;
-            --p21-blue: #38bdf8;
-            --p21-text: #ffffff;
-            --p21-muted: #aab4c8;
-            --p21-panel: #080d1f;
+            --nav-bg: rgba(5, 8, 22, 0.96);
+            --nav-border: rgba(245, 197, 66, 0.25);
+            --nav-gold: #f5c542;
+            --nav-blue: #38bdf8;
+            --nav-text: #ffffff;
+            --nav-muted: #aab4c8;
+            --nav-panel: #080d1f;
         }
 
-
         /* MAIN NAVBAR */
-
-        #project21Navbar {
+        #appNavbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 68px;
-
             z-index: 99990;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(5,8,22,.98),
-                    rgba(9,18,42,.97)
-                );
-
-            border-bottom:
-                1px solid
-                var(--p21-nav-border);
-
-            box-shadow:
-                0 5px 25px rgba(0,0,0,.35);
-
+            background: linear-gradient(135deg, rgba(5,8,22,.98), rgba(9,18,42,.97));
+            border-bottom: 1px solid var(--nav-border);
+            box-shadow: 0 5px 25px rgba(0,0,0,.35);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
         }
 
-
-        .project21-nav-inner {
-
+        .app-nav-inner {
             width: 100%;
             height: 68px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            padding:
-                0 14px;
-
+            padding: 0 14px;
             box-sizing: border-box;
         }
 
-
         /* BRAND */
-
-        .project21-brand {
-
+        .app-brand {
             display: flex;
             align-items: center;
             gap: 10px;
-
             text-decoration: none;
-
             min-width: 0;
-
             color: white;
-
-            -webkit-tap-highlight-color:
-                transparent;
+            -webkit-tap-highlight-color: transparent;
         }
 
-
-        .project21-logo-wrap {
-
+        .app-logo-wrap {
             width: 44px;
             height: 44px;
-
             flex-shrink: 0;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             border-radius: 50%;
-
-            border:
-                2px solid
-                var(--p21-gold);
-
-            box-shadow:
-                0 0 8px rgba(245,197,66,.35),
-                inset 0 0 8px rgba(245,197,66,.12);
-
+            border: 2px solid var(--nav-gold);
+            box-shadow: 0 0 8px rgba(245,197,66,.35), inset 0 0 8px rgba(245,197,66,.12);
             overflow: hidden;
-
             background: #050816;
         }
 
-
-        .project21-logo-wrap img {
-
+        .app-logo-wrap img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
-
             display: block;
         }
 
-
-        .project21-brand-text {
-
+        .app-brand-text {
             display: flex;
             flex-direction: column;
-
             min-width: 0;
         }
 
-
-        #project21BrandName {
-
+        #appBrandName {
             font-size: 16px;
             font-weight: 800;
-
             line-height: 1.1;
-
-            color: var(--p21-gold);
-
+            color: var(--nav-gold);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-
-        #project21BrandTagline {
-
+        #appBrandTagline {
             margin-top: 3px;
-
             font-size: 9px;
-
-            color: var(--p21-muted);
-
+            color: var(--nav-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
 
         /* HAMBURGER */
-
-        .project21-menu-btn {
-
+        .app-menu-btn {
             width: 46px;
             height: 46px;
-
             flex-shrink: 0;
-
-            border: 1px solid
-                rgba(245,197,66,.25);
-
+            border: 1px solid rgba(245,197,66,.25);
             border-radius: 12px;
-
-            background:
-                rgba(255,255,255,.05);
-
+            background: rgba(255,255,255,.05);
             display: flex;
             flex-direction: column;
-
             align-items: center;
             justify-content: center;
-
             gap: 5px;
-
             cursor: pointer;
-
             padding: 0;
-
-            -webkit-tap-highlight-color:
-                transparent;
+            -webkit-tap-highlight-color: transparent;
         }
 
-
-        .project21-menu-btn span {
-
+        .app-menu-btn span {
             display: block;
-
             width: 22px;
             height: 2px;
-
             border-radius: 5px;
-
-            background:
-                var(--p21-gold);
-
-            transition:
-                transform .25s ease,
-                opacity .25s ease;
+            background: var(--nav-gold);
+            transition: transform .25s ease, opacity .25s ease;
         }
 
-
-        .project21-menu-btn.active span:nth-child(1) {
-            transform:
-                translateY(7px)
-                rotate(45deg);
+        .app-menu-btn.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
         }
 
-        .project21-menu-btn.active span:nth-child(2) {
+        .app-menu-btn.active span:nth-child(2) {
             opacity: 0;
         }
 
-        .project21-menu-btn.active span:nth-child(3) {
-            transform:
-                translateY(-7px)
-                rotate(-45deg);
+        .app-menu-btn.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
         }
-
 
         /* OVERLAY */
-
-        .project21-menu-overlay {
-
+        .app-menu-overlay {
             position: fixed;
-
             inset: 0;
-
-            background:
-                rgba(0,0,0,.65);
-
+            background: rgba(0,0,0,.65);
             opacity: 0;
-
             visibility: hidden;
-
-            transition:
-                opacity .25s ease,
-                visibility .25s ease;
-
+            transition: opacity .25s ease, visibility .25s ease;
             z-index: 99991;
         }
 
-
-        .project21-menu-overlay.active {
-
+        .app-menu-overlay.active {
             opacity: 1;
-
             visibility: visible;
         }
 
-
         /* SIDE MENU */
-
-        .project21-side-menu {
-
+        .app-side-menu {
             position: fixed;
-
             top: 0;
             right: 0;
-
             width: min(88vw, 360px);
             height: 100dvh;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #080d1f 0%,
-                    #050816 100%
-                );
-
-            border-left:
-                1px solid
-                rgba(245,197,66,.25);
-
-            box-shadow:
-                -10px 0 40px rgba(0,0,0,.55);
-
+            background: linear-gradient(180deg, #080d1f 0%, #050816 100%);
+            border-left: 1px solid rgba(245,197,66,.25);
+            box-shadow: -10px 0 40px rgba(0,0,0,.55);
             z-index: 99992;
-
-            transform:
-                translateX(105%);
-
-            transition:
-                transform .3s cubic-bezier(.4,0,.2,1);
-
+            transform: translateX(105%);
+            transition: transform .3s cubic-bezier(.4,0,.2,1);
             display: flex;
             flex-direction: column;
-
             overflow-y: auto;
-
-            overscroll-behavior:
-                contain;
+            overscroll-behavior: contain;
         }
 
-
-        .project21-side-menu.active {
-
-            transform:
-                translateX(0);
+        .app-side-menu.active {
+            transform: translateX(0);
         }
-
 
         /* MENU HEADER */
-
-        .project21-menu-header {
-
+        .app-menu-header {
             min-height: 78px;
-
-            padding:
-                14px;
-
+            padding: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.08);
-
+            border-bottom: 1px solid rgba(255,255,255,.08);
             flex-shrink: 0;
         }
 
-
-        .project21-menu-brand {
-
+        .app-menu-brand {
             display: flex;
             align-items: center;
-
             gap: 10px;
-
             min-width: 0;
         }
 
-
-        .project21-menu-brand img {
-
+        .app-menu-brand img {
             width: 42px;
             height: 42px;
-
             border-radius: 50%;
-
             object-fit: cover;
-
-            border:
-                2px solid
-                var(--p21-gold);
+            border: 2px solid var(--nav-gold);
         }
 
-
-        .project21-menu-brand div {
-
+        .app-menu-brand div {
             display: flex;
             flex-direction: column;
-
             min-width: 0;
         }
 
-
-        #project21MenuBrandName {
-
-            color: var(--p21-gold);
-
+        #appMenuBrandName {
+            color: var(--nav-gold);
             font-size: 14px;
             font-weight: 800;
-
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-
-        #project21MenuBrandLocation {
-
+        #appMenuBrandLocation {
             margin-top: 3px;
-
-            color: var(--p21-muted);
-
+            color: var(--nav-muted);
             font-size: 10px;
         }
 
-
-        .project21-menu-close {
-
+        .app-menu-close {
             width: 38px;
             height: 38px;
-
-            border: 1px solid
-                rgba(245,197,66,.25);
-
+            border: 1px solid rgba(245,197,66,.25);
             border-radius: 10px;
-
-            background:
-                rgba(255,255,255,.05);
-
-            color: var(--p21-gold);
-
+            background: rgba(255,255,255,.05);
+            color: var(--nav-gold);
             font-size: 19px;
-
             cursor: pointer;
-
             flex-shrink: 0;
         }
 
-
         /* MENU LIST */
-
-        .project21-menu-list {
-
-            padding:
-                10px;
-
+        .app-menu-list {
+            padding: 10px;
             flex: 1;
         }
 
-
-        .project21-menu-item {
-
+        .app-menu-item {
             width: 100%;
-
             min-height: 50px;
-
             border: 0;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.045);
-
-            background:
-                transparent;
-
-            color:
-                var(--p21-text);
-
+            border-bottom: 1px solid rgba(255,255,255,.045);
+            background: transparent;
+            color: var(--nav-text);
             display: flex;
-
             align-items: center;
-
             gap: 13px;
-
-            padding:
-                10px 8px;
-
+            padding: 10px 8px;
             font-size: 14px;
-
             text-align: left;
-
             cursor: pointer;
-
             border-radius: 10px;
-
-            transition:
-                background .2s ease,
-                padding-left .2s ease;
+            transition: background .2s ease, padding-left .2s ease;
         }
 
-
-        .project21-menu-item:hover,
-        .project21-menu-item:active {
-
-            background:
-                rgba(245,197,66,.08);
-
+        .app-menu-item:hover,
+        .app-menu-item:active {
+            background: rgba(245,197,66,.08);
             padding-left: 13px;
         }
 
-
         .menu-item-icon {
-
             width: 30px;
-
             text-align: center;
-
             font-size: 19px;
         }
 
-
-        .project21-menu-item > span:nth-child(2) {
-
+        .app-menu-item > span:nth-child(2) {
             flex: 1;
-
             font-weight: 600;
         }
 
-
         .menu-arrow {
-
-            color:
-                var(--p21-gold);
-
+            color: var(--nav-gold);
             font-size: 22px;
         }
 
-
         /* APP SETTINGS */
-
-        .project21-settings {
-
-            margin:
-                5px 10px 10px;
-
-            padding:
-                10px;
-
-            border:
-                1px solid
-                rgba(245,197,66,.18);
-
+        .app-settings {
+            margin: 5px 10px 10px;
+            padding: 10px;
+            border: 1px solid rgba(245,197,66,.18);
             border-radius: 14px;
-
-            background:
-                rgba(255,255,255,.025);
+            background: rgba(255,255,255,.025);
         }
 
-
-        .project21-settings-title {
-
+        .app-settings-title {
             display: flex;
-
             align-items: center;
-
             gap: 8px;
-
-            color:
-                var(--p21-gold);
-
+            color: var(--nav-gold);
             font-size: 12px;
-
             font-weight: 800;
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                .7px;
-
-            padding:
-                4px 6px 9px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.07);
-
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            padding: 4px 6px 9px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
             margin-bottom: 4px;
         }
 
-
-        .project21-setting-item {
-
+        .app-setting-item {
             width: 100%;
-
             min-height: 46px;
-
             border: 0;
-
-            background:
-                transparent;
-
-            color:
-                white;
-
+            background: transparent;
+            color: white;
             display: flex;
-
             align-items: center;
-
             gap: 12px;
-
-            padding:
-                8px 6px;
-
+            padding: 8px 6px;
             border-radius: 9px;
-
             cursor: pointer;
-
             font-size: 13px;
-
             text-align: left;
         }
 
-
-        .project21-setting-item:hover,
-        .project21-setting-item:active {
-
-            background:
-                rgba(255,255,255,.06);
+        .app-setting-item:hover,
+        .app-setting-item:active {
+            background: rgba(255,255,255,.06);
         }
 
-
         .setting-icon {
-
             width: 28px;
-
             text-align: center;
-
             font-size: 18px;
         }
 
-
-        .project21-setting-item span:nth-child(2) {
-
+        .app-setting-item span:nth-child(2) {
             flex: 1;
         }
 
-
         .setting-arrow {
-
-            color:
-                var(--p21-muted);
-
+            color: var(--nav-muted);
             font-size: 20px;
         }
 
-
-        .project21-reset-item {
-
-            color:
-                #ffb4b4;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.06);
-
+        .app-reset-item {
+            color: #ffb4b4;
+            border-top: 1px solid rgba(255,255,255,.06);
             margin-top: 3px;
-
             padding-top: 10px;
         }
 
-
         /* FOOTER */
-
-        .project21-menu-footer {
-
-            padding:
-                12px 16px 18px;
-
+        .app-menu-footer {
+            padding: 12px 16px 18px;
             text-align: center;
-
-            color:
-                var(--p21-gold);
-
+            color: var(--nav-gold);
             font-size: 11px;
-
             flex-shrink: 0;
         }
 
-
-        .project21-menu-footer small {
-
+        .app-menu-footer small {
             display: block;
-
             margin-top: 3px;
-
-            color:
-                var(--p21-muted);
-
+            color: var(--nav-muted);
             font-size: 9px;
         }
 
-
         /* BODY OFFSET */
-
         body {
-
             padding-top: 68px;
         }
 
-
         /* MOBILE */
-
         @media (max-width: 480px) {
-
-            .project21-brand-text #project21BrandName {
-
+            .app-brand-text #appBrandName {
                 font-size: 15px;
             }
-
-            .project21-logo-wrap {
-
+            .app-logo-wrap {
                 width: 42px;
                 height: 42px;
             }
-
-            .project21-menu-btn {
-
+            .app-menu-btn {
                 width: 44px;
                 height: 44px;
             }
         }
 
-
         /* DESKTOP */
-
         @media (min-width: 768px) {
-
-            .project21-nav-inner {
-
+            .app-nav-inner {
                 padding-left: 22px;
                 padding-right: 22px;
             }
-
-            .project21-side-menu {
-
+            .app-side-menu {
                 width: 380px;
             }
         }
-
         `;
-
         document.head.appendChild(style);
     }
-
 
     /* ---------------------------------------------------------
        HAMBURGER EVENTS
     --------------------------------------------------------- */
-
-    const menuBtn =
-        document.getElementById("project21MenuBtn");
-
-    const sideMenu =
-        document.getElementById("project21SideMenu");
-
-    const overlay =
-        document.getElementById("project21MenuOverlay");
-
+    const menuBtn = document.getElementById("appMenuBtn");
+    const overlay = document.getElementById("appMenuOverlay");
 
     if (menuBtn) {
-
         menuBtn.addEventListener("click", function (e) {
-
             e.stopPropagation();
-
-            toggleProjectNavbarMenu();
-
+            toggleNavbarMenu();
         });
-
     }
-
 
     if (overlay) {
-
         overlay.addEventListener("click", function () {
-
-            closeProjectNavbarMenu();
-
+            closeNavbarMenu();
         });
-
     }
 
-
-    updateProjectNavbarLanguage();
-    updateProjectNavbarTheme();
+    updateNavbarLanguage();
+    updateNavbarTheme();
 }
 
 /* =========================================================
    OPEN / CLOSE NAVBAR
 ========================================================= */
 
-function toggleProjectNavbarMenu() {
-
-    const btn =
-        document.getElementById("project21MenuBtn");
-
-    const menu =
-        document.getElementById("project21SideMenu");
-
-    const overlay =
-        document.getElementById("project21MenuOverlay");
+function toggleNavbarMenu() {
+    const btn = document.getElementById("appMenuBtn");
+    const menu = document.getElementById("appSideMenu");
+    const overlay = document.getElementById("appMenuOverlay");
 
     if (!btn || !menu) return;
 
-    const isOpen =
-        menu.classList.contains("active");
+    const isOpen = menu.classList.contains("active");
 
     if (isOpen) {
-
-        closeProjectNavbarMenu();
-
+        closeNavbarMenu();
     } else {
-
         menu.classList.add("active");
-
         overlay?.classList.add("active");
-
         btn.classList.add("active");
-
         btn.setAttribute("aria-expanded", "true");
-
         menu.setAttribute("aria-hidden", "false");
-
         document.body.style.overflow = "hidden";
 
         // 🔙 Add browser history state for hamburger menu
-        history.pushState(
-            { isNavbarMenuOpen: true },
-            ""
-        );
+        history.pushState({ isNavbarMenuOpen: true }, "");
     }
 }
 
+function closeNavbarMenu(isFromHistory = false) {
+    const btn = document.getElementById("appMenuBtn");
+    const menu = document.getElementById("appSideMenu");
+    const overlay = document.getElementById("appMenuOverlay");
 
-function closeProjectNavbarMenu(isFromHistory = false) {
-
-    const btn =
-        document.getElementById("project21MenuBtn");
-
-    const menu =
-        document.getElementById("project21SideMenu");
-
-    const overlay =
-        document.getElementById("project21MenuOverlay");
-
-    const wasOpen =
-        menu?.classList.contains("active");
+    const wasOpen = menu?.classList.contains("active");
 
     menu?.classList.remove("active");
-
     overlay?.classList.remove("active");
-
     btn?.classList.remove("active");
-
     btn?.setAttribute("aria-expanded", "false");
-
     menu?.setAttribute("aria-hidden", "true");
-
     document.body.style.overflow = "";
 
-    // 🔙 If user closed menu manually,
-    // remove the menu history state
-    if (
-        wasOpen &&
-        !isFromHistory &&
-        history.state &&
-        history.state.isNavbarMenuOpen
-    ) {
+    // 🔙 If user closed menu manually, remove the menu history state
+    if (wasOpen && !isFromHistory && history.state && history.state.isNavbarMenuOpen) {
         history.back();
     }
 }
-
 
 /* =========================================================
    NAVBAR SECTION NAVIGATION
 ========================================================= */
 
-function project21Navigate(sectionId) {
-
-    closeProjectNavbarMenu();
+function appNavigate(sectionId) {
+    closeNavbarMenu();
 
     setTimeout(() => {
-
-        const section =
-            document.getElementById(sectionId);
-
+        const section = document.getElementById(sectionId);
         if (!section) {
-
             showExitToast(
                 currentLang === "hi"
                     ? "यह सेक्शन उपलब्ध नहीं है।"
                     : "This section is not available."
             );
-
             return;
         }
 
-        const navbar =
-            document.getElementById("project21Navbar");
-
-        const offset =
-            navbar
-                ? navbar.offsetHeight + 10
-                : 78;
-
-        const y =
-            section.getBoundingClientRect().top +
-            window.pageYOffset -
-            offset;
+        const navbar = document.getElementById("appNavbar");
+        const offset = navbar ? navbar.offsetHeight + 10 : 78;
+        const y = section.getBoundingClientRect().top + window.pageYOffset - offset;
 
         window.scrollTo({
             top: Math.max(0, y),
             behavior: "smooth"
         });
-
     }, 150);
 }
-
 
 /* =========================================================
    NAVBAR CONTACT
 ========================================================= */
 
-function project21Call() {
-
-    closeProjectNavbarMenu();
-
-    const phone =
-        window.MASTER_CONFIG?.business?.phone;
-
+function appCall() {
+    closeNavbarMenu();
+    const phone = window.MASTER_CONFIG?.business?.phone;
     if (!phone) return;
-
-    window.location.href =
-        `tel:${phone}`;
+    window.location.href = `tel:${phone}`;
 }
-
 
 /* =========================================================
    NAVBAR THEME
 ========================================================= */
 
-function project21ToggleTheme() {
-
-    const root =
-        document.documentElement;
-
+function toggleAppTheme() {
+    const root = document.documentElement;
     root.classList.toggle("saved-light-theme");
+    const isLight = root.classList.contains("saved-light-theme");
 
-    const isLight =
-        root.classList.contains("saved-light-theme");
-
-    localStorage.setItem(
-        "sandeepTheme",
-        isLight ? "light" : "dark"
-    );
+    localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
 
     updateThemeButtonText();
-    updateProjectNavbarTheme();
+    updateNavbarTheme();
 
     showExitToast(
         isLight
-            ? (currentLang === "hi"
-                ? "☀️ लाइट मोड चालू"
-                : "☀️ Light Mode enabled")
-            : (currentLang === "hi"
-                ? "🌙 डार्क मोड चालू"
-                : "🌙 Dark Mode enabled")
+            ? (currentLang === "hi" ? "☀️ लाइट मोड चालू" : "☀️ Light Mode enabled")
+            : (currentLang === "hi" ? "🌙 डार्क मोड चालू" : "🌙 Dark Mode enabled")
     );
 }
-
 
 /* =========================================================
    NAVBAR LANGUAGE
 ========================================================= */
 
-function project21ToggleLanguage() {
-
-    const newLang =
-        currentLang === "hi"
-            ? "en"
-            : "hi";
-
+function toggleAppLanguage() {
+    const newLang = currentLang === "hi" ? "en" : "hi";
     setLanguage(newLang);
-
-    updateProjectNavbarLanguage();
+    updateNavbarLanguage();
 
     showExitToast(
         newLang === "hi"
@@ -1498,217 +995,86 @@ function project21ToggleLanguage() {
     );
 }
 
-
 /* =========================================================
    NAVBAR RESET
 ========================================================= */
 
-function project21ResetApp() {
-
-    closeProjectNavbarMenu();
-
+function resetAppAction() {
+    closeNavbarMenu();
     setTimeout(() => {
-
         resetAllToDefault();
-
     }, 150);
 }
-
 
 /* =========================================================
    NAVBAR LANGUAGE TEXT
 ========================================================= */
 
-function updateProjectNavbarLanguage() {
-
-    const isHi =
-        currentLang === "hi";
-
-    const cfg =
-        window.MASTER_CONFIG || {};
-
-    const biz =
-        cfg.business || {};
-
+function updateNavbarLanguage() {
+    const isHi = currentLang === "hi";
+    const cfg = window.MASTER_CONFIG || {};
+    const biz = cfg.business || {};
 
     const setText = (id, text) => {
-
-        const el =
-            document.getElementById(id);
-
+        const el = document.getElementById(id);
         if (el) el.innerText = text;
     };
 
-
-    setText(
-        "project21BrandName",
-        biz.name || "Sandeep ElectroFix"
-    );
-
-
-    setText(
-        "project21BrandTagline",
-        isHi
-            ? (biz.tagline_hi || "")
-            : (biz.tagline_en || "")
-    );
-
-
-    setText(
-        "project21MenuBrandName",
-        biz.name || "Sandeep ElectroFix"
-    );
-
-
-    setText(
-    "project21MenuBrandLocation",
-    "⚡ Powering Your Trust"
-);
-
+    setText("appBrandName", biz.name || "Sandeep ElectroFix");
+    setText("appBrandTagline", isHi ? (biz.tagline_hi || "") : (biz.tagline_en || ""));
+    setText("appMenuBrandName", biz.name || "Sandeep ElectroFix");
+    setText("appMenuBrandLocation", "⚡ Powering Your Trust");
 
     /* MAIN MENU */
-
-    setText(
-        "project21NavHome",
-        isHi ? "होम" : "Home"
-    );
-
-    setText(
-        "project21NavServices",
-        isHi ? "सेवाएँ" : "Services"
-    );
-
-    setText(
-        "project21NavWork",
-        isHi ? "हमारे कार्य" : "Our Work"
-    );
-
-    setText(
-        "project21NavQuote",
-        isHi ? "कोटेशन" : "Quote"
-    );
-
-    setText(
-        "project21NavAbout",
-        isHi ? "हमारे बारे में" : "About Us"
-    );
-
-    setText(
-        "project21NavLocation",
-        isHi ? "लोकेशन" : "Location"
-    );
-
-    setText(
-        "project21NavReviews",
-        isHi ? "ग्राहकों की राय" : "Reviews"
-    );
-
-    setText(
-        "project21NavFAQ",
-        isHi ? "अक्सर पूछे जाने वाले सवाल" : "FAQ"
-    );
-
-    setText(
-        "project21NavSocial",
-        isHi ? "सोशल मीडिया" : "Social Media"
-    );
-
-    setText(
-        "project21NavContact",
-        isHi ? "संपर्क करें" : "Contact"
-    );
-
+    setText("appNavHome", isHi ? "होम" : "Home");
+    setText("appNavServices", isHi ? "सेवाएँ" : "Services");
+    setText("appNavWork", isHi ? "हमारे कार्य" : "Our Work");
+    setText("appNavQuote", isHi ? "कोटेशन" : "Quote");
+    setText("appNavAbout", isHi ? "हमारे बारे में" : "About Us");
+    setText("appNavLocation", isHi ? "लोकेशन" : "Location");
+    setText("appNavReviews", isHi ? "ग्राहकों की राय" : "Reviews");
+    setText("appNavFAQ", isHi ? "अक्सर पूछे जाने वाले सवाल" : "FAQ");
+    setText("appNavSocial", isHi ? "सोशल मीडिया" : "Social Media");
+    setText("appNavContact", isHi ? "संपर्क करें" : "Contact");
 
     /* SETTINGS */
+    setText("appSettingsTitle", isHi ? "ऐप सेटिंग्स" : "App Settings");
+    setText("appLanguageText", isHi ? "भाषा बदलें (हिन्दी / English)" : "Change Language (English / हिन्दी)");
+    setText("appResetText", isHi ? "ऐप रीसेट करें" : "Reset App");
 
-    setText(
-        "project21SettingsTitle",
-        isHi
-            ? "ऐप सेटिंग्स"
-            : "App Settings"
-    );
-
-
-    setText(
-        "project21LanguageText",
-        isHi
-            ? "भाषा बदलें (हिन्दी / English)"
-            : "Change Language (English / हिन्दी)"
-    );
-
-
-    setText(
-        "project21ResetText",
-        isHi
-            ? "ऐप रीसेट करें"
-            : "Reset App"
-    );
-
-
-    updateProjectNavbarTheme();
+    updateNavbarTheme();
 }
-
 
 /* =========================================================
    NAVBAR THEME TEXT
 ========================================================= */
 
-function updateProjectNavbarTheme() {
-
-    const isLight =
-        document.documentElement
-            .classList
-            .contains("saved-light-theme");
-
-
-    const icon =
-        document.getElementById("project21ThemeIcon");
-
-    const text =
-        document.getElementById("project21ThemeText");
-
+function updateNavbarTheme() {
+    const isLight = document.documentElement.classList.contains("saved-light-theme");
+    const icon = document.getElementById("appThemeIcon");
+    const text = document.getElementById("appThemeText");
 
     if (icon) {
-
-        icon.innerText =
-            isLight ? "🌙" : "☀️";
+        icon.innerText = isLight ? "🌙" : "☀️";
     }
-
 
     if (text) {
-
-        text.innerText =
-            isLight
-                ? (
-                    currentLang === "hi"
-                        ? "डार्क मोड"
-                        : "Dark Mode"
-                )
-                : (
-                    currentLang === "hi"
-                        ? "लाइट मोड"
-                        : "Light Mode"
-                );
+        text.innerText = isLight
+            ? (currentLang === "hi" ? "डार्क मोड" : "Dark Mode")
+            : (currentLang === "hi" ? "लाइट मोड" : "Light Mode");
     }
 }
-
 
 /* =========================================================
    NAVBAR ESC KEY
 ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (event.key === "Escape") {
-
-            closeProjectNavbarMenu();
-
-        }
-
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        closeNavbarMenu();
     }
-);
+});
+
 function updateThemeButtonText() {
     const isLight = document.documentElement.classList.contains("saved-light-theme");
     const themeIcon = document.getElementById("themeIcon");
@@ -1817,16 +1183,14 @@ function setLanguage(lang) {
     document.getElementById("navCall").innerText = isHi ? "कॉल" : "Call";
 
     updateThemeButtonText();
-   
     applyVisibilityControls();
-   
     renderServices();
     renderGallery();
     renderReviews();
     renderFAQ();
     updateCalculations();
-   updateProjectNavbarLanguage();
-updateProjectNavbarTheme();
+    updateNavbarLanguage();
+    updateNavbarTheme();
 }
 
 function renderServices() {
@@ -1988,93 +1352,55 @@ function showExitToast(msg) {
 ========================================================= */
 
 window.addEventListener("popstate", () => {
-
     /* -----------------------------------------------------
        1️⃣ HAMBURGER MENU
     ----------------------------------------------------- */
-
-    const navbarMenu =
-        document.getElementById("project21SideMenu");
-
-    const isNavbarMenuOpen =
-        navbarMenu &&
-        navbarMenu.classList.contains("active");
+    const navbarMenu = document.getElementById("appSideMenu");
+    const isNavbarMenuOpen = navbarMenu && navbarMenu.classList.contains("active");
 
     if (isNavbarMenuOpen) {
-
-        closeProjectNavbarMenu(true);
-
+        closeNavbarMenu(true);
         return;
     }
-
 
     /* -----------------------------------------------------
        2️⃣ LIGHTBOX
     ----------------------------------------------------- */
-
-    const lightbox =
-        document.getElementById("lightbox");
-
-    const isLightboxOpen =
-        lightbox &&
-        lightbox.style.display === "flex";
+    const lightbox = document.getElementById("lightbox");
+    const isLightboxOpen = lightbox && lightbox.style.display === "flex";
 
     if (isLightboxOpen) {
-
         closeLightboxModal(true);
-
         return;
     }
-
 
     /* -----------------------------------------------------
        3️⃣ SERVICE MODAL
     ----------------------------------------------------- */
-
-    const modalOverlay =
-        document.getElementById("serviceModalOverlay");
-
-    const isModalOpen =
-        modalOverlay &&
-        (
-            modalOverlay.classList.contains("active") ||
-            modalOverlay.style.display === "flex"
-        );
+    const modalOverlay = document.getElementById("serviceModalOverlay");
+    const isModalOpen = modalOverlay && (
+        modalOverlay.classList.contains("active") ||
+        modalOverlay.style.display === "flex"
+    );
 
     if (isModalOpen) {
-
         closeServiceModal(true);
-
         return;
     }
-
 
     /* -----------------------------------------------------
        4️⃣ APP EXIT / DOUBLE BACK
     ----------------------------------------------------- */
-
     const currentTime = Date.now();
 
-    if (
-        currentTime - lastBackPressTime < 2000
-    ) {
-
+    if (currentTime - lastBackPressTime < 2000) {
         history.back();
-
     } else {
-
         lastBackPressTime = currentTime;
-
-        history.pushState(
-            { page: "app" },
-            ""
-        );
-
-        const msg =
-            currentLang === "hi"
-                ? "ऐप बंद करने के लिए दोबारा Back दबाएं"
-                : "Press Back again to exit app";
-
+        history.pushState({ page: "app" }, "");
+        const msg = currentLang === "hi"
+            ? "ऐप बंद करने के लिए दोबारा Back दबाएं"
+            : "Press Back again to exit app";
         showExitToast(msg);
     }
 });
@@ -2386,20 +1712,12 @@ function shareWebsite() {
 
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
-
-    initializeProjectNavbar();
+    initializeNavbar();
 
     // Initial app history state
-    history.replaceState(
-        {
-            page: "app"
-        },
-        "",
-        window.location.href
-    );
+    history.replaceState({ page: "app" }, "", window.location.href);
 
     const savedTheme = localStorage.getItem("sandeepTheme");
-
     if (savedTheme === "light") {
         document.documentElement.classList.add("saved-light-theme");
     } else {
@@ -2407,33 +1725,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("themeToggle")?.addEventListener("click", () => {
-
         document.documentElement.classList.toggle("saved-light-theme");
-
-        const isLight =
-            document.documentElement.classList.contains(
-                "saved-light-theme"
-            );
-
-        localStorage.setItem(
-            "sandeepTheme",
-            isLight ? "light" : "dark"
-        );
-
+        const isLight = document.documentElement.classList.contains("saved-light-theme");
+        localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
         updateThemeButtonText();
     });
 
-    const qLayout =
-        localStorage.getItem("sandeepQuickLayout") || "grid-2";
-
+    const qLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
     applyQuickLayout(qLayout);
 
-    const sLayout =
-        localStorage.getItem("sandeepServiceLayout") || "list";
-
+    const sLayout = localStorage.getItem("sandeepServiceLayout") || "list";
     applyServiceLayout(sLayout);
 
     restoreCustomerInputs();
-
     setLanguage(currentLang);
 });
