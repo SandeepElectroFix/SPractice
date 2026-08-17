@@ -828,29 +828,44 @@ document.addEventListener("DOMContentLoaded", () => {
     setLanguage(currentLang);
     handlePWAShortcutAction();
 });
+
 /* =========================================================
-   PROJECT 2.1 — PREMIUM NAVBAR
-   HAMBURGER + SIDE MENU
+   PROJECT 2.1 — FINAL MOBILE NAVBAR
+   ✅ Hamburger Open / Close
+   ✅ Android Back Button Close
+   ✅ Menu Item Click Close
+   ✅ Overlay Click Close
+   ✅ ESC Close
+   ✅ Install App
+   ✅ Dark / Light
+   ✅ Reset
 ========================================================= */
 
-(function initializePremiumNavbar() {
+(function initProject21Navbar() {
 
     const menuBtn = document.getElementById("navbarMenuBtn");
     const sideMenu = document.getElementById("sideMenu");
     const overlay = document.getElementById("navbarOverlay");
     const closeBtn = document.getElementById("sideMenuClose");
 
-    if (!menuBtn || !sideMenu || !overlay || !closeBtn) {
-        console.warn("Premium Navbar elements not found.");
+    if (!menuBtn || !sideMenu || !overlay) {
+        console.warn("Project 2.1 Navbar elements missing.");
         return;
     }
+
+    let menuIsOpen = false;
+    let historyAdded = false;
 
 
     /* =====================================================
        OPEN MENU
     ===================================================== */
 
-    function openNavbarMenu() {
+    function openMenu() {
+
+        if (menuIsOpen) return;
+
+        menuIsOpen = true;
 
         sideMenu.classList.add("active");
         overlay.classList.add("active");
@@ -860,6 +875,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         menuBtn.setAttribute("aria-expanded", "true");
         menuBtn.setAttribute("aria-label", "Close Menu");
+
+        /* Android/browser Back support */
+        if (!historyAdded) {
+
+            history.pushState(
+                {
+                    project21Menu: true
+                },
+                "",
+                window.location.href
+            );
+
+            historyAdded = true;
+        }
     }
 
 
@@ -867,7 +896,11 @@ document.addEventListener("DOMContentLoaded", () => {
        CLOSE MENU
     ===================================================== */
 
-    function closeNavbarMenu() {
+    function closeMenu(fromPopState = false) {
+
+        if (!menuIsOpen) return;
+
+        menuIsOpen = false;
 
         sideMenu.classList.remove("active");
         overlay.classList.remove("active");
@@ -877,6 +910,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         menuBtn.setAttribute("aria-expanded", "false");
         menuBtn.setAttribute("aria-label", "Open Menu");
+
+        /*
+         * Agar user ne normal click se close kiya hai,
+         * to added history entry remove karo.
+         */
+        if (!fromPopState && historyAdded) {
+
+            history.back();
+
+        }
+
+        historyAdded = false;
     }
 
 
@@ -884,12 +929,19 @@ document.addEventListener("DOMContentLoaded", () => {
        HAMBURGER BUTTON
     ===================================================== */
 
-    menuBtn.addEventListener("click", function () {
+    menuBtn.addEventListener("click", function (event) {
 
-        if (sideMenu.classList.contains("active")) {
-            closeNavbarMenu();
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (menuIsOpen) {
+
+            closeMenu();
+
         } else {
-            openNavbarMenu();
+
+            openMenu();
+
         }
 
     });
@@ -899,34 +951,75 @@ document.addEventListener("DOMContentLoaded", () => {
        CLOSE BUTTON
     ===================================================== */
 
-    closeBtn.addEventListener("click", closeNavbarMenu);
+    if (closeBtn) {
+
+        closeBtn.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            closeMenu();
+
+        });
+
+    }
 
 
     /* =====================================================
        OVERLAY CLICK
     ===================================================== */
 
-    overlay.addEventListener("click", closeNavbarMenu);
+    overlay.addEventListener("click", function () {
+
+        closeMenu();
+
+    });
 
 
     /* =====================================================
-       MENU ITEM CLICK
-       Section par jaate hi menu close
+       ALL MENU ITEMS
+       
+       IMPORTANT:
+       class="menu-item" hona zaroori nahi.
+       Side menu ke andar kisi bhi <a> ya <button>
+       ko click karne par menu close hoga.
     ===================================================== */
 
-    const menuLinks = sideMenu.querySelectorAll(
-        "a.menu-item"
-    );
+    const allMenuLinks =
+        sideMenu.querySelectorAll("a, button");
 
-    menuLinks.forEach(function (link) {
+    allMenuLinks.forEach(function (item) {
 
-        link.addEventListener("click", function () {
+        /* Close button ko double handle nahi karna */
+        if (item === closeBtn) return;
 
+        item.addEventListener("click", function () {
+
+            /*
+             * Small delay se anchor ko section par
+             * smoothly jump karne ka time milta hai.
+             */
             setTimeout(function () {
-                closeNavbarMenu();
-            }, 120);
+
+                closeMenu();
+
+            }, 80);
 
         });
+
+    });
+
+
+    /* =====================================================
+       ANDROID / BROWSER BACK BUTTON
+    ===================================================== */
+
+    window.addEventListener("popstate", function () {
+
+        if (menuIsOpen) {
+
+            closeMenu(true);
+
+        }
 
     });
 
@@ -937,8 +1030,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("keydown", function (event) {
 
-        if (event.key === "Escape") {
-            closeNavbarMenu();
+        if (event.key === "Escape" && menuIsOpen) {
+
+            closeMenu();
+
         }
 
     });
@@ -946,48 +1041,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =====================================================
        INSTALL APP
-       Existing PWA install event ko use karega
     ===================================================== */
 
-    const installBtn = document.getElementById("menuInstallApp");
+    const installBtn =
+        document.getElementById("menuInstallApp");
 
     if (installBtn) {
 
-        installBtn.addEventListener("click", function () {
+        installBtn.addEventListener("click", async function () {
 
-            /*
-             * Agar existing project mein installApp()
-             * function hai to use karega.
-             */
+            closeMenu();
 
             if (typeof window.installApp === "function") {
 
-                window.installApp();
+                await window.installApp();
 
-            } else if (
-                window.deferredPrompt
-            ) {
+                return;
+            }
+
+            if (window.deferredPrompt) {
 
                 window.deferredPrompt.prompt();
 
-            } else {
+                try {
 
-                if (typeof showToast === "function") {
+                    await window.deferredPrompt.userChoice;
 
-                    showToast(
-                        "Install option अभी उपलब्ध नहीं है।",
-                        "info"
-                    );
+                } catch (error) {
 
-                } else {
-
-                    alert(
-                        "Install option अभी उपलब्ध नहीं है।"
-                    );
+                    console.log(error);
 
                 }
 
+                window.deferredPrompt = null;
+
+                return;
             }
+
+            alert(
+                "Install option अभी उपलब्ध नहीं है।\n\n" +
+                "अगर App पहले से installed है, तो वह यहाँ दिखाई नहीं देगा।"
+            );
 
         });
 
@@ -995,8 +1089,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       THEME TOGGLE
-       Existing themeToggle button ko trigger karega
+       THEME
     ===================================================== */
 
     const menuThemeBtn =
@@ -1009,19 +1102,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         menuThemeBtn.addEventListener("click", function () {
 
+            closeMenu();
+
             if (originalThemeBtn) {
 
                 originalThemeBtn.click();
 
             } else if (
-                typeof toggleTheme === "function"
+                typeof window.toggleTheme === "function"
             ) {
 
-                toggleTheme();
+                window.toggleTheme();
 
             }
-
-            updateNavbarThemeText();
 
         });
 
@@ -1029,42 +1122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       UPDATE THEME TEXT
-    ===================================================== */
-
-    function updateNavbarThemeText() {
-
-        const icon =
-            document.getElementById("menuThemeIcon");
-
-        const text =
-            document.getElementById("menuThemeText");
-
-        if (!icon || !text) return;
-
-        const isDark =
-            document.body.classList.contains("dark-mode") ||
-            document.documentElement.classList.contains("dark-mode") ||
-            document.body.classList.contains("dark");
-
-        if (isDark) {
-
-            icon.textContent = "☀️";
-            text.textContent = "Light Mode";
-
-        } else {
-
-            icon.textContent = "🌙";
-            text.textContent = "Dark Mode";
-
-        }
-
-    }
-
-
-    /* =====================================================
        RESET APP
-       Two-step confirmation
     ===================================================== */
 
     const resetBtn =
@@ -1074,49 +1132,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
         resetBtn.addEventListener("click", function () {
 
-            const firstConfirm = confirm(
-                "⚠️ क्या आप App को Default Settings पर Reset करना चाहते हैं?"
-            );
+            closeMenu();
 
-            if (!firstConfirm) return;
+            setTimeout(function () {
 
+                const firstConfirm = confirm(
+                    "⚠️ Reset App?\n\n" +
+                    "क्या आप App को Default Settings पर Reset करना चाहते हैं?"
+                );
 
-            const secondConfirm = confirm(
-                "⚠️ FINAL CONFIRMATION\n\n" +
-                "Reset करने पर आपकी saved settings हट सकती हैं।\n\n" +
-                "क्या आप सच में Reset करना चाहते हैं?"
-            );
-
-            if (!secondConfirm) return;
+                if (!firstConfirm) return;
 
 
-            if (
-                typeof window.resetAllToDefault ===
-                "function"
-            ) {
+                const secondConfirm = confirm(
+                    "⚠️ FINAL CONFIRMATION\n\n" +
+                    "Reset करने पर आपकी saved settings हट सकती हैं।\n\n" +
+                    "क्या आप सच में Reset करना चाहते हैं?"
+                );
 
-                window.resetAllToDefault();
+                if (!secondConfirm) return;
 
-            } else {
 
-                try {
+                if (
+                    typeof window.resetAllToDefault ===
+                    "function"
+                ) {
+
+                    window.resetAllToDefault();
+
+                } else {
 
                     localStorage.clear();
-
                     sessionStorage.clear();
 
                     location.reload();
 
-                } catch (error) {
-
-                    console.error(
-                        "Reset failed:",
-                        error
-                    );
-
                 }
 
-            }
+            }, 100);
 
         });
 
@@ -1124,35 +1177,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       INITIAL THEME STATE
+       PREVENT BODY HORIZONTAL SCROLL
     ===================================================== */
 
-    updateNavbarThemeText();
-
-
-    /* =====================================================
-       UPDATE THEME TEXT AFTER EXISTING THEME BUTTON
-    ===================================================== */
-
-    if (originalThemeBtn) {
-
-        originalThemeBtn.addEventListener(
-            "click",
-            function () {
-
-                setTimeout(
-                    updateNavbarThemeText,
-                    50
-                );
-
-            }
-        );
-
-    }
-
+    document.documentElement.style.overflowX = "hidden";
 
     console.log(
-        "✅ Project 2.1 Premium Navbar initialized."
+        "✅ Project 2.1 Navbar Ready"
     );
 
 })();
+
+
