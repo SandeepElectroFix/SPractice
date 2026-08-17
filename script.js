@@ -2394,10 +2394,20 @@ function shareWebsite() {
 
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
- initializeProjectNavbar();
-   history.pushState({ page: "app" }, "");
+
+    initializeProjectNavbar();
+
+    // Initial app history state
+    history.replaceState(
+        {
+            page: "app"
+        },
+        "",
+        window.location.href
+    );
 
     const savedTheme = localStorage.getItem("sandeepTheme");
+
     if (savedTheme === "light") {
         document.documentElement.classList.add("saved-light-theme");
     } else {
@@ -2405,18 +2415,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("themeToggle")?.addEventListener("click", () => {
+
         document.documentElement.classList.toggle("saved-light-theme");
-        const isLight = document.documentElement.classList.contains("saved-light-theme");
-        localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
+
+        const isLight =
+            document.documentElement.classList.contains(
+                "saved-light-theme"
+            );
+
+        localStorage.setItem(
+            "sandeepTheme",
+            isLight ? "light" : "dark"
+        );
+
         updateThemeButtonText();
     });
 
-    const qLayout = localStorage.getItem("sandeepQuickLayout") || "grid-2";
+    const qLayout =
+        localStorage.getItem("sandeepQuickLayout") || "grid-2";
+
     applyQuickLayout(qLayout);
 
-    const sLayout = localStorage.getItem("sandeepServiceLayout") || "list";
+    const sLayout =
+        localStorage.getItem("sandeepServiceLayout") || "list";
+
     applyServiceLayout(sLayout);
 
     restoreCustomerInputs();
+
     setLanguage(currentLang);
 });
