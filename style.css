@@ -815,3 +815,738 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
   .service-modal-overlay { align-items: center !important; }
   .service-modal-content { border-radius: 24px !important; max-height: 75vh !important; max-width: 600px !important; }
 }
+
+
+/* =========================================================
+   PROJECT 2.1 — PREMIUM NAVBAR
+   LOGO LEFT + BRAND + HAMBURGER RIGHT
+========================================================= */
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.p21-navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 8px 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(5, 8, 22, 0.98),
+            rgba(10, 18, 38, 0.98)
+        );
+
+    border-bottom: 1px solid rgba(245, 197, 66, 0.25);
+
+    box-shadow:
+        0 5px 25px rgba(0, 0, 0, 0.45);
+
+    z-index: 50000;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.p21-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    text-decoration: none;
+
+    min-width: 0;
+
+    color: #fff;
+
+    cursor: pointer;
+}
+
+
+/* LOGO */
+
+.p21-logo {
+    width: 48px;
+    height: 48px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    border: 2px solid #f5c542;
+
+    box-shadow:
+        0 0 8px rgba(245, 197, 66, 0.45),
+        0 0 20px rgba(245, 197, 66, 0.18);
+
+    background: #050816;
+}
+
+
+/* BRAND TEXT */
+
+.p21-brand-text {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.p21-brand-name {
+    font-size: 17px;
+
+    font-weight: 800;
+
+    line-height: 1.1;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    color: #f5c542;
+
+    letter-spacing: 0.2px;
+}
+
+
+.p21-brand-sub {
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color: #aab4c8;
+
+    letter-spacing: 0.7px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   HAMBURGER
+========================================================= */
+
+.p21-menu-btn {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 5px;
+
+    border: 1px solid rgba(245, 197, 66, 0.35);
+
+    border-radius: 12px;
+
+    background:
+        rgba(245, 197, 66, 0.08);
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+
+    position: relative;
+
+    z-index: 50010;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.p21-menu-btn span {
+    width: 23px;
+    height: 2px;
+
+    background: #f5c542;
+
+    border-radius: 5px;
+
+    transition:
+        transform 0.25s ease,
+        opacity 0.2s ease;
+}
+
+
+.p21-menu-btn:hover {
+    background:
+        rgba(245, 197, 66, 0.16);
+}
+
+
+.p21-menu-btn.active span:nth-child(1) {
+    transform:
+        translateY(7px)
+        rotate(45deg);
+}
+
+
+.p21-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+
+.p21-menu-btn.active span:nth-child(3) {
+    transform:
+        translateY(-7px)
+        rotate(-45deg);
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.p21-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.68);
+
+    backdrop-filter:
+        blur(3px);
+
+    -webkit-backdrop-filter:
+        blur(3px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+
+    z-index: 49990;
+}
+
+
+.p21-overlay.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.p21-side-menu {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+
+    width: min(88vw, 360px);
+
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+
+    background:
+        linear-gradient(
+            180deg,
+            #050816 0%,
+            #0a1224 55%,
+            #050816 100%
+        );
+
+    border-left:
+        1px solid rgba(245, 197, 66, 0.25);
+
+    box-shadow:
+        -15px 0 45px rgba(0, 0, 0, 0.65);
+
+    transform:
+        translateX(105%);
+
+    visibility: hidden;
+
+    transition:
+        transform 0.3s cubic-bezier(.4,0,.2,1),
+        visibility 0.3s ease;
+
+    z-index: 50005;
+
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+
+.p21-side-menu.active {
+    transform:
+        translateX(0);
+
+    visibility: visible;
+}
+
+
+/* =========================================================
+   MENU HEADER
+========================================================= */
+
+.p21-menu-header {
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 14px;
+
+    border-bottom:
+        1px solid rgba(245, 197, 66, 0.18);
+
+    flex-shrink: 0;
+}
+
+
+.p21-menu-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+
+.p21-menu-brand img {
+    width: 43px;
+    height: 43px;
+
+    object-fit: contain;
+
+    border-radius: 50%;
+
+    border: 1.5px solid #f5c542;
+}
+
+
+.p21-menu-brand strong {
+    display: block;
+
+    color: #f5c542;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+}
+
+
+.p21-menu-brand small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8894aa;
+
+    font-size: 9px;
+}
+
+
+/* CLOSE */
+
+.p21-close-btn {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid rgba(245, 197, 66, 0.25);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    color: #f5c542;
+
+    font-size: 28px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MENU LIST
+========================================================= */
+
+.p21-menu-list {
+    padding: 10px 10px 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.p21-menu-item {
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 8px 12px;
+
+    color: #e7ecf5;
+
+    text-decoration: none;
+
+    border-radius: 11px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.p21-menu-item:hover,
+.p21-menu-item:active {
+    background:
+        rgba(245, 197, 66, 0.09);
+
+    color: #f5c542;
+
+    transform:
+        translateX(3px);
+}
+
+
+.p21-menu-icon {
+    width: 28px;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.p21-menu-divider {
+    height: 1px;
+
+    margin: 10px 14px 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(245,197,66,.35),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   QUICK ACTION TITLE
+========================================================= */
+
+.p21-menu-title {
+    padding: 0 16px 8px;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    color: #7f8ba3;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.p21-quick-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+
+    padding: 0 12px;
+}
+
+
+.p21-action-btn {
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #fff;
+
+    border: 1px solid rgba(255,255,255,.1);
+}
+
+
+.p21-action-btn.call {
+    background:
+        rgba(37, 211, 102, 0.10);
+}
+
+
+.p21-action-btn.whatsapp {
+    background:
+        rgba(37, 211, 102, 0.15);
+}
+
+
+/* =========================================================
+   APP SETTINGS
+========================================================= */
+
+.p21-settings-section {
+    margin-top: 15px;
+
+    padding: 12px 12px 0;
+
+    border-top:
+        1px solid rgba(245, 197, 66, 0.15);
+}
+
+
+.p21-settings-heading {
+    padding:
+        0 4px 8px;
+
+    color: #f5c542;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+
+/* SETTINGS ITEM */
+
+.p21-setting-item {
+    width: 100%;
+
+    min-height: 55px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 8px 10px;
+
+    margin-bottom: 5px;
+
+    border: 1px solid transparent;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    color: #fff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.p21-setting-item:hover {
+    background:
+        rgba(245,197,66,0.08);
+
+    border-color:
+        rgba(245,197,66,0.18);
+}
+
+
+.p21-setting-icon {
+    width: 30px;
+
+    text-align: center;
+
+    font-size: 19px;
+}
+
+
+.p21-setting-text {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.p21-setting-text strong {
+    font-size: 13px;
+
+    color: #e9edf5;
+}
+
+
+.p21-setting-text small {
+    margin-top: 3px;
+
+    font-size: 9px;
+
+    color: #7f8ba3;
+}
+
+
+.p21-setting-arrow {
+    color: #6f7b91;
+
+    font-size: 22px;
+}
+
+
+.p21-setting-item.reset .p21-setting-text strong {
+    color: #ff7b7b;
+}
+
+
+/* =========================================================
+   MENU FOOTER
+========================================================= */
+
+.p21-menu-footer {
+    margin-top: auto;
+
+    padding: 18px 15px 22px;
+
+    text-align: center;
+
+    color: #69758a;
+
+    font-size: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.p21-menu-footer span {
+    color: #f5c542;
+}
+
+
+.p21-menu-footer small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #465166;
+}
+
+
+/* =========================================================
+   WHEN MENU OPEN
+========================================================= */
+
+body.p21-menu-open {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .p21-navbar {
+        height: 62px;
+
+        padding: 7px 10px;
+    }
+
+    .p21-logo {
+        width: 43px;
+        height: 43px;
+    }
+
+    .p21-brand-name {
+        font-size: 15px;
+    }
+
+    .p21-brand-sub {
+        font-size: 8px;
+    }
+
+    .p21-menu-btn {
+        width: 43px;
+        height: 43px;
+    }
+
+}
+
