@@ -801,3 +801,624 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
   .service-modal-overlay { align-items: center !important; }
   .service-modal-content { border-radius: 24px !important; max-height: 75vh !important; max-width: 600px !important; }
 }
+/* =========================================================
+   PROJECT 2.1 — PREMIUM NAVBAR
+   SANDEEP ELECTROFIX
+========================================================= */
+
+:root {
+    --nav-bg: rgba(5, 10, 20, 0.92);
+    --nav-border: rgba(245, 197, 66, 0.35);
+    --gold: #f5c542;
+    --blue: #0ea5e9;
+    --blue-light: #38bdf8;
+    --white: #ffffff;
+    --text-soft: #cbd5e1;
+    --menu-bg: rgba(7, 13, 25, 0.98);
+}
+
+
+/* =========================================================
+   MAIN NAVBAR
+========================================================= */
+
+.main-navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 70px;
+
+    z-index: 99999;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(3, 7, 18, 0.97),
+            rgba(8, 15, 30, 0.94),
+            rgba(3, 7, 18, 0.97)
+        );
+
+    border-bottom: 1px solid var(--nav-border);
+
+    box-shadow:
+        0 5px 25px rgba(0, 0, 0, 0.45),
+        0 0 18px rgba(14, 165, 233, 0.12);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* =========================================================
+   NAVBAR INNER
+========================================================= */
+
+.navbar-inner {
+    width: 100%;
+    max-width: 1200px;
+    height: 70px;
+
+    margin: 0 auto;
+
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    text-decoration: none;
+
+    color: var(--white);
+
+    min-width: 0;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   NAVBAR LOGO
+========================================================= */
+
+.navbar-logo {
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background: #050b16;
+
+    border: 2px solid var(--gold);
+
+    box-shadow:
+        0 0 8px rgba(245, 197, 66, 0.45),
+        0 0 18px rgba(14, 165, 233, 0.25);
+}
+
+
+.navbar-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+/* =========================================================
+   BRAND TEXT
+========================================================= */
+
+.navbar-brand-text {
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+.brand-sandeep {
+    color: var(--white);
+
+    font-size: 0.95rem;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+
+.brand-electrofix {
+    margin-top: 4px;
+
+    font-size: 0.75rem;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--gold),
+            var(--blue-light)
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================================
+   HAMBURGER BUTTON
+========================================================= */
+
+.navbar-menu-btn {
+    width: 48px;
+    height: 48px;
+
+    padding: 0;
+
+    border: 1px solid rgba(245, 197, 66, 0.35);
+    border-radius: 12px;
+
+    background: rgba(14, 165, 233, 0.08);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+.navbar-menu-btn span {
+    width: 23px;
+    height: 2px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--gold),
+            var(--blue-light)
+        );
+
+    box-shadow:
+        0 0 6px rgba(56, 189, 248, 0.45);
+
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+}
+
+
+.navbar-menu-btn:hover {
+    border-color: var(--gold);
+
+    background: rgba(245, 197, 66, 0.1);
+
+    box-shadow:
+        0 0 15px rgba(245, 197, 66, 0.2);
+}
+
+
+.navbar-menu-btn:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   HAMBURGER → X
+========================================================= */
+
+.navbar-menu-btn.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+
+.navbar-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+
+.navbar-menu-btn.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =========================================================
+   DARK OVERLAY
+========================================================= */
+
+.navbar-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99997;
+
+    background: rgba(0, 0, 0, 0.62);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+
+.navbar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+
+    width: min(380px, 92vw);
+    height: 100vh;
+
+    z-index: 99998;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(7, 13, 25, 0.99),
+            rgba(3, 8, 18, 0.99)
+        );
+
+    border-left: 1px solid rgba(245, 197, 66, 0.25);
+
+    box-shadow:
+        -10px 0 40px rgba(0, 0, 0, 0.55),
+        -4px 0 25px rgba(14, 165, 233, 0.08);
+
+    transform: translateX(105%);
+
+    transition:
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+.side-menu.active {
+    transform: translateX(0);
+}
+
+
+/* =========================================================
+   SIDE MENU HEADER
+========================================================= */
+
+.side-menu-header {
+    min-height: 82px;
+
+    padding: 15px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid rgba(245, 197, 66, 0.2);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(245, 197, 66, 0.06),
+            rgba(14, 165, 233, 0.08)
+        );
+}
+
+
+/* =========================================================
+   SIDE MENU BRAND
+========================================================= */
+
+.side-menu-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.side-menu-brand img {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    object-fit: contain;
+
+    border: 2px solid var(--gold);
+
+    box-shadow:
+        0 0 10px rgba(245, 197, 66, 0.35);
+}
+
+
+.side-menu-brand div {
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1;
+}
+
+
+.side-menu-brand strong {
+    color: var(--white);
+
+    font-size: 0.88rem;
+    letter-spacing: 1px;
+}
+
+
+.side-menu-brand span {
+    margin-top: 4px;
+
+    color: var(--gold);
+
+    font-size: 0.7rem;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.side-menu-close {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(245, 197, 66, 0.3);
+
+    background: rgba(245, 197, 66, 0.07);
+
+    color: var(--gold);
+
+    font-size: 30px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.side-menu-close:hover {
+    transform: rotate(90deg);
+
+    background: rgba(245, 197, 66, 0.14);
+
+    border-color: var(--gold);
+}
+
+
+/* =========================================================
+   SIDE MENU CONTENT
+========================================================= */
+
+.side-menu-content {
+    padding: 15px 14px 30px;
+}
+
+
+.menu-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+/* =========================================================
+   MENU ITEMS
+========================================================= */
+
+.menu-item {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 10px 13px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    border-radius: 12px;
+
+    border: 1px solid transparent;
+
+    background: transparent;
+
+    color: var(--text-soft);
+
+    text-decoration: none;
+
+    font-size: 0.94rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
+    box-sizing: border-box;
+
+    text-align: left;
+}
+
+
+.menu-item:hover,
+.menu-item:focus-visible {
+    color: var(--white);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(14, 165, 233, 0.13),
+            rgba(245, 197, 66, 0.07)
+        );
+
+    border-color: rgba(14, 165, 233, 0.25);
+
+    transform: translateX(3px);
+
+    outline: none;
+}
+
+
+.menu-icon {
+    width: 28px;
+
+    flex: 0 0 28px;
+
+    text-align: center;
+
+    font-size: 1.15rem;
+}
+
+
+/* =========================================================
+   APP SETTINGS
+========================================================= */
+
+.menu-settings {
+    margin-top: 17px;
+
+    padding-top: 17px;
+
+    border-top: 1px solid rgba(245, 197, 66, 0.18);
+}
+
+
+.menu-settings-title {
+    padding: 0 13px 10px;
+
+    color: var(--gold);
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   MENU ACTION BUTTONS
+========================================================= */
+
+.menu-action {
+    appearance: none;
+    -webkit-appearance: none;
+
+    font-family: inherit;
+}
+
+
+.reset-menu-btn {
+    margin-top: 4px;
+
+    color: #fca5a5;
+}
+
+
+.reset-menu-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+
+    border-color: rgba(239, 68, 68, 0.25);
+
+    color: #fecaca;
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+.menu-language {
+    margin: 5px 0;
+
+    padding: 10px 13px;
+
+    border-radius: 12px;
+
+    background: rgba(14, 165, 233, 0.045);
+
+    border: 1px solid rgba(14, 165, 233, 0.1);
+}
+
+
+.menu-language-title {
+    margin-bottom: 8px;
+
+    color: var(--text-soft);
+
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+
+.menu-language-buttons {
+    display:
