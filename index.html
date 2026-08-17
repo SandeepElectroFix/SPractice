@@ -19,7 +19,254 @@
 </head>
 <body id="top">
      <div class="background-glow"></div>
-     
+<!-- =========================================================
+     PROJECT 2.1 — PREMIUM NAVBAR
+========================================================= -->
+
+<header class="p21-navbar">
+
+    <!-- LEFT : LOGO + BRAND -->
+    <a href="#heroSection" class="p21-brand">
+
+        <img
+            src="assets/logo.png"
+            alt="Sandeep ElectroFix Logo"
+            class="p21-logo"
+        >
+
+        <div class="p21-brand-text">
+            <span class="p21-brand-name">Sandeep ElectroFix</span>
+            <span class="p21-brand-sub">Electrical Services</span>
+        </div>
+
+    </a>
+
+
+    <!-- RIGHT : HAMBURGER -->
+    <button
+        type="button"
+        id="p21MenuBtn"
+        class="p21-menu-btn"
+        aria-label="Open Menu"
+        aria-expanded="false"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+</header>
+
+
+<!-- =========================================================
+     NAVBAR OVERLAY
+========================================================= -->
+
+<div
+    id="p21Overlay"
+    class="p21-overlay"
+></div>
+
+
+<!-- =========================================================
+     SIDE MENU
+========================================================= -->
+
+<aside
+    id="p21SideMenu"
+    class="p21-side-menu"
+    aria-hidden="true"
+>
+
+    <!-- MENU HEADER -->
+    <div class="p21-menu-header">
+
+        <div class="p21-menu-brand">
+
+            <img
+                src="assets/logo.png"
+                alt="Sandeep ElectroFix"
+            >
+
+            <div>
+                <strong>Sandeep ElectroFix</strong>
+                <small>Premium Electrical Services</small>
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="p21CloseBtn"
+            class="p21-close-btn"
+            aria-label="Close Menu"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN MENU
+    ===================================================== -->
+
+    <nav class="p21-menu-list">
+
+        <a href="#heroSection" class="p21-menu-item">
+            <span class="p21-menu-icon">🏠</span>
+            <span>Home</span>
+        </a>
+
+        <a href="#servicesSection" class="p21-menu-item">
+            <span class="p21-menu-icon">⚡</span>
+            <span>Our Services</span>
+        </a>
+
+        <a href="#gallerySection" class="p21-menu-item">
+            <span class="p21-menu-icon">🖼️</span>
+            <span>Our Work</span>
+        </a>
+
+        <a href="#quoteFormSection" class="p21-menu-item">
+            <span class="p21-menu-icon">📋</span>
+            <span>Get Estimate</span>
+        </a>
+
+        <a href="#aboutSection" class="p21-menu-item">
+            <span class="p21-menu-icon">ℹ️</span>
+            <span>About Us</span>
+        </a>
+
+        <a href="#locationSection" class="p21-menu-item">
+            <span class="p21-menu-icon">📍</span>
+            <span>Service Location</span>
+        </a>
+
+        <a href="#reviewsSection" class="p21-menu-item">
+            <span class="p21-menu-icon">⭐</span>
+            <span>Customer Reviews</span>
+        </a>
+
+        <a href="#faqSection" class="p21-menu-item">
+            <span class="p21-menu-icon">❓</span>
+            <span>FAQ</span>
+        </a>
+
+        <a href="#cardQRContainer" class="p21-menu-item">
+            <span class="p21-menu-icon">🔳</span>
+            <span>QR Code</span>
+        </a>
+
+    </nav>
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ===================================================== -->
+
+    <div class="p21-menu-divider"></div>
+
+    <div class="p21-menu-title">
+        QUICK ACTIONS
+    </div>
+
+    <div class="p21-quick-actions">
+
+        <a
+            href="tel:+919026036445"
+            class="p21-action-btn call"
+        >
+            📞
+            <span>Call Now</span>
+        </a>
+
+        <a
+            href="https://wa.me/919026036445"
+            target="_blank"
+            rel="noopener"
+            class="p21-action-btn whatsapp"
+        >
+            💬
+            <span>WhatsApp</span>
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         APP SETTINGS
+    ===================================================== -->
+
+    <div class="p21-settings-section">
+
+        <div class="p21-settings-heading">
+            ⚙️ APP SETTINGS
+        </div>
+
+
+        <!-- THEME -->
+        <button
+            type="button"
+            id="p21ThemeBtn"
+            class="p21-setting-item"
+        >
+            <span class="p21-setting-icon">🌙</span>
+
+            <span class="p21-setting-text">
+                <strong>Theme</strong>
+                <small id="p21ThemeStatus">Dark Mode</small>
+            </span>
+
+            <span class="p21-setting-arrow">›</span>
+        </button>
+
+
+        <!-- LANGUAGE -->
+        <button
+            type="button"
+            id="p21LanguageBtn"
+            class="p21-setting-item"
+        >
+            <span class="p21-setting-icon">🌐</span>
+
+            <span class="p21-setting-text">
+                <strong>Language</strong>
+                <small id="p21LanguageStatus">English</small>
+            </span>
+
+            <span class="p21-setting-arrow">›</span>
+        </button>
+
+
+        <!-- RESET -->
+        <button
+            type="button"
+            id="p21ResetBtn"
+            class="p21-setting-item reset"
+        >
+            <span class="p21-setting-icon">♻️</span>
+
+            <span class="p21-setting-text">
+                <strong>Reset App</strong>
+                <small>Restore default settings</small>
+            </span>
+
+            <span class="p21-setting-arrow">›</span>
+        </button>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="p21-menu-footer">
+        <span>⚡</span>
+        Sandeep ElectroFix
+        <small>Project 2.1</small>
+    </div>
+
+</aside>
+    
      <!-- HERO SECTION -->
      <header class="hero" id="heroSection">
           <div class="top-controls-bar">
