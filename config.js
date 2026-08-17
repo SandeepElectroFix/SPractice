@@ -6,7 +6,7 @@ window.MASTER_CONFIG = {
     controls: {
         showHero: true,
         showDiscount: true,
-        discountPercent: 10,
+        discountPercent: 5,
         showQuickAccess: true,
         showSocialLinks: true,
         showAbout: true,
