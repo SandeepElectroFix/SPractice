@@ -567,7 +567,7 @@ section h2 {
 
 .modal-items-list .sub-service-info { display: flex; flex-direction: column; gap: 2px; max-width: 65%; }
 .modal-items-list .sub-name { color: var(--text); font-weight: 500; font-size: 0.88rem; }
-.modal-items-list .sub-rate { color: var(--gold-light); font-size: 0.78rem; font-weight: 600; }
+.modal-items-list .sub-rate { color: #00FFFF; font-size: 0.78rem; font-weight: 600; }
 
 .qty-control {
   display: flex;
