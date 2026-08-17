@@ -1233,7 +1233,7 @@ html.saved-light-theme .app-settings-section {
     min-height: 46px;
     border: 0;
     background: transparent;
-    color: white;
+    color: var(--text);
     display: flex;
     align-items: center;
     gap: 12px;
