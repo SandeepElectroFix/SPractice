@@ -828,3 +828,331 @@ document.addEventListener("DOMContentLoaded", () => {
     setLanguage(currentLang);
     handlePWAShortcutAction();
 });
+/* =========================================================
+   PROJECT 2.1 — PREMIUM NAVBAR
+   HAMBURGER + SIDE MENU
+========================================================= */
+
+(function initializePremiumNavbar() {
+
+    const menuBtn = document.getElementById("navbarMenuBtn");
+    const sideMenu = document.getElementById("sideMenu");
+    const overlay = document.getElementById("navbarOverlay");
+    const closeBtn = document.getElementById("sideMenuClose");
+
+    if (!menuBtn || !sideMenu || !overlay || !closeBtn) {
+        console.warn("Premium Navbar elements not found.");
+        return;
+    }
+
+
+    /* =====================================================
+       OPEN MENU
+    ===================================================== */
+
+    function openNavbarMenu() {
+
+        sideMenu.classList.add("active");
+        overlay.classList.add("active");
+        menuBtn.classList.add("active");
+
+        document.body.classList.add("menu-open");
+
+        menuBtn.setAttribute("aria-expanded", "true");
+        menuBtn.setAttribute("aria-label", "Close Menu");
+    }
+
+
+    /* =====================================================
+       CLOSE MENU
+    ===================================================== */
+
+    function closeNavbarMenu() {
+
+        sideMenu.classList.remove("active");
+        overlay.classList.remove("active");
+        menuBtn.classList.remove("active");
+
+        document.body.classList.remove("menu-open");
+
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.setAttribute("aria-label", "Open Menu");
+    }
+
+
+    /* =====================================================
+       HAMBURGER BUTTON
+    ===================================================== */
+
+    menuBtn.addEventListener("click", function () {
+
+        if (sideMenu.classList.contains("active")) {
+            closeNavbarMenu();
+        } else {
+            openNavbarMenu();
+        }
+
+    });
+
+
+    /* =====================================================
+       CLOSE BUTTON
+    ===================================================== */
+
+    closeBtn.addEventListener("click", closeNavbarMenu);
+
+
+    /* =====================================================
+       OVERLAY CLICK
+    ===================================================== */
+
+    overlay.addEventListener("click", closeNavbarMenu);
+
+
+    /* =====================================================
+       MENU ITEM CLICK
+       Section par jaate hi menu close
+    ===================================================== */
+
+    const menuLinks = sideMenu.querySelectorAll(
+        "a.menu-item"
+    );
+
+    menuLinks.forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            setTimeout(function () {
+                closeNavbarMenu();
+            }, 120);
+
+        });
+
+    });
+
+
+    /* =====================================================
+       ESC KEY
+    ===================================================== */
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closeNavbarMenu();
+        }
+
+    });
+
+
+    /* =====================================================
+       INSTALL APP
+       Existing PWA install event ko use karega
+    ===================================================== */
+
+    const installBtn = document.getElementById("menuInstallApp");
+
+    if (installBtn) {
+
+        installBtn.addEventListener("click", function () {
+
+            /*
+             * Agar existing project mein installApp()
+             * function hai to use karega.
+             */
+
+            if (typeof window.installApp === "function") {
+
+                window.installApp();
+
+            } else if (
+                window.deferredPrompt
+            ) {
+
+                window.deferredPrompt.prompt();
+
+            } else {
+
+                if (typeof showToast === "function") {
+
+                    showToast(
+                        "Install option अभी उपलब्ध नहीं है।",
+                        "info"
+                    );
+
+                } else {
+
+                    alert(
+                        "Install option अभी उपलब्ध नहीं है।"
+                    );
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       THEME TOGGLE
+       Existing themeToggle button ko trigger karega
+    ===================================================== */
+
+    const menuThemeBtn =
+        document.getElementById("menuThemeToggle");
+
+    const originalThemeBtn =
+        document.getElementById("themeToggle");
+
+    if (menuThemeBtn) {
+
+        menuThemeBtn.addEventListener("click", function () {
+
+            if (originalThemeBtn) {
+
+                originalThemeBtn.click();
+
+            } else if (
+                typeof toggleTheme === "function"
+            ) {
+
+                toggleTheme();
+
+            }
+
+            updateNavbarThemeText();
+
+        });
+
+    }
+
+
+    /* =====================================================
+       UPDATE THEME TEXT
+    ===================================================== */
+
+    function updateNavbarThemeText() {
+
+        const icon =
+            document.getElementById("menuThemeIcon");
+
+        const text =
+            document.getElementById("menuThemeText");
+
+        if (!icon || !text) return;
+
+        const isDark =
+            document.body.classList.contains("dark-mode") ||
+            document.documentElement.classList.contains("dark-mode") ||
+            document.body.classList.contains("dark");
+
+        if (isDark) {
+
+            icon.textContent = "☀️";
+            text.textContent = "Light Mode";
+
+        } else {
+
+            icon.textContent = "🌙";
+            text.textContent = "Dark Mode";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESET APP
+       Two-step confirmation
+    ===================================================== */
+
+    const resetBtn =
+        document.getElementById("menuResetApp");
+
+    if (resetBtn) {
+
+        resetBtn.addEventListener("click", function () {
+
+            const firstConfirm = confirm(
+                "⚠️ क्या आप App को Default Settings पर Reset करना चाहते हैं?"
+            );
+
+            if (!firstConfirm) return;
+
+
+            const secondConfirm = confirm(
+                "⚠️ FINAL CONFIRMATION\n\n" +
+                "Reset करने पर आपकी saved settings हट सकती हैं।\n\n" +
+                "क्या आप सच में Reset करना चाहते हैं?"
+            );
+
+            if (!secondConfirm) return;
+
+
+            if (
+                typeof window.resetAllToDefault ===
+                "function"
+            ) {
+
+                window.resetAllToDefault();
+
+            } else {
+
+                try {
+
+                    localStorage.clear();
+
+                    sessionStorage.clear();
+
+                    location.reload();
+
+                } catch (error) {
+
+                    console.error(
+                        "Reset failed:",
+                        error
+                    );
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       INITIAL THEME STATE
+    ===================================================== */
+
+    updateNavbarThemeText();
+
+
+    /* =====================================================
+       UPDATE THEME TEXT AFTER EXISTING THEME BUTTON
+    ===================================================== */
+
+    if (originalThemeBtn) {
+
+        originalThemeBtn.addEventListener(
+            "click",
+            function () {
+
+                setTimeout(
+                    updateNavbarThemeText,
+                    50
+                );
+
+            }
+        );
+
+    }
+
+
+    console.log(
+        "✅ Project 2.1 Premium Navbar initialized."
+    );
+
+})();
