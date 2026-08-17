@@ -976,27 +976,69 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
     pointer-events: auto;
 }
 
-/* SIDE MENU */
+/* =========================================================
+   PREMIUM HAMBURGER SIDE MENU
+========================================================= */
+
 .app-side-menu {
     position: fixed;
     top: 0;
     right: 0;
     width: min(88vw, 360px);
     height: 100dvh;
-    background: linear-gradient(180deg, #080d1f 0%, #050816 100%);
-    border-left: 1px solid rgba(245, 197, 66, 0.25);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.55);
+
+    /* PREMIUM GLASS BACKGROUND */
+    background:
+        linear-gradient(
+            180deg,
+            rgba(11, 18, 36, 0.96) 0%,
+            rgba(5, 8, 22, 0.94) 100%
+        );
+
+    border-left: 1px solid rgba(245, 197, 66, 0.30);
+
+    box-shadow:
+        -10px 0 40px rgba(0, 0, 0, 0.55),
+        inset 1px 0 0 rgba(255, 255, 255, 0.04);
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
     z-index: 99992;
+
     transform: translateX(105%);
-    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+    transition:
+        transform .3s cubic-bezier(.4, 0, .2, 1);
+
     display: flex;
     flex-direction: column;
+
     overflow-y: auto;
     overscroll-behavior: contain;
 }
 
+/* OPEN */
 .app-side-menu.active {
     transform: translateX(0);
+}
+
+/* =========================================================
+   LIGHT THEME SIDE MENU
+========================================================= */
+
+html.saved-light-theme .app-side-menu {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.97) 0%,
+            rgba(244, 247, 251, 0.97) 100%
+        );
+
+    border-left-color: rgba(15, 23, 42, 0.12);
+
+    box-shadow:
+        -10px 0 35px rgba(15, 23, 42, 0.16),
+        inset 1px 0 0 rgba(255, 255, 255, 0.8);
 }
 
 /* MENU HEADER */
@@ -1105,12 +1147,24 @@ html.saved-light-theme .qr-section p { color: #475569 !important; }
 }
 
 /* APP SETTINGS */
-.app-settings, .app-settings-section {
+.app-settings,
+.app-settings-section {
     margin: 5px 10px 10px;
     padding: 10px;
+
     border: 1px solid rgba(245, 197, 66, 0.18);
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.025);
+
+    background: rgba(15, 23, 42, 0.55);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+html.saved-light-theme .app-settings,
+html.saved-light-theme .app-settings-section {
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(15, 23, 42, 0.10);
 }
 
 .app-settings-title, .app-settings-heading {
