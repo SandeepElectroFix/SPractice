@@ -280,12 +280,8 @@ function initializeProjectNavbar() {
                         </strong>
 
                         <small id="project21MenuBrandLocation">
-                            📍 ${
-                                currentLang === "hi"
-                                ? (biz.location_hi || "")
-                                : (biz.location_en || "")
-                            }
-                        </small>
+    ⚡ Powering Your Trust
+</small>
                     </div>
 
                 </div>
@@ -516,7 +512,7 @@ function initializeProjectNavbar() {
                 </span>
 
                 <small>
-                    Project 2.1
+                    Powering Your Trust
                 </small>
 
             </div>
