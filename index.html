@@ -3,377 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0ea5e9">
-    <meta name="robots" content="index, follow">
-    <meta name="google-site-verification" content="DcSvRpMWr7K4Mmvy0rl2-ZxAklY5g_b_017f0wl-LKU">
+    <meta name="theme-color" content="#0047ff">
     <title>Sandeep ElectroFix | Electrician in Lucknow</title>
-    <meta name="description" content="Professional Electrician and Electrical Services in Lucknow, Uttar Pradesh.">
-    <link rel="canonical" href="https://sandeepelectrofix.github.io/SandeepElectroFix-Card/">
-    <link rel="icon" type="image/png" href="assets/logo.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=2.1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body id="top">
-    <div class="background-glow"></div>
 
-    <!-- ==========================================
-         NAVBAR & RIGHT-SIDE HAMBURGER MENU
-    =========================================== -->
-    <nav class="main-navbar" id="mainNavbar">
-        <div class="navbar-inner">
-            <a href="#top" class="navbar-brand" aria-label="Sandeep ElectroFix Home">
-                <div class="navbar-logo">
-                    <img src="assets/logo.png" alt="Sandeep ElectroFix Logo" onerror="this.style.display='none'">
-                </div>
-                <div class="navbar-brand-text">
-                    <span class="brand-sandeep">SANDEEP</span>
-                    <span class="brand-electrofix">ELECTROFIX</span>
-                </div>
-            </a>
+    <div class="app-container">
 
-            <button type="button" class="navbar-menu-btn" id="navbarMenuBtn" aria-label="Open Menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
+        <!-- ==========================================
+             NAVBAR
+        =========================================== -->
+        <nav class="main-navbar">
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="nav-logo" onerror="this.src='https://via.placeholder.com/40'">
+                <div class="brand-text">
+                    <span class="brand-name">SANDEEP</span>
+                    <span class="brand-sub">ELECTROFIX</span>
+                </div>
+            </div>
+            <button class="menu-btn" id="navbarMenuBtn" aria-label="Open Menu">
+                <span></span><span></span><span></span>
             </button>
-        </div>
+        </nav>
 
-        <div class="navbar-overlay" id="navbarOverlay"></div>
+        <!-- ==========================================
+             RIGHT-SIDE HAMBURGER SLIDE MENU
+        =========================================== -->
+        <div class="navbar-overlay" id="navbarOverlay" onclick="closeProject21Menu()"></div>
 
-        <aside class="side-menu" id="sideMenu">
-            <div class="side-menu-header">
-                <div class="side-menu-brand">
-                    <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
-                    <div>
-                        <strong>SANDEEP</strong>
-                        <span>ELECTROFIX</span>
-                    </div>
-                </div>
-                <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close Menu">×</button>
+        <aside class="side-menu-drawer" id="sideMenu">
+            <!-- HAMBURGER HEADER -->
+            <div class="side-menu-head">
+                <i class="fa-solid fa-bars"></i>
+                <span id="menuHeadTitle">HAMBURGER MENU</span>
             </div>
 
-            <div class="side-menu-content">
-                <div class="menu-group">
-                    <a href="#top" class="menu-item"><span class="menu-icon">🏠</span><span id="menuHomeText">Home</span><span class="menu-arrow">›</span></a>
-                    <a href="#aboutSection" class="menu-item"><span class="menu-icon">👤</span><span id="menuAboutText">About Us</span><span class="menu-arrow">›</span></a>
-                    <a href="#locationSection" class="menu-item"><span class="menu-icon">📍</span><span id="menuLocationText">Service Location</span><span class="menu-arrow">›</span></a>
-                    <a href="#servicesSection" class="menu-item"><span class="menu-icon">⚡</span><span id="menuServicesText">Our Services</span><span class="menu-arrow">›</span></a>
-                    <a href="#gallerySection" class="menu-item"><span class="menu-icon">🖼️</span><span id="menuWorkText">Our Work</span><span class="menu-arrow">›</span></a>
-                    <a href="#reviewsSection" class="menu-item"><span class="menu-icon">⭐</span><span id="menuReviewsText">Customer Reviews</span><span class="menu-arrow">›</span></a>
-                    <a href="#quoteFormSection" class="menu-item"><span class="menu-icon">💰</span><span id="menuQuoteText">Estimate &amp; Quotation</span><span class="menu-arrow">›</span></a>
-                    <a href="#faqSection" class="menu-item"><span class="menu-icon">❓</span><span id="menuFaqText">FAQ</span><span class="menu-arrow">›</span></a>
-                    <a href="#cardQRContainer" class="menu-item"><span class="menu-icon">📱</span><span id="menuQrText">QR Code</span><span class="menu-arrow">›</span></a>
+            <div class="side-menu-scrollable">
+                <!-- 1 TO 9 NAVIGATION CARD -->
+                <div class="menu-nav-card">
+                    <a href="#top" class="menu-nav-row" onclick="handleMenuClick('#top')">
+                        <span class="badge badge-1">1</span>
+                        <i class="fa-solid fa-house ic-nav"></i>
+                        <span class="nav-label" id="mTextHome">Home</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#aboutSection" class="menu-nav-row" onclick="handleMenuClick('#aboutSection')">
+                        <span class="badge badge-2">2</span>
+                        <i class="fa-solid fa-user ic-nav"></i>
+                        <span class="nav-label" id="mTextAbout">About Us</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#locationSection" class="menu-nav-row" onclick="handleMenuClick('#locationSection')">
+                        <span class="badge badge-3">3</span>
+                        <i class="fa-solid fa-location-dot ic-nav"></i>
+                        <span class="nav-label" id="mTextLocation">Service Location</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#servicesSection" class="menu-nav-row" onclick="handleMenuClick('#servicesSection')">
+                        <span class="badge badge-4">4</span>
+                        <i class="fa-solid fa-bolt ic-nav"></i>
+                        <span class="nav-label" id="mTextServices">Our Services</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#gallerySection" class="menu-nav-row" onclick="handleMenuClick('#gallerySection')">
+                        <span class="badge badge-5">5</span>
+                        <i class="fa-solid fa-image ic-nav"></i>
+                        <span class="nav-label" id="mTextWork">Our Work</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#reviewsSection" class="menu-nav-row" onclick="handleMenuClick('#reviewsSection')">
+                        <span class="badge badge-6">6</span>
+                        <i class="fa-solid fa-star ic-nav"></i>
+                        <span class="nav-label" id="mTextReviews">Customer Reviews</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#quoteFormSection" class="menu-nav-row" onclick="handleMenuClick('#quoteFormSection')">
+                        <span class="badge badge-7">7</span>
+                        <i class="fa-solid fa-file-lines ic-nav"></i>
+                        <span class="nav-label" id="mTextQuote">Estimate &amp; Quotation</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#faqSection" class="menu-nav-row" onclick="handleMenuClick('#faqSection')">
+                        <span class="badge badge-8">8</span>
+                        <i class="fa-solid fa-circle-question ic-nav"></i>
+                        <span class="nav-label" id="mTextFaq">FAQ</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
+                    <a href="#cardQRContainer" class="menu-nav-row" onclick="handleMenuClick('#cardQRContainer')">
+                        <span class="badge badge-9">9</span>
+                        <i class="fa-solid fa-qrcode ic-nav"></i>
+                        <span class="nav-label" id="mTextQr">QR Code</span>
+                        <i class="fa-solid fa-chevron-right arrow-nav"></i>
+                    </a>
                 </div>
 
-                <div class="menu-settings">
-                    <div class="menu-settings-title" id="menuAppSettingsTitle">⚙️ APP SETTINGS</div>
-                    
-                    <button type="button" class="menu-item menu-action" id="menuInstallApp">
-                        <span class="menu-icon">📲</span><span id="menuInstallAppText">Install App</span>
-                    </button>
+                <!-- APP SETTINGS CARD -->
+                <div class="settings-head-bar">
+                    <i class="fa-solid fa-gear"></i>
+                    <span id="mAppSettingsHead">APP SETTINGS</span>
+                </div>
 
-                    <button type="button" class="menu-item menu-action" id="menuThemeToggle">
-                        <span class="menu-icon" id="menuThemeIcon">🌙</span><span id="menuThemeText">Dark / Light Mode</span>
-                    </button>
-
-                    <div class="menu-language">
-                        <div class="menu-language-title" id="menuLangHeading">🌐 Language</div>
-                        <div class="menu-language-buttons">
-                            <button type="button" class="menu-lang-btn active" data-menu-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
-                            <button type="button" class="menu-lang-btn" data-menu-lang="en" onclick="setLanguage('en')">English</button>
-                        </div>
+                <div class="menu-settings-card">
+                    <div class="setting-item" onclick="triggerAppInstall()">
+                        <i class="fa-solid fa-mobile-screen-button set-ico ic-install"></i>
+                        <span id="mInstallTxt">Install App</span>
                     </div>
-
-                    <button type="button" class="menu-item menu-action reset-menu-btn" id="menuResetApp" onclick="openResetModal()">
-                        <span class="menu-icon">🔄</span><span id="menuResetText">Reset App (2-Step)</span>
-                    </button>
+                    <div class="setting-item" onclick="toggleAppTheme()">
+                        <i class="fa-solid fa-moon set-ico ic-theme" id="themeIconEl"></i>
+                        <span id="mThemeTxt">Dark / Light Mode</span>
+                    </div>
+                    <div class="setting-item" onclick="toggleLanguage()">
+                        <i class="fa-solid fa-globe set-ico ic-lang"></i>
+                        <span id="mLangTxt">हिन्दी / English</span>
+                    </div>
+                    <div class="setting-divider"></div>
+                    <div class="setting-item reset-trigger-item" onclick="openResetModal()">
+                        <i class="fa-solid fa-arrows-rotate set-ico ic-reset"></i>
+                        <span id="mResetTxt">Reset App (2-Step)</span>
+                    </div>
                 </div>
             </div>
         </aside>
-    </nav>
 
-    <!-- ==========================================
-         1. HERO SECTION (HOME)
-    =========================================== -->
-    <header class="hero" id="heroSection">
-        <div class="hero-card">
-            <div class="hero-content">
-                <h1 id="businessTitle">Powering Your Trust</h1>
-                <p class="tagline" id="businessTagline">Professional Electrical Services in Lucknow</p>
-                <p class="location" id="businessLocation">📍 Lucknow, Uttar Pradesh</p>
-                <div class="hero-buttons">
-                    <a href="tel:+919026036445" class="btn call-btn" id="callBtn">
-                        <span id="callBtnText">📞 Call Now</span>
-                    </a>
-                    <a href="https://wa.me/919026036445" class="btn whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">
-                        <span id="whatsappBtnText">💬 WhatsApp</span>
-                    </a>
+        <!-- ==========================================
+             1. HERO SECTION
+        =========================================== -->
+        <header class="section-hero" id="heroSection">
+            <div class="hero-text">
+                <h1 class="hero-title" id="businessTitle">Powering Your Trust</h1>
+                <p class="hero-desc" id="businessTagline">Professional Electrical Services in Lucknow</p>
+                <p class="hero-loc" id="businessLocation"><i class="fa-solid fa-location-dot"></i> Lucknow, Uttar Pradesh</p>
+                <div class="hero-actions">
+                    <a href="tel:+919026036445" class="btn btn-call"><i class="fa-solid fa-phone"></i> <span id="callBtnText">Call Now</span></a>
+                    <a href="https://wa.me/919026036445" class="btn btn-whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i> <span id="whatsappBtnText">WhatsApp</span></a>
                 </div>
             </div>
-            <div class="hero-image-wrap">
-                <img src="assets/hero-electrician.png" alt="Electrician" onerror="this.style.display='none'">
+            <div class="hero-img">
+                <img src="assets/electrician-hero.png" alt="Electrician" onerror="this.style.display='none'">
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- ==========================================
-         2. SPECIAL OFFER (DISCOUNT)
-    =========================================== -->
-    <section id="discountSection" class="discount-section">
-        <div class="discount-card">
-            <div class="discount-badge" id="discountBadge">🔥 SPECIAL OFFER</div>
-            <div class="discount-percent"><span id="discountPercentage">10</span>% OFF</div>
-            <h2 id="discountTitle">on Selected Electrical Services</h2>
-            <p id="discountMessage">Get 10% OFF on Selected Electrical Services</p>
-            <div class="discount-validity" id="discountValidity">⏳ Limited Time Offer</div>
-            <a href="#servicesSection" class="discount-btn" id="discountBtnText">⚡ Get Discount</a>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         3. QUICK ACCESS (8 ICONS)
-    =========================================== -->
-    <section class="quick-actions" id="quickAccessBar">
-        <h2 id="quickHeading">Quick Access</h2>
-        <div class="grid layout-grid-2" id="quickGridContainer">
-            <a href="tel:+919026036445" class="card" id="btnQuickCall">
-                <span class="icon call-icon">📞</span>
-                <strong id="labelCall">Call</strong>
-            </a>
-            <a href="https://wa.me/919026036445" class="card" target="_blank" rel="noopener" id="btnQuickWhatsapp">
-                <span class="icon whatsapp-icon">💬</span>
-                <strong id="labelWhatsapp">WhatsApp</strong>
-            </a>
-            <a href="mailto:SandeepElectroFix@gmail.com" class="card" id="btnQuickEmail">
-                <span class="icon email-icon">✉️</span>
-                <strong id="labelEmail">Email</strong>
-            </a>
-            <a href="https://sandeepelectrofix.github.io/" class="card" target="_blank" rel="noopener" id="btnQuickWebsite">
-                <span class="icon website-icon">🌐</span>
-                <strong id="labelWeb">Website</strong>
-            </a>
-            <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="card" target="_blank" rel="noopener" id="btnQuickMaps">
-                <span class="icon maps-icon">📍</span>
-                <strong id="labelMap">Google Maps</strong>
-            </a>
-            <a href="javascript:void(0)" class="card" onclick="saveContactVCard()" id="btnQuickSaveContact">
-                <span class="icon contact-icon">👤</span>
-                <strong id="labelSaveContact">Save Contact</strong>
-            </a>
-            <a href="javascript:void(0)" class="card" onclick="shareWebsite()" id="btnQuickShare">
-                <span class="icon share-icon">🔗</span>
-                <strong id="labelShare">Share</strong>
-            </a>
-            <a href="material-catalogue.html" class="card catalogue-card-highlight" id="btnQuickCatalogue">
-                <span class="icon catalogue-icon">📋</span>
-                <strong id="labelCatalogue">Catalogue</strong>
-            </a>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         4. ABOUT US
-    =========================================== -->
-    <section class="about" id="aboutSection">
-        <h2 id="aboutHeading">About Us</h2>
-        <div class="about-card">
-            <div class="about-text-wrap">
-                <p id="aboutText">Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB Installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.</p>
-                <a href="#servicesSection" class="read-more-link" id="aboutReadMore">Read More →</a>
+        <!-- ==========================================
+             2. SPECIAL OFFER CARD
+        =========================================== -->
+        <section class="card offer-card" id="discountSection">
+            <div class="offer-left">
+                <div class="offer-badge" id="discountBadge"><i class="fa-solid fa-fire"></i> SPECIAL OFFER</div>
+                <div class="offer-percent"><span id="discountPercentage">10% OFF</span></div>
+                <p class="offer-title" id="discountTitle">on Selected Electrical Services</p>
+                <a href="#servicesSection" class="btn btn-offer" id="discountBtnText">🎁 Get Discount</a>
             </div>
-            <div class="about-img-wrap">
-                <img src="assets/about-work.jpg" alt="About Sandeep ElectroFix" onerror="this.parentElement.style.display='none'">
+            <div class="offer-gift">
+                <img src="assets/gift-box.png" alt="Gift" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4213/4213651.png'">
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ==========================================
-         5. SERVICE LOCATION
-    =========================================== -->
-    <section id="locationSection" class="location-box">
-        <h2 id="locHeading">Service Location</h2>
-        <p id="locDesc">Providing on-site electrical services across Lucknow.</p>
-        <div class="location-action-buttons">
-            <button type="button" class="location-btn" id="checkLocationBtn" onclick="getUserLocation()">
-                <span>📡</span> <span id="distBtnText">Check Distance</span>
-            </button>
-            <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="location-btn maps-btn" id="btnDirectionsMap" target="_blank" rel="noopener">
-                <span>🗺️</span> <span id="mapBtnText">Get Directions</span>
+        <!-- ==========================================
+             3. QUICK ACCESS
+        =========================================== -->
+        <div class="section-title-white" id="quickHeading">Quick Access</div>
+        <section class="quick-access-grid" id="quickAccessBar">
+            <a href="tel:+919026036445" class="qa-item">
+                <div class="qa-icon-wrap ic-call"><i class="fa-solid fa-phone"></i></div>
+                <span id="labelCall">Call</span>
             </a>
-        </div>
-        <div id="locationStatus" class="location-status"></div>
-    </section>
+            <a href="https://wa.me/919026036445" class="qa-item" target="_blank">
+                <div class="qa-icon-wrap ic-wa"><i class="fa-brands fa-whatsapp"></i></div>
+                <span id="labelWhatsapp">WhatsApp</span>
+            </a>
+            <a href="mailto:SandeepElectroFix@gmail.com" class="qa-item">
+                <div class="qa-icon-wrap ic-mail"><i class="fa-solid fa-envelope"></i></div>
+                <span id="labelEmail">Email</span>
+            </a>
+            <a href="https://sandeepelectrofix.github.io/" class="qa-item" target="_blank">
+                <div class="qa-icon-wrap ic-web"><i class="fa-solid fa-globe"></i></div>
+                <span id="labelWeb">Website</span>
+            </a>
+            <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" class="qa-item" target="_blank">
+                <div class="qa-icon-wrap ic-map"><i class="fa-solid fa-location-dot"></i></div>
+                <span id="labelMap">Google Maps</span>
+            </a>
+            <a href="javascript:void(0)" class="qa-item" onclick="saveContactVCard()">
+                <div class="qa-icon-wrap ic-contact"><i class="fa-solid fa-user-plus"></i></div>
+                <span id="labelSaveContact">Save Contact</span>
+            </a>
+            <a href="javascript:void(0)" class="qa-item" onclick="shareWebsite()">
+                <div class="qa-icon-wrap ic-share"><i class="fa-solid fa-share-nodes"></i></div>
+                <span id="labelShare">Share</span>
+            </a>
+            <a href="material-catalogue.html" class="qa-item">
+                <div class="qa-icon-wrap ic-cat"><i class="fa-solid fa-book-open"></i></div>
+                <span id="labelCatalogue">Catalogue</span>
+            </a>
+        </section>
 
-    <!-- ==========================================
-         6. OUR SERVICES
-    =========================================== -->
-    <section id="servicesSection" class="services">
-        <h2 id="servicesHeading">Our Services</h2>
-        <div class="service-layout-bar" id="servicesLayoutBar">
-            <button type="button" class="layout-btn active" data-sl="grid-2" onclick="applyServiceLayout('grid-2')">⊞ Grid</button>
-            <button type="button" class="layout-btn" data-sl="list" onclick="applyServiceLayout('list')">☰ List</button>
-            <button type="button" class="layout-btn" data-sl="carousel" onclick="applyServiceLayout('carousel')">⇆ Slider</button>
-        </div>
-        <div class="service-grid layout-grid-2" id="serviceContainer"></div>
-        <div class="view-all-wrapper">
-            <a href="#quoteFormSection" class="btn-view-all" id="btnViewAllServices">View All Services →</a>
-        </div>
-    </section>
+        <!-- ==========================================
+             4. ABOUT US
+        =========================================== -->
+        <section class="card about-card" id="aboutSection">
+            <div class="about-content">
+                <h3 class="card-head" id="aboutHeading">About Us</h3>
+                <p id="aboutText">Welcome to <strong>Sandeep ElectroFix</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB &amp; DB Installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.</p>
+                <a href="#servicesSection" class="link-blue" id="aboutReadMore">Read More →</a>
+            </div>
+            <div class="about-thumb">
+                <img src="assets/about-work.jpg" alt="Work Room" onerror="this.src='https://images.unsplash.com/photo-1513694203232-719a280e022f?w=300'">
+            </div>
+        </section>
 
-    <!-- ==========================================
-         7. OUR WORK (GALLERY)
-    =========================================== -->
-    <section id="gallerySection" class="gallery">
-        <h2 id="galleryHeading">Our Work</h2>
-        <div class="gallery-grid" id="galleryContainer"></div>
-    </section>
+        <!-- ==========================================
+             5. SERVICE LOCATION
+        =========================================== -->
+        <section class="card loc-card" id="locationSection">
+            <div class="loc-left">
+                <h3 class="card-head" id="locHeading">Service Location</h3>
+                <p id="locDesc">Providing on-site electrical services across Lucknow.</p>
+                <div class="loc-btns">
+                    <button type="button" class="btn btn-blue-sm" onclick="getUserLocation()"><i class="fa-solid fa-location-crosshairs"></i> <span id="distBtnText">Check Distance</span></button>
+                    <a href="https://maps.app.goo.gl/XYZnm7sFAVRT68Vs7" target="_blank" class="btn btn-yellow-sm"><i class="fa-solid fa-map-location-dot"></i> <span id="mapBtnText">Get Directions</span></a>
+                </div>
+                <div id="locationStatus" class="loc-status-txt"></div>
+            </div>
+            <div class="loc-map-img">
+                <img src="assets/map-preview.png" alt="Map View" onerror="this.src='https://via.placeholder.com/120x80'">
+            </div>
+        </section>
 
-    <div id="lightbox" onclick="closeLightboxModal()">
-        <span id="closeLightbox">&times;</span>
-        <img id="lightboxImage" src="" alt="Work Photo">
+        <!-- ==========================================
+             6. OUR SERVICES
+        =========================================== -->
+        <section class="card section-services" id="servicesSection">
+            <h3 class="card-head text-center" id="servicesHeading">Our Services</h3>
+            
+            <div class="services-3col-grid" id="serviceContainer"></div>
+
+            <div class="center-btn-wrap">
+                <a href="#quoteFormSection" class="btn btn-pill-blue" id="btnViewAllServices">View All Services →</a>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             7. OUR WORK (GALLERY)
+        =========================================== -->
+        <section class="card gallery-card" id="gallerySection">
+            <h3 class="card-head text-center" id="galleryHeading">Our Work</h3>
+            <div class="gallery-scroll" id="galleryContainer"></div>
+        </section>
+
+        <!-- ==========================================
+             8. CUSTOMER REVIEWS
+        =========================================== -->
+        <section class="card reviews-card" id="reviewsSection">
+            <h3 class="card-head text-center" id="reviewsHeading">Customer Reviews</h3>
+            <div class="reviews-row" id="reviewContainer"></div>
+        </section>
+
+        <!-- ==========================================
+             9. ESTIMATE & QUOTATION
+        =========================================== -->
+        <section class="card quote-card" id="quoteFormSection">
+            <div class="quote-header">
+                <div>
+                    <h3 class="card-head" id="quoteHeading">Estimate &amp; Quotation</h3>
+                    <p class="sub-txt" id="quoteSubHint">Get instant estimate for your electrical work.</p>
+                </div>
+                <img src="assets/estimate-calc.png" class="quote-clip-img" alt="Quote" onerror="this.src='https://cdn-icons-png.flaticon.com/512/8982/8982845.png'">
+            </div>
+            
+            <div class="center-btn-wrap">
+                <button type="button" class="btn btn-pill-blue w-100" id="btnGetEstimateNow" onclick="openServiceModal(0)">Get Your Estimate Now →</button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             10. FAQ
+        =========================================== -->
+        <section class="card faq-card" id="faqSection">
+            <h3 class="card-head text-center" id="faqHeading">Frequently Asked Questions</h3>
+            <div class="faq-list" id="faqContainer"></div>
+            <div class="center-btn-wrap">
+                <button type="button" class="btn btn-pill-blue" id="btnViewAllFaq" onclick="toggleAllFAQ()">View All FAQ →</button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             11. QR CODE
+        =========================================== -->
+        <section class="card qr-box-card" id="cardQRContainer">
+            <div class="qr-info">
+                <h3 class="card-head" id="qrHeading">Our Digital Card (Scan &amp; Save)</h3>
+                <p id="qrDesc">Scan QR code to save our card or share.</p>
+                <a href="assets/qr-card.png" download="SandeepElectroFix_QR.png" class="btn btn-pill-blue" id="qrBtnText">Download QR ▾</a>
+            </div>
+            <div class="qr-img-wrap">
+                <img src="assets/qr-card.png" alt="QR" id="cardQR" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sandeepelectrofix.github.io/'">
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <p id="footerText">&copy; 2026 Sandeep Electrofix. All rights reserved.</p>
+        </footer>
+
     </div>
 
     <!-- ==========================================
-         8. CUSTOMER REVIEWS
+         2-STEP RESET MODAL POPUP
     =========================================== -->
-    <section id="reviewsSection" class="reviews-section">
-        <h2 id="reviewsHeading">Customer Reviews</h2>
-        <div class="review-grid" id="reviewContainer"></div>
-    </section>
-
-    <!-- ==========================================
-         9. ESTIMATE & QUOTATION
-    =========================================== -->
-    <section id="quoteFormSection" class="quote-section">
-        <h2 id="quoteHeading">Estimate &amp; Quotation</h2>
-        <p class="quote-sub-hint" id="quoteSubHint">Get instant estimate for your electrical work.</p>
-        <div class="quote-card card">
-            <div class="quote-form">
-                <input type="text" id="customerName" placeholder="Your Name *" oninput="saveCustomerInputs()">
-                <input type="tel" id="customerPhone" placeholder="Mobile Number *" oninput="saveCustomerInputs()">
-                
-                <div class="quote-location-wrapper">
-                    <input type="text" id="customerLocation" placeholder="Your Address / Area *" oninput="saveCustomerInputs()">
-                    <button type="button" class="btn-gps-detect" id="btnGpsDetect" onclick="getQuoteLiveLocation()" title="GPS">
-                        <span id="gpsBtnIcon">📍</span> <span id="gpsBtnText">GPS</span>
-                    </button>
-                </div>
-
-                <textarea id="customerMessage" rows="2" placeholder="Additional work details (optional)..." oninput="saveCustomerInputs()"></textarea>
-                
-                <div id="estimateSummaryBox" class="estimate-summary-box">
-                    <div class="summary-heading" id="summaryHeader">Selected Services (<span id="selectedCount">0</span>)</div>
-                    <div id="selectedServicesList" class="selected-services-list">
-                        <p class="no-selection-hint" id="noSelHint">No services selected yet. Use + / − above.</p>
-                    </div>
-
-                    <div class="calc-row"><span id="lblSubtotal">Subtotal:</span> <strong id="calcSubtotal">₹0</strong></div>
-                    <div class="calc-row discount-row" id="calcDiscountRow" style="display:none;">
-                        <span id="discountLabel">Special Discount:</span> <strong id="calcDiscount">-₹0</strong>
-                    </div>
-                    <div class="calc-row total-row"><span id="lblGrandTotal">Grand Total:</span> <strong id="calcGrandTotal">₹0</strong></div>
-                </div>
-
-                <div class="quote-action-buttons">
-                    <button type="button" class="btn whatsapp-btn" id="sendWhatsappBtn" onclick="sendWhatsappQuote()">💬 Send on WhatsApp</button>
-                    <button type="button" class="btn pdf-download-btn" id="downloadPdfBtn" onclick="downloadEstimatePDF()">📄 Download PDF Estimate</button>
-                </div>
+    <div id="resetModalOverlay" class="reset-modal-backdrop" style="display:none;" onclick="closeResetModal()">
+        <div class="reset-box-card" onclick="event.stopPropagation()">
+            <div class="reset-yellow-header">
+                <i class="fa-solid fa-lock"></i>
+                <span id="rHeadTitle">Reset App – 2 Step Safety</span>
             </div>
-        </div>
-    </section>
 
-    <!-- ==========================================
-         10. FAQ
-    =========================================== -->
-    <section id="faqSection" class="faq-section">
-        <h2 id="faqHeading">Frequently Asked Questions</h2>
-        <div class="faq-container" id="faqContainer"></div>
-        <div class="view-all-wrapper">
-            <button type="button" class="btn-view-all" id="btnViewAllFaq" onclick="toggleAllFAQ()">View All FAQ →</button>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         11. QR CODE
-    =========================================== -->
-    <section id="cardQRContainer" class="qr-section">
-        <h2 id="qrHeading">Our Digital Card (Scan &amp; Save)</h2>
-        <p id="qrDesc">Scan QR code to save our card or share.</p>
-        <div class="qr-container">
-            <img src="assets/qr-card.png" alt="QR Code" id="cardQR" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sandeepelectrofix.github.io/SandeepElectroFix-Card/'">
-        </div>
-        <br>
-        <a href="assets/qr-card.png" download="SandeepElectroFix_qr-card.png" class="btn download-qr-btn" id="qrBtnText">📥 Download QR</a>
-    </section>
-
-    <!-- ==========================================
-         FOOTER (SOCIAL LINKS + COPYRIGHT)
-    =========================================== -->
-    <footer id="footerSection">
-        <div class="social-links-grid">
-            <a href="https://www.facebook.com/SandeepElectroFix" target="_blank" rel="noopener" id="btnFacebook" class="social-btn facebook">📘 Facebook</a>
-            <a href="https://www.instagram.com/sandeep_electrofix" target="_blank" rel="noopener" id="btnInstagram" class="social-btn instagram">📸 Instagram</a>
-            <a href="https://youtube.com/@sandeepelectrofix" target="_blank" rel="noopener" id="btnYoutube" class="social-btn youtube">▶️ YouTube</a>
-        </div>
-        <p id="footerText">&copy; 2026 Sandeep ElectroFix. All rights reserved.</p>
-    </footer>
-
-    <!-- ==========================================
-         2-STEP RESET SAFETY MODAL
-    =========================================== -->
-    <div id="resetModalOverlay" class="reset-modal-overlay" style="display:none;">
-        <div class="reset-modal-content">
-            <div id="resetStep1">
-                <h3 id="resetStep1Title">Reset App?</h3>
-                <p id="resetStep1Desc">Do you want to reset all selections and settings to default?</p>
-                <div class="reset-modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeResetModal()" id="btnResetCancel1">Cancel</button>
-                    <button type="button" class="btn-continue" onclick="goToResetStep2()" id="btnResetCont">Continue</button>
+            <div class="reset-body-wrap">
+                <!-- STEP 1 -->
+                <div id="resetStep1Box" class="step-card-box">
+                    <div class="step-badge-tag"><span id="rStep1Tag">Step 1</span></div>
+                    <h4 class="step-title" id="rStep1Q">Reset App?</h4>
+                    <div class="step-actions">
+                        <button type="button" class="btn-step btn-step-cancel" onclick="closeResetModal()" id="rBtnCancel1">Cancel</button>
+                        <button type="button" class="btn-step btn-step-blue" onclick="goToResetStep2()" id="rBtnContinue">Continue</button>
+                    </div>
                 </div>
-            </div>
-            <div id="resetStep2" style="display:none;">
-                <h3 style="color:#ef4444;" id="resetStep2Title">Step 2: Are you sure?</h3>
-                <p id="resetStep2Desc">This action cannot be undone.</p>
-                <div class="reset-modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeResetModal()" id="btnResetCancel2">Cancel</button>
-                    <button type="button" class="btn-danger" onclick="executeAppReset()" id="btnResetExec">RESET</button>
+
+                <!-- STEP ARROW -->
+                <div class="step-down-arrow" id="resetArrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                <!-- STEP 2 -->
+                <div id="resetStep2Box" class="step-card-box" style="display:none;">
+                    <div class="step-badge-tag"><span id="rStep2Tag">Step 2</span></div>
+                    <h4 class="step-title text-red" id="rStep2Q">Are you sure?</h4>
+                    <div class="step-actions">
+                        <button type="button" class="btn-step btn-step-cancel" onclick="closeResetModal()" id="rBtnCancel2">Cancel</button>
+                        <button type="button" class="btn-step btn-step-red" onclick="executeAppReset()" id="rBtnResetFinal">RESET</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         SERVICE MODAL POPUP
-    =========================================== -->
-    <div id="serviceModalOverlay" class="service-modal-overlay" onclick="closeServiceModal()">
-        <div class="service-modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div class="modal-title-wrap">
+    <!-- SERVICE MODAL -->
+    <div id="serviceModalOverlay" class="service-modal-backdrop" style="display:none;" onclick="closeServiceModal()">
+        <div class="service-modal-sheet" onclick="event.stopPropagation()">
+            <div class="sm-head">
+                <div class="sm-title-wrap">
                     <span id="modalServiceIcon">⚡</span>
                     <h3 id="modalServiceTitle">Service Title</h3>
                 </div>
-                <button type="button" class="modal-close-btn" onclick="closeServiceModal()">&times;</button>
+                <button type="button" class="sm-close" onclick="closeServiceModal()">&times;</button>
             </div>
-            <p id="modalServiceDesc" class="modal-desc"></p>
-            <div id="modalItemsContainer" class="modal-items-list"></div>
+            <p id="modalServiceDesc" class="sm-desc"></p>
+            <div id="modalItemsContainer" class="sm-items-list"></div>
         </div>
     </div>
 
-    <!-- ==========================================
-         MOBILE BOTTOM NAV
-    =========================================== -->
-    <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <a href="#top" class="bottom-nav-item"><span>🏠</span><small id="navHome">Home</small></a>
-        <a href="#servicesSection" class="bottom-nav-item"><span>⚡</span><small id="navServices">Services</small></a>
-        <a href="#gallerySection" class="bottom-nav-item"><span>📸</span><small id="navWork">Work</small></a>
-        <a href="#quoteFormSection" class="bottom-nav-item"><span>💬</span><small id="navQuote">Quote</small></a>
-        <a href="tel:+919026036445" class="bottom-nav-item"><span>📞</span><small id="navCall">Call</small></a>
-    </nav>
+    <!-- LIGHTBOX -->
+    <div id="lightbox" style="display:none;" onclick="this.style.display='none'"><img id="lightboxImage" src="" alt="Zoomed"></div>
 
-    <!-- SCRIPTS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js" defer></script>
-    <script src="config.js?v=2.1"></script>
-    <script src="script.js?v=2.1"></script>
+    <script src="script.js"></script>
 </body>
 </html>
