@@ -751,50 +751,67 @@ function saveAreaSubService() {
 
     if (area <= 0) {
         alert(currentLang === "hi" ? "कृपया सही वर्ग फीट (sq.ft.) दर्ज करें" : "Please enter a valid area in sq.ft.");
-        return;
-    }
+function openAreaModal(sIdx, subIdx) {
+    const service = window.MASTER_CONFIG.services[sIdx];
+    const sub = service.subServices[subIdx];
+    const key = `${sIdx}_${subIdx}`;
+    const isHi = currentLang === "hi";
 
-    const { key, name_hi, name_en, price, sIdx } = activeAreaContext;
-    selectedItemsMap[key] = {
-        type: 'area',
-        name_hi: name_hi,
-        name_en: name_en,
-        price: Number(price),
-        area: area,
-        total: area * Number(price)
+    const name = isHi ? sub.name_hi : sub.name_en;
+    const rateStr = isHi ? sub.rate_hi : sub.rate_en;
+
+    activeAreaContext = {
+        key: key,
+        sIdx: sIdx,
+        subIdx: subIdx,
+        name_hi: sub.name_hi,
+        name_en: sub.name_en,
+        price: sub.price,
+        rateStr: rateStr
     };
 
-    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
-    updateCalculations();
-    closeAreaModal();
-    openServiceModal(sIdx);
-}
+    const modalIcon = document.getElementById("areaModalIcon");
+    const modalTitle = document.getElementById("areaModalTitle");
+    const rateDisplay = document.getElementById("areaModalRateDisplay");
+    const areaInput = document.getElementById("areaSqftInput");
+    const deleteBtn = document.getElementById("btnDeleteAreaService");
+    const saveBtn = document.getElementById("btnSaveAreaService");
 
-// 3. Delete Function (Matches HTML onclick="deleteAreaSubService()")
-function deleteAreaSubService() {
-    if (!activeAreaContext) return;
-    const { key, sIdx } = activeAreaContext;
-    if (selectedItemsMap[key]) {
-        delete selectedItemsMap[key];
-        localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
-        updateCalculations();
+    // Dynamic Language Labels
+    const lblRate = document.getElementById("lblAreaRate");
+    const lblInput = document.getElementById("lblAreaInput");
+    const lblEstimated = document.getElementById("lblAreaEstimated");
+
+    if (lblRate) lblRate.innerText = isHi ? "दर (Rate):" : "Rate:";
+    if (lblInput) lblInput.innerText = isHi ? "एरिया दर्ज करें (वर्ग फीट) *" : "Enter Area (in sq. ft.) *";
+    if (areaInput) areaInput.placeholder = isHi ? "उदा. 1000" : "e.g. 1000";
+    if (lblEstimated) lblEstimated.innerText = isHi ? "अनुमानित कुल राशि (Estimated Amount):" : "Estimated Amount:";
+    if (saveBtn) saveBtn.innerText = isHi ? "✅ जोड़ें" : "✅ Add Service";
+    if (deleteBtn) deleteBtn.innerText = isHi ? "🗑️ हटाएं" : "🗑️ Remove";
+
+    if (modalIcon) modalIcon.innerText = service.icon || "🏠";
+    if (modalTitle) modalTitle.innerText = name;
+    if (rateDisplay) rateDisplay.innerText = rateStr;
+
+    const existing = selectedItemsMap[key];
+    if (existing && existing.type === 'area') {
+        if (areaInput) areaInput.value = existing.area;
+        if (deleteBtn) deleteBtn.style.display = "block";
+    } else {
+        if (areaInput) areaInput.value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
     }
-    closeAreaModal();
-    openServiceModal(sIdx);
-}
 
-function closeAreaModal(isFromHistory = false) {
+    updateAreaLiveEstimate();
+
     const overlay = document.getElementById("areaCalcModalOverlay");
     if (overlay) {
-        overlay.classList.remove("active");
-        overlay.style.display = "none";
-        activeAreaContext = null;
-
-        if (!isFromHistory && history.state && history.state.isAreaModalOpen) {
-            history.back();
-        }
+        overlay.style.display = "flex";
+        setTimeout(() => overlay.classList.add("active"), 10);
     }
+    history.pushState({ isAreaModalOpen: true }, "");
 }
+
 
 /* =========================================================
    LIGHTBOX & TOAST
