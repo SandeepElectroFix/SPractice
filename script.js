@@ -738,54 +738,49 @@ function closeAreaModal(isFromHistory = false) {
     }
 }
 /* =========================================================
-   AREA MODAL — LIVE SQFT CALCULATION
-   Sq.Ft × Rate = Estimated Amount
+   AREA MODAL — LIVE SQ.FT CALCULATION
+   Area × Rate = Estimated Amount
 ========================================================= */
 function updateAreaLiveEstimate() {
 
     if (!activeAreaContext) return;
 
     const areaInput = document.getElementById("areaSqftInput");
+    const estimate = document.getElementById("areaModalLiveAmount");
 
-    if (!areaInput) return;
+    if (!areaInput || !estimate) return;
 
+    // Entered area
     const area = parseFloat(areaInput.value) || 0;
 
-    // Rate from MASTER_CONFIG
+    // Rate text
     const rateText = activeAreaContext.rateStr || "";
 
-    // Extract first number from rate text
-    // Examples:
-    // ₹ 25 / Sq.Ft
-    // ₹25/Sq.Ft
-    // 25 / Sq.Ft
-    const rateMatch = rateText.replace(/,/g, "").match(/(\d+(?:\.\d+)?)/);
+    // Extract numeric rate
+    // Example: ₹25 / sq.ft. → 25
+    const rateMatch = rateText
+        .replace(/,/g, "")
+        .match(/(\d+(?:\.\d+)?)/);
 
-    const rate = rateMatch ? parseFloat(rateMatch[1]) : 0;
+    const rate = rateMatch
+        ? parseFloat(rateMatch[1])
+        : 0;
 
+    // Final calculation
     const total = area * rate;
 
-    // Try common estimate element IDs
-    const estimate =
-        document.getElementById("areaModalLiveEstimate") ||
-        document.getElementById("areaLiveEstimate") ||
-        document.getElementById("areaEstimate") ||
-        document.getElementById("areaModalTotal");
+    // Display result
+    if (area > 0 && rate > 0) {
 
-    if (estimate) {
+        estimate.innerText =
+            `₹${total.toLocaleString("en-IN", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            })}`;
 
-        if (area > 0 && rate > 0) {
+    } else {
 
-            estimate.innerText =
-                `₹${total.toLocaleString("en-IN", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2
-                })}`;
-
-        } else {
-
-            estimate.innerText = "₹0";
-        }
+        estimate.innerText = "₹0";
     }
 }
 
