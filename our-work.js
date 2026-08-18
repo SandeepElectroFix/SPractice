@@ -3,6 +3,24 @@
    OUR WORK - JAVASCRIPT
    Version 1.0.0
 ========================================================= */
+// =========================================================
+// SYNC MAIN PAGE THEME
+// =========================================================
+
+(function syncTheme() {
+    const savedTheme = localStorage.getItem("sandeepTheme");
+
+    if (savedTheme === "light") {
+        document.documentElement.classList.add("saved-light-theme");
+    } else {
+        document.documentElement.classList.remove("saved-light-theme");
+    }
+})();
+
+
+
+
+
 
 const WHATSAPP_PHONE = "919026036445";
 
