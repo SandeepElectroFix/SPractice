@@ -922,6 +922,55 @@
 
     </section>
 
+<!-- =========================================================
+     AREA CALCULATION CENTER MODAL (HOUSE WIRING)
+========================================================== -->
+<div id="areaCalcModalOverlay" class="service-modal-overlay" onclick="closeAreaModal()" style="display:none;">
+    <div class="service-modal-content area-popup-box" onclick="event.stopPropagation()">
+        
+        <div class="modal-header">
+            <div class="modal-title-wrap">
+                <span id="areaModalIcon" style="font-size: 1.4rem;">🏠</span>
+                <h3 id="areaModalTitle" class="modal-title">Sub Service</h3>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeAreaModal()">&times;</button>
+        </div>
+
+        <div class="area-modal-body">
+            <div class="area-rate-row">
+                <span>दर (Approx. Rate):</span>
+                <strong id="areaModalRateDisplay">₹0 / sq.ft.</strong>
+            </div>
+
+            <div class="area-input-wrap">
+                <label for="areaSqftInput">एरिया दर्ज करें (Area in sq. ft.) *</label>
+                <input 
+                    type="number" 
+                    id="areaSqftInput" 
+                    placeholder="उदा. 1000" 
+                    min="1" 
+                    step="1"
+                    oninput="updateAreaLiveEstimate()"
+                >
+            </div>
+
+            <div class="area-live-box">
+                <span>अनुमानित कुल राशि (Live Estimated Amount):</span>
+                <div class="live-price" id="areaModalLiveAmount">₹0</div>
+            </div>
+
+            <div class="area-modal-actions">
+                <button type="button" class="btn-delete-area" id="btnDeleteAreaService" onclick="deleteAreaSubService()">
+                    🗑️ हटाएं
+                </button>
+                <button type="button" class="btn-save-area" id="btnSaveAreaService" onclick="saveAreaSubService()">
+                    ✅ जोड़ें / अपडेट करें
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
     <!-- =========================================================
