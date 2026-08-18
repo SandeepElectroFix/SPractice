@@ -712,6 +712,12 @@ const materials = [
     }
 ];
 
+/* =========================================================
+   MATERIAL CATALOGUE ENGINE - STABLE FIX
+   Version 2.2.0
+   Persistent Category + Search
+========================================================= */
+
 const categories = [
     { name: "All", icon: "🛒" },
     { name: "Wires", icon: "🧵" },
@@ -722,10 +728,30 @@ const categories = [
     { name: "Accessories", icon: "🔩" }
 ];
 
-let selectedCategory = "All";
-let searchText = "";
 
-document.addEventListener("DOMContentLoaded", function () {
+/* =========================================================
+   PERSISTENT FILTER STATE
+========================================================= */
+
+let selectedCategory =
+    localStorage.getItem("sandeepCatalogueCategory") || "All";
+
+let searchText =
+    localStorage.getItem("sandeepCatalogueSearch") || "";
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+function initMaterialCatalogue() {
+
+    console.log(
+        "Sandeep ElectroFix Material Catalogue:",
+        materials.length,
+        "materials loaded"
+    );
+
     createCategories();
     renderProducts();
     setupSearch();
@@ -733,208 +759,987 @@ document.addEventListener("DOMContentLoaded", function () {
     setupModal();
     setupBackButton();
     setupResetButton();
-});
+
+}
+
+
+/* =========================================================
+   SAFE DOM READY
+========================================================= */
+
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initMaterialCatalogue,
+        { once: true }
+    );
+
+} else {
+
+    initMaterialCatalogue();
+
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
 
 function createCategories() {
-    const container = document.getElementById("categoryContainer");
+
+    const container =
+        document.getElementById("categoryContainer");
+
     if (!container) return;
+
     container.innerHTML = "";
 
     categories.forEach(category => {
-        const button = document.createElement("button");
+
+        const button =
+            document.createElement("button");
+
         button.type = "button";
         button.className = "category-item";
-        if (category.name === selectedCategory) button.classList.add("active");
 
-        button.innerHTML = `<span>${category.icon}</span> <span>${category.name}</span>`;
-        button.addEventListener("click", function () {
-            selectedCategory = category.name;
-            document.querySelectorAll(".category-item").forEach(item => item.classList.remove("active"));
+        if (category.name === selectedCategory) {
+
             button.classList.add("active");
-            renderProducts();
-        });
+
+        }
+
+        button.innerHTML = `
+            <span>${category.icon}</span>
+            <span>${category.name}</span>
+        `;
+
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                selectedCategory =
+                    category.name;
+
+
+                /* SAVE CATEGORY */
+
+                localStorage.setItem(
+                    "sandeepCatalogueCategory",
+                    selectedCategory
+                );
+
+
+                document
+                    .querySelectorAll(".category-item")
+                    .forEach(item =>
+                        item.classList.remove("active")
+                    );
+
+
+                button.classList.add("active");
+
+                renderProducts();
+
+            }
+        );
+
+
         container.appendChild(button);
+
     });
+
 }
 
+
+/* =========================================================
+   FILTER
+========================================================= */
+
 function getFilteredProducts() {
-    const query = searchText.toLowerCase().trim();
+
+    const query =
+        searchText.toLowerCase().trim();
+
+
     return materials.filter(product => {
-        const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
-        if (!query) return categoryMatch;
+
+        const categoryMatch =
+            selectedCategory === "All" ||
+            product.category === selectedCategory;
+
+
+        if (!query) {
+
+            return categoryMatch;
+
+        }
+
 
         const searchableText = [
+
             product.name,
             product.category,
             product.size,
             product.description,
-            ...product.specifications
-        ].join(" ").toLowerCase();
 
-        return categoryMatch && searchableText.includes(query);
+            ...(Array.isArray(product.specifications)
+                ? product.specifications
+                : [])
+
+        ]
+            .join(" ")
+            .toLowerCase();
+
+
+        return (
+            categoryMatch &&
+            searchableText.includes(query)
+        );
+
     });
+
 }
+
+
+/* =========================================================
+   IMAGE FALLBACK
+========================================================= */
+
+function createProductImage(product) {
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "product-image";
+
+
+    const img =
+        document.createElement("img");
+
+    img.src =
+        product.image || "";
+
+    img.alt =
+        `${product.name} ${product.size}`;
+
+    img.loading = "lazy";
+
+
+    const placeholder =
+        document.createElement("div");
+
+    placeholder.className =
+        "product-image-placeholder";
+
+    placeholder.style.display = "none";
+    placeholder.style.width = "100%";
+    placeholder.style.height = "100%";
+    placeholder.style.alignItems = "center";
+    placeholder.style.justifyContent = "center";
+    placeholder.style.fontSize = "40px";
+
+    placeholder.textContent =
+        product.icon || "📦";
+
+
+    img.onerror = function () {
+
+        this.style.display = "none";
+
+        placeholder.style.display = "flex";
+
+    };
+
+
+    if (!product.image) {
+
+        img.style.display = "none";
+
+        placeholder.style.display = "flex";
+
+    }
+
+
+    wrapper.appendChild(img);
+
+    wrapper.appendChild(placeholder);
+
+
+    const category =
+        document.createElement("span");
+
+    category.className =
+        "product-category";
+
+    category.textContent =
+        product.category;
+
+
+    wrapper.appendChild(category);
+
+
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
 
 function renderProducts() {
-    const container = document.getElementById("productsGrid");
+
+    const container =
+        document.getElementById("productsGrid");
+
     if (!container) return;
 
-    const filtered = getFilteredProducts();
+
+    const filtered =
+        getFilteredProducts();
+
+
     container.innerHTML = "";
 
+
     filtered.forEach(product => {
-        const card = document.createElement("article");
-        card.className = "product-card";
 
-        const imageHTML = product.image
-            ? `<img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-               <div class="product-image-placeholder" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:40px;">${product.icon}</div>`
-            : `<div class="product-image-placeholder" style="display:flex; width:100%; height:100%; align-items:center; justify-content:center; font-size:40px;">${product.icon}</div>`;
+        const card =
+            document.createElement("article");
 
-        card.innerHTML = `
-            <div class="product-image">
-                ${imageHTML}
-                <span class="product-category">${product.category}</span>
-            </div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <div class="product-size">${product.size}</div>
-                <div class="product-price">${product.price}</div>
-                <div class="product-actions">
-                    <button type="button" class="product-details-btn">👁️ Details</button>
-                    <button type="button" class="product-whatsapp-btn">💬 Enquire</button>
-                </div>
-            </div>
-        `;
+        card.className =
+            "product-card";
 
-        card.querySelector(".product-details-btn").addEventListener("click", () => openProductModal(product.id));
-        card.querySelector(".product-whatsapp-btn").addEventListener("click", () => sendWhatsAppEnquiry(product));
+
+        /* =================================================
+           IMAGE
+        ================================================= */
+
+        const imageArea =
+            createProductImage(product);
+
+        card.appendChild(imageArea);
+
+
+        /* =================================================
+           INFO
+        ================================================= */
+
+        const info =
+            document.createElement("div");
+
+        info.className =
+            "product-info";
+
+
+        const title =
+            document.createElement("h3");
+
+        title.textContent =
+            product.name;
+
+
+        const size =
+            document.createElement("div");
+
+        size.className =
+            "product-size";
+
+        size.textContent =
+            product.size;
+
+
+        const price =
+            document.createElement("div");
+
+        price.className =
+            "product-price";
+
+        price.textContent =
+            product.price;
+
+
+        /* =================================================
+           ACTIONS
+        ================================================= */
+
+        const actions =
+            document.createElement("div");
+
+        actions.className =
+            "product-actions";
+
+
+        const detailsBtn =
+            document.createElement("button");
+
+        detailsBtn.type = "button";
+
+        detailsBtn.className =
+            "product-details-btn";
+
+        detailsBtn.textContent =
+            "👁️ Details";
+
+
+        detailsBtn.addEventListener(
+            "click",
+            () => openProductModal(product.id)
+        );
+
+
+        const whatsappBtn =
+            document.createElement("button");
+
+        whatsappBtn.type = "button";
+
+        whatsappBtn.className =
+            "product-whatsapp-btn";
+
+        whatsappBtn.textContent =
+            "💬 Enquire";
+
+
+        whatsappBtn.addEventListener(
+            "click",
+            () => sendWhatsAppEnquiry(product)
+        );
+
+
+        actions.appendChild(detailsBtn);
+
+        actions.appendChild(whatsappBtn);
+
+
+        info.appendChild(title);
+
+        info.appendChild(size);
+
+        info.appendChild(price);
+
+        info.appendChild(actions);
+
+
+        card.appendChild(info);
 
         container.appendChild(card);
+
     });
 
-    const counter = document.getElementById("productCounter");
-    if (counter) counter.textContent = `${filtered.length} Materials`;
 
-    const noProd = document.getElementById("noProducts");
-    if (noProd) noProd.classList.toggle("show", filtered.length === 0);
+    /* =================================================
+       COUNTER
+    ================================================= */
+
+    const counter =
+        document.getElementById("productCounter");
+
+
+    if (counter) {
+
+        counter.textContent =
+            `${filtered.length} Materials`;
+
+    }
+
+
+    /* =================================================
+       NO PRODUCTS
+    ================================================= */
+
+    const noProducts =
+        document.getElementById("noProducts");
+
+
+    if (noProducts) {
+
+        noProducts.classList.toggle(
+            "show",
+            filtered.length === 0
+        );
+
+    }
+
 }
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 function setupSearch() {
-    const input = document.getElementById("materialSearch");
-    const clearBtn = document.getElementById("clearSearch");
+
+    const input =
+        document.getElementById("materialSearch");
+
+    const clearBtn =
+        document.getElementById("clearSearch");
+
+
     if (!input) return;
 
-    input.addEventListener("input", function () {
-        searchText = input.value.trim();
-        renderProducts();
-        if (clearBtn) clearBtn.classList.toggle("show", searchText.length > 0);
-    });
+
+    /* =====================================================
+       RESTORE SEARCH AFTER REFRESH
+    ===================================================== */
+
+    input.value =
+        searchText;
+
 
     if (clearBtn) {
-        clearBtn.addEventListener("click", function () {
-            input.value = "";
-            searchText = "";
-            clearBtn.classList.remove("show");
-            renderProducts();
-            input.focus();
-        });
+
+        clearBtn.classList.toggle(
+            "show",
+            searchText.length > 0
+        );
+
     }
+
+
+    /* =====================================================
+       SEARCH INPUT
+    ===================================================== */
+
+    input.addEventListener(
+        "input",
+        function () {
+
+            searchText =
+                input.value.trim();
+
+
+            /* SAVE SEARCH */
+
+            localStorage.setItem(
+                "sandeepCatalogueSearch",
+                searchText
+            );
+
+
+            renderProducts();
+
+
+            if (clearBtn) {
+
+                clearBtn.classList.toggle(
+                    "show",
+                    searchText.length > 0
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       CLEAR SEARCH
+    ===================================================== */
+
+    if (clearBtn) {
+
+        clearBtn.addEventListener(
+            "click",
+            function () {
+
+                input.value = "";
+
+                searchText = "";
+
+
+                /* REMOVE SAVED SEARCH */
+
+                localStorage.removeItem(
+                    "sandeepCatalogueSearch"
+                );
+
+
+                clearBtn.classList.remove(
+                    "show"
+                );
+
+
+                renderProducts();
+
+                input.focus();
+
+            }
+        );
+
+    }
+
 }
+
+
+/* =========================================================
+   SEARCH TOGGLE
+========================================================= */
 
 function setupSearchToggle() {
-    const toggle = document.getElementById("searchToggle");
-    const panel = document.getElementById("searchPanel");
-    if (toggle && panel) {
-        toggle.addEventListener("click", () => panel.classList.toggle("show"));
-    }
+
+    const toggle =
+        document.getElementById("searchToggle");
+
+    const panel =
+        document.getElementById("searchPanel");
+
+
+    if (!toggle || !panel) return;
+
+
+    toggle.addEventListener(
+        "click",
+        () => {
+
+            panel.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
 }
+
+
+/* =========================================================
+   RESET
+========================================================= */
 
 function setupResetButton() {
-    const btn = document.getElementById("resetFilters");
-    if (btn) {
-        btn.addEventListener("click", function () {
+
+    const button =
+        document.getElementById("resetFilters");
+
+
+    if (!button) return;
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
             selectedCategory = "All";
+
             searchText = "";
-            const input = document.getElementById("materialSearch");
-            if (input) input.value = "";
+
+
+            /* REMOVE SAVED CATEGORY */
+
+            localStorage.removeItem(
+                "sandeepCatalogueCategory"
+            );
+
+
+            /* REMOVE SAVED SEARCH */
+
+            localStorage.removeItem(
+                "sandeepCatalogueSearch"
+            );
+
+
+            const input =
+                document.getElementById(
+                    "materialSearch"
+                );
+
+
+            if (input) {
+
+                input.value = "";
+
+            }
+
+
             createCategories();
+
             renderProducts();
-        });
-    }
+
+        }
+    );
+
 }
+
+
+/* =========================================================
+   MODAL
+========================================================= */
 
 function setupModal() {
-    const modal = document.getElementById("productModal");
-    const closeBtn = document.getElementById("modalClose");
-    const backdrop = document.querySelector(".modal-backdrop");
+
+    const modal =
+        document.getElementById("productModal");
+
+    const closeBtn =
+        document.getElementById("modalClose");
+
+    const backdrop =
+        document.querySelector(
+            ".modal-backdrop"
+        );
+
+
     if (!modal) return;
 
-    if (closeBtn) closeBtn.addEventListener("click", closeProductModal);
-    if (backdrop) backdrop.addEventListener("click", closeProductModal);
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeProductModal();
-    });
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            "click",
+            closeProductModal
+        );
+
+    }
+
+
+    if (backdrop) {
+
+        backdrop.addEventListener(
+            "click",
+            closeProductModal
+        );
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                closeProductModal();
+
+            }
+
+        }
+    );
+
 }
+
+
+/* =========================================================
+   OPEN PRODUCT MODAL
+========================================================= */
 
 function openProductModal(id) {
-    const product = materials.find(item => item.id === Number(id));
+
+    const product =
+        materials.find(
+            item =>
+                item.id === Number(id)
+        );
+
+
     if (!product) return;
 
-    const modal = document.getElementById("productModal");
-    const img = document.getElementById("modalProductImage");
-    const tag = document.getElementById("modalProductTag");
-    const title = document.getElementById("modalProductTitle");
-    const size = document.getElementById("modalProductSize");
-    const price = document.getElementById("modalProductPrice");
-    const desc = document.getElementById("modalProductDescription");
-    const specs = document.getElementById("modalSpecifications");
-    const waBtn = document.getElementById("modalWhatsapp");
 
-    if (img) img.src = product.image || "";
-    if (tag) tag.textContent = product.category;
-    if (title) title.textContent = product.name;
-    if (size) size.textContent = product.size;
-    if (price) price.textContent = product.price;
-    if (desc) desc.textContent = product.description;
+    const modal =
+        document.getElementById(
+            "productModal"
+        );
+
+
+    const img =
+        document.getElementById(
+            "modalProductImage"
+        );
+
+
+    const tag =
+        document.getElementById(
+            "modalProductTag"
+        );
+
+
+    const title =
+        document.getElementById(
+            "modalProductTitle"
+        );
+
+
+    const size =
+        document.getElementById(
+            "modalProductSize"
+        );
+
+
+    const price =
+        document.getElementById(
+            "modalProductPrice"
+        );
+
+
+    const desc =
+        document.getElementById(
+            "modalProductDescription"
+        );
+
+
+    const specs =
+        document.getElementById(
+            "modalSpecifications"
+        );
+
+
+    const whatsapp =
+        document.getElementById(
+            "modalWhatsapp"
+        );
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    if (img) {
+
+        img.style.display =
+            "block";
+
+
+        img.src =
+            product.image || "";
+
+
+        img.alt =
+            `${product.name} ${product.size}`;
+
+
+        img.onerror =
+            function () {
+
+                this.onerror = null;
+
+                this.style.display =
+                    "none";
+
+            };
+
+    }
+
+
+    /* =====================================================
+       TEXT
+    ===================================================== */
+
+    if (tag) {
+
+        tag.textContent =
+            product.category;
+
+    }
+
+
+    if (title) {
+
+        title.textContent =
+            product.name;
+
+    }
+
+
+    if (size) {
+
+        size.textContent =
+            product.size;
+
+    }
+
+
+    if (price) {
+
+        price.textContent =
+            product.price;
+
+    }
+
+
+    if (desc) {
+
+        desc.textContent =
+            product.description;
+
+    }
+
+
+    /* =====================================================
+       SPECIFICATIONS
+    ===================================================== */
 
     if (specs) {
-        specs.innerHTML = product.specifications.map(s => `<li>${s}</li>`).join("");
+
+        specs.innerHTML = "";
+
+
+        const list =
+            Array.isArray(
+                product.specifications
+            )
+                ? product.specifications
+                : [];
+
+
+        list.forEach(spec => {
+
+            const li =
+                document.createElement("li");
+
+
+            li.textContent =
+                spec;
+
+
+            specs.appendChild(li);
+
+        });
+
     }
 
-    if (waBtn) {
-        waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello Sandeep ElectroFix 👋\n\nI want to enquire about:\n🛒 Item: ${product.name}\n📏 Size: ${product.size}\n📂 Category: ${product.category}`)}`;
-        waBtn.target = "_blank";
-        waBtn.rel = "noopener noreferrer";
+
+    /* =====================================================
+       WHATSAPP
+    ===================================================== */
+
+    if (whatsapp) {
+
+        const message =
+            `Hello Sandeep ElectroFix 👋
+
+I want to enquire about:
+
+🛒 Item: ${product.name}
+📏 Size: ${product.size}
+📂 Category: ${product.category}`;
+
+
+        whatsapp.href =
+            `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+
+        whatsapp.target =
+            "_blank";
+
+
+        whatsapp.rel =
+            "noopener noreferrer";
+
     }
+
+
+    /* =====================================================
+       SHOW MODAL
+    ===================================================== */
 
     if (modal) {
+
         modal.classList.add("show");
-        document.body.style.overflow = "hidden";
+
+        document.body.style.overflow =
+            "hidden";
+
     }
+
 }
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
 
 function closeProductModal() {
-    const modal = document.getElementById("productModal");
-    if (modal) {
-        modal.classList.remove("show");
-        document.body.style.overflow = "";
-    }
+
+    const modal =
+        document.getElementById(
+            "productModal"
+        );
+
+
+    if (!modal) return;
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
 }
+
+
+/* =========================================================
+   WHATSAPP ENQUIRY
+========================================================= */
 
 function sendWhatsAppEnquiry(product) {
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello Sandeep ElectroFix 👋\n\nI want to enquire about:\n🛒 Item: ${product.name}\n📏 Size: ${product.size}\n📂 Category: ${product.category}`)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+
+    const message =
+        `Hello Sandeep ElectroFix 👋
+
+I want to enquire about:
+
+🛒 Item: ${product.name}
+📏 Size: ${product.size}
+📂 Category: ${product.category}`;
+
+
+    const url =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
 }
 
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
 function setupBackButton() {
-    const btn = document.getElementById("backButton");
-    if (btn) {
-        btn.addEventListener("click", function (e) {
+
+    const button =
+        document.getElementById(
+            "backButton"
+        );
+
+
+    if (!button) return;
+
+
+    button.addEventListener(
+        "click",
+        function (event) {
+
             if (window.history.length > 1) {
-                e.preventDefault();
+
+                event.preventDefault();
+
                 window.history.back();
+
             }
-        });
-    }
+
+        }
+    );
+
 }
+
+
+/* =========================================================
+   DEBUG
+========================================================= */
+
+console.log(
+    "Sandeep ElectroFix Catalogue Engine Loaded:",
+    materials.length,
+    "materials"
+);
