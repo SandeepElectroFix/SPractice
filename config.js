@@ -84,11 +84,11 @@ window.MASTER_CONFIG = {
             desc_en: "Complete house wiring and piping solutions.",
             desc_hi: "नए और पुराने मकान की पूरी वायरिंग और पाइपिंग।",
             subServices: [
-                { show: true, name_en: "New House Wiring", name_hi: "नए मकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45 },
+                { show: false, name_en: "New House Wiring", name_hi: "नए मकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45 },
                 { show: true, name_en: "Concealed Wiring", name_hi: "कंसील्ड (अंडरग्राउंड) वायरिंग", rate_en: "₹40 / sq.ft.", rate_hi: "₹40 / वर्ग फीट", price: 40 },
                 { show: true, name_en: "Surface Wiring", name_hi: "ओपन / सरफेस वायरिंग", rate_en: "₹30 / sq.ft.", rate_hi: "₹30 / वर्ग फीट", price: 30 },
                 { show: true, name_en: "Slab Piping", name_hi: "छत / स्लैब पाइपिंग", rate_en: "₹15 / sq.ft.", rate_hi: "₹15 / वर्ग फीट", price: 15 },
-                { show: true, name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
+                { show: false, name_en: "Switch & Socket Installation", name_hi: "स्विच और सॉकेट फिटिंग", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
                 { show: true, name_en: "Complete House Wiring", name_hi: "फुल हाउस वायरिंग सेटअप", rate_en: "₹50 / sq.ft.", rate_hi: "₹50 / वर्ग फीट", price: 50 }
             ]
         },
@@ -153,10 +153,10 @@ window.MASTER_CONFIG = {
             desc_hi: "इन्वर्टर कनेक्शन, चेंजओवर स्विच और बैकअप वायरिंग।",
             subServices: [
                 { show: true, name_en: "Inverter Installation", name_hi: "इन्वर्टर इंस्टॉलेशन", rate_en: "₹500 / set", rate_hi: "₹500 / सेट", price: 500 },
-                { show: true, name_en: "Inverter Wiring", name_hi: "इन्वर्टर लाइन वायरिंग", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                { show: true, name_en: "Inverter Wiring", name_hi: "इन्वर्टर लाइन वायरिंग", rate_en: "₹5 / sq.ft.", rate_hi: "₹5 / वर्ग फीट", price: 5 },
                 { show: true, name_en: "Battery Connection", name_hi: "बैटरी कनेक्शन", rate_en: "₹150 / conn", rate_hi: "₹150 / कनेक्शन", price: 150 },
                 { show: true, name_en: "Changeover Switch Fitting", name_hi: "चेंजओवर स्विच लगाना", rate_en: "₹300 / pc", rate_hi: "₹300 / पीस", price: 300 },
-                { show: true, name_en: "Backup Line Routing", name_hi: "बैकअप लाइन बिछाना", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
+                { show: false, name_en: "Backup Line Routing", name_hi: "बैकअप लाइन बिछाना", rate_en: "₹8 / sq.ft.", rate_hi: "₹8 / वर्ग फीट", price: 8 },
                 { show: true, name_en: "Inverter Fault Check", name_hi: "इन्वर्टर फॉल्ट चेकिंग", rate_en: "₹200 / visit", rate_hi: "₹200 / विजिट", price: 200 }
             ]
         },
@@ -171,15 +171,15 @@ window.MASTER_CONFIG = {
             subServices: [
                 { show: true, name_en: "Switch Repair", name_hi: "स्विच रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
                 { show: true, name_en: "Socket Repair", name_hi: "सॉकेट रिपेयर", rate_en: "₹80 / point", rate_hi: "₹80 / point", price: 80 },
-                { show: true, name_en: "Fan Repair", name_hi: "पंखा रिपेयर", rate_en: "₹150 / fan", rate_hi: "₹150 / पंखा", price: 150 },
-                { show: true, name_en: "Light Repair", name_hi: "लाइट रिपेयर", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
+                { show: false, name_en: "Fan Repair", name_hi: "पंखा रिपेयर", rate_en: "₹150 / fan", rate_hi: "₹150 / पंखा", price: 150 },
+                { show: false, name_en: "Light Repair", name_hi: "लाइट रिपेयर", rate_en: "₹100 / light", rate_hi: "₹100 / लाइट", price: 100 },
                 { show: true, name_en: "Loose Connection Fix", name_hi: "लूज कनेक्शन सही करना", rate_en: "₹150 / point", rate_hi: "₹150 / पॉइंट", price: 150 },
                 { show: true, name_en: "Short Circuit Fix", name_hi: "शॉर्ट सर्किट रिपेयर", rate_en: "₹300 / visit", rate_hi: "₹300 / विजिट", price: 300 }
             ]
         },
         {
             id: "fault-finding",
-            show: true,
+            show: false,
             icon: "🔍",
             title_en: "Fault Finding",
             title_hi: "फॉल्ट टेस्टिंग और चेकिंग",
@@ -203,11 +203,11 @@ window.MASTER_CONFIG = {
             desc_en: "Wiring and maintenance for shops, offices, and clinics.",
             desc_hi: "दुकान, ऑफिस और शोरूम की पूरी वायरिंग व मेंटेनेंस।",
             subServices: [
-                { show: true, name_en: "Shop Wiring", name_hi: "दुकान की वायरिंग", rate_en: "₹45 / sq.ft.", rate_hi: "₹45 / वर्ग फीट", price: 45 },
-                { show: true, name_en: "Office Wiring", name_hi: "ऑफिस वायरिंग", rate_en: "₹50 / sq.ft.", rate_hi: "₹50 / वर्ग फीट", price: 50 },
-                { show: true, name_en: "Commercial Points Fitting", name_hi: "कमर्शियल पॉइंट फिटिंग", rate_en: "₹100 / point", rate_hi: "₹100 / पॉइंट", price: 100 },
-                { show: true, name_en: "Commercial DB Setup", name_hi: "कमर्शियल डीबी सेटअप", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 },
-                { show: true, name_en: "Track Light Fitting", name_hi: "ट्रैक लाइट इंस्टॉलेशन", rate_en: "₹150 / light", rate_hi: "₹150 / लाइट", price: 150 },
+                { show: true, name_en: "Shop Wiring", name_hi: "दुकान की वायरिंग", rate_en: "₹35 / sq.ft.", rate_hi: "₹35 / वर्ग फीट", price: 35 },
+                { show: true, name_en: "Office Wiring", name_hi: "ऑफिस वायरिंग", rate_en: "₹35 / sq.ft.", rate_hi: "₹35 / वर्ग फीट", price: 35 },
+                { show: false, name_en: "Commercial Points Fitting", name_hi: "कमर्शियल पॉइंट फिटिंग", rate_en: "₹100 / point", rate_hi: "₹100 / पॉइंट", price: 100 },
+                { show: false, name_en: "Commercial DB Setup", name_hi: "कमर्शियल डीबी सेटअप", rate_en: "₹500 / DB", rate_hi: "₹500 / DB", price: 500 },
+                { show: true, name_en: "Track Light Fitting", name_hi: "ट्रैक लाइट इंस्टॉलेशन", rate_en: "₹300 / light", rate_hi: "₹300 / लाइट", price: 300 },
                 { show: true, name_en: "Monthly Maintenance", name_hi: "मासिक मेंटेनेंस विजिट", rate_en: "₹500 / visit", rate_hi: "₹500 / विजिट", price: 500 }
             ]
         }
