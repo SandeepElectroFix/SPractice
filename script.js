@@ -717,7 +717,7 @@ function openAreaModal(sIdx, subIdx) {
     history.pushState({ isAreaModalOpen: true }, "");
 }
 
-// Live Price Calculation on Typing
+// 1. Live Price Calculation on Typing
 function updateAreaLiveEstimate() {
     if (!activeAreaContext) return;
 
@@ -739,8 +739,8 @@ function updateAreaLiveEstimate() {
     }
 }
 
-// Save Area Data (Add Button)
-function saveAreaModalData() {
+// 2. Save / Add Function (HTML: onclick="saveAreaSubService()")
+function saveAreaSubService() {
     if (!activeAreaContext) return;
     const areaInput = document.getElementById("areaSqftInput");
     const area = parseFloat(areaInput?.value) || 0;
@@ -766,8 +766,8 @@ function saveAreaModalData() {
     openServiceModal(sIdx);
 }
 
-// Delete Area Service
-function deleteAreaModalData() {
+// 3. Delete Function (HTML: onclick="deleteAreaSubService()")
+function deleteAreaSubService() {
     if (!activeAreaContext) return;
     const { key, sIdx } = activeAreaContext;
     if (selectedItemsMap[key]) {
