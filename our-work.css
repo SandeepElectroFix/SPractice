@@ -15,12 +15,20 @@ html {
 }
 
 body {
-    font-family: "Poppins", Arial, sans-serif;
-    background:
-        radial-gradient(circle at top, rgba(0, 153, 255, 0.12), transparent 35%),
-        #070b12;
-    color: #ffffff;
     min-height: 100vh;
+    font-family: "Poppins", Arial, sans-serif;
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(5, 8, 22, 0.90) 0%,
+            rgba(5, 8, 22, 0.96) 100%
+        ),
+        url('assets/cover.jpg') no-repeat center center fixed;
+
+    background-size: cover;
+    line-height: 1.6;
     overflow-x: hidden;
 }
 
@@ -29,11 +37,28 @@ body {
     inset: 0;
     z-index: -1;
     pointer-events: none;
+
     background:
-        radial-gradient(circle at 15% 20%, rgba(0, 200, 255, 0.10), transparent 30%),
-        radial-gradient(circle at 85% 70%, rgba(255, 193, 7, 0.08), transparent 30%);
+        radial-gradient(
+            circle at 15% 25%,
+            rgba(0, 191, 255, 0.10),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 85% 70%,
+            rgba(245, 197, 66, 0.08),
+            transparent 28%
+        );
 }
 
+html.saved-light-theme body {
+    background: #f4f7fb;
+    color: #101827;
+}
+
+html.saved-light-theme .work-background {
+    background: transparent;
+}
 /* HEADER */
 .work-header {
     position: relative;
