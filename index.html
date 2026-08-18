@@ -925,25 +925,28 @@
 <!-- =========================================================
      AREA CALCULATION CENTER MODAL (HOUSE WIRING)
 ========================================================== -->
-<div id="areaCalcModalOverlay" class="service-modal-overlay" onclick="closeAreaModal()" style="display:none;">
-    <div class="service-modal-content area-popup-box" onclick="event.stopPropagation()">
+<div id="areaCalcModalOverlay" class="service-modal-overlay" onclick="closeAreaModal()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:999999; align-items:center; justify-content:center;">
+    <div class="service-modal-content area-popup-box" onclick="event.stopPropagation()" style="background:#fff; border-radius:16px; padding:20px; max-width:380px; width:90%; box-shadow:0 20px 40px rgba(0,0,0,0.3);">
         
-        <div class="modal-header">
-            <div class="modal-title-wrap">
-                <span id="areaModalIcon" style="font-size: 1.4rem;">🏠</span>
-                <h3 id="areaModalTitle" class="modal-title">Sub Service</h3>
+        <!-- Header -->
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div class="modal-title-wrap" style="display:flex; align-items:center; gap:8px;">
+                <span id="areaModalIcon" style="font-size:1.4rem;">🏠</span>
+                <h3 id="areaModalTitle" class="modal-title" style="margin:0; font-size:1.1rem; color:#0f172a;">Sub Service</h3>
             </div>
-            <button type="button" class="modal-close-btn" onclick="closeAreaModal()">&times;</button>
+            <button type="button" class="modal-close-btn" onclick="closeAreaModal()" style="border:none; background:#f1f5f9; width:32px; height:32px; border-radius:50%; font-size:1.2rem; cursor:pointer;">&times;</button>
         </div>
 
-        <div class="area-modal-body">
-            <div class="area-rate-row">
-                <span>दर (Approx. Rate):</span>
-                <strong id="areaModalRateDisplay">₹0 / sq.ft.</strong>
+        <div class="area-modal-body" style="display:flex; flex-direction:column; gap:14px;">
+            <!-- Rate Display -->
+            <div class="area-rate-row" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:10px 12px; border-radius:10px; font-size:0.95rem; color:#334155;">
+                <span>दर (Rate):</span>
+                <strong id="areaModalRateDisplay" style="color:#0ea5e9;">₹0 / sq.ft.</strong>
             </div>
 
-            <div class="area-input-wrap">
-                <label for="areaSqftInput">एरिया दर्ज करें (Area in sq. ft.) *</label>
+            <!-- Area Input Field -->
+            <div class="area-input-wrap" style="display:flex; flex-direction:column; gap:6px;">
+                <label for="areaSqftInput" style="font-size:0.85rem; font-weight:600; color:#475569;">एरिया दर्ज करें (Area in sq. ft.) *</label>
                 <input 
                     type="number" 
                     id="areaSqftInput" 
@@ -951,26 +954,30 @@
                     min="1" 
                     step="1"
                     oninput="updateAreaLiveEstimate()"
+                    style="width:100%; padding:12px; border:2px solid #cbd5e1; border-radius:10px; font-size:1.15rem; font-weight:600; outline:none; box-sizing:border-box;"
                 >
             </div>
 
-            <div class="area-live-box">
-                <span>अनुमानित कुल राशि (Live Estimated Amount):</span>
-                <div class="live-price" id="areaModalLiveAmount">₹0</div>
+            <!-- Live Amount Box -->
+            <div class="area-live-box" style="text-align:center; background:#f0fdf4; border:1.5px dashed #22c55e; padding:12px; border-radius:12px;">
+                <span style="font-size:0.8rem; color:#166534; display:block;">अनुमानित कुल राशि (Estimated Amount):</span>
+                <div class="live-price" id="areaModalLiveAmount" style="font-size:1.6rem; font-weight:700; color:#15803d; margin-top:4px;">₹0</div>
             </div>
 
-            <div class="area-modal-actions">
-                <button type="button" class="btn-delete-area" id="btnDeleteAreaService" onclick="deleteAreaSubService()">
+            <!-- Action Buttons -->
+            <div class="area-modal-actions" style="display:flex; gap:10px; margin-top:4px;">
+                <button type="button" class="btn-delete-area" id="btnDeleteAreaService" onclick="deleteAreaSubService()" style="flex:1; background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:12px; border-radius:10px; font-weight:600; cursor:pointer;">
                     🗑️ हटाएं
                 </button>
-                <button type="button" class="btn-save-area" id="btnSaveAreaService" onclick="saveAreaSubService()">
-                    ✅ जोड़ें / अपडेट करें
+                <button type="button" class="btn-save-area" id="btnSaveAreaService" onclick="saveAreaSubService()" style="flex:2; background:#0ea5e9; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:600; cursor:pointer;">
+                    ✅ जोड़ें
                 </button>
             </div>
         </div>
 
     </div>
 </div>
+
 
 
     <!-- =========================================================
