@@ -1,11 +1,13 @@
 /* =========================================================
-   SANDEEP ELECTROFIX - CORE JAVASCRIPT ENGINE
+   SANDEEP ELECTROFIX - CORE JAVASCRIPT ENGINE (V3.2)
    Reads directly from window.MASTER_CONFIG
+   Supports: Area-based Center Modal & Quantity-based Services
 ========================================================= */
 
 let currentLang = localStorage.getItem("sandeepLang") || "hi";
 let selectedItemsMap = {};
 let lastBackPressTime = 0;
+let activeAreaContext = null; // Area Modal Context State
 
 // Load Cart Persistence
 try {
@@ -181,675 +183,111 @@ function applyVisibilityControls() {
 }
 
 /* =========================================================
-   📱 PREMIUM NAVBAR SYSTEM
-   Logo + Brand Name + Hamburger Menu + App Settings
+   📱 NAVBAR SYSTEM
 ========================================================= */
-
 function initializeNavbar() {
-    // Prevent duplicate navbar
     if (document.getElementById("appNavbar")) return;
 
     const cfg = window.MASTER_CONFIG || {};
     const biz = cfg.business || {};
-    const ctrl = cfg.controls || {};
 
-    /* ---------------------------------------------------------
-       NAVBAR HTML
-    --------------------------------------------------------- */
     const navbar = document.createElement("header");
     navbar.id = "appNavbar";
     navbar.className = "app-navbar";
 
     navbar.innerHTML = `
         <div class="app-nav-inner">
-
-            <!-- LEFT: LOGO + BRAND -->
-            <a href="#heroSection"
-               class="app-brand"
-               onclick="closeNavbarMenu()">
-
+            <a href="#heroSection" class="app-brand" onclick="closeNavbarMenu()">
                 <div class="app-logo-wrap">
-                    <img
-                        id="appNavLogo"
-                        src="${biz.logo || 'assets/logo.png'}"
-                        alt="${biz.name || 'Sandeep ElectroFix'}"
-                        onerror="this.style.display='none'"
-                    >
+                    <img id="appNavLogo" src="${biz.logo || 'assets/logo.png'}" alt="${biz.name || 'Sandeep ElectroFix'}" onerror="this.style.display='none'">
                 </div>
-
                 <div class="app-brand-text">
-                    <span id="appBrandName">
-                        ${biz.name || "Sandeep ElectroFix"}
-                    </span>
-                    <small id="appBrandTagline">
-                        ${currentLang === "hi"
-                            ? (biz.tagline_hi || "")
-                            : (biz.tagline_en || "")}
-                    </small>
+                    <span id="appBrandName">${biz.name || "Sandeep ElectroFix"}</span>
+                    <small id="appBrandTagline">${currentLang === "hi" ? (biz.tagline_hi || "") : (biz.tagline_en || "")}</small>
                 </div>
-
             </a>
-
-            <!-- RIGHT: HAMBURGER -->
-            <button
-                type="button"
-                id="appMenuBtn"
-                class="app-menu-btn"
-                aria-label="Open Menu"
-                aria-expanded="false">
-
-                <span></span>
-                <span></span>
-                <span></span>
-
+            <button type="button" id="appMenuBtn" class="app-menu-btn" aria-label="Open Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
             </button>
-
         </div>
 
-        <!-- =====================================================
-             HAMBURGER PANEL
-        ====================================================== -->
+        <div id="appMenuOverlay" class="app-menu-overlay" onclick="closeNavbarMenu()"></div>
 
-        <div id="appMenuOverlay"
-             class="app-menu-overlay"
-             onclick="closeNavbarMenu()">
-        </div>
-
-        <aside id="appSideMenu"
-               class="app-side-menu"
-               aria-hidden="true">
-
-            <!-- MENU HEADER -->
+        <aside id="appSideMenu" class="app-side-menu" aria-hidden="true">
             <div class="app-menu-header">
-
                 <div class="app-menu-brand">
-
-                    <img
-                        src="${biz.logo || 'assets/logo.png'}"
-                        alt="${biz.name || 'Sandeep ElectroFix'}"
-                        onerror="this.style.display='none'"
-                    >
-
+                    <img src="${biz.logo || 'assets/logo.png'}" alt="${biz.name || 'Sandeep ElectroFix'}" onerror="this.style.display='none'">
                     <div>
-                        <strong id="appMenuBrandName">
-                            ${biz.name || "Sandeep ElectroFix"}
-                        </strong>
-
-                        <small id="appMenuBrandLocation">
-                            ⚡ Powering Your Trust
-                        </small>
+                        <strong id="appMenuBrandName">${biz.name || "Sandeep ElectroFix"}</strong>
+                        <small id="appMenuBrandLocation">⚡ Powering Your Trust</small>
                     </div>
-
                 </div>
-
-                <button
-                    type="button"
-                    class="app-menu-close"
-                    onclick="closeNavbarMenu()"
-                    aria-label="Close Menu">
-                    ✕
-                </button>
-
+                <button type="button" class="app-menu-close" onclick="closeNavbarMenu()" aria-label="Close Menu">✕</button>
             </div>
 
-            <!-- MENU ITEMS -->
             <nav class="app-menu-list">
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('heroSection')">
-                    <span class="menu-item-icon">🏠</span>
-                    <span id="appNavHome">Home</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('heroSection')">
+                    <span class="menu-item-icon">🏠</span><span id="appNavHome">Home</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('servicesSection')">
-                    <span class="menu-item-icon">⚡</span>
-                    <span id="appNavServices">Services</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('servicesSection')">
+                    <span class="menu-item-icon">⚡</span><span id="appNavServices">Services</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('gallerySection')">
-                    <span class="menu-item-icon">🖼️</span>
-                    <span id="appNavWork">Our Work</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('gallerySection')">
+                    <span class="menu-item-icon">🖼️</span><span id="appNavWork">Our Work</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('quoteFormSection')">
-                    <span class="menu-item-icon">🧾</span>
-                    <span id="appNavQuote">Quote</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('quoteFormSection')">
+                    <span class="menu-item-icon">🧾</span><span id="appNavQuote">Quote</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('aboutSection')">
-                    <span class="menu-item-icon">ℹ️</span>
-                    <span id="appNavAbout">About Us</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('aboutSection')">
+                    <span class="menu-item-icon">ℹ️</span><span id="appNavAbout">About Us</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('locationSection')">
-                    <span class="menu-item-icon">📍</span>
-                    <span id="appNavLocation">Location</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('locationSection')">
+                    <span class="menu-item-icon">📍</span><span id="appNavLocation">Location</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('reviewsSection')">
-                    <span class="menu-item-icon">⭐</span>
-                    <span id="appNavReviews">Reviews</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('reviewsSection')">
+                    <span class="menu-item-icon">⭐</span><span id="appNavReviews">Reviews</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('faqSection')">
-                    <span class="menu-item-icon">❓</span>
-                    <span id="appNavFAQ">FAQ</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('faqSection')">
+                    <span class="menu-item-icon">❓</span><span id="appNavFAQ">FAQ</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appNavigate('socialSection')">
-                    <span class="menu-item-icon">📱</span>
-                    <span id="appNavSocial">Social Media</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appNavigate('socialSection')">
+                    <span class="menu-item-icon">📱</span><span id="appNavSocial">Social Media</span><span class="menu-arrow">›</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="app-menu-item"
-                    onclick="appCall()">
-                    <span class="menu-item-icon">📞</span>
-                    <span id="appNavContact">Contact</span>
-                    <span class="menu-arrow">›</span>
+                <button type="button" class="app-menu-item" onclick="appCall()">
+                    <span class="menu-item-icon">📞</span><span id="appNavContact">Contact</span><span class="menu-arrow">›</span>
                 </button>
-
             </nav>
 
-            <!-- =================================================
-                 APP SETTINGS
-            ================================================== -->
             <div class="app-settings">
-
                 <div class="app-settings-title">
-                    <span>⚙️</span>
-                    <span id="appSettingsTitle">
-                        App Settings
-                    </span>
+                    <span>⚙️</span><span id="appSettingsTitle">App Settings</span>
                 </div>
-
-                <!-- THEME -->
-                <button
-                    type="button"
-                    id="appThemeBtn"
-                    class="app-setting-item"
-                    onclick="toggleAppTheme()">
+                <button type="button" id="appThemeBtn" class="app-setting-item" onclick="toggleAppTheme()">
                     <span class="setting-icon" id="appThemeIcon">🌙</span>
                     <span id="appThemeText">Dark Mode</span>
                     <span class="setting-arrow">›</span>
                 </button>
-
-                <!-- LANGUAGE -->
-                <button
-                    type="button"
-                    id="appLanguageBtn"
-                    class="app-setting-item"
-                    onclick="toggleAppLanguage()">
+                <button type="button" id="appLanguageBtn" class="app-setting-item" onclick="toggleAppLanguage()">
                     <span class="setting-icon">🌐</span>
                     <span id="appLanguageText">हिन्दी / English</span>
                     <span class="setting-arrow">›</span>
                 </button>
-
-                <!-- RESET -->
-                <button
-                    type="button"
-                    id="appResetBtn"
-                    class="app-setting-item app-reset-item"
-                    onclick="resetAppAction()">
+                <button type="button" id="appResetBtn" class="app-setting-item app-reset-item" onclick="resetAppAction()">
                     <span class="setting-icon">🔄</span>
                     <span id="appResetText">Reset App</span>
                     <span class="setting-arrow">›</span>
                 </button>
-
             </div>
 
-            <!-- MENU FOOTER -->
             <div class="app-menu-footer">
                 <span>${biz.name || "Sandeep ElectroFix"}</span>
                 <small>Powering Your Trust</small>
             </div>
-
         </aside>
     `;
 
     document.body.prepend(navbar);
 
-    /* ---------------------------------------------------------
-       NAVBAR CSS
-    --------------------------------------------------------- */
-    if (!document.getElementById("appNavbarCSS")) {
-        const style = document.createElement("style");
-        style.id = "appNavbarCSS";
-
-        style.textContent = `
-        /* =====================================================
-           NAVBAR STYLES
-        ====================================================== */
-        :root {
-            --nav-bg: rgba(5, 8, 22, 0.96);
-            --nav-border: rgba(245, 197, 66, 0.25);
-            --nav-gold: #f5c542;
-            --nav-blue: #38bdf8;
-            --nav-text: #ffffff;
-            --nav-muted: #aab4c8;
-            --nav-panel: #080d1f;
-        }
-
-        /* MAIN NAVBAR */
-        #appNavbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 68px;
-            z-index: 99990;
-            background: linear-gradient(135deg, rgba(5,8,22,.98), rgba(9,18,42,.97));
-            border-bottom: 1px solid var(--nav-border);
-            box-shadow: 0 5px 25px rgba(0,0,0,.35);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-        }
-
-        .app-nav-inner {
-            width: 100%;
-            height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 14px;
-            box-sizing: border-box;
-        }
-
-        /* BRAND */
-        .app-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            min-width: 0;
-            color: white;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .app-logo-wrap {
-            width: 44px;
-            height: 44px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 2px solid var(--nav-gold);
-            box-shadow: 0 0 8px rgba(245,197,66,.35), inset 0 0 8px rgba(245,197,66,.12);
-            overflow: hidden;
-            background: #050816;
-        }
-
-        .app-logo-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .app-brand-text {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        #appBrandName {
-            font-size: 16px;
-            font-weight: 800;
-            line-height: 1.1;
-            color: var(--nav-gold);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        #appBrandTagline {
-            margin-top: 3px;
-            font-size: 9px;
-            color: var(--nav-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* HAMBURGER */
-        .app-menu-btn {
-            width: 46px;
-            height: 46px;
-            flex-shrink: 0;
-            border: 1px solid rgba(245,197,66,.25);
-            border-radius: 12px;
-            background: rgba(255,255,255,.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            cursor: pointer;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .app-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            border-radius: 5px;
-            background: var(--nav-gold);
-            transition: transform .25s ease, opacity .25s ease;
-        }
-
-        .app-menu-btn.active span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-
-        .app-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .app-menu-btn.active span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
-
-        /* OVERLAY */
-        .app-menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.65);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .25s ease, visibility .25s ease;
-            z-index: 99991;
-        }
-
-        .app-menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* SIDE MENU */
-        .app-side-menu {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: min(88vw, 360px);
-            height: 100dvh;
-            background: linear-gradient(180deg, #080d1f 0%, #050816 100%);
-            border-left: 1px solid rgba(245,197,66,.25);
-            box-shadow: -10px 0 40px rgba(0,0,0,.55);
-            z-index: 99992;
-            transform: translateX(105%);
-            transition: transform .3s cubic-bezier(.4,0,.2,1);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            overscroll-behavior: contain;
-        }
-
-        .app-side-menu.active {
-            transform: translateX(0);
-        }
-
-        /* MENU HEADER */
-        .app-menu-header {
-            min-height: 78px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-            flex-shrink: 0;
-        }
-
-        .app-menu-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .app-menu-brand img {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--nav-gold);
-        }
-
-        .app-menu-brand div {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        #appMenuBrandName {
-            color: var(--nav-gold);
-            font-size: 14px;
-            font-weight: 800;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        #appMenuBrandLocation {
-            margin-top: 3px;
-            color: var(--nav-muted);
-            font-size: 10px;
-        }
-
-        .app-menu-close {
-            width: 38px;
-            height: 38px;
-            border: 1px solid rgba(245,197,66,.25);
-            border-radius: 10px;
-            background: rgba(255,255,255,.05);
-            color: var(--nav-gold);
-            font-size: 19px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        /* MENU LIST */
-        .app-menu-list {
-            padding: 10px;
-            flex: 1;
-        }
-
-        .app-menu-item {
-            width: 100%;
-            min-height: 50px;
-            border: 0;
-            border-bottom: 1px solid rgba(255,255,255,.045);
-            background: transparent;
-            color: var(--nav-text);
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            padding: 10px 8px;
-            font-size: 14px;
-            text-align: left;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: background .2s ease, padding-left .2s ease;
-        }
-
-        .app-menu-item:hover,
-        .app-menu-item:active {
-            background: rgba(245,197,66,.08);
-            padding-left: 13px;
-        }
-
-        .menu-item-icon {
-            width: 30px;
-            text-align: center;
-            font-size: 19px;
-        }
-
-        .app-menu-item > span:nth-child(2) {
-            flex: 1;
-            font-weight: 600;
-        }
-
-        .menu-arrow {
-            color: var(--nav-gold);
-            font-size: 22px;
-        }
-
-        /* APP SETTINGS */
-        .app-settings {
-            margin: 5px 10px 10px;
-            padding: 10px;
-            border: 1px solid rgba(245,197,66,.18);
-            border-radius: 14px;
-            background: rgba(255,255,255,.025);
-        }
-
-        .app-settings-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--nav-gold);
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .7px;
-            padding: 4px 6px 9px;
-            border-bottom: 1px solid rgba(255,255,255,.07);
-            margin-bottom: 4px;
-        }
-
-        .app-setting-item {
-            width: 100%;
-            min-height: 46px;
-            border: 0;
-            background: transparent;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 6px;
-            border-radius: 9px;
-            cursor: pointer;
-            font-size: 13px;
-            text-align: left;
-        }
-
-        .app-setting-item:hover,
-        .app-setting-item:active {
-            background: rgba(255,255,255,.06);
-        }
-
-        .setting-icon {
-            width: 28px;
-            text-align: center;
-            font-size: 18px;
-        }
-
-        .app-setting-item span:nth-child(2) {
-            flex: 1;
-        }
-
-        .setting-arrow {
-            color: var(--nav-muted);
-            font-size: 20px;
-        }
-
-        .app-reset-item {
-            color: #ffb4b4;
-            border-top: 1px solid rgba(255,255,255,.06);
-            margin-top: 3px;
-            padding-top: 10px;
-        }
-
-        /* FOOTER */
-        .app-menu-footer {
-            padding: 12px 16px 18px;
-            text-align: center;
-            color: var(--nav-gold);
-            font-size: 11px;
-            flex-shrink: 0;
-        }
-
-        .app-menu-footer small {
-            display: block;
-            margin-top: 3px;
-            color: var(--nav-muted);
-            font-size: 9px;
-        }
-
-        /* BODY OFFSET */
-        body {
-            padding-top: 68px;
-        }
-
-        /* MOBILE */
-        @media (max-width: 480px) {
-            .app-brand-text #appBrandName {
-                font-size: 15px;
-            }
-            .app-logo-wrap {
-                width: 42px;
-                height: 42px;
-            }
-            .app-menu-btn {
-                width: 44px;
-                height: 44px;
-            }
-        }
-
-        /* DESKTOP */
-        @media (min-width: 768px) {
-            .app-nav-inner {
-                padding-left: 22px;
-                padding-right: 22px;
-            }
-            .app-side-menu {
-                width: 380px;
-            }
-        }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /* ---------------------------------------------------------
-       HAMBURGER EVENTS
-    --------------------------------------------------------- */
     const menuBtn = document.getElementById("appMenuBtn");
     const overlay = document.getElementById("appMenuOverlay");
 
@@ -870,10 +308,6 @@ function initializeNavbar() {
     updateNavbarTheme();
 }
 
-/* =========================================================
-   OPEN / CLOSE NAVBAR
-========================================================= */
-
 function toggleNavbarMenu() {
     const btn = document.getElementById("appMenuBtn");
     const menu = document.getElementById("appSideMenu");
@@ -892,8 +326,6 @@ function toggleNavbarMenu() {
         btn.setAttribute("aria-expanded", "true");
         menu.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
-
-        // 🔙 Add browser history state for hamburger menu
         history.pushState({ isNavbarMenuOpen: true }, "");
     }
 }
@@ -902,7 +334,6 @@ function closeNavbarMenu(isFromHistory = false) {
     const btn = document.getElementById("appMenuBtn");
     const menu = document.getElementById("appSideMenu");
     const overlay = document.getElementById("appMenuOverlay");
-
     const wasOpen = menu?.classList.contains("active");
 
     menu?.classList.remove("active");
@@ -912,103 +343,48 @@ function closeNavbarMenu(isFromHistory = false) {
     menu?.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
 
-    // 🔙 If user closed menu manually, remove the menu history state
     if (wasOpen && !isFromHistory && history.state && history.state.isNavbarMenuOpen) {
         history.back();
     }
 }
 
-/* =========================================================
-   NAVBAR SECTION NAVIGATION
-========================================================= */
-
 function appNavigate(sectionId) {
     closeNavbarMenu();
-
     setTimeout(() => {
         const section = document.getElementById(sectionId);
-        if (!section) {
-            showExitToast(
-                currentLang === "hi"
-                    ? "यह सेक्शन उपलब्ध नहीं है।"
-                    : "This section is not available."
-            );
-            return;
-        }
-
+        if (!section) return;
         const navbar = document.getElementById("appNavbar");
         const offset = navbar ? navbar.offsetHeight + 10 : 78;
         const y = section.getBoundingClientRect().top + window.pageYOffset - offset;
-
-        window.scrollTo({
-            top: Math.max(0, y),
-            behavior: "smooth"
-        });
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     }, 150);
 }
-
-/* =========================================================
-   NAVBAR CONTACT
-========================================================= */
 
 function appCall() {
     closeNavbarMenu();
     const phone = window.MASTER_CONFIG?.business?.phone;
-    if (!phone) return;
-    window.location.href = `tel:${phone}`;
+    if (phone) window.location.href = `tel:${phone}`;
 }
-
-/* =========================================================
-   NAVBAR THEME
-========================================================= */
 
 function toggleAppTheme() {
     const root = document.documentElement;
     root.classList.toggle("saved-light-theme");
     const isLight = root.classList.contains("saved-light-theme");
-
     localStorage.setItem("sandeepTheme", isLight ? "light" : "dark");
-
     updateThemeButtonText();
     updateNavbarTheme();
-
-    showExitToast(
-        isLight
-            ? (currentLang === "hi" ? "☀️ लाइट मोड चालू" : "☀️ Light Mode enabled")
-            : (currentLang === "hi" ? "🌙 डार्क मोड चालू" : "🌙 Dark Mode enabled")
-    );
 }
-
-/* =========================================================
-   NAVBAR LANGUAGE
-========================================================= */
 
 function toggleAppLanguage() {
     const newLang = currentLang === "hi" ? "en" : "hi";
     setLanguage(newLang);
     updateNavbarLanguage();
-
-    showExitToast(
-        newLang === "hi"
-            ? "🇮🇳 हिन्दी भाषा चुनी गई"
-            : "🇬🇧 English language selected"
-    );
 }
-
-/* =========================================================
-   NAVBAR RESET
-========================================================= */
 
 function resetAppAction() {
     closeNavbarMenu();
-    setTimeout(() => {
-        resetAllToDefault();
-    }, 150);
+    setTimeout(() => { resetAllToDefault(); }, 150);
 }
-
-/* =========================================================
-   NAVBAR LANGUAGE TEXT
-========================================================= */
 
 function updateNavbarLanguage() {
     const isHi = currentLang === "hi";
@@ -1025,7 +401,6 @@ function updateNavbarLanguage() {
     setText("appMenuBrandName", biz.name || "Sandeep ElectroFix");
     setText("appMenuBrandLocation", "⚡ Powering Your Trust");
 
-    /* MAIN MENU */
     setText("appNavHome", isHi ? "होम" : "Home");
     setText("appNavServices", isHi ? "सेवाएँ" : "Services");
     setText("appNavWork", isHi ? "हमारे कार्य" : "Our Work");
@@ -1037,7 +412,6 @@ function updateNavbarLanguage() {
     setText("appNavSocial", isHi ? "सोशल मीडिया" : "Social Media");
     setText("appNavContact", isHi ? "संपर्क करें" : "Contact");
 
-    /* SETTINGS */
     setText("appSettingsTitle", isHi ? "ऐप सेटिंग्स" : "App Settings");
     setText("appLanguageText", isHi ? "भाषा बदलें (हिन्दी / English)" : "Change Language (English / हिन्दी)");
     setText("appResetText", isHi ? "ऐप रीसेट करें" : "Reset App");
@@ -1045,19 +419,12 @@ function updateNavbarLanguage() {
     updateNavbarTheme();
 }
 
-/* =========================================================
-   NAVBAR THEME TEXT
-========================================================= */
-
 function updateNavbarTheme() {
     const isLight = document.documentElement.classList.contains("saved-light-theme");
     const icon = document.getElementById("appThemeIcon");
     const text = document.getElementById("appThemeText");
 
-    if (icon) {
-        icon.innerText = isLight ? "🌙" : "☀️";
-    }
-
+    if (icon) icon.innerText = isLight ? "🌙" : "☀️";
     if (text) {
         text.innerText = isLight
             ? (currentLang === "hi" ? "डार्क मोड" : "Dark Mode")
@@ -1065,13 +432,12 @@ function updateNavbarTheme() {
     }
 }
 
-/* =========================================================
-   NAVBAR ESC KEY
-========================================================= */
-
 document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
         closeNavbarMenu();
+        closeAreaModal();
+        closeServiceModal();
+        closeLightboxModal();
     }
 });
 
@@ -1087,6 +453,9 @@ function updateThemeButtonText() {
     }
 }
 
+/* =========================================================
+   LANGUAGE AND RENDERING
+========================================================= */
 function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem("sandeepLang", currentLang);
@@ -1100,17 +469,14 @@ function setLanguage(lang) {
     const biz = cfg.business;
     const ctrl = cfg.controls;
 
-    // Reset Button Label
     if (document.getElementById("resetBtnText")) document.getElementById("resetBtnText").innerText = isHi ? "रीसेट" : "Reset";
 
-    // Static Texts
     document.getElementById("businessTitle").innerText = biz.name;
     document.getElementById("businessTagline").innerText = isHi ? biz.tagline_hi : biz.tagline_en;
     document.getElementById("businessLocation").innerText = isHi ? `📍 ${biz.location_hi}` : `📍 ${biz.location_en}`;
     document.getElementById("callBtnText").innerText = isHi ? "📞 अभी कॉल करें" : "📞 Call Now";
     document.getElementById("whatsappBtnText").innerText = isHi ? "💬 व्हाट्सएप करें" : "💬 WhatsApp";
 
-    // Discount Texts
     document.getElementById("discountBadge").innerText = isHi ? "🔥 विशेष ऑफर" : "🔥 SPECIAL OFFER";
     document.getElementById("discountTitle").innerText = isHi ? "विशेष छूट" : "Special Discount";
     document.getElementById("discountPercentage").innerText = ctrl.discountPercent || 10;
@@ -1120,7 +486,6 @@ function setLanguage(lang) {
     document.getElementById("discountValidity").innerText = isHi ? "⏳ सीमित समय के लिए" : "⏳ Limited Time Offer";
     document.getElementById("discountBtnText").innerText = isHi ? "⚡ छूट प्राप्त करें" : "⚡ Get Discount";
 
-    // Quick Access Labels
     document.getElementById("quickHeading").innerText = isHi ? "त्वरित सेवाएँ" : "Quick Access";
     document.getElementById("labelCall").innerText = isHi ? "कॉल करें" : "Call";
     document.getElementById("labelWhatsapp").innerText = isHi ? "व्हाट्सएप" : "WhatsApp";
@@ -1133,19 +498,16 @@ function setLanguage(lang) {
     document.getElementById("labelCatalogue").innerText = isHi ? "सामग्री सूची" : "Catalogue";
     document.getElementById("socialHeading").innerText = isHi ? "हमसे सोशल मीडिया पर जुड़ें" : "Connect on Social Media";
 
-    // About
     document.getElementById("aboutHeading").innerText = isHi ? "हमारे बारे में" : "About Us";
     document.getElementById("aboutText").innerHTML = isHi
         ? `<strong>${biz.name}</strong> में आपका स्वागत है। हम लखनऊ में पेशेवर इलेक्ट्रीशियन सेवाएँ प्रदान करते हैं, जिसमें हाउस वायरिंग, फॉल्स सीलिंग वायरिंग, एमसीबी और डीबी इंस्टॉलेशन, पंखा और लाइट फिटिंग, इन्वर्टर वायरिंग, फॉल्ट रिपेयर और मेंटेनेंस शामिल हैं।`
         : `Welcome to <strong>${biz.name}</strong>. We provide professional electrical services across Lucknow, including house wiring, false ceiling wiring, MCB & DB installation, fan and light fitting, inverter wiring, fault repair, and general maintenance.`;
 
-    // Location
     document.getElementById("locHeading").innerText = isHi ? "📍 सेवा क्षेत्र एवं लोकेशन" : "📍 Service Location";
     document.getElementById("locDesc").innerText = isHi ? "पूरे लखनऊ और आसपास के क्षेत्रों में ऑन-साइट इलेक्ट्रीशियन सेवा उपलब्ध।" : "Providing on-site electrical services across Lucknow.";
     document.getElementById("distBtnText").innerText = isHi ? "हमारे यहाँ से अपनी दूरी चेक करें" : "Check Your Distance from Us";
     document.getElementById("mapBtnText").innerText = isHi ? "गूगल मैप्स पर रास्ता देखें" : "Get Directions on Google Maps";
 
-    // Headers
     document.getElementById("servicesHeading").innerText = isHi ? "हमारी सेवाएँ" : "Our Services";
     document.getElementById("galleryHeading").innerText = isHi ? "हमारे द्वारा किए गए कार्य" : "Our Work";
     document.getElementById("qrHeading").innerText = isHi ? "क्यूआर कोड स्कैन करें" : "Scan QR Code";
@@ -1153,20 +515,11 @@ function setLanguage(lang) {
     document.getElementById("qrBtnText").innerText = isHi ? "📥 क्यूआर कोड डाउनलोड करें" : "📥 Download QR Code";
     document.getElementById("reviewsHeading").innerText = isHi ? "ग्राहकों की राय" : "Customer Reviews";
 
-    // Estimate
     document.getElementById("quoteHeading").innerText = isHi ? "कोटेशन व अनुमानित खर्च" : "Estimate & Quotation";
     if (document.getElementById("customerName")) document.getElementById("customerName").placeholder = isHi ? "आपका नाम *" : "Your Name *";
     if (document.getElementById("customerPhone")) document.getElementById("customerPhone").placeholder = isHi ? "मोबाइल नंबर *" : "Mobile Number *";
     if (document.getElementById("customerLocation")) document.getElementById("customerLocation").placeholder = isHi ? "आपका पता / एरिया *" : "Your Address / Area *";
     if (document.getElementById("customerMessage")) document.getElementById("customerMessage").placeholder = isHi ? "कार्य का अतिरिक्त विवरण (वैकल्पिक)..." : "Additional work details (optional)...";
-    
-    const count = Object.values(selectedItemsMap).reduce((acc, itm) => acc + itm.qty, 0);
-    const summaryHeader = document.getElementById("summaryHeader");
-    if (summaryHeader) {
-        summaryHeader.innerHTML = isHi 
-            ? `चुनी गई सेवाएँ (<span id="selectedCount">${count}</span>)` 
-            : `Selected Services (<span id="selectedCount">${count}</span>)`;
-    }
 
     document.getElementById("lblSubtotal").innerText = isHi ? "कुल राशि:" : "Subtotal:";
     document.getElementById("lblGrandTotal").innerText = isHi ? "अंतिम राशि:" : "Grand Total:";
@@ -1174,7 +527,6 @@ function setLanguage(lang) {
     document.getElementById("sendWhatsappBtn").innerText = isHi ? "💬 व्हाट्सएप पर भेजें" : "💬 Send on WhatsApp";
     document.getElementById("downloadPdfBtn").innerText = isHi ? "📄 पीडीएफ एस्टीमेट डाउनलोड करें" : "📄 Download PDF Estimate";
 
-    // FAQs & Bottom Nav
     document.getElementById("faqHeading").innerText = isHi ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions";
     document.getElementById("navHome").innerText = isHi ? "होम" : "Home";
     document.getElementById("navServices").innerText = isHi ? "सेवाएं" : "Services";
@@ -1204,8 +556,8 @@ function renderServices() {
         const title = currentLang === "hi" ? service.title_hi : service.title_en;
         let activeCount = 0;
         service.subServices.forEach((_, subIdx) => {
-            if (selectedItemsMap[`${sIdx}_${subIdx}`]?.qty > 0) {
-                activeCount += selectedItemsMap[`${sIdx}_${subIdx}`].qty;
+            if (selectedItemsMap[`${sIdx}_${subIdx}`]) {
+                activeCount += 1;
             }
         });
 
@@ -1224,6 +576,9 @@ function renderServices() {
     });
 }
 
+/* =========================================================
+   MODAL 1: MAIN SERVICE LIST MODAL
+========================================================= */
 function openServiceModal(sIdx) {
     const service = window.MASTER_CONFIG.services[sIdx];
     const title = currentLang === "hi" ? service.title_hi : service.title_en;
@@ -1236,23 +591,46 @@ function openServiceModal(sIdx) {
     const itemsContainer = document.getElementById("modalItemsContainer");
     itemsContainer.innerHTML = service.subServices.filter(sub => sub.show !== false).map((sub, subIdx) => {
         const key = `${sIdx}_${subIdx}`;
-        const qty = selectedItemsMap[key]?.qty || 0;
+        const item = selectedItemsMap[key];
+        const isAreaBased = (sub.rate_en && sub.rate_en.includes('/ sq.ft.')) || (sub.rate_hi && sub.rate_hi.includes('वर्ग फीट'));
         const name = currentLang === "hi" ? sub.name_hi : sub.name_en;
         const rate = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
 
-        return `
-            <div class="sub-service-item ${qty > 0 ? 'has-qty' : ''}" id="modal_row_${key}">
-                <div class="sub-service-info">
-                    <span class="sub-name">${name}</span>
-                    <span class="sub-rate">${rate}</span>
+        if (isAreaBased) {
+            // AREA BASED ROW (Tap to open popup)
+            const hasArea = item && item.type === 'area';
+            const badge = hasArea
+                ? `<span class="area-badge" style="background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:12px; font-size:0.8rem; font-weight:700;">${item.area} sq.ft. = ₹${item.total.toLocaleString('en-IN')}</span>`
+                : `<span class="area-badge-tap" style="color:#64748b; font-size:0.8rem; font-weight:600;">👆 टैप करें</span>`;
+
+            return `
+                <div class="sub-service-item ${hasArea ? 'has-qty' : ''}" id="modal_row_${key}" onclick="openAreaModal(${sIdx}, ${subIdx})" style="cursor:pointer;">
+                    <div class="sub-service-info">
+                        <span class="sub-name">${name}</span>
+                        <span class="sub-rate">${rate}</span>
+                    </div>
+                    <div class="area-action-display">
+                        ${badge}
+                    </div>
                 </div>
-                <div class="qty-control">
-                    <button type="button" class="qty-btn minus-btn" onclick="changeQtyModal(${sIdx}, ${subIdx}, -1)">−</button>
-                    <span class="qty-val" id="modal_qty_${key}">${qty}</span>
-                    <button type="button" class="qty-btn plus-btn" onclick="changeQtyModal(${sIdx}, ${subIdx}, 1)">+</button>
+            `;
+        } else {
+            // QUANTITY BASED ROW (+ / -)
+            const qty = item?.qty || 0;
+            return `
+                <div class="sub-service-item ${qty > 0 ? 'has-qty' : ''}" id="modal_row_${key}">
+                    <div class="sub-service-info">
+                        <span class="sub-name">${name}</span>
+                        <span class="sub-rate">${rate}</span>
+                    </div>
+                    <div class="qty-control">
+                        <button type="button" class="qty-btn minus-btn" onclick="changeQtyModal(${sIdx}, ${subIdx}, -1)">−</button>
+                        <span class="qty-val" id="modal_qty_${key}">${qty}</span>
+                        <button type="button" class="qty-btn plus-btn" onclick="changeQtyModal(${sIdx}, ${subIdx}, 1)">+</button>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
     }).join("");
 
     const overlay = document.getElementById("serviceModalOverlay");
@@ -1290,6 +668,126 @@ function closeServiceModal(isFromHistory = false) {
     }
 }
 
+/* =========================================================
+   MODAL 2: CENTER POPUP FOR AREA-BASED SUB-SERVICES
+   (Area input only, Approx rate, Live estimate, Delete)
+========================================================= */
+function openAreaModal(sIdx, subIdx) {
+    const service = window.MASTER_CONFIG.services[sIdx];
+    const sub = service.subServices[subIdx];
+    const key = `${sIdx}_${subIdx}`;
+    const name = currentLang === "hi" ? sub.name_hi : sub.name_en;
+    const rateStr = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
+
+    activeAreaContext = {
+        key: key,
+        sIdx: sIdx,
+        subIdx: subIdx,
+        name_hi: sub.name_hi,
+        name_en: sub.name_en,
+        price: sub.price,
+        rateStr: rateStr
+    };
+
+    const modalIcon = document.getElementById("areaModalIcon");
+    const modalTitle = document.getElementById("areaModalTitle");
+    const rateDisplay = document.getElementById("areaModalRateDisplay");
+    const areaInput = document.getElementById("areaSqftInput");
+    const deleteBtn = document.getElementById("btnDeleteAreaService");
+
+    if (modalIcon) modalIcon.innerText = service.icon || "🏠";
+    if (modalTitle) modalTitle.innerText = name;
+    if (rateDisplay) rateDisplay.innerText = rateStr;
+
+    const existing = selectedItemsMap[key];
+    if (existing && existing.type === 'area') {
+        if (areaInput) areaInput.value = existing.area;
+        if (deleteBtn) deleteBtn.style.display = "block";
+    } else {
+        if (areaInput) areaInput.value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
+    }
+
+    updateAreaLiveEstimate();
+
+    const overlay = document.getElementById("areaCalcModalOverlay");
+    if (overlay) overlay.style.display = "flex";
+
+    history.pushState({ isAreaModalOpen: true }, "");
+}
+
+function updateAreaLiveEstimate() {
+    if (!activeAreaContext) return;
+    const areaInput = document.getElementById("areaSqftInput");
+    const area = parseFloat(areaInput?.value) || 0;
+    const total = area * activeAreaContext.price;
+
+    const liveDisplay = document.getElementById("areaModalLiveAmount");
+    if (liveDisplay) {
+        liveDisplay.innerText = `₹${total.toLocaleString('en-IN')}`;
+    }
+}
+
+function saveAreaSubService() {
+    if (!activeAreaContext) return;
+    const areaInput = document.getElementById("areaSqftInput");
+    const area = parseFloat(areaInput?.value) || 0;
+
+    if (area <= 0) {
+        alert(currentLang === 'hi' ? 'कृपया सही एरिया (Area in sq. ft.) दर्ज करें।' : 'Please enter a valid area in sq. ft.');
+        return;
+    }
+
+    const calculatedTotal = area * activeAreaContext.price;
+
+    selectedItemsMap[activeAreaContext.key] = {
+        type: 'area',
+        name_hi: activeAreaContext.name_hi,
+        name_en: activeAreaContext.name_en,
+        price: activeAreaContext.price,
+        rateStr: activeAreaContext.rateStr,
+        area: area,
+        qty: 1,
+        total: calculatedTotal
+    };
+
+    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
+    closeAreaModal();
+    updateCalculations();
+    
+    // Refresh parent service modal if open
+    if (activeAreaContext.sIdx !== undefined) {
+        openServiceModal(activeAreaContext.sIdx);
+    }
+}
+
+function deleteAreaSubService() {
+    if (!activeAreaContext) return;
+    delete selectedItemsMap[activeAreaContext.key];
+    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
+    closeAreaModal();
+    updateCalculations();
+
+    if (activeAreaContext.sIdx !== undefined) {
+        openServiceModal(activeAreaContext.sIdx);
+    }
+}
+
+function closeAreaModal(isFromHistory = false) {
+    const overlay = document.getElementById("areaCalcModalOverlay");
+    if (overlay && overlay.style.display === "flex") {
+        overlay.style.display = "none";
+        activeAreaContext = null;
+
+        if (!isFromHistory && history.state && history.state.isAreaModalOpen) {
+            history.back();
+        }
+    }
+}
+
+/* =========================================================
+   LIGHTBOX & TOAST
+========================================================= */
 function openLightboxModal(src) {
     const box = document.getElementById("lightbox");
     const img = document.getElementById("lightboxImage");
@@ -1344,55 +842,38 @@ function showExitToast(msg) {
 
 /* =========================================================
    🔙 SMART BACK BUTTON SYSTEM
-   Priority:
-   1. Hamburger Menu
-   2. Lightbox
-   3. Service Modal
-   4. Exit App
 ========================================================= */
-
 window.addEventListener("popstate", () => {
-    /* -----------------------------------------------------
-       1️⃣ HAMBURGER MENU
-    ----------------------------------------------------- */
-    const navbarMenu = document.getElementById("appSideMenu");
-    const isNavbarMenuOpen = navbarMenu && navbarMenu.classList.contains("active");
+    // 1. Area Calculation Modal
+    const areaOverlay = document.getElementById("areaCalcModalOverlay");
+    if (areaOverlay && areaOverlay.style.display === "flex") {
+        closeAreaModal(true);
+        return;
+    }
 
-    if (isNavbarMenuOpen) {
+    // 2. Side Navbar Menu
+    const navbarMenu = document.getElementById("appSideMenu");
+    if (navbarMenu && navbarMenu.classList.contains("active")) {
         closeNavbarMenu(true);
         return;
     }
 
-    /* -----------------------------------------------------
-       2️⃣ LIGHTBOX
-    ----------------------------------------------------- */
+    // 3. Lightbox
     const lightbox = document.getElementById("lightbox");
-    const isLightboxOpen = lightbox && lightbox.style.display === "flex";
-
-    if (isLightboxOpen) {
+    if (lightbox && lightbox.style.display === "flex") {
         closeLightboxModal(true);
         return;
     }
 
-    /* -----------------------------------------------------
-       3️⃣ SERVICE MODAL
-    ----------------------------------------------------- */
+    // 4. Main Service Modal
     const modalOverlay = document.getElementById("serviceModalOverlay");
-    const isModalOpen = modalOverlay && (
-        modalOverlay.classList.contains("active") ||
-        modalOverlay.style.display === "flex"
-    );
-
-    if (isModalOpen) {
+    if (modalOverlay && (modalOverlay.classList.contains("active") || modalOverlay.style.display === "flex")) {
         closeServiceModal(true);
         return;
     }
 
-    /* -----------------------------------------------------
-       4️⃣ APP EXIT / DOUBLE BACK
-    ----------------------------------------------------- */
+    // 5. Exit App / Double Back
     const currentTime = Date.now();
-
     if (currentTime - lastBackPressTime < 2000) {
         history.back();
     } else {
@@ -1405,21 +886,30 @@ window.addEventListener("popstate", () => {
     }
 });
 
+/* =========================================================
+   QUANTITY & CART CALCULATIONS
+========================================================= */
 function changeQty(sIdx, subIdx, change) {
     const key = `${sIdx}_${subIdx}`;
     const sub = window.MASTER_CONFIG.services[sIdx].subServices[subIdx];
 
     if (!selectedItemsMap[key]) {
         selectedItemsMap[key] = {
+            type: 'qty',
             name_hi: sub.name_hi,
             name_en: sub.name_en,
             price: sub.price,
-            qty: 0
+            qty: 0,
+            total: 0
         };
     }
 
     selectedItemsMap[key].qty += change;
-    if (selectedItemsMap[key].qty <= 0) delete selectedItemsMap[key];
+    selectedItemsMap[key].total = selectedItemsMap[key].qty * selectedItemsMap[key].price;
+
+    if (selectedItemsMap[key].qty <= 0) {
+        delete selectedItemsMap[key];
+    }
 
     localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
     updateCalculations();
@@ -1453,11 +943,10 @@ function updateCalculations() {
     const totalEl = document.getElementById("calcGrandTotal");
     const ctrl = window.MASTER_CONFIG?.controls;
 
-    const count = entries.reduce((acc, [_, itm]) => acc + itm.qty, 0);
-    if (countEl) countEl.innerText = count;
+    if (countEl) countEl.innerText = entries.length;
 
     if (entries.length === 0) {
-        if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'अभी तक कोई सेवा नहीं चुनी गई। ऊपर + / − का उपयोग करें।' : 'No services selected yet. Use + / − above.'}</p>`;
+        if (listEl) listEl.innerHTML = `<p class="no-selection-hint">${currentLang === 'hi' ? 'अभी तक कोई सेवा नहीं चुनी गई। ऊपर सेवाओं पर टैप करके चुनें।' : 'No services selected yet. Tap services above to add.'}</p>`;
         if (subtotalEl) subtotalEl.innerText = "₹0";
         if (discRow) discRow.style.display = "none";
         if (totalEl) totalEl.innerText = "₹0";
@@ -1467,32 +956,52 @@ function updateCalculations() {
     if (listEl) {
         listEl.innerHTML = entries.map(([key, itm]) => {
             const name = currentLang === 'hi' ? itm.name_hi : itm.name_en;
-            return `
-                <div class="summary-item-row">
-                    <div class="summary-item-left">
-                        <span class="summary-item-name">• ${name}</span>
-                        <span class="summary-item-price">₹${itm.price * itm.qty} (₹${itm.price} × ${itm.qty})</span>
+            const parts = key.split('_');
+            const sIdx = parseInt(parts[0]);
+            const subIdx = parseInt(parts[1]);
+
+            if (itm.type === 'area') {
+                return `
+                    <div class="summary-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9;">
+                        <div class="summary-item-left">
+                            <span class="summary-item-name" style="font-weight:700; color:#0f172a;">• ${name}</span><br>
+                            <span class="summary-item-price" style="font-size:0.85rem; color:#64748b;">${itm.area} sq.ft. × ₹${itm.price}/sq.ft.</span>
+                        </div>
+                        <div class="summary-qty-actions" style="display:flex; align-items:center; gap:8px;">
+                            <strong style="color:#0ea5e9; font-size:1rem; margin-right:4px;">₹${itm.total.toLocaleString('en-IN')}</strong>
+                            <button type="button" class="summary-btn edit" onclick="openAreaModal(${sIdx}, ${subIdx})" title="एरिया बदलें" style="padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1; background:#f8fafc; font-size:0.8rem; cursor:pointer;">✏️</button>
+                            <button type="button" class="summary-btn remove" onclick="removeItemDirect('${key}')" title="हटाएं" style="padding:4px 8px; border-radius:6px; border:1px solid #fca5a5; background:#fee2e2; color:#dc2626; font-size:0.8rem; cursor:pointer;">🗑️</button>
+                        </div>
                     </div>
-                    <div class="summary-qty-actions">
-                        <button type="button" class="summary-btn minus" onclick="changeQtyDirect('${key}', -1)" title="कम करें">−</button>
-                        <span class="summary-qty-val">${itm.qty}</span>
-                        <button type="button" class="summary-btn plus" onclick="changeQtyDirect('${key}', 1)" title="बढ़ाएं">+</button>
-                        <button type="button" class="summary-btn remove" onclick="removeItemDirect('${key}')" title="हटाएं">🗑️</button>
+                `;
+            } else {
+                return `
+                    <div class="summary-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9;">
+                        <div class="summary-item-left">
+                            <span class="summary-item-name" style="font-weight:700; color:#0f172a;">• ${name}</span><br>
+                            <span class="summary-item-price" style="font-size:0.85rem; color:#64748b;">₹${itm.price} × ${itm.qty} = ₹${itm.total.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div class="summary-qty-actions" style="display:flex; align-items:center; gap:6px;">
+                            <button type="button" class="summary-btn minus" onclick="changeQtyDirect('${key}', -1)" title="कम करें" style="width:26px; height:26px; border-radius:50%; border:1px solid #cbd5e1; background:#f8fafc; cursor:pointer;">−</button>
+                            <span class="summary-qty-val" style="font-weight:700; min-width:18px; text-align:center;">${itm.qty}</span>
+                            <button type="button" class="summary-btn plus" onclick="changeQtyDirect('${key}', 1)" title="बढ़ाएं" style="width:26px; height:26px; border-radius:50%; border:none; background:#0ea5e9; color:#fff; cursor:pointer;">+</button>
+                            <button type="button" class="summary-btn remove" onclick="removeItemDirect('${key}')" title="हटाएं" style="margin-left:4px; padding:2px 6px; border-radius:6px; border:1px solid #fca5a5; background:#fee2e2; color:#dc2626; cursor:pointer;">🗑️</button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
         }).join("");
     }
 
-    const subtotal = entries.reduce((acc, [_, itm]) => acc + (itm.price * itm.qty), 0);
-    const isDiscountActive = ctrl.showDiscount && (ctrl.discountPercent > 0);
+    const subtotal = entries.reduce((acc, [_, itm]) => acc + (itm.total || 0), 0);
+    const isDiscountActive = ctrl?.showDiscount && (ctrl?.discountPercent > 0);
     const discount = isDiscountActive ? Math.round(subtotal * (ctrl.discountPercent / 100)) : 0;
     const total = subtotal - discount;
 
-    if (subtotalEl) subtotalEl.innerText = `₹${subtotal}`;
+    if (subtotalEl) subtotalEl.innerText = `₹${subtotal.toLocaleString('en-IN')}`;
     if (discRow) discRow.style.display = isDiscountActive ? "flex" : "none";
-    if (discEl) discEl.innerText = `-₹${discount}`;
-    if (totalEl) totalEl.innerText = `₹${total}`;
+    if (discEl) discEl.innerText = `-₹${discount.toLocaleString('en-IN')}`;
+    if (totalEl) totalEl.innerText = `₹${total.toLocaleString('en-IN')}`;
 }
 
 function renderGallery() {
@@ -1550,7 +1059,6 @@ function applyServiceLayout(layout) {
     localStorage.setItem("sandeepServiceLayout", layout);
 }
 
-// ⚡ Save Contact vCard (.vcf) Generator
 function saveContactVCard() {
     const biz = window.MASTER_CONFIG?.business;
     if (!biz) return;
@@ -1576,6 +1084,9 @@ END:VCARD`;
     URL.revokeObjectURL(url);
 }
 
+/* =========================================================
+   WHATSAPP QUOTE
+========================================================= */
 function sendWhatsappQuote() {
     const name = document.getElementById("customerName")?.value.trim();
     const phone = document.getElementById("customerPhone")?.value.trim();
@@ -1587,10 +1098,10 @@ function sendWhatsappQuote() {
 
     if (!name || !phone) return alert(currentLang === 'hi' ? "कृपया अपना नाम और मोबाइल नंबर दर्ज करें।" : "Please enter Name and Phone.");
     if (!location) return alert(currentLang === 'hi' ? "कृपया अपना पता या लोकेशन दर्ज करें।" : "Please provide your address/location.");
-    if (items.length === 0) return alert(currentLang === 'hi' ? "कृपया + बटन दबाकर कम से कम एक सेवा चुनें।" : "Please add at least one service.");
+    if (items.length === 0) return alert(currentLang === 'hi' ? "कृपया कम से कम एक सेवा जोड़ें।" : "Please add at least one service.");
 
-    const subtotal = items.reduce((acc, itm) => acc + (itm.price * itm.qty), 0);
-    const isDiscountActive = ctrl.showDiscount && (ctrl.discountPercent > 0);
+    const subtotal = items.reduce((acc, itm) => acc + (itm.total || 0), 0);
+    const isDiscountActive = ctrl?.showDiscount && (ctrl?.discountPercent > 0);
     const discount = isDiscountActive ? Math.round(subtotal * (ctrl.discountPercent / 100)) : 0;
     const total = subtotal - discount;
 
@@ -1602,454 +1113,169 @@ function sendWhatsappQuote() {
     msg += `\n📋 *${currentLang === 'hi' ? 'चुनी गई सेवाएँ' : 'Selected Services'}:*\n`;
 
     items.forEach((itm, i) => {
-        msg += `${i+1}. ${currentLang === 'hi' ? itm.name_hi : itm.name_en} [Qty: ${itm.qty}] - ₹${itm.price * itm.qty}\n`;
+        const itemTitle = currentLang === 'hi' ? itm.name_hi : itm.name_en;
+        if (itm.type === 'area') {
+            msg += `${i+1}. ${itemTitle} (${itm.area} sq.ft. × ₹${itm.price}) = ₹${itm.total.toLocaleString('en-IN')}\n`;
+        } else {
+            msg += `${i+1}. ${itemTitle} [Qty: ${itm.qty}] = ₹${itm.total.toLocaleString('en-IN')}\n`;
+        }
     });
 
-    msg += `\n💵 *Subtotal:* ₹${subtotal}\n`;
-    if (isDiscountActive) msg += `🎁 *Discount (${ctrl.discountPercent}%):* -₹${discount}\n`;
-    msg += `✅ *Grand Total:* ₹${total}\n\n`;
+    msg += `\n💵 *Subtotal:* ₹${subtotal.toLocaleString('en-IN')}\n`;
+    if (isDiscountActive) msg += `🎁 *Discount (${ctrl.discountPercent}%):* -₹${discount.toLocaleString('en-IN')}\n`;
+    msg += `✅ *Grand Total:* ₹${total.toLocaleString('en-IN')}\n\n`;
     msg += `_Please confirm visit/booking._`;
 
     window.open(`https://wa.me/${biz.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
+/* =========================================================
+   📄 PDF ESTIMATE GENERATION (Area + Quantity Support)
+========================================================= */
 function downloadEstimatePDF() {
     const { jsPDF } = window.jspdf || {};
     if (!jsPDF) {
         return alert("PDF library is loading, please try in 2 seconds.");
     }
 
-    const name =
-        document.getElementById("customerName")?.value.trim() || "Customer";
-
-    const phone =
-        document.getElementById("customerPhone")?.value.trim() || "N/A";
-
-    const location =
-        document.getElementById("customerLocation")?.value.trim() || "N/A";
-
-    const note =
-        document.getElementById("customerMessage")?.value.trim() || "N/A";
+    const name = document.getElementById("customerName")?.value.trim() || "Customer";
+    const phone = document.getElementById("customerPhone")?.value.trim() || "N/A";
+    const location = document.getElementById("customerLocation")?.value.trim() || "N/A";
+    const note = document.getElementById("customerMessage")?.value.trim() || "N/A";
 
     const items = Object.values(selectedItemsMap);
-
     const ctrl = window.MASTER_CONFIG?.controls || {};
     const biz = window.MASTER_CONFIG?.business || {};
 
     if (items.length === 0) {
         return alert(
             currentLang === "hi"
-                ? "कृपया पहले + से कोई सेवा जोड़ें।"
+                ? "कृपया पहले कोई सेवा जोड़ें।"
                 : "Please add services first."
         );
     }
 
-    // =========================================================
-    // 📅 DATE + 🕐 TIME
-    // =========================================================
     const now = new Date();
+    const dateText = now.toLocaleDateString("en-IN", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const timeText = now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true });
+    const website = biz.cardWebsite || biz.website || "https://sandeepelectrofix.github.io/SPractice/";
 
-    const dateText = now.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
-    });
-
-    const timeText = now.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true
-    });
-
-    // =========================================================
-    // 🌐 WEBSITE
-    // =========================================================
-    const website =
-        biz.cardWebsite ||
-        biz.website ||
-        "https://sandeepelectrofix.github.io/SPractice/";
-
-    // =========================================================
-    // 📄 CREATE PDF
-    // =========================================================
     const doc = new jsPDF();
-alert("NEW ESTIMATE CODE IS RUNNING");
-    // =========================================================
-    // 🎨 HEADER
-    // =========================================================
+
+    // HEADER
     doc.setFillColor(5, 8, 22);
     doc.rect(0, 0, 210, 42, "F");
 
-    // =========================================================
-    // 🖼️ LOGO
-    // =========================================================
     const logoPath = "assets/logo.png";
-
     const logoImage = new Image();
 
     logoImage.onload = function () {
-
-        // Logo
         try {
-            doc.addImage(
-                logoImage,
-                "PNG",
-                10,
-                6,
-                25,
-                25
-            );
+            doc.addImage(logoImage, "PNG", 10, 6, 25, 25);
         } catch (e) {
             console.warn("Logo could not be added:", e);
         }
-
         createEstimatePDFContent();
-
     };
 
     logoImage.onerror = function () {
-
-        console.warn("Logo not found:", logoPath);
-
-        // PDF logo ke bina bhi generate hoga
         createEstimatePDFContent();
-
     };
 
     logoImage.src = logoPath;
 
-
-    // =========================================================
-    // 📄 MAIN PDF CONTENT
-    // =========================================================
     function createEstimatePDFContent() {
-
-        // -----------------------------------------------------
-        // BUSINESS NAME
-        // -----------------------------------------------------
         doc.setTextColor(245, 197, 66);
         doc.setFontSize(18);
+        doc.text(biz.name || "Sandeep ElectroFix", 40, 16);
 
-        doc.text(
-            biz.name || "Sandeep ElectroFix",
-            40,
-            16
-        );
-
-
-        // -----------------------------------------------------
-        // PHONE + LOCATION
-        // -----------------------------------------------------
         doc.setFontSize(9);
         doc.setTextColor(255, 255, 255);
+        doc.text(`Phone: ${biz.phone || "N/A"} | Lucknow, UP`, 40, 24);
 
-        doc.text(
-            `Phone: ${biz.phone || "N/A"} | Lucknow, UP`,
-            40,
-            24
-        );
+        doc.text(`Date: ${dateText}`, 140, 17);
+        doc.text(`Time: ${timeText}`, 140, 24);
 
-
-        // -----------------------------------------------------
-        // DATE + TIME
-        // -----------------------------------------------------
-        doc.text(
-            `Date: ${dateText}`,
-            140,
-            17
-        );
-
-        doc.text(
-            `Time: ${timeText}`,
-            140,
-            24
-        );
-
-
-        // -----------------------------------------------------
-        // WEBSITE LINK
-        // -----------------------------------------------------
         doc.setTextColor(100, 200, 255);
         doc.setFontSize(8);
+        doc.textWithLink(website, 40, 32, { url: website });
 
-        doc.textWithLink(
-            website,
-            40,
-            32,
-            {
-                url: website
-            }
-        );
-
-
-        // -----------------------------------------------------
-        // TITLE
-        // -----------------------------------------------------
         doc.setTextColor(16, 24, 39);
         doc.setFontSize(11);
+        doc.text("CUSTOMER ESTIMATE", 14, 52);
 
-        doc.text(
-            "CUSTOMER ESTIMATE",
-            14,
-            52
-        );
-
-
-        // -----------------------------------------------------
-        // CUSTOMER DETAILS
-        // -----------------------------------------------------
         doc.setFontSize(9);
-
-        doc.text(
-            `Client: ${name}  |  Phone: ${phone}`,
-            14,
-            59
-        );
-
-        doc.text(
-            `Location: ${location}`,
-            14,
-            65
-        );
+        doc.text(`Client: ${name}  |  Phone: ${phone}`, 14, 59);
+        doc.text(`Location: ${location}`, 14, 65);
 
         if (note !== "N/A") {
-            doc.text(
-                `Note: ${note}`,
-                14,
-                71
-            );
+            doc.text(`Note: ${note}`, 14, 71);
         }
 
+        const startTableY = note !== "N/A" ? 77 : 71;
 
-        // -----------------------------------------------------
-        // TABLE START POSITION
-        // -----------------------------------------------------
-        const startTableY =
-            note !== "N/A"
-                ? 77
-                : 71;
-
-
-        // -----------------------------------------------------
-        // SERVICE ROWS
-        // -----------------------------------------------------
+        // TABLE ROWS (Area & Qty breakdown)
         const rows = items.map((itm, i) => {
-
             const price = Number(itm.price) || 0;
-            const qty = Number(itm.qty) || 0;
-            const amount = price * qty;
+            const amount = Number(itm.total) || (price * (itm.qty || 1));
+            const measureUnit = itm.type === 'area' ? `${itm.area} sq.ft.` : `${itm.qty} Qty`;
+            const rateLabel = itm.type === 'area' ? `Rs. ${price} / sq.ft.` : `Rs. ${price}`;
 
             return [
                 i + 1,
                 itm.name_en || itm.name_hi || "Service",
-                `Rs. ${price}`,
-                qty,
-                `Rs. ${amount}`
+                rateLabel,
+                measureUnit,
+                `Rs. ${amount.toLocaleString('en-IN')}`
             ];
-
         });
 
+        const subtotal = items.reduce((acc, itm) => acc + (Number(itm.total) || 0), 0);
+        const isDiscountActive = ctrl.showDiscount && Number(ctrl.discountPercent) > 0;
+        const discount = isDiscountActive ? Math.round(subtotal * (Number(ctrl.discountPercent) / 100)) : 0;
+        const total = subtotal - discount;
 
-        // -----------------------------------------------------
-        // CALCULATIONS
-        // -----------------------------------------------------
-        const subtotal = items.reduce(
-            (acc, itm) => {
-
-                const price = Number(itm.price) || 0;
-                const qty = Number(itm.qty) || 0;
-
-                return acc + (price * qty);
-
-            },
-            0
-        );
-
-
-        const isDiscountActive =
-            ctrl.showDiscount &&
-            Number(ctrl.discountPercent) > 0;
-
-
-        const discount =
-            isDiscountActive
-                ? Math.round(
-                    subtotal *
-                    (Number(ctrl.discountPercent) / 100)
-                )
-                : 0;
-
-
-        const total =
-            subtotal - discount;
-
-
-        // =====================================================
-        // 📊 ESTIMATE TABLE
-        // =====================================================
         doc.autoTable({
-
             startY: startTableY,
-
-            head: [
-                [
-                    "#",
-                    "Service Item",
-                    "Rate",
-                    "Qty",
-                    "Total Amount"
-                ]
-            ],
-
+            head: [["#", "Service Item", "Rate", "Area / Qty", "Total Amount"]],
             body: rows,
-
             theme: "grid",
-
-            headStyles: {
-                fillColor: [5, 8, 22],
-                textColor: [245, 197, 66]
-            },
-
-            styles: {
-                fontSize: 9
-            },
-
-            margin: {
-                left: 14,
-                right: 14
-            }
-
+            headStyles: { fillColor: [5, 8, 22], textColor: [245, 197, 66] },
+            styles: { fontSize: 9 },
+            margin: { left: 14, right: 14 }
         });
 
-
-        // =====================================================
-        // 💰 TOTAL SECTION
-        // =====================================================
-        const finalY =
-            doc.lastAutoTable.finalY + 8;
-
+        const finalY = doc.lastAutoTable.finalY + 8;
 
         doc.setFontSize(9.5);
-
         doc.setTextColor(16, 24, 39);
+        doc.text(`Subtotal: Rs. ${subtotal.toLocaleString('en-IN')}`, 135, finalY);
 
-        doc.text(
-            `Subtotal: Rs. ${subtotal}`,
-            140,
-            finalY
-        );
+        let nextY = finalY + 5;
 
-
-        let nextY =
-            finalY + 5;
-
-
-        // -----------------------------------------------------
-        // DISCOUNT
-        // -----------------------------------------------------
         if (isDiscountActive) {
-
-            doc.setTextColor(
-                37,
-                211,
-                102
-            );
-
-            doc.text(
-                `Discount (${ctrl.discountPercent}%): -Rs. ${discount}`,
-                140,
-                nextY
-            );
-
+            doc.setTextColor(37, 211, 102);
+            doc.text(`Discount (${ctrl.discountPercent}%): -Rs. ${discount.toLocaleString('en-IN')}`, 135, nextY);
             nextY += 5;
-
         }
 
-
-        // -----------------------------------------------------
-        // GRAND TOTAL
-        // -----------------------------------------------------
         doc.setFontSize(11);
+        doc.setTextColor(16, 24, 39);
+        doc.text(`Grand Total: Rs. ${total.toLocaleString('en-IN')}`, 135, nextY);
 
-        doc.setTextColor(
-            16,
-            24,
-            39
-        );
-
-        doc.text(
-            `Grand Total: Rs. ${total}`,
-            140,
-            nextY
-        );
-
-
-        // =====================================================
-        // 🌐 FOOTER WEBSITE
-        // =====================================================
-        const pageHeight =
-            doc.internal.pageSize.getHeight();
-
-
-        doc.setDrawColor(
-            220,
-            220,
-            220
-        );
-
-        doc.line(
-            14,
-            pageHeight - 20,
-            196,
-            pageHeight - 20
-        );
-
+        const pageHeight = doc.internal.pageSize.getHeight();
+        doc.setDrawColor(220, 220, 220);
+        doc.line(14, pageHeight - 20, 196, pageHeight - 20);
 
         doc.setFontSize(8);
+        doc.setTextColor(90, 90, 90);
+        doc.text("Thank you for choosing Sandeep ElectroFix", 14, pageHeight - 13);
 
-        doc.setTextColor(
-            90,
-            90,
-            90
-        );
+        doc.setTextColor(14, 130, 200);
+        doc.textWithLink(website, 14, pageHeight - 7, { url: website });
 
-        doc.text(
-            "Thank you for choosing Sandeep ElectroFix",
-            14,
-            pageHeight - 13
-        );
-
-
-        // Clickable website link
-        doc.setTextColor(
-            14,
-            130,
-            200
-        );
-
-        doc.textWithLink(
-            website,
-            14,
-            pageHeight - 7,
-            {
-                url: website
-            }
-        );
-
-
-        // =====================================================
-        // 💾 SAVE PDF
-        // =====================================================
-        const safeName =
-            name
-                .replace(/[^\w\s-]/g, "")
-                .replace(/\s+/g, "_");
-
-
-        doc.save(
-            `Estimate_${safeName || "Customer"}.pdf`
-        );
-
+        const safeName = name.replace(/[^\w\s-]/g, "").replace(/\s+/g, "_");
+        doc.save(`Estimate_${safeName || "Customer"}.pdf`);
     }
 }
 
@@ -2087,7 +1313,6 @@ function shareWebsite() {
 document.addEventListener("DOMContentLoaded", () => {
     initializeNavbar();
 
-    // Initial app history state
     history.replaceState({ page: "app" }, "", window.location.href);
 
     const savedTheme = localStorage.getItem("sandeepTheme");
