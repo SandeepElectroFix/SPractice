@@ -44,7 +44,7 @@ function resetAllToDefault() {
     const confirmMsg = currentLang === "hi" 
         ? "क्या आप सभी चुनी गई सेवाओं, फॉर्म डेटा और सेटिंग्स को रीसेट करना चाहते हैं?" 
         : "Are you sure you want to reset all selected services, inputs, and settings to default?";
-        
+
     if (!confirm(confirmMsg)) return;
 
     // 1. Clear Storage
@@ -100,7 +100,7 @@ function getQuoteLiveLocation() {
             const lat = position.coords.latitude.toFixed(5);
             const lng = position.coords.longitude.toFixed(5);
             const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
-            
+
             if (locInput) {
                 locInput.value = `${lat}, ${lng} (${mapUrl})`;
                 saveCustomerInputs();
@@ -597,7 +597,6 @@ function openServiceModal(sIdx) {
         const rate = currentLang === "hi" ? sub.rate_hi : sub.rate_en;
 
         if (isAreaBased) {
-            // AREA BASED ROW (Tap to open popup)
             const hasArea = item && item.type === 'area';
             const badge = hasArea
                 ? `<span class="area-badge" style="background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:12px; font-size:0.8rem; font-weight:700;">${item.area} sq.ft. = ₹${item.total.toLocaleString('en-IN')}</span>`
@@ -615,7 +614,6 @@ function openServiceModal(sIdx) {
                 </div>
             `;
         } else {
-            // QUANTITY BASED ROW (+ / -)
             const qty = item?.qty || 0;
             return `
                 <div class="sub-service-item ${qty > 0 ? 'has-qty' : ''}" id="modal_row_${key}">
@@ -645,7 +643,7 @@ function changeQtyModal(sIdx, subIdx, change) {
     changeQty(sIdx, subIdx, change);
     const key = `${sIdx}_${subIdx}`;
     const currentQty = selectedItemsMap[key]?.qty || 0;
-    
+
     const mQty = document.getElementById(`modal_qty_${key}`);
     const mRow = document.getElementById(`modal_row_${key}`);
     if (mQty) mQty.innerText = currentQty;
@@ -670,7 +668,6 @@ function closeServiceModal(isFromHistory = false) {
 
 /* =========================================================
    MODAL 2: CENTER POPUP FOR AREA-BASED SUB-SERVICES
-   (Area input only, Approx rate, Live estimate, Delete)
 ========================================================= */
 function openAreaModal(sIdx, subIdx) {
     const service = window.MASTER_CONFIG.services[sIdx];
@@ -708,38 +705,75 @@ function openAreaModal(sIdx, subIdx) {
         if (deleteBtn) deleteBtn.style.display = "none";
     }
 
-    function updateAreaLiveEstimate() {
+    updateAreaLiveEstimate();
 
+    const overlay = document.getElementById("areaCalcModalOverlay");
+    if (overlay) {
+        overlay.style.display = "flex";
+        setTimeout(() => overlay.classList.add("active"), 10);
+    }
+    history.pushState({ isAreaModalOpen: true }, "");
+}
+
+function updateAreaLiveEstimate() {
     if (!activeAreaContext) return;
 
     const areaInput = document.getElementById("areaSqftInput");
     const estimate = document.getElementById("areaModalLiveAmount");
-
     if (!areaInput || !estimate) return;
 
-    // Entered Area
     const area = parseFloat(areaInput.value) || 0;
-
-    // Rate directly from MASTER_CONFIG → sub.price
     const rate = Number(activeAreaContext.price) || 0;
-
-    // Area × Rate
     const total = area * rate;
 
-    // Live Amount
     if (area > 0 && rate > 0) {
-
-        estimate.innerText =
-            `₹${total.toLocaleString("en-IN", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
-            })}`;
-
+        estimate.innerText = `₹${total.toLocaleString("en-IN", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        })}`;
     } else {
-
         estimate.innerText = "₹0";
     }
 }
+
+function saveAreaModalData() {
+    if (!activeAreaContext) return;
+    const areaInput = document.getElementById("areaSqftInput");
+    const area = parseFloat(areaInput?.value) || 0;
+
+    if (area <= 0) {
+        alert(currentLang === "hi" ? "कृपया मान्य क्षेत्रफल (sq.ft.) दर्ज करें" : "Please enter a valid area in sq.ft.");
+        return;
+    }
+
+    const { key, name_hi, name_en, price, sIdx } = activeAreaContext;
+    selectedItemsMap[key] = {
+        type: 'area',
+        name_hi: name_hi,
+        name_en: name_en,
+        price: Number(price),
+        area: area,
+        total: area * Number(price)
+    };
+
+    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
+    updateCalculations();
+    closeAreaModal();
+    openServiceModal(sIdx);
+}
+
+function deleteAreaModalData() {
+    if (!activeAreaContext) return;
+    const { key, sIdx } = activeAreaContext;
+    if (selectedItemsMap[key]) {
+        delete selectedItemsMap[key];
+        localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
+        updateCalculations();
+    }
+    closeAreaModal();
+    openServiceModal(sIdx);
+}
+
 function closeAreaModal(isFromHistory = false) {
     const overlay = document.getElementById("areaCalcModalOverlay");
     if (overlay) {
@@ -750,52 +784,6 @@ function closeAreaModal(isFromHistory = false) {
         if (!isFromHistory && history.state && history.state.isAreaModalOpen) {
             history.back();
         }
-    }
-}
-/* =========================================================
-   AREA MODAL — LIVE SQ.FT CALCULATION
-   Area × Rate = Estimated Amount
-========================================================= */
-function updateAreaLiveEstimate() {
-
-    if (!activeAreaContext) return;
-
-    const areaInput = document.getElementById("areaSqftInput");
-    const estimate = document.getElementById("areaModalLiveAmount");
-
-    if (!areaInput || !estimate) return;
-
-    // Entered area
-    const area = parseFloat(areaInput.value) || 0;
-
-    // Rate text
-    const rateText = activeAreaContext.rateStr || "";
-
-    // Extract numeric rate
-    // Example: ₹25 / sq.ft. → 25
-    const rateMatch = rateText
-        .replace(/,/g, "")
-        .match(/(\d+(?:\.\d+)?)/);
-
-    const rate = rateMatch
-        ? parseFloat(rateMatch[1])
-        : 0;
-
-    // Final calculation
-    const total = area * rate;
-
-    // Display result
-    if (area > 0 && rate > 0) {
-
-        estimate.innerText =
-            `₹${total.toLocaleString("en-IN", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
-            })}`;
-
-    } else {
-
-        estimate.innerText = "₹0";
     }
 }
 
@@ -1300,7 +1288,7 @@ function getUserLocation() {
         return;
     }
     if (status) status.innerText = "Locating...";
-    
+
     navigator.geolocation.getCurrentPosition(
         (pos) => {
             const R = 6371;
