@@ -717,6 +717,7 @@ function openAreaModal(sIdx, subIdx) {
     history.pushState({ isAreaModalOpen: true }, "");
 }
 
+// Live Price Calculation on Typing
 function updateAreaLiveEstimate() {
     if (!activeAreaContext) return;
 
@@ -738,13 +739,14 @@ function updateAreaLiveEstimate() {
     }
 }
 
+// Save Area Data (Add Button)
 function saveAreaModalData() {
     if (!activeAreaContext) return;
     const areaInput = document.getElementById("areaSqftInput");
     const area = parseFloat(areaInput?.value) || 0;
 
     if (area <= 0) {
-        alert(currentLang === "hi" ? "कृपया मान्य क्षेत्रफल (sq.ft.) दर्ज करें" : "Please enter a valid area in sq.ft.");
+        alert(currentLang === "hi" ? "कृपया सही वर्ग फीट (sq.ft.) दर्ज करें" : "Please enter a valid area in sq.ft.");
         return;
     }
 
@@ -764,6 +766,7 @@ function saveAreaModalData() {
     openServiceModal(sIdx);
 }
 
+// Delete Area Service
 function deleteAreaModalData() {
     if (!activeAreaContext) return;
     const { key, sIdx } = activeAreaContext;
