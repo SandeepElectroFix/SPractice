@@ -588,8 +588,9 @@ function openServiceModal(sIdx) {
     document.getElementById("modalServiceTitle").innerText = title;
     document.getElementById("modalServiceDesc").innerText = desc;
 
-    const itemsContainer = document.getElementById("modalItemsContainer");
-    itemsContainer.innerHTML = service.subServices.filter(sub => sub.show !== false).map((sub, subIdx) => {
+        itemsContainer.innerHTML = service.subServices.map((sub, subIdx) => {
+        if (sub.show === false) return "";
+
         const key = `${sIdx}_${subIdx}`;
         const item = selectedItemsMap[key];
         const isAreaBased = (sub.rate_en && sub.rate_en.includes('/ sq.ft.')) || (sub.rate_hi && sub.rate_hi.includes('वर्ग फीट'));
@@ -630,6 +631,7 @@ function openServiceModal(sIdx) {
             `;
         }
     }).join("");
+
 
     const overlay = document.getElementById("serviceModalOverlay");
     overlay.style.display = "flex";
