@@ -761,7 +761,7 @@ section h2 {
 
 .calc-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 3px 0; }
 .discount-row { color: var(--green); }
-.total-row { border-top: 1px solid var(--card-border); padding-top: 8px; margin-top: 4px; font-size: 1rem; font-weight: 700; color: #25d366; }
+.total-row { border-top: 1px solid var(--card-border); padding-top: 8px; margin-top: 4px; font-size: 1rem; font-weight: 700; color: #8B0000; }
 
 .quote-action-buttons { display: flex; flex-direction: column; gap: 8px; }
 .pdf-download-btn { background: linear-gradient(135deg, #00bfff, #0072ff); color: #fff; border: none; font-weight: 700; }
