@@ -588,7 +588,10 @@ function openServiceModal(sIdx) {
     document.getElementById("modalServiceTitle").innerText = title;
     document.getElementById("modalServiceDesc").innerText = desc;
 
-        itemsContainer.innerHTML = service.subServices.map((sub, subIdx) => {
+    const itemsContainer = document.getElementById("modalItemsContainer");
+    if (!itemsContainer) return;
+
+    itemsContainer.innerHTML = service.subServices.map((sub, subIdx) => {
         if (sub.show === false) return "";
 
         const key = `${sIdx}_${subIdx}`;
@@ -632,10 +635,11 @@ function openServiceModal(sIdx) {
         }
     }).join("");
 
-
     const overlay = document.getElementById("serviceModalOverlay");
-    overlay.style.display = "flex";
-    setTimeout(() => overlay.classList.add("active"), 10);
+    if (overlay) {
+        overlay.style.display = "flex";
+        setTimeout(() => overlay.classList.add("active"), 10);
+    }
     document.body.style.overflow = "hidden";
 
     history.pushState({ isModalOpen: true }, "");
@@ -739,7 +743,7 @@ function updateAreaLiveEstimate() {
     }
 }
 
-// 2. Save / Add Function (HTML: onclick="saveAreaSubService()")
+// 2. Save / Add Function (Matches HTML onclick="saveAreaSubService()")
 function saveAreaSubService() {
     if (!activeAreaContext) return;
     const areaInput = document.getElementById("areaSqftInput");
@@ -766,7 +770,7 @@ function saveAreaSubService() {
     openServiceModal(sIdx);
 }
 
-// 3. Delete Function (HTML: onclick="deleteAreaSubService()")
+// 3. Delete Function (Matches HTML onclick="deleteAreaSubService()")
 function deleteAreaSubService() {
     if (!activeAreaContext) return;
     const { key, sIdx } = activeAreaContext;
