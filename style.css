@@ -1493,3 +1493,115 @@ html.saved-light-theme .app-overlay {
     }
 
 }
+
+/* Center Area Popup Styles */
+.area-popup-box {
+    max-width: 380px;
+    width: 90%;
+    margin: auto;
+    border-radius: 16px;
+    background: #ffffff;
+    padding: 18px 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.area-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.area-rate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.area-input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.area-input-wrap label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.area-input-wrap input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #0f172a;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.area-input-wrap input:focus {
+    border-color: #0ea5e9;
+}
+
+.area-live-box {
+    text-align: center;
+    background: #f0fdf4;
+    border: 1.5px dashed #22c55e;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.area-live-box span {
+    font-size: 0.8rem;
+    color: #166534;
+    display: block;
+    font-weight: 500;
+}
+
+.area-live-box .live-price {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #15803d;
+    margin-top: 4px;
+}
+
+.area-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.btn-save-area {
+    flex: 2;
+    background: #0ea5e9;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btn-delete-area {
+    flex: 1;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+
