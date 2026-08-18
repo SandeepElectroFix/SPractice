@@ -14,4 +14,4 @@ Professional Electrician and Electrical Services in Lucknow, Uttar Pradesh.
 - **Business**: Sandeep ElectroFix
 - **Location**: Lucknow, Uttar Pradesh
 - **Phone / WhatsApp**: +91 9026036445
-- **Website**: https://sandeepelectrofix.github.io/SandeepElectroFix-Card/
+- **Website**: https://sandeepelectrofix.github.io/SPractice/
