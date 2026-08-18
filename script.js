@@ -708,23 +708,38 @@ function openAreaModal(sIdx, subIdx) {
         if (deleteBtn) deleteBtn.style.display = "none";
     }
 
-    updateAreaLiveEstimate();
+    function updateAreaLiveEstimate() {
 
-    const overlay = document.getElementById("areaCalcModalOverlay");
-    if (overlay) {
-        overlay.style.display = "flex";
-        overlay.classList.add("active");
+    if (!activeAreaContext) return;
+
+    const areaInput = document.getElementById("areaSqftInput");
+    const estimate = document.getElementById("areaModalLiveAmount");
+
+    if (!areaInput || !estimate) return;
+
+    // Entered Area
+    const area = parseFloat(areaInput.value) || 0;
+
+    // Rate directly from MASTER_CONFIG → sub.price
+    const rate = Number(activeAreaContext.price) || 0;
+
+    // Area × Rate
+    const total = area * rate;
+
+    // Live Amount
+    if (area > 0 && rate > 0) {
+
+        estimate.innerText =
+            `₹${total.toLocaleString("en-IN", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            })}`;
+
+    } else {
+
+        estimate.innerText = "₹0";
     }
-
-    history.pushState({ isAreaModalOpen: true }, "");
 }
-document.addEventListener("input", function (e) {
-
-    if (e.target && e.target.id === "areaSqftInput") {
-        updateAreaLiveEstimate();
-    }
-
-});
 function closeAreaModal(isFromHistory = false) {
     const overlay = document.getElementById("areaCalcModalOverlay");
     if (overlay) {
