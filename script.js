@@ -718,7 +718,13 @@ function openAreaModal(sIdx, subIdx) {
 
     history.pushState({ isAreaModalOpen: true }, "");
 }
+document.addEventListener("input", function (e) {
 
+    if (e.target && e.target.id === "areaSqftInput") {
+        updateAreaLiveEstimate();
+    }
+
+});
 function closeAreaModal(isFromHistory = false) {
     const overlay = document.getElementById("areaCalcModalOverlay");
     if (overlay) {
@@ -731,7 +737,57 @@ function closeAreaModal(isFromHistory = false) {
         }
     }
 }
+/* =========================================================
+   AREA MODAL — LIVE SQFT CALCULATION
+   Sq.Ft × Rate = Estimated Amount
+========================================================= */
+function updateAreaLiveEstimate() {
 
+    if (!activeAreaContext) return;
+
+    const areaInput = document.getElementById("areaSqftInput");
+
+    if (!areaInput) return;
+
+    const area = parseFloat(areaInput.value) || 0;
+
+    // Rate from MASTER_CONFIG
+    const rateText = activeAreaContext.rateStr || "";
+
+    // Extract first number from rate text
+    // Examples:
+    // ₹ 25 / Sq.Ft
+    // ₹25/Sq.Ft
+    // 25 / Sq.Ft
+    const rateMatch = rateText.replace(/,/g, "").match(/(\d+(?:\.\d+)?)/);
+
+    const rate = rateMatch ? parseFloat(rateMatch[1]) : 0;
+
+    const total = area * rate;
+
+    // Try common estimate element IDs
+    const estimate =
+        document.getElementById("areaModalLiveEstimate") ||
+        document.getElementById("areaLiveEstimate") ||
+        document.getElementById("areaEstimate") ||
+        document.getElementById("areaModalTotal");
+
+    if (estimate) {
+
+        if (area > 0 && rate > 0) {
+
+            estimate.innerText =
+                `₹${total.toLocaleString("en-IN", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                })}`;
+
+        } else {
+
+            estimate.innerText = "₹0";
+        }
+    }
+}
 
 /* =========================================================
    LIGHTBOX & TOAST
