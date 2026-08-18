@@ -940,13 +940,13 @@
         <div class="area-modal-body" style="display:flex; flex-direction:column; gap:14px;">
             <!-- Rate Display -->
             <div class="area-rate-row" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:10px 12px; border-radius:10px; font-size:0.95rem; color:#334155;">
-                <span>दर (Rate):</span>
+                <span id="lblAreaRate">दर (Rate):</span>
                 <strong id="areaModalRateDisplay" style="color:#0ea5e9;">₹0 / sq.ft.</strong>
             </div>
 
             <!-- Area Input Field -->
             <div class="area-input-wrap" style="display:flex; flex-direction:column; gap:6px;">
-                <label for="areaSqftInput" style="font-size:0.85rem; font-weight:600; color:#475569;">एरिया दर्ज करें (Area in sq. ft.) *</label>
+                <label for="areaSqftInput" id="lblAreaInput" style="font-size:0.85rem; font-weight:600; color:#475569;">एरिया दर्ज करें (Area in sq. ft.) *</label>
                 <input 
                     type="number" 
                     id="areaSqftInput" 
@@ -960,7 +960,7 @@
 
             <!-- Live Amount Box -->
             <div class="area-live-box" style="text-align:center; background:#f0fdf4; border:1.5px dashed #22c55e; padding:12px; border-radius:12px;">
-                <span style="font-size:0.8rem; color:#166534; display:block;">अनुमानित कुल राशि (Estimated Amount):</span>
+                <span id="lblAreaEstimated" style="font-size:0.8rem; color:#166534; display:block;">अनुमानित कुल राशि (Estimated Amount):</span>
                 <div class="live-price" id="areaModalLiveAmount" style="font-size:1.6rem; font-weight:700; color:#15803d; margin-top:4px;">₹0</div>
             </div>
 
