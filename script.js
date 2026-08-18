@@ -711,71 +711,18 @@ function openAreaModal(sIdx, subIdx) {
     updateAreaLiveEstimate();
 
     const overlay = document.getElementById("areaCalcModalOverlay");
-    if (overlay) overlay.style.display = "flex";
+    if (overlay) {
+        overlay.style.display = "flex";
+        overlay.classList.add("active");
+    }
 
     history.pushState({ isAreaModalOpen: true }, "");
 }
 
-function updateAreaLiveEstimate() {
-    if (!activeAreaContext) return;
-    const areaInput = document.getElementById("areaSqftInput");
-    const area = parseFloat(areaInput?.value) || 0;
-    const total = area * activeAreaContext.price;
-
-    const liveDisplay = document.getElementById("areaModalLiveAmount");
-    if (liveDisplay) {
-        liveDisplay.innerText = `₹${total.toLocaleString('en-IN')}`;
-    }
-}
-
-function saveAreaSubService() {
-    if (!activeAreaContext) return;
-    const areaInput = document.getElementById("areaSqftInput");
-    const area = parseFloat(areaInput?.value) || 0;
-
-    if (area <= 0) {
-        alert(currentLang === 'hi' ? 'कृपया सही एरिया (Area in sq. ft.) दर्ज करें।' : 'Please enter a valid area in sq. ft.');
-        return;
-    }
-
-    const calculatedTotal = area * activeAreaContext.price;
-
-    selectedItemsMap[activeAreaContext.key] = {
-        type: 'area',
-        name_hi: activeAreaContext.name_hi,
-        name_en: activeAreaContext.name_en,
-        price: activeAreaContext.price,
-        rateStr: activeAreaContext.rateStr,
-        area: area,
-        qty: 1,
-        total: calculatedTotal
-    };
-
-    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
-    closeAreaModal();
-    updateCalculations();
-    
-    // Refresh parent service modal if open
-    if (activeAreaContext.sIdx !== undefined) {
-        openServiceModal(activeAreaContext.sIdx);
-    }
-}
-
-function deleteAreaSubService() {
-    if (!activeAreaContext) return;
-    delete selectedItemsMap[activeAreaContext.key];
-    localStorage.setItem("sandeepCart", JSON.stringify(selectedItemsMap));
-    closeAreaModal();
-    updateCalculations();
-
-    if (activeAreaContext.sIdx !== undefined) {
-        openServiceModal(activeAreaContext.sIdx);
-    }
-}
-
 function closeAreaModal(isFromHistory = false) {
     const overlay = document.getElementById("areaCalcModalOverlay");
-    if (overlay && overlay.style.display === "flex") {
+    if (overlay) {
+        overlay.classList.remove("active");
         overlay.style.display = "none";
         activeAreaContext = null;
 
@@ -784,6 +731,7 @@ function closeAreaModal(isFromHistory = false) {
         }
     }
 }
+
 
 /* =========================================================
    LIGHTBOX & TOAST
