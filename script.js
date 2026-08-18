@@ -1141,7 +1141,7 @@ function sendWhatsappQuote() {
 }
 
 /* =========================================================
-   📄 PDF ESTIMATE GENERATION (Area + Quantity Support)
+   📄 PDF ESTIMATE GENERATION (Fixed Logo Aspect Ratio)
 ========================================================= */
 function downloadEstimatePDF() {
     const { jsPDF } = window.jspdf || {};
@@ -1173,7 +1173,7 @@ function downloadEstimatePDF() {
 
     const doc = new jsPDF();
 
-    // HEADER
+    // HEADER Background Bar
     doc.setFillColor(5, 8, 22);
     doc.rect(0, 0, 210, 42, "F");
 
@@ -1182,7 +1182,22 @@ function downloadEstimatePDF() {
 
     logoImage.onload = function () {
         try {
-            doc.addImage(logoImage, "PNG", 10, 6, 25, 25);
+            // ऑटो-कैलकुलेशन: अधिकतम 26mm ऊंचाई के अनुसार सही चौड़ाई सेट करना
+            const maxH = 26;
+            const aspect = logoImage.naturalWidth / (logoImage.naturalHeight || 1);
+            let finalW = maxH * aspect;
+            let finalH = maxH;
+
+            // अगर लोगो बहुत चौड़ा हो तो लिमिट करना
+            if (finalW > 30) {
+                finalW = 30;
+                finalH = 30 / aspect;
+            }
+
+            const posX = 12;
+            const posY = 6 + (maxH - finalH) / 2; // वर्टिकल सेंटर अलाइनमेंट
+
+            doc.addImage(logoImage, "PNG", posX, posY, finalW, finalH);
         } catch (e) {
             console.warn("Logo could not be added:", e);
         }
@@ -1197,19 +1212,19 @@ function downloadEstimatePDF() {
 
     function createEstimatePDFContent() {
         doc.setTextColor(245, 197, 66);
-        doc.setFontSize(18);
-        doc.text(biz.name || "Sandeep ElectroFix", 40, 16);
+        doc.setFontSize(17);
+        doc.text(biz.name || "Sandeep ElectroFix", 44, 16);
 
         doc.setFontSize(9);
         doc.setTextColor(255, 255, 255);
-        doc.text(`Phone: ${biz.phone || "N/A"} | Lucknow, UP`, 40, 24);
+        doc.text(`Phone: ${biz.phone || "N/A"} | Lucknow, UP`, 44, 23);
 
-        doc.text(`Date: ${dateText}`, 140, 17);
-        doc.text(`Time: ${timeText}`, 140, 24);
+        doc.text(`Date: ${dateText}`, 145, 16);
+        doc.text(`Time: ${timeText}`, 145, 23);
 
         doc.setTextColor(100, 200, 255);
         doc.setFontSize(8);
-        doc.textWithLink(website, 40, 32, { url: website });
+        doc.textWithLink(website, 44, 30, { url: website });
 
         doc.setTextColor(16, 24, 39);
         doc.setFontSize(11);
@@ -1290,35 +1305,6 @@ function downloadEstimatePDF() {
     }
 }
 
-function getUserLocation() {
-    const status = document.getElementById("locationStatus");
-    if (!navigator.geolocation) {
-        if (status) status.innerText = "Geolocation not supported.";
-        return;
-    }
-    if (status) status.innerText = "Locating...";
-
-    navigator.geolocation.getCurrentPosition(
-        (pos) => {
-            const R = 6371;
-            const dLat = (pos.coords.latitude - 26.8467) * (Math.PI / 180);
-            const dLon = (pos.coords.longitude - 80.9462) * (Math.PI / 180);
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(26.8467 * (Math.PI / 180)) * Math.cos(pos.coords.latitude * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const dist = (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))).toFixed(1);
-            if (status) status.innerHTML = `✅ ${currentLang === 'hi' ? 'आप हमारे केंद्र से लगभग' : 'You are approx'} <strong>${dist} km</strong> ${currentLang === 'hi' ? 'दूर हैं।' : 'away from Lucknow center.'}`;
-        },
-        () => { if (status) status.innerText = "Location permission denied."; }
-    );
-}
-
-function shareWebsite() {
-    if (navigator.share) {
-        navigator.share({ title: window.MASTER_CONFIG?.business?.name, url: window.location.href });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link copied!");
-    }
-}
 
 // App Initialization
 document.addEventListener("DOMContentLoaded", () => {
