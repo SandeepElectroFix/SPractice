@@ -1566,7 +1566,7 @@ window.MATERIAL_ESTIMATE_MATERIALS = [
     id: "stage4-kitkat-32a-416v",
     stage: "stage-4",
     name: "Kit Kat Fuse",
-    size: "32A / 416V",
+    size: "63A / 415V",
     rate: 0,
     rateEditable: true,
     colorWise: false
@@ -1576,7 +1576,7 @@ window.MATERIAL_ESTIMATE_MATERIALS = [
     id: "stage4-kitkat-32a-417v",
     stage: "stage-4",
     name: "Kit Kat Fuse",
-    size: "32A / 417V",
+    size: "100A / 415V",
     rate: 0,
     rateEditable: true,
     colorWise: false
