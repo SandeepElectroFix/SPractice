@@ -1,10 +1,11 @@
 /* =========================================================
    SANDEEP ELECTROFIX
-   MATERIAL ESTIMATE SYSTEM
+   ADVANCED MATERIAL ESTIMATE SYSTEM
    MASTER MATERIAL CATALOGUE
-   Version 1.0.0
+   Version 2.0.0
 
-   Structure:
+   STRUCTURE
+
    Material
       ↓
    Type
@@ -13,2382 +14,2273 @@
       ↓
    Color
       ↓
-   Qty
+   Quantity
+      ↓
+   Unit
       ↓
    Brand
+
+   FEATURES
+   ✓ Hindi + English
+   ✓ Stage wise
+   ✓ Show / Hide
+   ✓ Type / Sub Type
+   ✓ Color
+   ✓ Quantity
+   ✓ Material specific Unit
+   ✓ Brand
+   ✓ Non Brand / Local
+   ✓ Skip Brand
 ========================================================= */
 
-window.MATERIAL_CATALOG = [
 
-    /* =====================================================
-       STAGE 1
-       SLAB CONDUIT INSTALLATION
-    ===================================================== */
+/* =========================================================
+   COMMON HELPERS
+========================================================= */
+
+const MATERIAL_COLORS = [
+    {
+        id: "red",
+        show: true,
+        name_hi: "लाल",
+        name_en: "Red"
+    },
+    {
+        id: "black",
+        show: true,
+        name_hi: "काला",
+        name_en: "Black"
+    },
+    {
+        id: "yellow",
+        show: true,
+        name_hi: "पीला",
+        name_en: "Yellow"
+    },
+    {
+        id: "blue",
+        show: true,
+        name_hi: "नीला",
+        name_en: "Blue"
+    },
+    {
+        id: "green",
+        show: true,
+        name_hi: "हरा",
+        name_en: "Green"
+    },
+    {
+        id: "white",
+        show: true,
+        name_hi: "सफेद",
+        name_en: "White"
+    },
+    {
+        id: "grey",
+        show: true,
+        name_hi: "स्लेटी",
+        name_en: "Grey"
+    }
+];
+
+
+const UNITS = {
+
+    PCS: {
+        id: "pcs",
+        show: true,
+        name_hi: "पीस",
+        name_en: "Pcs"
+    },
+
+    BUNDLE: {
+        id: "bundle",
+        show: true,
+        name_hi: "बंडल",
+        name_en: "Bundle"
+    },
+
+    BOX: {
+        id: "box",
+        show: true,
+        name_hi: "बॉक्स",
+        name_en: "Box"
+    },
+
+    METER: {
+        id: "meter",
+        show: true,
+        name_hi: "मीटर",
+        name_en: "Meter"
+    },
+
+    COIL: {
+        id: "coil",
+        show: true,
+        name_hi: "कॉइल",
+        name_en: "Coil"
+    },
+
+    ROLL: {
+        id: "roll",
+        show: true,
+        name_hi: "रोल",
+        name_en: "Roll"
+    },
+
+    PACKET: {
+        id: "packet",
+        show: true,
+        name_hi: "पैकेट",
+        name_en: "Packet"
+    },
+
+    SET: {
+        id: "set",
+        show: true,
+        name_hi: "सेट",
+        name_en: "Set"
+    },
+
+    KG: {
+        id: "kg",
+        show: true,
+        name_hi: "किलोग्राम",
+        name_en: "Kg"
+    },
+
+    BAG: {
+        id: "bag",
+        show: true,
+        name_hi: "बैग",
+        name_en: "Bag"
+    }
+};
+
+
+/* =========================================================
+   MATERIAL FACTORY
+========================================================= */
+
+function createMaterial({
+    id,
+    hi,
+    en,
+    types = [],
+    colors = null,
+    units = [],
+    show = true
+}) {
+
+    return {
+
+        id,
+
+        show,
+
+        name_hi: hi,
+        name_en: en,
+
+        types,
+
+        colors,
+
+        unit: {
+
+            show: true,
+
+            options: units
+
+        },
+
+        brand: {
+
+            show: true,
+
+            allowSkip: true,
+
+            allowNonBrand: true,
+
+            customEntry: true
+
+        }
+
+    };
+}
+
+
+function createType(
+    id,
+    hi,
+    en,
+    subTypes = [],
+    show = true
+) {
+
+    return {
+
+        id,
+
+        show,
+
+        name_hi: hi,
+        name_en: en,
+
+        subTypes
+
+    };
+}
+
+
+function createSubType(
+    id,
+    hi,
+    en,
+    colors = null,
+    show = true
+) {
+
+    return {
+
+        id,
+
+        show,
+
+        name_hi: hi,
+        name_en: en,
+
+        colors
+
+    };
+}
+
+
+/* =========================================================
+   STAGE 1
+   SLAB CONDUIT INSTALLATION
+========================================================= */
+
+const STAGE_1_MATERIALS = [
+
+    createMaterial({
+        id: "slab-pipe",
+        hi: "पाइप",
+        en: "Pipe",
+
+        types: [
+
+            createType(
+                "heavy",
+                "भारी",
+                "Heavy"
+            ),
+
+            createType(
+                "medium",
+                "माध्यम",
+                "Medium"
+            ),
+
+            createType(
+                "light",
+                "हल्का",
+                "Light"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BUNDLE
+        ]
+    }),
+
+
+    createMaterial({
+        id: "slab-long-bend",
+        hi: "लॉन्ग बेंड",
+        en: "Long Bend",
+
+        types: [
+
+            createType(
+                "heavy",
+                "भारी",
+                "Heavy"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "deep-junction-box",
+        hi: "डीप जंक्शन बॉक्स",
+        en: "Deep Junction Box",
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fan-box",
+        hi: "फैन बॉक्स",
+        en: "Fan Box",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "light-box",
+        hi: "लाइट बॉक्स",
+        en: "Light Box",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "slab-tape",
+        hi: '3" टेप',
+        en: '3" Tape',
+
+        units: [
+            UNITS.ROLL,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "neel-powder",
+        hi: "नील पाउडर",
+        en: "Neel Powder",
+
+        units: [
+            UNITS.PACKET,
+            UNITS.KG
+        ]
+    }),
+
+
+    createMaterial({
+        id: "kachcha-wire",
+        hi: "कच्चा तार",
+        en: "Binding Wire",
+
+        units: [
+            UNITS.KG,
+            UNITS.BUNDLE
+        ]
+    }),
+
+
+    createMaterial({
+        id: "cable-tie",
+        hi: "केबल टाई",
+        en: "Cable Tie",
+
+        units: [
+            UNITS.PCS,
+            UNITS.PACKET
+        ]
+    })
+
+];
+
+
+/* =========================================================
+   STAGE 2
+   WALL CONDUIT INSTALLATION
+========================================================= */
+
+const STAGE_2_MATERIALS = [
+
+    createMaterial({
+        id: "gi-metal-box",
+        hi: "जीआई बोर्ड / मेटल बॉक्स",
+        en: "GI Board / Metal Box",
+
+        types: [
+
+            createType(
+                "2-module",
+                "2 मॉड्यूल",
+                "2 Module"
+            ),
+
+            createType(
+                "3-module",
+                "3 मॉड्यूल",
+                "3 Module"
+            ),
+
+            createType(
+                "4-module",
+                "4 मॉड्यूल",
+                "4 Module"
+            ),
+
+            createType(
+                "6-module",
+                "6 मॉड्यूल",
+                "6 Module"
+            ),
+
+            createType(
+                "8-module-square",
+                "8 मॉड्यूल (चौकोर)",
+                "8 Module (Square)"
+            ),
+
+            createType(
+                "8-module-long",
+                "8 मॉड्यूल (लम्बा)",
+                "8 Module (Rectangular)"
+            ),
+
+            createType(
+                "12-module",
+                "12 मॉड्यूल",
+                "12 Module"
+            ),
+
+            createType(
+                "16-module",
+                "16 मॉड्यूल",
+                "16 Module"
+            ),
+
+            createType(
+                "18-module",
+                "18 मॉड्यूल",
+                "18 Module"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "wall-pipe",
+        hi: "पाइप",
+        en: "Pipe",
+
+        types: [
+
+            createType(
+                "heavy",
+                "भारी",
+                "Heavy"
+            ),
+
+            createType(
+                "medium",
+                "माध्यम",
+                "Medium"
+            ),
+
+            createType(
+                "light",
+                "हल्का",
+                "Light"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BUNDLE
+        ]
+    }),
+
+
+    createMaterial({
+        id: "wall-junction-box",
+        hi: "जंक्शन बॉक्स 4वे (डिब्बी)",
+        en: "Junction Box 4 Way (Dibby)",
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "wall-long-bend",
+        hi: "लॉन्ग बेंड",
+        en: "Long Bend",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "wall-tape",
+        hi: '3" टेप',
+        en: '3" Tape',
+
+        units: [
+            UNITS.ROLL,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "25mm-clip",
+        hi: "25 एमएम क्लिप",
+        en: "25mm Clip",
+
+        units: [
+            UNITS.PCS,
+            UNITS.PACKET
+        ]
+    }),
+
+
+    createMaterial({
+        id: "mcb-box-double-door",
+        hi: "एमसीबी बॉक्स डबल डोर",
+        en: "MCB Box Double Door",
+
+        units: [
+            UNITS.PCS
+        ]
+    })
+
+];
+
+
+/* =========================================================
+   STAGE 3
+   WIRING INSTALLATION
+========================================================= */
+
+const WIRE_SIZES = [
+
+    createSubType(
+        "0-75-sqmm",
+        "0.75 स्क्वायर एमएम",
+        "0.75 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "1-sqmm",
+        "1 स्क्वायर एमएम",
+        "1 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "1-5-sqmm",
+        "1.5 स्क्वायर एमएम",
+        "1.5 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "2-5-sqmm",
+        "2.5 स्क्वायर एमएम",
+        "2.5 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "4-sqmm",
+        "4 स्क्वायर एमएम",
+        "4 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "6-sqmm",
+        "6 स्क्वायर एमएम",
+        "6 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "10-sqmm",
+        "10 स्क्वायर एमएम",
+        "10 Sqmm",
+        MATERIAL_COLORS
+    )
+
+];
+
+
+const STAGE_3_MATERIALS = [
+
+    createMaterial({
+        id: "wire",
+        hi: "तार",
+        en: "Wire",
+
+        types: [
+
+            createType(
+                "fr",
+                "FR",
+                "FR",
+                WIRE_SIZES
+            )
+
+        ],
+
+        units: [
+            UNITS.METER,
+            UNITS.COIL
+        ]
+    }),
+
+
+    createMaterial({
+        id: "wiring-tape",
+        hi: "बिजली वाला टेप",
+        en: "Electrical Tape",
+
+        types: [],
+
+        units: [
+            UNITS.ROLL,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "flexible-pipe",
+        hi: "फ्लेक्सिबल पाइप",
+        en: "Flexible Pipe",
+
+        types: [
+
+            createType(
+                "0-75-inch",
+                '0.75"',
+                '0.75"'
+            ),
+
+            createType(
+                "1-inch",
+                '1"',
+                '1"'
+            )
+
+        ],
+
+        units: [
+            UNITS.METER,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "steel-spring-wire",
+        hi: "स्टील तार / स्प्रिंग तार",
+        en: "Steel Wire / Spring Wire",
+
+        units: [
+            UNITS.METER,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "pop",
+        hi: "पीओपी",
+        en: "POP",
+
+        units: [
+            UNITS.KG,
+            UNITS.BAG
+        ]
+    }),
+
+
+    createMaterial({
+        id: "putty-blade",
+        hi: "पुट्टी वाला पत्ता",
+        en: "Putty Blade / Patta",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fastener",
+        hi: "फास्टनर",
+        en: "Fastener",
+
+        types: [
+
+            createType(
+                "m10",
+                "एम 10",
+                "M10"
+            ),
+
+            createType(
+                "m12",
+                "एम 12",
+                "M12"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    })
+
+];
+
+
+/* =========================================================
+   STAGE 4
+   FINAL ELECTRICAL FITTINGS
+========================================================= */
+
+const STAGE_4_MATERIALS = [
+
+    /* ---------- MODULAR PLATE ---------- */
+
+    createMaterial({
+        id: "modular-plate",
+        hi: "मॉड्यूलर प्लेट",
+        en: "Modular Plate",
+
+        types: [
+
+            createType(
+                "2-module",
+                "2 मॉड्यूल",
+                "2 Module"
+            ),
+
+            createType(
+                "3-module",
+                "3 मॉड्यूल",
+                "3 Module"
+            ),
+
+            createType(
+                "4-module",
+                "4 मॉड्यूल",
+                "4 Module"
+            ),
+
+            createType(
+                "6-module",
+                "6 मॉड्यूल",
+                "6 Module"
+            ),
+
+            createType(
+                "8-module-square",
+                "8 मॉड्यूल (चौकोर)",
+                "8 Module (Square)"
+            ),
+
+            createType(
+                "8-module-long",
+                "8 मॉड्यूल (लम्बा)",
+                "8 Module (Rectangular)"
+            ),
+
+            createType(
+                "12-module",
+                "12 मॉड्यूल",
+                "12 Module"
+            ),
+
+            createType(
+                "16-module",
+                "16 मॉड्यूल",
+                "16 Module"
+            ),
+
+            createType(
+                "18-module",
+                "18 मॉड्यूल",
+                "18 Module"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- SWITCH ---------- */
+
+    createMaterial({
+        id: "switch",
+        hi: "स्विच",
+        en: "Switch",
+
+        types: [
+
+            createType(
+                "6a",
+                "6 एम्पेयर",
+                "6 Ampere"
+            ),
+
+            createType(
+                "16a",
+                "16 एम्पेयर",
+                "16 Ampere"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- SOCKET ---------- */
+
+    createMaterial({
+        id: "socket",
+        hi: "सॉकेट",
+        en: "Socket",
+
+        types: [
+
+            createType(
+                "6a",
+                "6 एम्पेयर",
+                "6 Ampere"
+            ),
+
+            createType(
+                "16a",
+                "16 एम्पेयर",
+                "16 Ampere"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- MINI MCB ---------- */
+
+    createMaterial({
+        id: "mini-mcb",
+        hi: "मिनी एमसीबी",
+        en: "Mini MCB",
+
+        types: [
+
+            createType("6a", "6 एम्पेयर", "6 Ampere"),
+            createType("10a", "10 एम्पेयर", "10 Ampere"),
+            createType("16a", "16 एम्पेयर", "16 Ampere"),
+            createType("20a", "20 एम्पेयर", "20 Ampere"),
+            createType("25a", "25 एम्पेयर", "25 Ampere"),
+            createType("32a", "32 एम्पेयर", "32 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- FAN REGULATOR ---------- */
+
+    createMaterial({
+        id: "fan-regulator",
+        hi: "फैन रेगुलेटर",
+        en: "Fan Regulator",
+
+        types: [
+
+            createType(
+                "1-module",
+                "1 मॉड्यूल",
+                "1 Module"
+            ),
+
+            createType(
+                "2-module",
+                "2 मॉड्यूल",
+                "2 Module"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- 2 WAY SWITCH ---------- */
+
+    createMaterial({
+        id: "2-way-switch",
+        hi: "2वे स्विच",
+        en: "2 Way Switch",
+
+        types: [
+
+            createType(
+                "6a",
+                "6 एम्पेयर",
+                "6 Ampere"
+            ),
+
+            createType(
+                "16a",
+                "16 एम्पेयर",
+                "16 Ampere"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- BELL PUSH ---------- */
+
+    createMaterial({
+        id: "bell-push",
+        hi: "बेल पुश (घन्टी स्विच)",
+        en: "Bell Push",
+
+        types: [
+
+            createType(
+                "1-module",
+                "1 मॉड्यूल",
+                "1 Module"
+            ),
+
+            createType(
+                "2-module",
+                "2 मॉड्यूल",
+                "2 Module"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "neon-indicator",
+        hi: "निऑन इंडिकेटर",
+        en: "Neon Indicator",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "blank-plate",
+        hi: "ब्लेंक प्लेट/डमी स्विच",
+        en: "Blank Plate / Dummy Switch",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- FAN SHEET ---------- */
+
+    createMaterial({
+        id: "fan-sheet",
+        hi: "फैन शीट",
+        en: "Fan Sheet",
+
+        types: [
+
+            createType(
+                "pvc",
+                "पीवीसी",
+                "PVC"
+            ),
+
+            createType(
+                "mica",
+                "माइका",
+                "Mica"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "door-bell",
+        hi: "डोर बेल (घन्टी)",
+        en: "Door Bell",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "ceiling-rose",
+        hi: "सीलिंग रोज",
+        en: "Ceiling Rose",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "led-bulb",
+        hi: "एलईडी बल्ब",
+        en: "LED Bulb",
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "led-tube-light",
+        hi: "एलईडी ट्यूब लाइट",
+        en: "LED Tube Light",
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "foot-light",
+        hi: "फुट लाइट",
+        en: "Foot Light",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "up-down-light",
+        hi: "अप डाउन लाइट",
+        en: "Up Down Light",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "panel-light",
+        hi: "पैनल लाइट",
+        en: "Panel Light",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "surface-light",
+        hi: "सरफेस लाइट",
+        en: "Surface Light",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "cob-light",
+        hi: "सीओबी लाइट",
+        en: "COB Light",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "cob-spot-light",
+        hi: "सीओबी स्पॉट लाइट",
+        en: "COB Spot Light",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- DOWN LIGHT ---------- */
+
+    createMaterial({
+        id: "down-light",
+        hi: "डाउन लाइट",
+        en: "Down Light",
+
+        types: [
+
+            createType(
+                "warm-white",
+                "वार्म वाइट",
+                "Warm White"
+            ),
+
+            createType(
+                "cool-white",
+                "कूल वाइट",
+                "Cool White"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- STRIP LIGHT ---------- */
+
+    createMaterial({
+        id: "strip-light",
+        hi: "स्ट्रिप लाइट",
+        en: "Strip Light",
+
+        types: [
+
+            createType(
+                "60-led",
+                "60 एलईडी/मीटर",
+                "60 LED/Meter"
+            ),
+
+            createType(
+                "120-led",
+                "120 एलईडी/मीटर",
+                "120 LED/Meter"
+            ),
+
+            createType(
+                "240-led",
+                "240 एलईडी/मीटर",
+                "240 LED/Meter"
+            )
+
+        ],
+
+        units: [
+            UNITS.METER,
+            UNITS.ROLL
+        ]
+    }),
+
+
+    createMaterial({
+        id: "rope-light",
+        hi: "रोप लाइट",
+        en: "Rope Light",
+
+        units: [
+            UNITS.METER,
+            UNITS.ROLL
+        ]
+    }),
+
+
+    createMaterial({
+        id: "led-profile-channel",
+        hi: "एल ई डी प्रोफाइल चैनल",
+        en: "LED Profile Channel",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- BATTEN HOLDER ---------- */
+
+    createMaterial({
+        id: "batten-holder",
+        hi: "बैटन होल्डर",
+        en: "Batten Holder",
+
+        types: [
+
+            createType(
+                "normal",
+                "नॉर्मल",
+                "Normal"
+            ),
+
+            createType(
+                "modular",
+                "मॉडयूलर",
+                "Modular"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- ANGLE HOLDER ---------- */
+
+    createMaterial({
+        id: "angle-holder",
+        hi: "एंगल होल्डर",
+        en: "Angle Holder",
+
+        types: [
+
+            createType(
+                "normal",
+                "नॉर्मल",
+                "Normal"
+            ),
+
+            createType(
+                "modular",
+                "मॉडयूलर",
+                "Modular"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "instant-glue",
+        hi: "इंस्टेंट ग्लू",
+        en: "Instant Glue",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- SCREW ---------- */
+
+    createMaterial({
+        id: "screw",
+        hi: "पेंच",
+        en: "Screw",
+
+        types: [
+
+            createType("1-inch", '1"', '1"'),
+            createType("1-5-inch", '1.5"', '1.5"'),
+            createType("2-inch", '2"', '2"'),
+            createType("2-5-inch", '2.5"', '2.5"'),
+            createType("3-inch", '3"', '3"')
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- ROUND SHEET ---------- */
+
+    createMaterial({
+        id: "round-sheet",
+        hi: "राउंड शीट",
+        en: "Round Sheet",
+
+        types: [
+
+            createType(
+                "pvc",
+                "पीवीसी",
+                "PVC"
+            ),
+
+            createType(
+                "mica",
+                "माइका",
+                "Mica"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- DP SWITCH ---------- */
+
+    createMaterial({
+        id: "dp-switch",
+        hi: "डीपी स्विच",
+        en: "DP Switch",
+
+        types: [
+
+            createType("16a", "16 एम्पेयर", "16 Ampere"),
+            createType("20a", "20 एम्पेयर", "20 Ampere"),
+            createType("25a", "25 एम्पेयर", "25 Ampere"),
+            createType("32a", "32 एम्पेयर", "32 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- ELECTRICAL TAPE ---------- */
+
+    createMaterial({
+        id: "final-electrical-tape",
+        hi: "इलेक्ट्रिकल टेप",
+        en: "Electrical Tape",
+
+        types: [
+
+            createType("red", "लाल", "Red"),
+            createType("black", "काला", "Black"),
+            createType("white", "सफेद", "White"),
+            createType("green", "हरा", "Green"),
+            createType("blue", "नीला", "Blue"),
+            createType("yellow", "पीला", "Yellow")
+
+        ],
+
+        units: [
+            UNITS.ROLL,
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- SP MCB ---------- */
+
+    createMaterial({
+        id: "sp-mcb",
+        hi: "एसपी एमसीबी",
+        en: "SP MCB",
+
+        types: [
+
+            createType("6a", "6 एम्पेयर", "6 Ampere"),
+            createType("10a", "10 एम्पेयर", "10 Ampere"),
+            createType("16a", "16 एम्पेयर", "16 Ampere"),
+            createType("20a", "20 एम्पेयर", "20 Ampere"),
+            createType("25a", "25 एम्पेयर", "25 Ampere"),
+            createType("32a", "32 एम्पेयर", "32 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- DP ISOLATOR ---------- */
+
+    createMaterial({
+        id: "dp-isolator",
+        hi: "डीपी आइसोलेटर",
+        en: "DP Isolator",
+
+        types: [
+
+            createType("40a", "40 एम्पेयर", "40 Ampere"),
+            createType("63a", "63 एम्पेयर", "63 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- PIN TYPE COPPER LUG ---------- */
+
+    createMaterial({
+        id: "pin-type-copper-lug",
+        hi: "पिन टाइप कॉपर लग",
+        en: "Pin Type Copper Lug",
+
+        types: [
+
+            createType("2-5mm", "2.5 एमएम", "2.5mm"),
+            createType("4mm", "4 एमएम", "4mm"),
+            createType("6mm", "6 एमएम", "6mm"),
+            createType("10mm", "10 एमएम", "10mm")
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.PACKET
+        ]
+    }),
+
+
+    /* ---------- MCB CHANGEOVER ---------- */
+
+    createMaterial({
+        id: "mcb-changeover",
+        hi: "एमसीबी चेंजओवर",
+        en: "MCB Changeover",
+
+        types: [
+
+            createType("32a", "32 एम्पेयर", "32 Ampere"),
+            createType("40a", "40 एम्पेयर", "40 Ampere"),
+            createType("63a", "63 एम्पेयर", "63 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- DP MCB ---------- */
+
+    createMaterial({
+        id: "dp-mcb",
+        hi: "डीपी एमसीबी",
+        en: "DP MCB",
+
+        types: [
+
+            createType("16a", "16 एम्पेयर", "16 Ampere"),
+            createType("25a", "25 एम्पेयर", "25 Ampere"),
+            createType("32a", "32 एम्पेयर", "32 Ampere"),
+            createType("40a", "40 एम्पेयर", "40 Ampere"),
+            createType("63a", "63 एम्पेयर", "63 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- TPN MCB ---------- */
+
+    createMaterial({
+        id: "tpn-mcb",
+        hi: "टीपीएन एमसीबी",
+        en: "TPN MCB",
+
+        types: [
+
+            createType("32a", "32 एम्पेयर", "32 Ampere"),
+            createType("40a", "40 एम्पेयर", "40 Ampere"),
+            createType("63a", "63 एम्पेयर", "63 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    /* ---------- TPN ISOLATOR ---------- */
+
+    createMaterial({
+        id: "tpn-isolator",
+        hi: "टीपीएन आइसोलेटर",
+        en: "TPN Isolator",
+
+        types: [
+
+            createType("32a", "32 एम्पेयर", "32 Ampere"),
+            createType("40a", "40 एम्पेयर", "40 Ampere"),
+            createType("63a", "63 एम्पेयर", "63 Ampere")
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    /* ---------- RCCB / RCD ---------- */
+
+    createMaterial({
+        id: "rccb-rcd",
+        hi: "आरसीसीबी / आरसीडी",
+        en: "RCCB / RCD",
+
+        types: [
+
+            createType(
+                "25a",
+                "25 एम्पेयर",
+                "25 Ampere"
+            ),
+
+            createType(
+                "40a",
+                "40 एम्पेयर",
+                "40 Ampere"
+            ),
+
+            createType(
+                "63a",
+                "63 एम्पेयर",
+                "63 Ampere"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "final-pop",
+        hi: "पीओपी",
+        en: "POP",
+
+        units: [
+            UNITS.KG,
+            UNITS.BAG
+        ]
+    }),
+
+
+    createMaterial({
+        id: "final-putty-blade",
+        hi: "पुट्टी वाला पत्ता",
+        en: "Putty Blade / Patta",
+
+        units: [
+            UNITS.PCS
+        ]
+    })
+
+];
+
+
+/* =========================================================
+   FALSE CEILING WIRING MATERIAL
+========================================================= */
+
+const FALSE_CEILING_WIRE_SIZES = [
+
+    createSubType(
+        "0-75",
+        "0.75 स्क्वायर एमएम",
+        "0.75 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "1",
+        "1 स्क्वायर एमएम",
+        "1 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "1-5",
+        "1.5 स्क्वायर एमएम",
+        "1.5 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "2-5",
+        "2.5 स्क्वायर एमएम",
+        "2.5 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "4",
+        "4 स्क्वायर एमएम",
+        "4 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "6",
+        "6 स्क्वायर एमएम",
+        "6 Sqmm",
+        MATERIAL_COLORS
+    ),
+
+    createSubType(
+        "10",
+        "10 स्क्वायर एमएम",
+        "10 Sqmm",
+        MATERIAL_COLORS
+    )
+
+];
+
+
+const FALSE_CEILING_MATERIALS = [
+
+    createMaterial({
+        id: "fc-wire",
+        hi: "तार",
+        en: "Wire",
+
+        types: [
+
+            createType(
+                "fr",
+                "FR",
+                "FR",
+                FALSE_CEILING_WIRE_SIZES
+            )
+
+        ],
+
+        units: [
+            UNITS.METER,
+            UNITS.COIL
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-electrical-tape",
+        hi: "बिजली वाला टेप",
+        en: "Electrical Tape",
+
+        units: [
+            UNITS.ROLL,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-pipe",
+        hi: "पाइप",
+        en: "Pipe",
+
+        types: [
+
+            createType(
+                "heavy",
+                "भारी",
+                "Heavy"
+            ),
+
+            createType(
+                "medium",
+                "माध्यम",
+                "Medium"
+            ),
+
+            createType(
+                "light",
+                "हल्का",
+                "Light"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BUNDLE
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-long-bend",
+        hi: "लॉन्ग बेंड",
+        en: "Long Bend",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-junction-box",
+        hi: "जंक्शन बॉक्स 4वे (डिब्बी)",
+        en: "Junction Box 4 Way (Dibby)",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "zip-tie-cable-tie",
+        hi: "ज़िप टाई / केबल टाई",
+        en: "Zip Tie / Cable Tie",
+
+        types: [
+
+            createType(
+                "300mm",
+                "300 एमएम",
+                "300mm"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.PACKET
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-flexible-pipe",
+        hi: "फ्लेक्सिबल पाइप",
+        en: "Flexible Pipe",
+
+        types: [
+
+            createType(
+                "0-75",
+                '0.75"',
+                '0.75"'
+            ),
+
+            createType(
+                "1",
+                '1"',
+                '1"'
+            )
+
+        ],
+
+        units: [
+            UNITS.METER,
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "saddle-clamp",
+        hi: "सैडल क्लैंप",
+        en: "Saddle Clamp",
+
+        types: [
+
+            createType(
+                "25mm",
+                "25 एमएम",
+                "25mm"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "cable-clip",
+        hi: "केबल क्लिप",
+        en: "Cable Clip",
+
+        types: [
+
+            createType(
+                "25mm",
+                "25 एमएम",
+                "25mm"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-screw",
+        hi: "पेंच",
+        en: "Screw",
+
+        types: [
+
+            createType("1-inch", '1"', '1"'),
+            createType("1-5-inch", '1.5"', '1.5"')
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fc-fastener",
+        hi: "फास्टनर",
+        en: "Fastener",
+
+        types: [
+
+            createType(
+                "m10",
+                "एम 10",
+                "M10"
+            ),
+
+            createType(
+                "m12",
+                "एम 12",
+                "M12"
+            )
+
+        ],
+
+        units: [
+            UNITS.PCS,
+            UNITS.BOX
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fan-rod",
+        hi: "फैन रॉड",
+        en: "Fan Rod",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "fan-clam",
+        hi: "फैन क्लैम",
+        en: "Fan Clamp",
+
+        units: [
+            UNITS.PCS
+        ]
+    }),
+
+
+    createMaterial({
+        id: "pvc-wall-plug",
+        hi: "पीवीसी वॉल प्लग / गुल्ली / गिट्टी",
+        en: "PVC Wall Plug",
+
+        units: [
+            UNITS.PCS,
+            UNITS.PACKET
+        ]
+    }),
+
+
+    createMaterial({
+        id: "washer",
+        hi: "वॉशर",
+        en: "Washer",
+
+        units: [
+            UNITS.PCS,
+            UNITS.PACKET
+        ]
+    })
+
+];
+
+
+/* =========================================================
+   STAGE CONFIGURATION
+========================================================= */
+
+window.MATERIAL_STAGES = [
 
     {
-        id: "slab-conduit",
-        stage: "slab-conduit",
+        id: "stage-1",
         show: true,
 
-        name_hi: "Slab Conduit Installation",
+        name_hi: "स्लैब कंड्यूट इंस्टॉलेशन",
         name_en: "Slab Conduit Installation",
 
-        materials: [
-
-            {
-                id: "slab-pipe",
-                show: true,
-
-                name_hi: "Pipe",
-                name_en: "Pipe",
-
-                types: [
-
-                    {
-                        id: "heavy",
-                        show: true,
-                        name_hi: "Heavy",
-                        name_en: "Heavy",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "medium",
-                        show: true,
-                        name_hi: "Medium",
-                        name_en: "Medium",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "light",
-                        show: true,
-                        name_hi: "Light",
-                        name_en: "Light",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "slab-long-bend",
-                show: true,
-
-                name_hi: "Long Bend",
-                name_en: "Long Bend",
-
-                types: [
-                    {
-                        id: "heavy",
-                        show: true,
-                        name_hi: "Heavy",
-                        name_en: "Heavy",
-                        subTypes: []
-                    }
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "deep-junction-box",
-                show: true,
-
-                name_hi: "Deep Junction Box",
-                name_en: "Deep Junction Box",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "fan-box",
-                show: true,
-
-                name_hi: "Fan Box",
-                name_en: "Fan Box",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "light-box",
-                show: true,
-
-                name_hi: "Light Box",
-                name_en: "Light Box",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "three-inch-tape",
-                show: true,
-
-                name_hi: '3" Tape',
-                name_en: '3" Tape',
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "solvent-cement",
-                show: true,
-
-                name_hi: "Solvent Cement",
-                name_en: "Solvent Cement",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "neel-powder",
-                show: true,
-
-                name_hi: "Neel Powder",
-                name_en: "Neel Powder",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "binding-wire",
-                show: true,
-
-                name_hi: "Binding Wire",
-                name_en: "Binding Wire",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "cable-tie",
-                show: true,
-
-                name_hi: "Cable Tie",
-                name_en: "Cable Tie",
-
-                types: [],
-                brands: []
-            }
-
-        ]
+        materials: STAGE_1_MATERIALS
     },
 
 
-    /* =====================================================
-       STAGE 2
-       WALL CONDUIT INSTALLATION
-    ===================================================== */
-
     {
-        id: "wall-conduit",
-        stage: "wall-conduit",
+        id: "stage-2",
         show: true,
 
-        name_hi: "Wall Conduit Installation",
+        name_hi: "वॉल कंड्यूट इंस्टॉलेशन",
         name_en: "Wall Conduit Installation",
 
-        materials: [
-
-            {
-                id: "gi-board",
-                show: true,
-
-                name_hi: "GI Board",
-                name_en: "GI Board",
-
-                types: [
-
-                    {
-                        id: "2-module",
-                        show: true,
-                        name_hi: "2 Module",
-                        name_en: "2 Module",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "3-module",
-                        show: true,
-                        name_hi: "3 Module",
-                        name_en: "3 Module",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "4-module",
-                        show: true,
-                        name_hi: "4 Module",
-                        name_en: "4 Module",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "6-module",
-                        show: true,
-                        name_hi: "6 Module",
-                        name_en: "6 Module",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "8-module-square",
-                        show: true,
-                        name_hi: "8 Module Square",
-                        name_en: "8 Module Square",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "8-module-rectangular",
-                        show: true,
-                        name_hi: "8 Module Rectangular",
-                        name_en: "8 Module Rectangular",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "12-module",
-                        show: true,
-                        name_hi: "12 Module",
-                        name_en: "12 Module",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "16-module",
-                        show: true,
-                        name_hi: "16 Module",
-                        name_en: "16 Module",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "18-module",
-                        show: true,
-                        name_hi: "18 Module",
-                        name_en: "18 Module",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "wall-pipe",
-                show: true,
-
-                name_hi: "Pipe",
-                name_en: "Pipe",
-
-                types: [
-
-                    {
-                        id: "heavy",
-                        show: true,
-                        name_hi: "Heavy",
-                        name_en: "Heavy",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "medium",
-                        show: true,
-                        name_hi: "Medium",
-                        name_en: "Medium",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "light",
-                        show: true,
-                        name_hi: "Light",
-                        name_en: "Light",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "wall-junction-box",
-                show: true,
-
-                name_hi: "Junction Box 4 Way (Dibby)",
-                name_en: "Junction Box 4 Way (Dibby)",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "wall-long-bend",
-                show: true,
-
-                name_hi: "Long Bend",
-                name_en: "Long Bend",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "wall-three-inch-tape",
-                show: true,
-
-                name_hi: '3" Tape',
-                name_en: '3" Tape',
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "25mm-clip",
-                show: true,
-
-                name_hi: "25mm Clip",
-                name_en: "25mm Clip",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "mcb-box-double-door",
-                show: true,
-
-                name_hi: "MCB Box Double Door",
-                name_en: "MCB Box Double Door",
-
-                types: [],
-                brands: []
-            }
-
-        ]
+        materials: STAGE_2_MATERIALS
     },
 
 
-    /* =====================================================
-       STAGE 3
-       WIRING INSTALLATION
-    ===================================================== */
-
     {
-        id: "wiring",
-        stage: "wiring",
+        id: "stage-3",
         show: true,
 
-        name_hi: "Wiring Installation",
+        name_hi: "वायरिंग इंस्टॉलेशन",
         name_en: "Wiring Installation",
 
-        materials: [
-
-            {
-                id: "wire",
-                show: true,
-
-                name_hi: "Wire",
-                name_en: "Wire",
-
-                types: [
-
-                    {
-                        id: "fr",
-                        show: true,
-
-                        name_hi: "FR",
-                        name_en: "FR",
-
-                        subTypes: [
-
-                            {
-                                id: "075-sqmm",
-                                show: true,
-                                name_hi: "0.75 Sqmm",
-                                name_en: "0.75 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "1-sqmm",
-                                show: true,
-                                name_hi: "1 Sqmm",
-                                name_en: "1 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "15-sqmm",
-                                show: true,
-                                name_hi: "1.5 Sqmm",
-                                name_en: "1.5 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "25-sqmm",
-                                show: true,
-                                name_hi: "2.5 Sqmm",
-                                name_en: "2.5 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "4-sqmm",
-                                show: true,
-                                name_hi: "4 Sqmm",
-                                name_en: "4 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "6-sqmm",
-                                show: true,
-                                name_hi: "6 Sqmm",
-                                name_en: "6 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "10-sqmm",
-                                show: true,
-                                name_hi: "10 Sqmm",
-                                name_en: "10 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            }
-
-                        ]
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "wiring-electrical-tape",
-                show: true,
-
-                name_hi: "Electrical Tape",
-                name_en: "Electrical Tape",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "flexible-pipe",
-                show: true,
-
-                name_hi: "Flexible Pipe",
-                name_en: "Flexible Pipe",
-
-                types: [
-
-                    {
-                        id: "075-inch",
-                        show: true,
-                        name_hi: '0.75"',
-                        name_en: '0.75"',
-                        subTypes: []
-                    },
-
-                    {
-                        id: "1-inch",
-                        show: true,
-                        name_hi: '1"',
-                        name_en: '1"',
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "steel-wire",
-                show: true,
-
-                name_hi: "Steel Wire / Spring Wire",
-                name_en: "Steel Wire / Spring Wire",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "pop",
-                show: true,
-
-                name_hi: "Pop",
-                name_en: "Pop",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "putty-blade",
-                show: true,
-
-                name_hi: "Putty Blade / Patta",
-                name_en: "Putty Blade / Patta",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "fastener",
-                show: true,
-
-                name_hi: "Fastener",
-                name_en: "Fastener",
-
-                types: [
-
-                    {
-                        id: "m10",
-                        show: true,
-                        name_hi: "M10",
-                        name_en: "M10",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "m12",
-                        show: true,
-                        name_hi: "M12",
-                        name_en: "M12",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            }
-
-        ]
+        materials: STAGE_3_MATERIALS
     },
 
-
-    /* =====================================================
-       STAGE 4
-       FINAL ELECTRICAL FITTINGS
-    ===================================================== */
 
     {
-        id: "final-fittings",
-        stage: "final-fittings",
+        id: "stage-4",
         show: true,
 
-        name_hi: "Final Electrical Fittings",
+        name_hi: "फाइनल इलेक्ट्रिकल फिटिंग्स",
         name_en: "Final Electrical Fittings",
 
-        materials: [
-
-            {
-                id: "modular-sheet",
-                show: true,
-
-                name_hi: "Modular Sheet",
-                name_en: "Modular Sheet",
-
-                types: [
-
-                    "2 Module",
-                    "3 Module",
-                    "4 Module",
-                    "6 Module",
-                    "8 Module Square",
-                    "8 Module Rectangular",
-                    "12 Module",
-                    "16 Module",
-                    "18 Module"
-
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "modular-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "switch",
-                show: true,
-
-                name_hi: "Switch",
-                name_en: "Switch",
-
-                types: [
-
-                    {
-                        id: "6a",
-                        show: true,
-                        name_hi: "6A",
-                        name_en: "6A",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "16a",
-                        show: true,
-                        name_hi: "16A",
-                        name_en: "16A",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "socket",
-                show: true,
-
-                name_hi: "Socket",
-                name_en: "Socket",
-
-                types: [
-
-                    {
-                        id: "6a",
-                        show: true,
-                        name_hi: "6A",
-                        name_en: "6A",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "16a",
-                        show: true,
-                        name_hi: "16A",
-                        name_en: "16A",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "mini-mcb",
-                show: true,
-
-                name_hi: "Mini MCB",
-                name_en: "Mini MCB",
-
-                types: [
-                    "6A",
-                    "10A",
-                    "16A",
-                    "20A",
-                    "25A",
-                    "32A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "mini-mcb-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "fan-regulator",
-                show: true,
-
-                name_hi: "Fan Regulator",
-                name_en: "Fan Regulator",
-
-                types: [
-
-                    {
-                        id: "1m",
-                        show: true,
-                        name_hi: "1M",
-                        name_en: "1M",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "2m",
-                        show: true,
-                        name_hi: "2M",
-                        name_en: "2M",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "two-way-switch",
-                show: true,
-
-                name_hi: "2 Way Switch",
-                name_en: "2 Way Switch",
-
-                types: [
-
-                    {
-                        id: "6a",
-                        show: true,
-                        name_hi: "6A",
-                        name_en: "6A",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "16a",
-                        show: true,
-                        name_hi: "16A",
-                        name_en: "16A",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "bell-push",
-                show: true,
-
-                name_hi: "Bell Push",
-                name_en: "Bell Push",
-
-                types: [
-
-                    {
-                        id: "1m",
-                        show: true,
-                        name_hi: "1M",
-                        name_en: "1M",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "2m",
-                        show: true,
-                        name_hi: "2M",
-                        name_en: "2M",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "neon-indicator",
-                show: true,
-
-                name_hi: "Neon Indicator",
-                name_en: "Neon Indicator",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "blank-plate",
-                show: true,
-
-                name_hi: "Blank Plate / Dummy Switch",
-                name_en: "Blank Plate / Dummy Switch",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "fan-sheet",
-                show: true,
-
-                name_hi: "Fan Sheet",
-                name_en: "Fan Sheet",
-
-                types: [
-
-                    {
-                        id: "pvc",
-                        show: true,
-                        name_hi: "PVC",
-                        name_en: "PVC",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "mica",
-                        show: true,
-                        name_hi: "Mica",
-                        name_en: "Mica",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "door-bell",
-                show: true,
-
-                name_hi: "Door Bell",
-                name_en: "Door Bell",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "ceiling-rose",
-                show: true,
-
-                name_hi: "Ceiling Rose",
-                name_en: "Ceiling Rose",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "led-bulb",
-                show: true,
-
-                name_hi: "LED Bulb",
-                name_en: "LED Bulb",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "led-tube-light",
-                show: true,
-
-                name_hi: "LED Tube Light",
-                name_en: "LED Tube Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "foot-light",
-                show: true,
-
-                name_hi: "Foot Light",
-                name_en: "Foot Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "up-down-light",
-                show: true,
-
-                name_hi: "Up Down Light",
-                name_en: "Up Down Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "panel-light",
-                show: true,
-
-                name_hi: "Panel Light",
-                name_en: "Panel Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "surface-light",
-                show: true,
-
-                name_hi: "Surface Light",
-                name_en: "Surface Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "cob-light",
-                show: true,
-
-                name_hi: "COB Light",
-                name_en: "COB Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "cob-spot-light",
-                show: true,
-
-                name_hi: "COB Spot Light",
-                name_en: "COB Spot Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "down-light",
-                show: true,
-
-                name_hi: "Down Light",
-                name_en: "Down Light",
-
-                types: [
-
-                    {
-                        id: "warm-white",
-                        show: true,
-                        name_hi: "Warm White",
-                        name_en: "Warm White",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "natural-white",
-                        show: true,
-                        name_hi: "Natural White",
-                        name_en: "Natural White",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "cool-white",
-                        show: true,
-                        name_hi: "Cool White",
-                        name_en: "Cool White",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "strip-light",
-                show: true,
-
-                name_hi: "Strip Light",
-                name_en: "Strip Light",
-
-                types: [
-
-                    {
-                        id: "60-leds",
-                        show: true,
-                        name_hi: "60 LEDs/Mtr",
-                        name_en: "60 LEDs/Mtr",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "120-leds",
-                        show: true,
-                        name_hi: "120 LEDs/Mtr",
-                        name_en: "120 LEDs/Mtr",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "240-leds",
-                        show: true,
-                        name_hi: "240 LEDs/Mtr",
-                        name_en: "240 LEDs/Mtr",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "rope-light",
-                show: true,
-
-                name_hi: "Rope Light",
-                name_en: "Rope Light",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "led-profile-channel",
-                show: true,
-
-                name_hi: "LED Profile Channel",
-                name_en: "LED Profile Channel",
-
-                types: [
-
-                    {
-                        id: "10ft",
-                        show: true,
-                        name_hi: "10ft",
-                        name_en: "10ft",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "led-strip-driver",
-                show: true,
-
-                name_hi: "LED Strip Driver",
-                name_en: "LED Strip Driver",
-
-                types: [
-
-                    {
-                        id: "5a",
-                        show: true,
-                        name_hi: "5A",
-                        name_en: "5A",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "10a",
-                        show: true,
-                        name_hi: "10A",
-                        name_en: "10A",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "batten-holder",
-                show: true,
-
-                name_hi: "Batten Holder",
-                name_en: "Batten Holder",
-
-                types: [
-
-                    {
-                        id: "normal",
-                        show: true,
-                        name_hi: "Normal",
-                        name_en: "Normal",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "modular",
-                        show: true,
-                        name_hi: "Modular",
-                        name_en: "Modular",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "angle-holder",
-                show: true,
-
-                name_hi: "Angle Holder",
-                name_en: "Angle Holder",
-
-                types: [
-
-                    {
-                        id: "normal",
-                        show: true,
-                        name_hi: "Normal",
-                        name_en: "Normal",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "modular",
-                        show: true,
-                        name_hi: "Modular",
-                        name_en: "Modular",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "instant-glue",
-                show: true,
-
-                name_hi: "Instant Glue",
-                name_en: "Instant Glue",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "araldite-glue",
-                show: true,
-
-                name_hi: "Araldite Glue",
-                name_en: "Araldite Glue",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "screw",
-                show: true,
-
-                name_hi: "Screw",
-                name_en: "Screw",
-
-                types: [
-
-                    "1\"",
-                    "1.5\"",
-                    "2\"",
-                    "2.5\"",
-                    "3\""
-
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "screw-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "round-sheet",
-                show: true,
-
-                name_hi: "Round Sheet",
-                name_en: "Round Sheet",
-
-                types: [
-
-                    {
-                        id: "pvc",
-                        show: true,
-                        name_hi: "PVC",
-                        name_en: "PVC",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "mica",
-                        show: true,
-                        name_hi: "Mica",
-                        name_en: "Mica",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "electrical-tape-final",
-                show: true,
-
-                name_hi: "Electrical Tape",
-                name_en: "Electrical Tape",
-
-                types: [
-
-                    "Red",
-                    "Black",
-                    "White",
-                    "Green",
-                    "Blue",
-                    "Yellow"
-
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "tape-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "dp-switch",
-                show: true,
-
-                name_hi: "DP Switch",
-                name_en: "DP Switch",
-
-                types: [
-                    "16A",
-                    "20A",
-                    "25A",
-                    "32A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "dp-switch-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "sp-mcb",
-                show: true,
-
-                name_hi: "SP MCB",
-                name_en: "SP MCB",
-
-                types: [
-                    "10A",
-                    "16A",
-                    "20A",
-                    "25A",
-                    "32A",
-                    "40A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "sp-mcb-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "dp-mcb",
-                show: true,
-
-                name_hi: "DP MCB",
-                name_en: "DP MCB",
-
-                types: [
-                    "16A",
-                    "25A",
-                    "32A",
-                    "40A",
-                    "63A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "dp-mcb-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "tpn-mcb",
-                show: true,
-
-                name_hi: "TPN MCB",
-                name_en: "TPN MCB",
-
-                types: [
-                    "32A",
-                    "40A",
-                    "63A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "tpn-mcb-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "mcb-changeover",
-                show: true,
-
-                name_hi: "MCB Changeover",
-                name_en: "MCB Changeover",
-
-                types: [
-                    "32A",
-                    "40A",
-                    "63A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "changeover-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "dp-isolator",
-                show: true,
-
-                name_hi: "DP Isolator",
-                name_en: "DP Isolator",
-
-                types: [
-                    "40A",
-                    "63A",
-                    "100A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "dp-isolator-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "tpn-isolator",
-                show: true,
-
-                name_hi: "TPN Isolator",
-                name_en: "TPN Isolator",
-
-                types: [
-                    "32A",
-                    "40A",
-                    "63A"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "tpn-isolator-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "rccb-rcd",
-                show: true,
-
-                name_hi: "RCCB / RCD",
-                name_en: "RCCB / RCD",
-
-                types: [
-
-                    {
-                        id: "30ma-25a",
-                        show: true,
-
-                        name_hi: "30mA • 25A",
-                        name_en: "30mA • 25A",
-
-                        subTypes: []
-                    },
-
-                    {
-                        id: "30ma-40a",
-                        show: true,
-
-                        name_hi: "30mA • 40A",
-                        name_en: "30mA • 40A",
-
-                        subTypes: []
-                    },
-
-                    {
-                        id: "30ma-63a",
-                        show: true,
-
-                        name_hi: "30mA • 63A",
-                        name_en: "30mA • 63A",
-
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "kit-kat-fuse",
-                show: true,
-
-                name_hi: "Kit Kat Fuse",
-                name_en: "Kit Kat Fuse",
-
-                types: [
-                    "32A / 415V",
-                    "63A / 415V",
-                    "100A / 415V"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "kitkat-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "pin-type-copper-lug",
-                show: true,
-
-                name_hi: "Pin Type Copper Lug",
-                name_en: "Pin Type Copper Lug",
-
-                types: [
-                    "2.5mm",
-                    "4mm",
-                    "6mm",
-                    "10mm"
-                ].map(
-                    (name, index) => ({
-
-                        id:
-                            "lug-" +
-                            (index + 1),
-
-                        show: true,
-
-                        name_hi: name,
-                        name_en: name,
-
-                        subTypes: []
-
-                    })
-                ),
-
-                brands: []
-            },
-
-
-            {
-                id: "final-pop",
-                show: true,
-
-                name_hi: "Pop",
-                name_en: "Pop",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "final-putty-blade",
-                show: true,
-
-                name_hi: "Putty Blade / Patta",
-                name_en: "Putty Blade / Patta",
-
-                types: [],
-                brands: []
-            }
-
-        ]
+        materials: STAGE_4_MATERIALS
     },
 
-
-    /* =====================================================
-       FALSE CEILING WIRING
-    ===================================================== */
 
     {
         id: "false-ceiling",
-        stage: "false-ceiling",
         show: true,
 
-        name_hi: "False Ceiling Wiring Material",
+        name_hi: "फॉल्स सीलिंग वायरिंग मटेरियल",
         name_en: "False Ceiling Wiring Material",
 
-        materials: [
-
-            {
-                id: "fc-wire",
-                show: true,
-
-                name_hi: "Wire",
-                name_en: "Wire",
-
-                types: [
-
-                    {
-                        id: "fr",
-                        show: true,
-
-                        name_hi: "FR",
-                        name_en: "FR",
-
-                        subTypes: [
-
-                            {
-                                id: "075",
-                                show: true,
-                                name_hi: "0.75 Sqmm",
-                                name_en: "0.75 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "1",
-                                show: true,
-                                name_hi: "1 Sqmm",
-                                name_en: "1 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "15",
-                                show: true,
-                                name_hi: "1.5 Sqmm",
-                                name_en: "1.5 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "25",
-                                show: true,
-                                name_hi: "2.5 Sqmm",
-                                name_en: "2.5 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "4",
-                                show: true,
-                                name_hi: "4 Sqmm",
-                                name_en: "4 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "6",
-                                show: true,
-                                name_hi: "6 Sqmm",
-                                name_en: "6 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            },
-
-                            {
-                                id: "10",
-                                show: true,
-                                name_hi: "10 Sqmm",
-                                name_en: "10 Sqmm",
-
-                                colors: [
-                                    "Red",
-                                    "Black",
-                                    "Yellow",
-                                    "Blue",
-                                    "Green",
-                                    "White",
-                                    "Grey"
-                                ]
-                            }
-
-                        ]
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "fc-electrical-tape",
-                show: true,
-
-                name_hi: "Electrical Tape",
-                name_en: "Electrical Tape",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "fc-pipe",
-                show: true,
-
-                name_hi: "Pipe",
-                name_en: "Pipe",
-
-                types: [
-
-                    {
-                        id: "heavy",
-                        show: true,
-                        name_hi: "Heavy",
-                        name_en: "Heavy",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "medium",
-                        show: true,
-                        name_hi: "Medium",
-                        name_en: "Medium",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "light",
-                        show: true,
-                        name_hi: "Light",
-                        name_en: "Light",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "fc-long-bend",
-                show: true,
-
-                name_hi: "Long Bend",
-                name_en: "Long Bend",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "fc-junction-box",
-                show: true,
-
-                name_hi: "Junction Box 4 Way (Dibby)",
-                name_en: "Junction Box 4 Way (Dibby)",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "zip-tie",
-                show: true,
-
-                name_hi: "Zip Tie / Cable Tie",
-                name_en: "Zip Tie / Cable Tie",
-
-                types: [
-
-                    {
-                        id: "300mm",
-                        show: true,
-                        name_hi: "300mm",
-                        name_en: "300mm",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "fc-flexible-pipe",
-                show: true,
-
-                name_hi: "Flexible Pipe",
-                name_en: "Flexible Pipe",
-
-                types: [
-
-                    {
-                        id: "075",
-                        show: true,
-                        name_hi: '0.75"',
-                        name_en: '0.75"',
-                        subTypes: []
-                    },
-
-                    {
-                        id: "1",
-                        show: true,
-                        name_hi: '1"',
-                        name_en: '1"',
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "saddle-clamp",
-                show: true,
-
-                name_hi: "Saddle Clamp",
-                name_en: "Saddle Clamp",
-
-                types: [
-
-                    {
-                        id: "25mm",
-                        show: true,
-                        name_hi: "25 mm",
-                        name_en: "25 mm",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "cable-clip",
-                show: true,
-
-                name_hi: "Cable Clip",
-                name_en: "Cable Clip",
-
-                types: [
-
-                    {
-                        id: "25mm",
-                        show: true,
-                        name_hi: "25mm",
-                        name_en: "25mm",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "fc-screw",
-                show: true,
-
-                name_hi: "Screw",
-                name_en: "Screw",
-
-                types: [
-
-                    {
-                        id: "1",
-                        show: true,
-                        name_hi: '1"',
-                        name_en: '1"',
-                        subTypes: []
-                    },
-
-                    {
-                        id: "15",
-                        show: true,
-                        name_hi: '1.5"',
-                        name_en: '1.5"',
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "fc-fastener",
-                show: true,
-
-                name_hi: "Fastener",
-                name_en: "Fastener",
-
-                types: [
-
-                    {
-                        id: "m10",
-                        show: true,
-                        name_hi: "M10",
-                        name_en: "M10",
-                        subTypes: []
-                    },
-
-                    {
-                        id: "m12",
-                        show: true,
-                        name_hi: "M12",
-                        name_en: "M12",
-                        subTypes: []
-                    }
-
-                ],
-
-                brands: []
-            },
-
-
-            {
-                id: "fan-rod",
-                show: true,
-
-                name_hi: "Fan Rod",
-                name_en: "Fan Rod",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "fan-clamp",
-                show: true,
-
-                name_hi: "Fan Clamp",
-                name_en: "Fan Clamp",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "pvc-wall-plug",
-                show: true,
-
-                name_hi: "PVC Wall Plug / Gulli / Gitti",
-                name_en: "PVC Wall Plug / Gulli / Gitti",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "washer",
-                show: true,
-
-                name_hi: "Washer",
-                name_en: "Washer",
-
-                types: [],
-                brands: []
-            },
-
-
-            {
-                id: "chain",
-                show: true,
-
-                name_hi: "Chain",
-                name_en: "Chain",
-
-                types: [],
-                brands: []
-            }
-
-        ]
+        materials: FALSE_CEILING_MATERIALS
     }
 
 ];
 
 
 /* =========================================================
-   GLOBAL BRAND CONFIGURATION
-   ---------------------------------------------------------
-   Brand is ALWAYS the LAST selection.
+   GLOBAL MATERIAL CATALOGUE
 ========================================================= */
 
-window.MATERIAL_BRAND_CONFIG = {
+window.MATERIAL_CATALOG = {
 
-    show: true,
+    version: "2.0.0",
 
-    allowSkip: true,
+    language: {
 
-    allowNonBrand: true,
+        default: "hi",
 
-    options: [
+        supported: [
+            "hi",
+            "en"
+        ]
 
-        {
-            id: "non-brand",
-            show: true,
+    },
 
-            name_hi: "Non Brand / Local",
-            name_en: "Non Brand / Local"
-        },
+    stages: window.MATERIAL_STAGES,
 
-        {
-            id: "skip",
-            show: true,
+    allMaterials: true,
 
-            name_hi: "Brand Skip करें",
-            name_en: "Skip Brand"
-        }
+    search: {
 
-    ]
+        show: true,
+
+        searchHindi: true,
+
+        searchEnglish: true,
+
+        searchMaterial: true,
+
+        searchType: true,
+
+        searchSubType: true,
+
+        searchBrand: true
+
+    },
+
+    quantity: {
+
+        show: true,
+
+        allowDecimal: true,
+
+        minimum: 0
+
+    },
+
+    unit: {
+
+        show: true,
+
+        required: true,
+
+        allowChange: true
+
+    },
+
+    brand: {
+
+        show: true,
+
+        position: "last",
+
+        allowSkip: true,
+
+        allowNonBrand: true,
+
+        allowCustomBrand: true,
+
+        options: [
+
+            {
+                id: "non-brand",
+                show: true,
+
+                name_hi: "लोकल / बिना ब्रांड",
+                name_en: "Local / Non Brand"
+            },
+
+            {
+                id: "skip",
+                show: true,
+
+                name_hi: "ब्रांड छोड़ें",
+                name_en: "Skip Brand"
+            }
+
+        ]
+
+    },
+
+    color: {
+
+        show: true,
+
+        headingUsesColorName: true,
+
+        colors: MATERIAL_COLORS
+
+    },
+
+    visibility: {
+
+        stage: true,
+
+        material: true,
+
+        type: true,
+
+        subType: true,
+
+        color: true,
+
+        unit: true,
+
+        brand: true
+
+    },
+
+    finalEstimate: {
+
+        show: true,
+
+        editable: true,
+
+        allowAdd: true,
+
+        allowDelete: true,
+
+        allowEdit: true,
+
+        allowChangeQty: true,
+
+        allowChangeUnit: true,
+
+        allowChangeBrand: true,
+
+        allowChangeRate: true,
+
+        allowChangeAmount: true
+
+    }
 
 };
 
 
 /* =========================================================
-   COLOR CONFIGURATION
-   ---------------------------------------------------------
-   Heading will be COLOR NAME.
+   BACKWARD COMPATIBILITY
 ========================================================= */
 
-window.MATERIAL_COLOR_CONFIG = {
+window.MATERIAL_ESTIMATE_CONFIG = {
 
-    show: true,
+    catalogue: window.MATERIAL_CATALOG,
 
-    colors: [
+    stages: window.MATERIAL_STAGES,
 
-        {
-            id: "red",
-            show: true,
-            name_hi: "Red",
-            name_en: "Red"
-        },
+    brands: window.MATERIAL_CATALOG.brand,
 
-        {
-            id: "black",
-            show: true,
-            name_hi: "Black",
-            name_en: "Black"
-        },
+    colors: window.MATERIAL_CATALOG.color,
 
-        {
-            id: "yellow",
-            show: true,
-            name_hi: "Yellow",
-            name_en: "Yellow"
-        },
+    settings: {
 
-        {
-            id: "blue",
-            show: true,
-            name_hi: "Blue",
-            name_en: "Blue"
-        },
+        showSearch: true,
 
-        {
-            id: "green",
-            show: true,
-            name_hi: "Green",
-            name_en: "Green"
-        },
+        showAllMaterials: true,
 
-        {
-            id: "white",
-            show: true,
-            name_hi: "White",
-            name_en: "White"
-        },
+        showBrand: true,
 
-        {
-            id: "grey",
-            show: true,
-            name_hi: "Grey",
-            name_en: "Grey"
-        }
+        showColor: true,
 
-    ]
+        showQty: true,
+
+        showUnit: true,
+
+        showRate: true,
+
+        allowEdit: true,
+
+        allowDelete: true,
+
+        allowAdd: true
+
+    }
 
 };
 
 
 /* =========================================================
-   CATALOGUE SETTINGS
+   DEBUG / LOAD CHECK
 ========================================================= */
 
-window.MATERIAL_CATALOG_SETTINGS = {
+console.log(
+    "Sandeep ElectroFix Material Catalogue Loaded:",
+    window.MATERIAL_CATALOG
+);
 
-    showStageMenu: true,
+console.log(
+    "Material Stages:",
+    window.MATERIAL_STAGES.length
+);
 
-    showAllMaterials: true,
+console.log(
+    "Stage 1 Materials:",
+    STAGE_1_MATERIALS.length
+);
 
-    showSearch: true,
+console.log(
+    "Stage 2 Materials:",
+    STAGE_2_MATERIALS.length
+);
 
-    showHindiEnglish: true,
+console.log(
+    "Stage 3 Materials:",
+    STAGE_3_MATERIALS.length
+);
 
-    showBrand: true,
+console.log(
+    "Stage 4 Materials:",
+    STAGE_4_MATERIALS.length
+);
 
-    showColor: true,
-
-    showQty: true,
-
-    showRate: true,
-
-    allowEditFinalEstimate: true,
-
-    allowDeleteFinalEstimate: true,
-
-    allowAddFromFinalEstimate: true
-
-};
-
+console.log(
+    "False Ceiling Materials:",
+    FALSE_CEILING_MATERIALS.length
+);
 
 /* =========================================================
-   END MATERIAL CATALOG
+   END
 ========================================================= */
