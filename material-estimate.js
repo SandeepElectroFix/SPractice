@@ -2,7 +2,19 @@
    SANDEEP ELECTROFIX
    MATERIAL ESTIMATE SYSTEM
    CORE JAVASCRIPT ENGINE
-   Version 1.0.0
+   Version 2.0.0
+   ---------------------------------------------------------
+   Features:
+   • Stage-wise Material Menu
+   • Search
+   • Smart Option Dropdown
+   • Editable Rate
+   • Quantity
+   • Colour-wise Wire Quantity
+   • Item Total
+   • Grand Total
+   • Selected Item Counter
+   • Persistent Selection During Filtering
 ========================================================= */
 
 "use strict";
@@ -11,14 +23,27 @@
    CONFIG SAFETY
 ========================================================= */
 
-const CONFIG = window.MATERIAL_ESTIMATE_CONFIG || {};
-const MATERIALS = window.MATERIAL_ESTIMATE_MATERIALS || [];
+const CONFIG =
+    window.MATERIAL_ESTIMATE_CONFIG || {};
 
-const GENERAL = CONFIG.general || {};
-const ESTIMATE = CONFIG.estimate || {};
-const DISPLAY = CONFIG.display || {};
-const MENUS = CONFIG.menus || [];
-const COLORS = (CONFIG.colors || []).filter(c => c.show !== false);
+const MATERIALS =
+    window.MATERIAL_ESTIMATE_MATERIALS || [];
+
+const GENERAL =
+    CONFIG.general || {};
+
+const ESTIMATE =
+    CONFIG.estimate || {};
+
+const DISPLAY =
+    CONFIG.display || {};
+
+const MENUS =
+    CONFIG.menus || [];
+
+const COLORS =
+    (CONFIG.colors || [])
+        .filter(color => color.show !== false);
 
 
 /* =========================================================
@@ -26,7 +51,22 @@ const COLORS = (CONFIG.colors || []).filter(c => c.show !== false);
 ========================================================= */
 
 let currentMenu = "all";
+
 let searchText = "";
+
+/*
+   Selected estimate data
+
+   Example:
+
+   estimateItems = {
+       "stage2-gi-board": {
+           selectedOption: "stage2-gi-board-2m",
+           rate: 50,
+           quantity: 4
+       }
+   }
+*/
 
 let estimateItems = {};
 
@@ -40,21 +80,26 @@ let clientInfo = {
    DOM READY
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    initializeClientInfo();
-    initializeMenus();
-    initializeSearch();
+        initializeClientInfo();
 
-    renderMaterials();
+        initializeMenus();
 
-    updateGrandTotal();
+        initializeSearch();
 
-    console.log(
-        "Sandeep ElectroFix Material Estimate System Loaded"
-    );
+        renderMaterials();
 
-});
+        updateGrandTotal();
+
+        console.log(
+            "Sandeep ElectroFix Material Estimate System Loaded"
+        );
+
+    }
+);
 
 
 /* =========================================================
@@ -64,30 +109,42 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeClientInfo() {
 
     const nameInput =
-        document.getElementById("clientName");
+        document.getElementById(
+            "clientName"
+        );
 
     const phoneInput =
-        document.getElementById("clientPhone");
+        document.getElementById(
+            "clientPhone"
+        );
+
 
     if (nameInput) {
 
-        nameInput.addEventListener("input", e => {
+        nameInput.addEventListener(
+            "input",
+            event => {
 
-            clientInfo.name =
-                e.target.value.trim();
+                clientInfo.name =
+                    event.target.value.trim();
 
-        });
+            }
+        );
 
     }
 
+
     if (phoneInput) {
 
-        phoneInput.addEventListener("input", e => {
+        phoneInput.addEventListener(
+            "input",
+            event => {
 
-            clientInfo.phone =
-                e.target.value.trim();
+                clientInfo.phone =
+                    event.target.value.trim();
 
-        });
+            }
+        );
 
     }
 
@@ -101,32 +158,49 @@ function initializeClientInfo() {
 function initializeMenus() {
 
     const container =
-        document.getElementById("categoryContainer");
+        document.getElementById(
+            "categoryContainer"
+        );
+
 
     if (!container) return;
 
+
     container.innerHTML = "";
 
+
     MENUS
-        .filter(menu => menu.show !== false)
+        .filter(
+            menu => menu.show !== false
+        )
         .forEach(menu => {
 
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
+
 
             button.type = "button";
 
             button.className =
                 "material-menu-button";
 
-            if (menu.id === currentMenu) {
 
-                button.classList.add("active");
+            if (
+                menu.id === currentMenu
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
 
             }
 
+
             button.dataset.menu =
                 menu.id;
+
 
             button.innerHTML = `
 
@@ -135,29 +209,48 @@ function initializeMenus() {
                 </span>
 
                 <span class="menu-name">
-                    ${menu.name || menu.id}
+                    ${escapeHTML(
+                        menu.name ||
+                        menu.id
+                    )}
                 </span>
 
             `;
 
-            button.addEventListener("click", () => {
 
-                currentMenu =
-                    menu.id;
+            button.addEventListener(
+                "click",
+                () => {
 
-                document
-                    .querySelectorAll(".material-menu-button")
-                    .forEach(btn =>
-                        btn.classList.remove("active")
+                    currentMenu =
+                        menu.id;
+
+
+                    document
+                        .querySelectorAll(
+                            ".material-menu-button"
+                        )
+                        .forEach(btn =>
+                            btn.classList.remove(
+                                "active"
+                            )
+                        );
+
+
+                    button.classList.add(
+                        "active"
                     );
 
-                button.classList.add("active");
 
-                renderMaterials();
+                    renderMaterials();
 
-            });
+                }
+            );
 
-            container.appendChild(button);
+
+            container.appendChild(
+                button
+            );
 
         });
 
@@ -171,65 +264,100 @@ function initializeMenus() {
 function initializeSearch() {
 
     const searchInput =
-        document.getElementById("materialSearch");
+        document.getElementById(
+            "materialSearch"
+        );
 
     const clearButton =
-        document.getElementById("clearSearch");
+        document.getElementById(
+            "clearSearch"
+        );
+
+    const resetButton =
+        document.getElementById(
+            "resetFilters"
+        );
+
+
+    /* ---------------------------------------------
+       SEARCH
+    --------------------------------------------- */
 
     if (searchInput) {
 
-        searchInput.addEventListener("input", e => {
+        searchInput.addEventListener(
+            "input",
+            event => {
 
-            searchText =
-                e.target.value
-                    .trim()
-                    .toLowerCase();
+                searchText =
+                    event.target.value
+                        .trim()
+                        .toLowerCase();
 
-            renderMaterials();
 
-        });
+                renderMaterials();
+
+            }
+        );
 
     }
+
+
+    /* ---------------------------------------------
+       CLEAR SEARCH
+    --------------------------------------------- */
 
     if (clearButton) {
 
-        clearButton.addEventListener("click", () => {
+        clearButton.addEventListener(
+            "click",
+            () => {
 
-            if (searchInput) {
+                if (searchInput) {
 
-                searchInput.value = "";
+                    searchInput.value = "";
+
+                }
+
+
+                searchText = "";
+
+                renderMaterials();
 
             }
-
-            searchText = "";
-
-            renderMaterials();
-
-        });
+        );
 
     }
 
 
-    const resetButton =
-        document.getElementById("resetFilters");
+    /* ---------------------------------------------
+       RESET FILTERS
+    --------------------------------------------- */
 
     if (resetButton) {
 
-        resetButton.addEventListener("click", () => {
+        resetButton.addEventListener(
+            "click",
+            () => {
 
-            currentMenu = "all";
-            searchText = "";
+                currentMenu = "all";
 
-            if (searchInput) {
+                searchText = "";
 
-                searchInput.value = "";
+
+                if (searchInput) {
+
+                    searchInput.value = "";
+
+                }
+
+
+                initializeMenus();
+
+                renderMaterials();
 
             }
-
-            initializeMenus();
-            renderMaterials();
-
-        });
+        );
 
     }
 
@@ -237,59 +365,118 @@ function initializeSearch() {
 
 
 /* =========================================================
-   FILTER MATERIALS
+   GROUP MATERIALS
+   ---------------------------------------------------------
+   Same material name + same stage = one card
+   Multiple sizes/options = dropdown
+========================================================= */
+
+function getMaterialGroups() {
+
+    const groups = {};
+
+    MATERIALS.forEach(
+        material => {
+
+            const key =
+                `${material.stage}__${material.name}`;
+
+            if (!groups[key]) {
+
+                groups[key] = {
+
+                    key: key,
+
+                    stage:
+                        material.stage,
+
+                    name:
+                        material.name,
+
+                    materials: []
+
+                };
+
+            }
+
+
+            groups[key]
+                .materials
+                .push(material);
+
+        }
+    );
+
+
+    return Object.values(groups);
+
+}
+
+
+/* =========================================================
+   FILTER MATERIAL GROUPS
 ========================================================= */
 
 function getFilteredMaterials() {
 
-    return MATERIALS.filter(material => {
-
-        /* ---------------------------------------------
-           MENU FILTER
-        --------------------------------------------- */
-
-        const menuMatch =
-            currentMenu === "all" ||
-            material.stage === currentMenu;
+    const groups =
+        getMaterialGroups();
 
 
-        if (!menuMatch) {
+    return groups.filter(
+        group => {
 
-            return false;
+            /* -----------------------------------------
+               STAGE FILTER
+            ----------------------------------------- */
+
+            const menuMatch =
+                currentMenu === "all" ||
+                group.stage === currentMenu;
+
+
+            if (!menuMatch) {
+
+                return false;
+
+            }
+
+
+            /* -----------------------------------------
+               SEARCH FILTER
+            ----------------------------------------- */
+
+            if (!searchText) {
+
+                return true;
+
+            }
+
+
+            const searchableText = [
+
+                group.name || "",
+
+                group.stage || "",
+
+                ...group.materials.map(
+                    material =>
+                        `${material.size || ""} ${
+                            material.description || ""
+                        }`
+                )
+
+            ]
+                .join(" ")
+                .toLowerCase();
+
+
+            return searchableText.includes(
+                searchText
+            );
 
         }
-
-
-        /* ---------------------------------------------
-           SEARCH FILTER
-        --------------------------------------------- */
-
-        if (!searchText) {
-
-            return true;
-
-        }
-
-
-        const searchableText = [
-
-            material.name || "",
-
-            material.size || "",
-
-            material.stage || "",
-
-            material.description || ""
-
-        ]
-            .join(" ")
-            .toLowerCase();
-
-
-        return searchableText
-            .includes(searchText);
-
-    });
+    );
 
 }
 
@@ -301,19 +488,25 @@ function getFilteredMaterials() {
 function renderMaterials() {
 
     const grid =
-        document.getElementById("productsGrid");
+        document.getElementById(
+            "productsGrid"
+        );
 
     const noProducts =
-        document.getElementById("noProducts");
+        document.getElementById(
+            "noProducts"
+        );
 
     const counter =
-        document.getElementById("productCounter");
+        document.getElementById(
+            "productCounter"
+        );
 
 
     if (!grid) return;
 
 
-    const materials =
+    const groups =
         getFilteredMaterials();
 
 
@@ -323,12 +516,12 @@ function renderMaterials() {
     if (counter) {
 
         counter.textContent =
-            `${materials.length} Materials`;
+            `${groups.length} Materials`;
 
     }
 
 
-    if (!materials.length) {
+    if (!groups.length) {
 
         if (noProducts) {
 
@@ -350,13 +543,17 @@ function renderMaterials() {
     }
 
 
-    materials.forEach(material => {
+    groups.forEach(
+        group => {
 
-        grid.appendChild(
-            createMaterialCard(material)
-        );
+            grid.appendChild(
+                createMaterialCard(
+                    group
+                )
+            );
 
-    });
+        }
+    );
 
 }
 
@@ -365,25 +562,50 @@ function renderMaterials() {
    MATERIAL CARD
 ========================================================= */
 
-function createMaterialCard(material) {
+function createMaterialCard(group) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
+
 
     card.className =
         "estimate-material-card";
 
 
+    const selectedMaterial =
+        getSelectedMaterial(
+            group
+        );
+
+
     const item =
-        getEstimateItem(material);
+        getEstimateItem(
+            selectedMaterial
+        );
 
 
     const totalQty =
-        calculateQuantity(material, item);
+        calculateQuantity(
+            selectedMaterial,
+            item
+        );
 
 
     const total =
-        calculateItemTotal(material, item);
+        calculateItemTotal(
+            selectedMaterial,
+            item
+        );
+
+
+    const hasOptions =
+        group.materials.length > 1;
+
+
+    card.dataset.group =
+        group.key;
 
 
     card.innerHTML = `
@@ -393,57 +615,86 @@ function createMaterialCard(material) {
             <div>
 
                 <h3>
-                    ${escapeHTML(material.name || "Material")}
+                    ${escapeHTML(
+                        group.name ||
+                        "Material"
+                    )}
                 </h3>
-
-                ${
-                    material.size
-                        ? `
-                            <div class="material-size">
-                                ${escapeHTML(material.size)}
-                            </div>
-                          `
-                        : ""
-                }
 
             </div>
 
             <span class="material-stage">
-                ${getStageName(material.stage)}
+                ${escapeHTML(
+                    getStageName(
+                        group.stage
+                    )
+                )}
             </span>
 
         </div>
 
 
         ${
+            hasOptions
+                ? createOptionDropdown(
+                    group,
+                    selectedMaterial
+                )
+                : createSingleOptionInfo(
+                    selectedMaterial
+                )
+        }
+
+
+        ${
             ESTIMATE.predefinedRate !== false
-                ? createRateBox(material, item)
+                ? createRateBox(
+                    selectedMaterial,
+                    item
+                )
                 : ""
         }
 
 
         ${
-            material.colorWise && ESTIMATE.colorWiseQuantity !== false
-                ? createColorQuantityBoxes(material, item)
-                : createNormalQuantityBox(material, item)
+            selectedMaterial.colorWise &&
+            ESTIMATE.colorWiseQuantity !== false
+
+                ? createColorQuantityBoxes(
+                    selectedMaterial,
+                    item
+                )
+
+                : createNormalQuantityBox(
+                    selectedMaterial,
+                    item
+                )
         }
 
 
         ${
             DISPLAY.showTotal !== false
+
                 ? `
+
                     <div class="estimate-item-total">
 
                         <span>
                             Item Total
                         </span>
 
-                        <strong id="total-${material.id}">
-                            ₹${formatMoney(total)}
+                        <strong
+                            class="item-total-value"
+                        >
+                            ₹${formatMoney(
+                                total
+                            )}
                         </strong>
 
                     </div>
+
                   `
+
                 : ""
         }
 
@@ -452,7 +703,7 @@ function createMaterialCard(material) {
 
     attachCardEvents(
         card,
-        material
+        group
     );
 
 
@@ -462,10 +713,107 @@ function createMaterialCard(material) {
 
 
 /* =========================================================
+   OPTION DROPDOWN
+========================================================= */
+
+function createOptionDropdown(
+    group,
+    selectedMaterial
+) {
+
+    return `
+
+        <div class="estimate-option-row">
+
+            <label>
+                Select Option
+            </label>
+
+            <select
+                class="material-option-select"
+            >
+
+                ${group.materials
+                    .map(
+                        material => `
+
+                            <option
+                                value="${escapeHTML(
+                                    material.id
+                                )}"
+                                ${
+                                    material.id ===
+                                    selectedMaterial.id
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+
+                                ${escapeHTML(
+                                    material.size ||
+                                    "Standard"
+                                )}
+
+                            </option>
+
+                        `
+                    )
+                    .join("")
+                }
+
+            </select>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SINGLE OPTION INFO
+========================================================= */
+
+function createSingleOptionInfo(
+    material
+) {
+
+    if (!material.size) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <div class="estimate-option-row">
+
+            <label>
+                Size / Type
+            </label>
+
+            <div class="material-single-option">
+                ${escapeHTML(
+                    material.size
+                )}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
    RATE BOX
 ========================================================= */
 
-function createRateBox(material, item) {
+function createRateBox(
+    material,
+    item
+) {
 
     const rate =
         Number(
@@ -497,7 +845,9 @@ function createRateBox(material, item) {
                     ${
                         material.rateEditable === false ||
                         ESTIMATE.userCanChangeRate === false
+
                             ? "readonly"
+
                             : ""
                     }
                 >
@@ -521,7 +871,9 @@ function createNormalQuantityBox(
 ) {
 
     const quantity =
-        Number(item.quantity || 0);
+        Number(
+            item.quantity || 0
+        );
 
 
     return `
@@ -567,41 +919,48 @@ function createColorQuantityBoxes(
             </div>
 
             <div class="color-quantity-grid">
+
     `;
 
 
-    COLORS.forEach(color => {
+    COLORS.forEach(
+        color => {
 
-        const quantity =
-            Number(
-                item.colors?.[color.id] || 0
-            );
+            const quantity =
+                Number(
+                    item.colors?.[
+                        color.id
+                    ] || 0
+                );
 
 
-        html += `
+            html += `
 
-            <div class="color-quantity-item">
+                <div class="color-quantity-item">
 
-                <label>
-                    ${escapeHTML(color.name)}
-                </label>
+                    <label>
+                        ${escapeHTML(
+                            color.name
+                        )}
+                    </label>
 
-                <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    class="color-quantity"
-                    data-id="${material.id}"
-                    data-color="${color.id}"
-                    value="${quantity}"
-                    placeholder="0"
-                >
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        class="color-quantity"
+                        data-id="${material.id}"
+                        data-color="${color.id}"
+                        value="${quantity}"
+                        placeholder="0"
+                    >
 
-            </div>
+                </div>
 
-        `;
+            `;
 
-    });
+        }
+    );
 
 
     html += `
@@ -615,7 +974,12 @@ function createColorQuantityBoxes(
                 </span>
 
                 <strong>
-                    ${calculateQuantity(material, item)}
+                    ${formatQuantity(
+                        calculateQuantity(
+                            material,
+                            item
+                        )
+                    )}
                 </strong>
 
             </div>
@@ -636,15 +1000,78 @@ function createColorQuantityBoxes(
 
 function attachCardEvents(
     card,
-    material
+    group
 ) {
 
-    /* ---------------------------------------------
+    /* =====================================================
+       OPTION CHANGE
+    ===================================================== */
+
+    const optionSelect =
+        card.querySelector(
+            ".material-option-select"
+        );
+
+
+    if (optionSelect) {
+
+        optionSelect.addEventListener(
+            "change",
+            () => {
+
+                const material =
+                    group.materials.find(
+                        item =>
+                            item.id ===
+                            optionSelect.value
+                    );
+
+
+                if (!material) return;
+
+
+                /*
+                   If this option has never
+                   been selected before,
+                   create its own estimate item.
+                */
+
+                getEstimateItem(
+                    material
+                );
+
+
+                /*
+                   Re-render only this card.
+                */
+
+                const newCard =
+                    createMaterialCard(
+                        group
+                    );
+
+
+                card.replaceWith(
+                    newCard
+                );
+
+
+                updateGrandTotal();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
        RATE
-    --------------------------------------------- */
+    ===================================================== */
 
     const rateInput =
-        card.querySelector(".material-rate");
+        card.querySelector(
+            ".material-rate"
+        );
 
 
     if (rateInput) {
@@ -653,16 +1080,29 @@ function attachCardEvents(
             "input",
             () => {
 
+                const material =
+                    getSelectedMaterial(
+                        group
+                    );
+
+
                 const item =
-                    getEstimateItem(material);
+                    getEstimateItem(
+                        material
+                    );
+
 
                 item.rate =
-                    Number(rateInput.value || 0);
+                    Number(
+                        rateInput.value || 0
+                    );
+
 
                 updateCardTotal(
                     card,
                     material
                 );
+
 
                 updateGrandTotal();
 
@@ -672,12 +1112,14 @@ function attachCardEvents(
     }
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        NORMAL QUANTITY
-    --------------------------------------------- */
+    ===================================================== */
 
     const quantityInput =
-        card.querySelector(".material-quantity");
+        card.querySelector(
+            ".material-quantity"
+        );
 
 
     if (quantityInput) {
@@ -686,16 +1128,29 @@ function attachCardEvents(
             "input",
             () => {
 
+                const material =
+                    getSelectedMaterial(
+                        group
+                    );
+
+
                 const item =
-                    getEstimateItem(material);
+                    getEstimateItem(
+                        material
+                    );
+
 
                 item.quantity =
-                    Number(quantityInput.value || 0);
+                    Number(
+                        quantityInput.value || 0
+                    );
+
 
                 updateCardTotal(
                     card,
                     material
                 );
+
 
                 updateGrandTotal();
 
@@ -705,46 +1160,99 @@ function attachCardEvents(
     }
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        COLOUR QUANTITY
-    --------------------------------------------- */
+    ===================================================== */
 
     card
-        .querySelectorAll(".color-quantity")
-        .forEach(input => {
+        .querySelectorAll(
+            ".color-quantity"
+        )
+        .forEach(
+            input => {
 
-            input.addEventListener(
-                "input",
-                () => {
+                input.addEventListener(
+                    "input",
+                    () => {
 
-                    const item =
-                        getEstimateItem(material);
+                        const material =
+                            getSelectedMaterial(
+                                group
+                            );
 
 
-                    if (!item.colors) {
+                        const item =
+                            getEstimateItem(
+                                material
+                            );
 
-                        item.colors = {};
+
+                        if (!item.colors) {
+
+                            item.colors = {};
+
+                        }
+
+
+                        item.colors[
+                            input.dataset.color
+                        ] =
+                            Number(
+                                input.value || 0
+                            );
+
+
+                        updateCardTotal(
+                            card,
+                            material
+                        );
+
+
+                        updateGrandTotal();
 
                     }
+                );
+
+            }
+        );
+
+}
 
 
-                    item.colors[
-                        input.dataset.color
-                    ] =
-                        Number(input.value || 0);
+/* =========================================================
+   GET SELECTED MATERIAL
+========================================================= */
+
+function getSelectedMaterial(
+    group
+) {
+
+    /*
+       Check if any option from this
+       group already has quantity/rate.
+    */
+
+    const activeMaterial =
+        group.materials.find(
+            material =>
+                estimateItems[
+                    material.id
+                ]
+        );
 
 
-                    updateCardTotal(
-                        card,
-                        material
-                    );
+    if (activeMaterial) {
 
-                    updateGrandTotal();
+        return activeMaterial;
 
-                }
-            );
+    }
 
-        });
+
+    /*
+       Otherwise first option.
+    */
+
+    return group.materials[0];
 
 }
 
@@ -753,14 +1261,39 @@ function attachCardEvents(
    GET / CREATE ESTIMATE ITEM
 ========================================================= */
 
-function getEstimateItem(material) {
+function getEstimateItem(
+    material
+) {
 
-    if (!estimateItems[material.id]) {
+    if (!material) {
 
-        estimateItems[material.id] = {
+        return {
+
+            rate: 0,
+
+            quantity: 0,
+
+            colors: {}
+
+        };
+
+    }
+
+
+    if (
+        !estimateItems[
+            material.id
+        ]
+    ) {
+
+        estimateItems[
+            material.id
+        ] = {
 
             rate:
-                Number(material.rate || 0),
+                Number(
+                    material.rate || 0
+                ),
 
             quantity:
                 0,
@@ -771,7 +1304,10 @@ function getEstimateItem(material) {
 
     }
 
-    return estimateItems[material.id];
+
+    return estimateItems[
+        material.id
+    ];
 
 }
 
@@ -786,16 +1322,22 @@ function calculateQuantity(
 ) {
 
     if (
+        material &&
         material.colorWise &&
         ESTIMATE.colorWiseQuantity !== false
     ) {
 
         return COLORS.reduce(
-            (total, color) => {
+            (
+                total,
+                color
+            ) => {
 
                 return total +
                     Number(
-                        item.colors?.[color.id] || 0
+                        item?.colors?.[
+                            color.id
+                        ] || 0
                     );
 
             },
@@ -806,7 +1348,7 @@ function calculateQuantity(
 
 
     return Number(
-        item.quantity || 0
+        item?.quantity || 0
     );
 
 }
@@ -820,6 +1362,13 @@ function calculateItemTotal(
     material,
     item
 ) {
+
+    if (!material || !item) {
+
+        return 0;
+
+    }
+
 
     const quantity =
         calculateQuantity(
@@ -851,7 +1400,9 @@ function updateCardTotal(
 ) {
 
     const item =
-        getEstimateItem(material);
+        getEstimateItem(
+            material
+        );
 
 
     const total =
@@ -863,14 +1414,16 @@ function updateCardTotal(
 
     const totalElement =
         card.querySelector(
-            `#total-${material.id}`
+            ".item-total-value"
         );
 
 
     if (totalElement) {
 
         totalElement.textContent =
-            `₹${formatMoney(total)}`;
+            `₹${formatMoney(
+                total
+            )}`;
 
     }
 
@@ -887,9 +1440,11 @@ function updateCardTotal(
     ) {
 
         colorTotal.textContent =
-            calculateQuantity(
-                material,
-                item
+            formatQuantity(
+                calculateQuantity(
+                    material,
+                    item
+                )
             );
 
     }
@@ -905,23 +1460,47 @@ function updateGrandTotal() {
 
     let grandTotal = 0;
 
-
-    MATERIALS.forEach(material => {
-
-        const item =
-            estimateItems[material.id];
+    let selectedCount = 0;
 
 
-        if (!item) return;
+    MATERIALS.forEach(
+        material => {
+
+            const item =
+                estimateItems[
+                    material.id
+                ];
 
 
-        grandTotal +=
-            calculateItemTotal(
-                material,
-                item
-            );
+            if (!item) {
 
-    });
+                return;
+
+            }
+
+
+            const quantity =
+                calculateQuantity(
+                    material,
+                    item
+                );
+
+
+            if (quantity > 0) {
+
+                selectedCount++;
+
+            }
+
+
+            grandTotal +=
+                calculateItemTotal(
+                    material,
+                    item
+                );
+
+        }
+    );
 
 
     const totalElement =
@@ -933,7 +1512,9 @@ function updateGrandTotal() {
     if (totalElement) {
 
         totalElement.textContent =
-            `₹${formatMoney(grandTotal)}`;
+            `₹${formatMoney(
+                grandTotal
+            )}`;
 
     }
 
@@ -945,34 +1526,6 @@ function updateGrandTotal() {
 
 
     if (qtyElement) {
-
-        let selectedCount = 0;
-
-
-        MATERIALS.forEach(material => {
-
-            const item =
-                estimateItems[material.id];
-
-
-            if (!item) return;
-
-
-            const qty =
-                calculateQuantity(
-                    material,
-                    item
-                );
-
-
-            if (qty > 0) {
-
-                selectedCount++;
-
-            }
-
-        });
-
 
         qtyElement.textContent =
             `${selectedCount} Items`;
@@ -986,17 +1539,20 @@ function updateGrandTotal() {
    STAGE NAME
 ========================================================= */
 
-function getStageName(stageId) {
+function getStageName(
+    stageId
+) {
 
     const stage =
         MENUS.find(
-            menu => menu.id === stageId
+            menu =>
+                menu.id === stageId
         );
 
 
     if (!stage) {
 
-        return "";
+        return stageId || "";
 
     }
 
@@ -1008,12 +1564,38 @@ function getStageName(stageId) {
 
 
 /* =========================================================
+   FORMAT QUANTITY
+========================================================= */
+
+function formatQuantity(
+    quantity
+) {
+
+    return Number(
+        quantity || 0
+    )
+        .toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+/* =========================================================
    MONEY FORMAT
 ========================================================= */
 
-function formatMoney(amount) {
+function formatMoney(
+    amount
+) {
 
-    return Number(amount || 0)
+    return Number(
+        amount || 0
+    )
         .toLocaleString(
             "en-IN",
             {
@@ -1029,14 +1611,33 @@ function formatMoney(amount) {
    HTML ESCAPE
 ========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1047,6 +1648,10 @@ function escapeHTML(value) {
 
 window.MaterialEstimate = {
 
+    /* ---------------------------------------------
+       GET ALL ITEMS
+    --------------------------------------------- */
+
     getItems() {
 
         return estimateItems;
@@ -1054,13 +1659,23 @@ window.MaterialEstimate = {
     },
 
 
+    /* ---------------------------------------------
+       GET GRAND TOTAL
+    --------------------------------------------- */
+
     getGrandTotal() {
 
         return MATERIALS.reduce(
-            (total, material) => {
+            (
+                total,
+                material
+            ) => {
 
                 const item =
-                    estimateItems[material.id];
+                    estimateItems[
+                        material.id
+                    ];
+
 
                 if (!item) {
 
@@ -1082,6 +1697,106 @@ window.MaterialEstimate = {
     },
 
 
+    /* ---------------------------------------------
+       GET SELECTED MATERIALS ONLY
+    --------------------------------------------- */
+
+    getSelectedItems() {
+
+        return MATERIALS
+            .filter(
+                material => {
+
+                    const item =
+                        estimateItems[
+                            material.id
+                        ];
+
+
+                    if (!item) {
+
+                        return false;
+
+                    }
+
+
+                    return (
+                        calculateQuantity(
+                            material,
+                            item
+                        ) > 0
+                    );
+
+                }
+            )
+            .map(
+                material => {
+
+                    const item =
+                        estimateItems[
+                            material.id
+                        ];
+
+
+                    return {
+
+                        id:
+                            material.id,
+
+                        stage:
+                            material.stage,
+
+                        name:
+                            material.name,
+
+                        size:
+                            material.size,
+
+                        rate:
+                            Number(
+                                item.rate ||
+                                material.rate ||
+                                0
+                            ),
+
+                        quantity:
+                            calculateQuantity(
+                                material,
+                                item
+                            ),
+
+                        colors:
+                            item.colors || {},
+
+                        total:
+                            calculateItemTotal(
+                                material,
+                                item
+                            )
+
+                    };
+
+                }
+            );
+
+    },
+
+
+    /* ---------------------------------------------
+       GET CLIENT INFO
+    --------------------------------------------- */
+
+    getClientInfo() {
+
+        return clientInfo;
+
+    },
+
+
+    /* ---------------------------------------------
+       CLEAR ESTIMATE
+    --------------------------------------------- */
+
     clearEstimate() {
 
         estimateItems = {};
@@ -1093,10 +1808,117 @@ window.MaterialEstimate = {
     },
 
 
-    getClientInfo() {
+    /* ---------------------------------------------
+       REFRESH
+    --------------------------------------------- */
 
-        return clientInfo;
+    refresh() {
+
+        renderMaterials();
+
+        updateGrandTotal();
+
+    },
+
+
+    /* ---------------------------------------------
+       SET RATE
+    --------------------------------------------- */
+
+    setRate(
+        materialId,
+        rate
+    ) {
+
+        const material =
+            MATERIALS.find(
+                item =>
+                    item.id ===
+                    materialId
+            );
+
+
+        if (!material) {
+
+            return false;
+
+        }
+
+
+        const item =
+            getEstimateItem(
+                material
+            );
+
+
+        item.rate =
+            Number(
+                rate || 0
+            );
+
+
+        renderMaterials();
+
+        updateGrandTotal();
+
+
+        return true;
 
     }
 
 };
+
+
+/* =========================================================
+   DEBUG INFORMATION
+========================================================= */
+
+console.log(
+    "Material Groups:",
+    getMaterialGroups().length
+);
+
+console.log(
+    "Total Materials:",
+    MATERIALS.length
+);
+
+console.log(
+    "Stage 1:",
+    MATERIALS.filter(
+        material =>
+            material.stage === "stage-1"
+    ).length
+);
+
+console.log(
+    "Stage 2:",
+    MATERIALS.filter(
+        material =>
+            material.stage === "stage-2"
+    ).length
+);
+
+console.log(
+    "Stage 3:",
+    MATERIALS.filter(
+        material =>
+            material.stage === "stage-3"
+    ).length
+);
+
+console.log(
+    "Stage 4:",
+    MATERIALS.filter(
+        material =>
+            material.stage === "stage-4"
+    ).length
+);
+
+console.log(
+    "Stage 5:",
+    MATERIALS.filter(
+        material =>
+            material.stage === "stage-5"
+    ).length
+);
