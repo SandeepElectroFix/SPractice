@@ -111,8 +111,6 @@ window.MATERIAL_ESTIMATE_MATERIALS = [
         colorWise: false
     }
 
-];
-
 console.log(
     "Stage 1 Materials Loaded:",
     window.MATERIAL_ESTIMATE_MATERIALS.length
