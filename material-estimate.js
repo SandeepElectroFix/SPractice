@@ -235,3 +235,128 @@ console.log(
     "Menus:",
     window.MATERIAL_ESTIMATE_CONFIG.menus.length
 );
+
+
+
+
+
+
+/* =========================================================
+   SANDEEP ELECTROFIX
+   MATERIAL ESTIMATE SYSTEM
+   MASTER MATERIAL DATA
+   Stage 1 - Slab Conduit Installation
+========================================================= */
+
+window.MATERIAL_ESTIMATE_MATERIALS = [
+
+    /* =====================================================
+       STAGE 1 – SLAB CONDUIT INSTALLATION
+    ===================================================== */
+
+    {
+        id: "stage1-pipe-heavy",
+        stage: "stage-1",
+        name: "Pipe",
+        size: "Heavy",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-long-bend-heavy",
+        stage: "stage-1",
+        name: "Long Bend",
+        size: "Heavy",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-deep-junction-box",
+        stage: "stage-1",
+        name: "Deep Junction Box",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-fan-box",
+        stage: "stage-1",
+        name: "Fan Box",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-light-box",
+        stage: "stage-1",
+        name: "Light Box",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-tape-3inch",
+        stage: "stage-1",
+        name: "Tape",
+        size: '3"',
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-solvent-cement",
+        stage: "stage-1",
+        name: "Solvent Cement",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-neel-powder",
+        stage: "stage-1",
+        name: "Neel Powder",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-binding-wire",
+        stage: "stage-1",
+        name: "Binding Wire",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    },
+
+    {
+        id: "stage1-cable-tie",
+        stage: "stage-1",
+        name: "Cable Tie",
+        size: "",
+        rate: 0,
+        rateEditable: true,
+        colorWise: false
+    }
+
+];
+
+console.log(
+    "Stage 1 Materials Loaded:",
+    window.MATERIAL_ESTIMATE_MATERIALS.length
+);
