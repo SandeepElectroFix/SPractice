@@ -299,7 +299,7 @@ console.log(
     rate: 0,
     rateEditable: true,
     colorWise: false
-}
+},
 
 
 
@@ -467,7 +467,7 @@ console.log(
     rate: 0,
     rateEditable: true,
     colorWise: false
-}
+},
 
 
 
@@ -1655,7 +1655,7 @@ console.log(
     rate: 0,
     rateEditable: true,
     colorWise: false
-}
+},
 
 
 
