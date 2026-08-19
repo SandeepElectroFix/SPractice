@@ -109,7 +109,7 @@ window.MATERIAL_ESTIMATE_MATERIALS = [
         rate: 0,
         rateEditable: true,
         colorWise: false
-    }
+    },
 
 console.log(
     "Stage 1 Materials Loaded:",
