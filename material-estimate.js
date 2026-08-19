@@ -1,1924 +1,272 @@
 /* =========================================================
-   SANDEEP ELECTROFIX
-   MATERIAL ESTIMATE SYSTEM
-   CORE JAVASCRIPT ENGINE
-   Version 2.0.0
-   ---------------------------------------------------------
-   Features:
-   • Stage-wise Material Menu
-   • Search
-   • Smart Option Dropdown
-   • Editable Rate
-   • Quantity
-   • Colour-wise Wire Quantity
-   • Item Total
-   • Grand Total
-   • Selected Item Counter
-   • Persistent Selection During Filtering
+   SANDEEP ELECTROFIX - MATERIAL ESTIMATE SYSTEM (v3.0)
+   Built-in Fallbacks for Instant Material Display
 ========================================================= */
 
 "use strict";
 
-/* =========================================================
-   CONFIG SAFETY
-========================================================= */
-
-const CONFIG =
-    window.MATERIAL_ESTIMATE_CONFIG || {};
-
-const MATERIALS =
-    window.MATERIAL_ESTIMATE_MATERIALS || [];
-
-const GENERAL =
-    CONFIG.general || {};
-
-const ESTIMATE =
-    CONFIG.estimate || {};
-
-const DISPLAY =
-    CONFIG.display || {};
-
-const MENUS =
-    CONFIG.menus || [];
-
-const COLORS =
-    (CONFIG.colors || [])
-        .filter(color => color.show !== false);
-
-
-/* =========================================================
-   APPLICATION STATE
-========================================================= */
-
-let currentMenu = "all";
-
-let searchText = "";
-
-/*
-   Selected estimate data
-
-   Example:
-
-   estimateItems = {
-       "stage2-gi-board": {
-           selectedOption: "stage2-gi-board-2m",
-           rate: 50,
-           quantity: 4
-       }
-   }
-*/
-
-let estimateItems = {};
-
-let clientInfo = {
-    name: "",
-    phone: ""
-};
-
-
-/* =========================================================
-   DOM READY
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeClientInfo();
-
-        initializeMenus();
-
-        initializeSearch();
-
-        renderMaterials();
-
-        updateGrandTotal();
-
-        console.log(
-            "Sandeep ElectroFix Material Estimate System Loaded"
-        );
-
-    }
-);
-
-
-/* =========================================================
-   CLIENT INFORMATION
-========================================================= */
-
-function initializeClientInfo() {
-
-    const nameInput =
-        document.getElementById(
-            "clientName"
-        );
-
-    const phoneInput =
-        document.getElementById(
-            "clientPhone"
-        );
-
-
-    if (nameInput) {
-
-        nameInput.addEventListener(
-            "input",
-            event => {
-
-                clientInfo.name =
-                    event.target.value.trim();
-
-            }
-        );
-
-    }
-
-
-    if (phoneInput) {
-
-        phoneInput.addEventListener(
-            "input",
-            event => {
-
-                clientInfo.phone =
-                    event.target.value.trim();
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   MENU SYSTEM
-========================================================= */
-
-function initializeMenus() {
-
-    const container =
-        document.getElementById(
-            "categoryContainer"
-        );
-
-
-    if (!container) return;
-
-
-    container.innerHTML = "";
-
-
-    MENUS
-        .filter(
-            menu => menu.show !== false
-        )
-        .forEach(menu => {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.type = "button";
-
-            button.className =
-                "material-menu-button";
-
-
-            if (
-                menu.id === currentMenu
-            ) {
-
-                button.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            button.dataset.menu =
-                menu.id;
-
-
-            button.innerHTML = `
-
-                <span class="menu-icon">
-                    ${menu.icon || "📦"}
-                </span>
-
-                <span class="menu-name">
-                    ${escapeHTML(
-                        menu.name ||
-                        menu.id
-                    )}
-                </span>
-
-            `;
-
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    currentMenu =
-                        menu.id;
-
-
-                    document
-                        .querySelectorAll(
-                            ".material-menu-button"
-                        )
-                        .forEach(btn =>
-                            btn.classList.remove(
-                                "active"
-                            )
-                        );
-
-
-                    button.classList.add(
-                        "active"
-                    );
-
-
-                    renderMaterials();
-
-                }
-            );
-
-
-            container.appendChild(
-                button
-            );
-
-        });
-
-}
-
-
-/* =========================================================
-   SEARCH SYSTEM
-========================================================= */
-
-function initializeSearch() {
-
-    const searchInput =
-        document.getElementById(
-            "materialSearch"
-        );
-
-    const clearButton =
-        document.getElementById(
-            "clearSearch"
-        );
-
-    const resetButton =
-        document.getElementById(
-            "resetFilters"
-        );
-
-
-    /* ---------------------------------------------
-       SEARCH
-    --------------------------------------------- */
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            event => {
-
-                searchText =
-                    event.target.value
-                        .trim()
-                        .toLowerCase();
-
-
-                renderMaterials();
-
-            }
-        );
-
-    }
-
-
-    /* ---------------------------------------------
-       CLEAR SEARCH
-    --------------------------------------------- */
-
-    if (clearButton) {
-
-        clearButton.addEventListener(
-            "click",
-            () => {
-
-                if (searchInput) {
-
-                    searchInput.value = "";
-
-                }
-
-
-                searchText = "";
-
-                renderMaterials();
-
-            }
-        );
-
-    }
-
-
-    /* ---------------------------------------------
-       RESET FILTERS
-    --------------------------------------------- */
-
-    if (resetButton) {
-
-        resetButton.addEventListener(
-            "click",
-            () => {
-
-                currentMenu = "all";
-
-                searchText = "";
-
-
-                if (searchInput) {
-
-                    searchInput.value = "";
-
-                }
-
-
-                initializeMenus();
-
-                renderMaterials();
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   GROUP MATERIALS
-   ---------------------------------------------------------
-   Same material name + same stage = one card
-   Multiple sizes/options = dropdown
-========================================================= */
-
-function getMaterialGroups() {
-
-    const groups = {};
-
-    MATERIALS.forEach(
-        material => {
-
-            const key =
-                `${material.stage}__${material.name}`;
-
-            if (!groups[key]) {
-
-                groups[key] = {
-
-                    key: key,
-
-                    stage:
-                        material.stage,
-
-                    name:
-                        material.name,
-
-                    materials: []
-
-                };
-
-            }
-
-
-            groups[key]
-                .materials
-                .push(material);
-
-        }
-    );
-
-
-    return Object.values(groups);
-
-}
-
-
-/* =========================================================
-   FILTER MATERIAL GROUPS
-========================================================= */
-
-function getFilteredMaterials() {
-
-    const groups =
-        getMaterialGroups();
-
-
-    return groups.filter(
-        group => {
-
-            /* -----------------------------------------
-               STAGE FILTER
-            ----------------------------------------- */
-
-            const menuMatch =
-                currentMenu === "all" ||
-                group.stage === currentMenu;
-
-
-            if (!menuMatch) {
-
-                return false;
-
-            }
-
-
-            /* -----------------------------------------
-               SEARCH FILTER
-            ----------------------------------------- */
-
-            if (!searchText) {
-
-                return true;
-
-            }
-
-
-            const searchableText = [
-
-                group.name || "",
-
-                group.stage || "",
-
-                ...group.materials.map(
-                    material =>
-                        `${material.size || ""} ${
-                            material.description || ""
-                        }`
-                )
-
-            ]
-                .join(" ")
-                .toLowerCase();
-
-
-            return searchableText.includes(
-                searchText
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   RENDER MATERIALS
-========================================================= */
-
-function renderMaterials() {
-
-    const grid =
-        document.getElementById(
-            "productsGrid"
-        );
-
-    const noProducts =
-        document.getElementById(
-            "noProducts"
-        );
-
-    const counter =
-        document.getElementById(
-            "productCounter"
-        );
-
-
-    if (!grid) return;
-
-
-    const groups =
-        getFilteredMaterials();
-
-
-    grid.innerHTML = "";
-
-
-    if (counter) {
-
-        counter.textContent =
-            `${groups.length} Materials`;
-
-    }
-
-
-    if (!groups.length) {
-
-        if (noProducts) {
-
-            noProducts.style.display =
-                "block";
-
-        }
-
-        return;
-
-    }
-
-
-    if (noProducts) {
-
-        noProducts.style.display =
-            "none";
-
-    }
-
-
-    groups.forEach(
-        group => {
-
-            grid.appendChild(
-                createMaterialCard(
-                    group
-                )
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MATERIAL CARD
-========================================================= */
-
-function createMaterialCard(group) {
-
-    const card =
-        document.createElement(
-            "article"
-        );
-
-
-    card.className =
-        "estimate-material-card";
-
-
-    const selectedMaterial =
-        getSelectedMaterial(
-            group
-        );
-
-
-    const item =
-        getEstimateItem(
-            selectedMaterial
-        );
-
-
-    const totalQty =
-        calculateQuantity(
-            selectedMaterial,
-            item
-        );
-
-
-    const total =
-        calculateItemTotal(
-            selectedMaterial,
-            item
-        );
-
-
-    const hasOptions =
-        group.materials.length > 1;
-
-
-    card.dataset.group =
-        group.key;
-
-
-    card.innerHTML = `
-
-        <div class="estimate-card-header">
-
-            <div>
-
-                <h3>
-                    ${escapeHTML(
-                        group.name ||
-                        "Material"
-                    )}
-                </h3>
-
-            </div>
-
-            <span class="material-stage">
-                ${escapeHTML(
-                    getStageName(
-                        group.stage
-                    )
-                )}
-            </span>
-
-        </div>
-
-
-        ${
-            hasOptions
-                ? createOptionDropdown(
-                    group,
-                    selectedMaterial
-                )
-                : createSingleOptionInfo(
-                    selectedMaterial
-                )
-        }
-
-
-        ${
-            ESTIMATE.predefinedRate !== false
-                ? createRateBox(
-                    selectedMaterial,
-                    item
-                )
-                : ""
-        }
-
-
-        ${
-            selectedMaterial.colorWise &&
-            ESTIMATE.colorWiseQuantity !== false
-
-                ? createColorQuantityBoxes(
-                    selectedMaterial,
-                    item
-                )
-
-                : createNormalQuantityBox(
-                    selectedMaterial,
-                    item
-                )
-        }
-
-
-        ${
-            DISPLAY.showTotal !== false
-
-                ? `
-
-                    <div class="estimate-item-total">
-
-                        <span>
-                            Item Total
-                        </span>
-
-                        <strong
-                            class="item-total-value"
-                        >
-                            ₹${formatMoney(
-                                total
-                            )}
-                        </strong>
-
-                    </div>
-
-                  `
-
-                : ""
-        }
-
-    `;
-
-
-    attachCardEvents(
-        card,
-        group
-    );
-
-
-    return card;
-
-}
-
-
-/* =========================================================
-   OPTION DROPDOWN
-========================================================= */
-
-function createOptionDropdown(
-    group,
-    selectedMaterial
-) {
-
-    return `
-
-        <div class="estimate-option-row">
-
-            <label>
-                Select Option
-            </label>
-
-            <select
-                class="material-option-select"
-            >
-
-                ${group.materials
-                    .map(
-                        material => `
-
-                            <option
-                                value="${escapeHTML(
-                                    material.id
-                                )}"
-                                ${
-                                    material.id ===
-                                    selectedMaterial.id
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-
-                                ${escapeHTML(
-                                    material.size ||
-                                    "Standard"
-                                )}
-
-                            </option>
-
-                        `
-                    )
-                    .join("")
-                }
-
-            </select>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   SINGLE OPTION INFO
-========================================================= */
-
-function createSingleOptionInfo(
-    material
-) {
-
-    if (!material.size) {
-
-        return "";
-
-    }
-
-
-    return `
-
-        <div class="estimate-option-row">
-
-            <label>
-                Size / Type
-            </label>
-
-            <div class="material-single-option">
-                ${escapeHTML(
-                    material.size
-                )}
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   RATE BOX
-========================================================= */
-
-function createRateBox(
-    material,
-    item
-) {
-
-    const rate =
-        Number(
-            item.rate ??
-            material.rate ??
-            0
-        );
-
-
-    return `
-
-        <div class="estimate-rate-row">
-
-            <label>
-                Rate
-            </label>
-
-            <div class="rate-input-wrapper">
-
-                <span>₹</span>
-
-                <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    class="material-rate"
-                    data-id="${material.id}"
-                    value="${rate}"
-                    ${
-                        material.rateEditable === false ||
-                        ESTIMATE.userCanChangeRate === false
-
-                            ? "readonly"
-
-                            : ""
-                    }
-                >
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   NORMAL QUANTITY
-========================================================= */
-
-function createNormalQuantityBox(
-    material,
-    item
-) {
-
-    const quantity =
-        Number(
-            item.quantity || 0
-        );
-
-
-    return `
-
-        <div class="estimate-quantity-row">
-
-            <label>
-                Quantity
-            </label>
-
-            <input
-                type="number"
-                min="0"
-                step="0.01"
-                class="material-quantity"
-                data-id="${material.id}"
-                value="${quantity}"
-                placeholder="Enter Qty"
-            >
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   COLOUR WISE QUANTITY
-========================================================= */
-
-function createColorQuantityBoxes(
-    material,
-    item
-) {
-
-    let html = `
-
-        <div class="color-quantity-section">
-
-            <div class="color-section-title">
-                Colour Quantity
-            </div>
-
-            <div class="color-quantity-grid">
-
-    `;
-
-
-    COLORS.forEach(
-        color => {
-
-            const quantity =
-                Number(
-                    item.colors?.[
-                        color.id
-                    ] || 0
-                );
-
-
-            html += `
-
-                <div class="color-quantity-item">
-
-                    <label>
-                        ${escapeHTML(
-                            color.name
-                        )}
-                    </label>
-
-                    <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        class="color-quantity"
-                        data-id="${material.id}"
-                        data-color="${color.id}"
-                        value="${quantity}"
-                        placeholder="0"
-                    >
-
-                </div>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-            </div>
-
-            <div class="color-total-row">
-
-                <span>
-                    Total Qty
-                </span>
-
-                <strong>
-                    ${formatQuantity(
-                        calculateQuantity(
-                            material,
-                            item
-                        )
-                    )}
-                </strong>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    return html;
-
-}
-
-
-/* =========================================================
-   ATTACH CARD EVENTS
-========================================================= */
-
-function attachCardEvents(
-    card,
-    group
-) {
-
-    /* =====================================================
-       OPTION CHANGE
-    ===================================================== */
-
-    const optionSelect =
-        card.querySelector(
-            ".material-option-select"
-        );
-
-
-    if (optionSelect) {
-
-        optionSelect.addEventListener(
-            "change",
-            () => {
-
-                const material =
-                    group.materials.find(
-                        item =>
-                            item.id ===
-                            optionSelect.value
-                    );
-
-
-                if (!material) return;
-
-
-                /*
-                   If this option has never
-                   been selected before,
-                   create its own estimate item.
-                */
-
-                getEstimateItem(
-                    material
-                );
-
-
-                /*
-                   Re-render only this card.
-                */
-
-                const newCard =
-                    createMaterialCard(
-                        group
-                    );
-
-
-                card.replaceWith(
-                    newCard
-                );
-
-
-                updateGrandTotal();
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       RATE
-    ===================================================== */
-
-    const rateInput =
-        card.querySelector(
-            ".material-rate"
-        );
-
-
-    if (rateInput) {
-
-        rateInput.addEventListener(
-            "input",
-            () => {
-
-                const material =
-                    getSelectedMaterial(
-                        group
-                    );
-
-
-                const item =
-                    getEstimateItem(
-                        material
-                    );
-
-
-                item.rate =
-                    Number(
-                        rateInput.value || 0
-                    );
-
-
-                updateCardTotal(
-                    card,
-                    material
-                );
-
-
-                updateGrandTotal();
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       NORMAL QUANTITY
-    ===================================================== */
-
-    const quantityInput =
-        card.querySelector(
-            ".material-quantity"
-        );
-
-
-    if (quantityInput) {
-
-        quantityInput.addEventListener(
-            "input",
-            () => {
-
-                const material =
-                    getSelectedMaterial(
-                        group
-                    );
-
-
-                const item =
-                    getEstimateItem(
-                        material
-                    );
-
-
-                item.quantity =
-                    Number(
-                        quantityInput.value || 0
-                    );
-
-
-                updateCardTotal(
-                    card,
-                    material
-                );
-
-
-                updateGrandTotal();
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       COLOUR QUANTITY
-    ===================================================== */
-
-    card
-        .querySelectorAll(
-            ".color-quantity"
-        )
-        .forEach(
-            input => {
-
-                input.addEventListener(
-                    "input",
-                    () => {
-
-                        const material =
-                            getSelectedMaterial(
-                                group
-                            );
-
-
-                        const item =
-                            getEstimateItem(
-                                material
-                            );
-
-
-                        if (!item.colors) {
-
-                            item.colors = {};
-
-                        }
-
-
-                        item.colors[
-                            input.dataset.color
-                        ] =
-                            Number(
-                                input.value || 0
-                            );
-
-
-                        updateCardTotal(
-                            card,
-                            material
-                        );
-
-
-                        updateGrandTotal();
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   GET SELECTED MATERIAL
-========================================================= */
-
-function getSelectedMaterial(
-    group
-) {
-
-    /*
-       Check if any option from this
-       group already has quantity/rate.
-    */
-
-    const activeMaterial =
-        group.materials.find(
-            material =>
-                estimateItems[
-                    material.id
-                ]
-        );
-
-
-    if (activeMaterial) {
-
-        return activeMaterial;
-
-    }
-
-
-    /*
-       Otherwise first option.
-    */
-
-    return group.materials[0];
-
-}
-
-
-/* =========================================================
-   GET / CREATE ESTIMATE ITEM
-========================================================= */
-
-function getEstimateItem(
-    material
-) {
-
-    if (!material) {
-
-        return {
-
-            rate: 0,
-
-            quantity: 0,
-
-            colors: {}
-
-        };
-
-    }
-
-
-    if (
-        !estimateItems[
-            material.id
-        ]
-    ) {
-
-        estimateItems[
-            material.id
-        ] = {
-
-            rate:
-                Number(
-                    material.rate || 0
-                ),
-
-            quantity:
-                0,
-
-            colors: {}
-
-        };
-
-    }
-
-
-    return estimateItems[
-        material.id
+(function () {
+    // 1. Fallback Menus agar config.js load na ho
+    const DEFAULT_MENUS = [
+        { id: "all", name: "All Materials", icon: "🛒" },
+        { id: "stage-1", name: "Stage 1", icon: "🏗️" },
+        { id: "stage-2", name: "Stage 2", icon: "🧱" },
+        { id: "stage-3", name: "Stage 3", icon: "🔌" },
+        { id: "stage-4", name: "Stage 4", icon: "💡" },
+        { id: "stage-5", name: "Stage 5", icon: "🏠" }
     ];
 
-}
+    const STAGE_LABELS = {
+        "stage-1": "Slab Conduit Installation",
+        "stage-2": "Wall Conduit Installation",
+        "stage-3": "Wiring Installation",
+        "stage-4": "Final Electrical Fittings",
+        "stage-5": "False Ceiling Wiring"
+    };
 
+    let currentMenu = "all";
+    let searchText = "";
+    let estimateItems = {};
+    let activeGroupOptions = {};
 
-/* =========================================================
-   CALCULATE QUANTITY
-========================================================= */
-
-function calculateQuantity(
-    material,
-    item
-) {
-
-    if (
-        material &&
-        material.colorWise &&
-        ESTIMATE.colorWiseQuantity !== false
-    ) {
-
-        return COLORS.reduce(
-            (
-                total,
-                color
-            ) => {
-
-                return total +
-                    Number(
-                        item?.colors?.[
-                            color.id
-                        ] || 0
-                    );
-
-            },
-            0
-        );
-
+    function getMenus() {
+        return window.MATERIAL_ESTIMATE_CONFIG?.menus || DEFAULT_MENUS;
     }
 
-
-    return Number(
-        item?.quantity || 0
-    );
-
-}
-
-
-/* =========================================================
-   CALCULATE ITEM TOTAL
-========================================================= */
-
-function calculateItemTotal(
-    material,
-    item
-) {
-
-    if (!material || !item) {
-
-        return 0;
-
+    function getMaterials() {
+        return window.MATERIAL_ESTIMATE_MATERIALS || [];
     }
 
+    document.addEventListener("DOMContentLoaded", () => {
+        initClientInfo();
+        initMenus();
+        initSearch();
+        initSelections();
+        renderMaterials();
+        updateGrandTotal();
+    });
 
-    const quantity =
-        calculateQuantity(
-            material,
-            item
-        );
-
-
-    const rate =
-        Number(
-            item.rate ??
-            material.rate ??
-            0
-        );
-
-
-    return quantity * rate;
-
-}
-
-
-/* =========================================================
-   UPDATE CARD TOTAL
-========================================================= */
-
-function updateCardTotal(
-    card,
-    material
-) {
-
-    const item =
-        getEstimateItem(
-            material
-        );
-
-
-    const total =
-        calculateItemTotal(
-            material,
-            item
-        );
-
-
-    const totalElement =
-        card.querySelector(
-            ".item-total-value"
-        );
-
-
-    if (totalElement) {
-
-        totalElement.textContent =
-            `₹${formatMoney(
-                total
-            )}`;
-
-    }
-
-
-    const colorTotal =
-        card.querySelector(
-            ".color-total-row strong"
-        );
-
-
-    if (
-        colorTotal &&
-        material.colorWise
-    ) {
-
-        colorTotal.textContent =
-            formatQuantity(
-                calculateQuantity(
-                    material,
-                    item
-                )
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   GRAND TOTAL
-========================================================= */
-
-function updateGrandTotal() {
-
-    let grandTotal = 0;
-
-    let selectedCount = 0;
-
-
-    MATERIALS.forEach(
-        material => {
-
-            const item =
-                estimateItems[
-                    material.id
-                ];
-
-
-            if (!item) {
-
-                return;
-
-            }
-
-
-            const quantity =
-                calculateQuantity(
-                    material,
-                    item
-                );
-
-
-            if (quantity > 0) {
-
-                selectedCount++;
-
-            }
-
-
-            grandTotal +=
-                calculateItemTotal(
-                    material,
-                    item
-                );
-
+    function initClientInfo() {
+        const nameInput = document.getElementById("clientName");
+        const phoneInput = document.getElementById("clientPhone");
+        if (nameInput) {
+            nameInput.value = localStorage.getItem("mat_client_name") || "";
+            nameInput.addEventListener("input", (e) => localStorage.setItem("mat_client_name", e.target.value));
         }
-    );
-
-
-    const totalElement =
-        document.getElementById(
-            "grandTotal"
-        );
-
-
-    if (totalElement) {
-
-        totalElement.textContent =
-            `₹${formatMoney(
-                grandTotal
-            )}`;
-
+        if (phoneInput) {
+            phoneInput.value = localStorage.getItem("mat_client_phone") || "";
+            phoneInput.addEventListener("input", (e) => localStorage.setItem("mat_client_phone", e.target.value));
+        }
     }
 
+    function initMenus() {
+        const container = document.getElementById("categoryContainer");
+        if (!container) return;
+        container.innerHTML = "";
 
-    const qtyElement =
-        document.getElementById(
-            "grandTotalItems"
-        );
-
-
-    if (qtyElement) {
-
-        qtyElement.textContent =
-            `${selectedCount} Items`;
-
+        getMenus().forEach(menu => {
+            if (menu.show === false) return;
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `material-menu-button ${menu.id === currentMenu ? "active" : ""}`;
+            btn.innerHTML = `<span>${menu.icon || "📦"}</span> <span>${escapeHTML(menu.name)}</span>`;
+            
+            btn.addEventListener("click", () => {
+                currentMenu = menu.id;
+                document.querySelectorAll(".material-menu-button").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                renderMaterials();
+            });
+            container.appendChild(btn);
+        });
     }
 
-}
+    function initSearch() {
+        const searchInput = document.getElementById("materialSearch");
+        const clearBtn = document.getElementById("clearSearch");
 
-
-/* =========================================================
-   STAGE NAME
-========================================================= */
-
-function getStageName(
-    stageId
-) {
-
-    const stage =
-        MENUS.find(
-            menu =>
-                menu.id === stageId
-        );
-
-
-    if (!stage) {
-
-        return stageId || "";
-
+        if (searchInput) {
+            searchInput.addEventListener("input", (e) => {
+                searchText = e.target.value.trim().toLowerCase();
+                renderMaterials();
+            });
+        }
+        if (clearBtn) {
+            clearBtn.addEventListener("click", () => {
+                if (searchInput) searchInput.value = "";
+                searchText = "";
+                renderMaterials();
+            });
+        }
     }
 
-
-    return stage.name ||
-        stage.id;
-
-}
-
-
-/* =========================================================
-   FORMAT QUANTITY
-========================================================= */
-
-function formatQuantity(
-    quantity
-) {
-
-    return Number(
-        quantity || 0
-    )
-        .toLocaleString(
-            "en-IN",
-            {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
+    function getMaterialGroups() {
+        const groups = {};
+        getMaterials().forEach(mat => {
+            const key = `${mat.stage}__${mat.name}`;
+            if (!groups[key]) {
+                groups[key] = { key, stage: mat.stage, name: mat.name, materials: [] };
             }
-        );
+            groups[key].materials.push(mat);
+        });
+        return Object.values(groups);
+    }
 
-}
-
-
-/* =========================================================
-   MONEY FORMAT
-========================================================= */
-
-function formatMoney(
-    amount
-) {
-
-    return Number(
-        amount || 0
-    )
-        .toLocaleString(
-            "en-IN",
-            {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
+    function initSelections() {
+        getMaterialGroups().forEach(group => {
+            if (!activeGroupOptions[group.key]) {
+                activeGroupOptions[group.key] = group.materials[0].id;
             }
-        );
-
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   PUBLIC API
-========================================================= */
-
-window.MaterialEstimate = {
-
-    /* ---------------------------------------------
-       GET ALL ITEMS
-    --------------------------------------------- */
-
-    getItems() {
-
-        return estimateItems;
-
-    },
-
-
-    /* ---------------------------------------------
-       GET GRAND TOTAL
-    --------------------------------------------- */
-
-    getGrandTotal() {
-
-        return MATERIALS.reduce(
-            (
-                total,
-                material
-            ) => {
-
-                const item =
-                    estimateItems[
-                        material.id
-                    ];
-
-
-                if (!item) {
-
-                    return total;
-
-                }
-
-
-                return total +
-                    calculateItemTotal(
-                        material,
-                        item
-                    );
-
-            },
-            0
-        );
-
-    },
-
-
-    /* ---------------------------------------------
-       GET SELECTED MATERIALS ONLY
-    --------------------------------------------- */
-
-    getSelectedItems() {
-
-        return MATERIALS
-            .filter(
-                material => {
-
-                    const item =
-                        estimateItems[
-                            material.id
-                        ];
-
-
-                    if (!item) {
-
-                        return false;
-
-                    }
-
-
-                    return (
-                        calculateQuantity(
-                            material,
-                            item
-                        ) > 0
-                    );
-
-                }
-            )
-            .map(
-                material => {
-
-                    const item =
-                        estimateItems[
-                            material.id
-                        ];
-
-
-                    return {
-
-                        id:
-                            material.id,
-
-                        stage:
-                            material.stage,
-
-                        name:
-                            material.name,
-
-                        size:
-                            material.size,
-
-                        rate:
-                            Number(
-                                item.rate ||
-                                material.rate ||
-                                0
-                            ),
-
-                        quantity:
-                            calculateQuantity(
-                                material,
-                                item
-                            ),
-
-                        colors:
-                            item.colors || {},
-
-                        total:
-                            calculateItemTotal(
-                                material,
-                                item
-                            )
-
-                    };
-
-                }
-            );
-
-    },
-
-
-    /* ---------------------------------------------
-       GET CLIENT INFO
-    --------------------------------------------- */
-
-    getClientInfo() {
-
-        return clientInfo;
-
-    },
-
-
-    /* ---------------------------------------------
-       CLEAR ESTIMATE
-    --------------------------------------------- */
-
-    clearEstimate() {
-
-        estimateItems = {};
-
-        renderMaterials();
-
-        updateGrandTotal();
-
-    },
-
-
-    /* ---------------------------------------------
-       REFRESH
-    --------------------------------------------- */
-
-    refresh() {
-
-        renderMaterials();
-
-        updateGrandTotal();
-
-    },
-
-
-    /* ---------------------------------------------
-       SET RATE
-    --------------------------------------------- */
-
-    setRate(
-        materialId,
-        rate
-    ) {
-
-        const material =
-            MATERIALS.find(
-                item =>
-                    item.id ===
-                    materialId
-            );
-
-
-        if (!material) {
-
-            return false;
-
+        });
+    }
+
+    function getFilteredGroups() {
+        return getMaterialGroups().filter(group => {
+            const stageMatch = currentMenu === "all" || group.stage === currentMenu;
+            if (!stageMatch) return false;
+            if (!searchText) return true;
+            const fullText = `${group.name} ${group.stage} ${group.materials.map(m => m.size || "").join(" ")}`.toLowerCase();
+            return fullText.includes(searchText);
+        });
+    }
+
+    function getSelectedMaterial(group) {
+        const activeId = activeGroupOptions[group.key];
+        return group.materials.find(m => m.id === activeId) || group.materials[0];
+    }
+
+    function renderMaterials() {
+        const grid = document.getElementById("productsGrid");
+        const counter = document.getElementById("productCounter");
+        const noProducts = document.getElementById("noProducts");
+        const filtered = getFilteredGroups();
+
+        if (counter) counter.innerText = `${filtered.length} Materials`;
+        if (!grid) return;
+        grid.innerHTML = "";
+
+        if (filtered.length === 0) {
+            if (noProducts) noProducts.style.display = "block";
+            return;
+        }
+        if (noProducts) noProducts.style.display = "none";
+
+        filtered.forEach(group => {
+            const material = getSelectedMaterial(group);
+            const itemData = estimateItems[material.id] || { qty: 0, rate: material.rate || 0 };
+            const subtotal = (itemData.qty || 0) * (itemData.rate || 0);
+
+            const card = document.createElement("article");
+            card.className = "estimate-material-card";
+            card.dataset.group = group.key;
+
+            let optionHtml = "";
+            if (group.materials.length > 1) {
+                optionHtml = `
+                    <div class="estimate-option-row">
+                        <label>Select Option</label>
+                        <select class="material-option-select">
+                            ${group.materials.map(m => `<option value="${m.id}" ${m.id === material.id ? "selected" : ""}>${escapeHTML(m.size || "Standard")}</option>`).join("")}
+                        </select>
+                    </div>
+                `;
+            } else if (material.size) {
+                optionHtml = `<div class="estimate-option-row"><label>Size / Type</label><div class="material-single-option">${escapeHTML(material.size)}</div></div>`;
+            }
+
+            card.innerHTML = `
+                <div class="estimate-card-header">
+                    <div><h3>${escapeHTML(group.name)}</h3></div>
+                    <span class="material-stage">${STAGE_LABELS[group.stage] || group.stage}</span>
+                </div>
+                ${optionHtml}
+                <div class="estimate-rate-row">
+                    <label>Rate</label>
+                    <div class="rate-input-wrapper">
+                        <span>₹</span>
+                        <input type="number" class="material-rate" value="${itemData.rate}">
+                    </div>
+                </div>
+                <div class="estimate-quantity-row">
+                    <label>Quantity</label>
+                    <input type="number" class="material-quantity" value="${itemData.qty || ''}" placeholder="Enter Qty">
+                </div>
+                <div class="estimate-item-total">
+                    <span>Item Total</span>
+                    <strong class="item-total-value">₹${formatMoney(subtotal)}</strong>
+                </div>
+            `;
+
+            attachCardEvents(card, group, material);
+            grid.appendChild(card);
+        });
+    }
+
+    function attachCardEvents(card, group, material) {
+        const select = card.querySelector(".material-option-select");
+        if (select) {
+            select.addEventListener("change", (e) => {
+                activeGroupOptions[group.key] = e.target.value;
+                renderMaterials();
+                updateGrandTotal();
+            });
         }
 
+        const rateInput = card.querySelector(".material-rate");
+        if (rateInput) {
+            rateInput.addEventListener("input", (e) => {
+                const val = parseFloat(e.target.value) || 0;
+                if (!estimateItems[material.id]) estimateItems[material.id] = { qty: 0, rate: val };
+                estimateItems[material.id].rate = val;
+                updateCardTotal(card, material);
+                updateGrandTotal();
+            });
+        }
 
-        const item =
-            getEstimateItem(
-                material
-            );
-
-
-        item.rate =
-            Number(
-                rate || 0
-            );
-
-
-        renderMaterials();
-
-        updateGrandTotal();
-
-
-        return true;
-
+        const qtyInput = card.querySelector(".material-quantity");
+        if (qtyInput) {
+            qtyInput.addEventListener("input", (e) => {
+                const val = parseFloat(e.target.value) || 0;
+                if (!estimateItems[material.id]) estimateItems[material.id] = { qty: 0, rate: material.rate || 0 };
+                estimateItems[material.id].qty = val;
+                if (val <= 0) delete estimateItems[material.id];
+                updateCardTotal(card, material);
+                updateGrandTotal();
+            });
+        }
     }
 
-};
+    function updateCardTotal(card, material) {
+        const item = estimateItems[material.id];
+        const total = (item?.qty || 0) * (item?.rate || 0);
+        const totalEl = card.querySelector(".item-total-value");
+        if (totalEl) totalEl.innerText = `₹${formatMoney(total)}`;
+    }
 
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        let count = 0;
 
-/* =========================================================
-   DEBUG INFORMATION
-========================================================= */
+        getMaterialGroups().forEach(group => {
+            const material = getSelectedMaterial(group);
+            const item = estimateItems[material.id];
+            if (item && item.qty > 0) {
+                count++;
+                grandTotal += (item.qty * item.rate);
+            }
+        });
 
-console.log(
-    "Material Groups:",
-    getMaterialGroups().length
-);
+        const grandTotalEl = document.getElementById("grandTotal");
+        const grandItemsEl = document.getElementById("grandTotalItems");
+        if (grandTotalEl) grandTotalEl.innerText = `₹${formatMoney(grandTotal)}`;
+        if (grandItemsEl) grandItemsEl.innerText = `${count} Items`;
+    }
 
-console.log(
-    "Total Materials:",
-    MATERIALS.length
-);
+    function formatMoney(num) {
+        return Number(num || 0).toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
 
-console.log(
-    "Stage 1:",
-    MATERIALS.filter(
-        material =>
-            material.stage === "stage-1"
-    ).length
-);
-
-console.log(
-    "Stage 2:",
-    MATERIALS.filter(
-        material =>
-            material.stage === "stage-2"
-    ).length
-);
-
-console.log(
-    "Stage 3:",
-    MATERIALS.filter(
-        material =>
-            material.stage === "stage-3"
-    ).length
-);
-
-console.log(
-    "Stage 4:",
-    MATERIALS.filter(
-        material =>
-            material.stage === "stage-4"
-    ).length
-);
-
-console.log(
-    "Stage 5:",
-    MATERIALS.filter(
-        material =>
-            material.stage === "stage-5"
-    ).length
-);
+    function escapeHTML(str) {
+        return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+})();
