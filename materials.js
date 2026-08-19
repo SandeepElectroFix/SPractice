@@ -1961,4 +1961,4 @@ console.log(
     rateEditable: true,
     colorWise: false
 }
-]
+];
