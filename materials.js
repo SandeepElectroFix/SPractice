@@ -111,13 +111,6 @@ window.MATERIAL_ESTIMATE_MATERIALS = [
         colorWise: false
     },
 
-console.log(
-    "Stage 1 Materials Loaded:",
-    window.MATERIAL_ESTIMATE_MATERIALS.length
-);
-
-
-
 
 /* =========================================================
    STAGE 2 – WALL CONDUIT INSTALLATION
@@ -1962,3 +1955,53 @@ console.log(
     colorWise: false
 }
 ];
+
+
+
+/* =========================================================
+   MATERIAL DATA CHECK
+========================================================= */
+
+console.log(
+    "Sandeep ElectroFix Material Data Loaded"
+);
+
+console.log(
+    "Total Materials:",
+    window.MATERIAL_ESTIMATE_MATERIALS.length
+);
+
+console.log(
+    "Stage 1:",
+    window.MATERIAL_ESTIMATE_MATERIALS.filter(
+        material => material.stage === "stage-1"
+    ).length
+);
+
+console.log(
+    "Stage 2:",
+    window.MATERIAL_ESTIMATE_MATERIALS.filter(
+        material => material.stage === "stage-2"
+    ).length
+);
+
+console.log(
+    "Stage 3:",
+    window.MATERIAL_ESTIMATE_MATERIALS.filter(
+        material => material.stage === "stage-3"
+    ).length
+);
+
+console.log(
+    "Stage 4:",
+    window.MATERIAL_ESTIMATE_MATERIALS.filter(
+        material => material.stage === "stage-4"
+    ).length
+);
+
+console.log(
+    "Stage 5:",
+    window.MATERIAL_ESTIMATE_MATERIALS.filter(
+        material => material.stage === "stage-5"
+    ).length
+);
