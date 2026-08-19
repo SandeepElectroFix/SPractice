@@ -1,426 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="theme-color" content="#070b12">
-    <meta name="description"
-          content="Sandeep ElectroFix Material Estimate System">
-
-    <title>Material Estimate | Sandeep ElectroFix</title>
-
-    <link rel="icon"
-          type="image/png"
-          href="assets/logo.png">
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="material-estimate.css">
-<!-- =====================================================
-     PDF LIBRARIES
-===================================================== -->
-
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-</script>
-
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
-</script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Material Estimate - Sandeep ElectroFix</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="material-estimate.css">
+    <style>
+        .stage-btn-group { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+        .stage-btn-group::-webkit-scrollbar { display: none; }
+        .stage-btn { flex: 0 0 auto; padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); background: #0d1426; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .stage-btn.active { background: linear-gradient(135deg, #00aaff, #0066ff); border-color: transparent; }
+    </style>
 </head>
-
 <body>
+    <div class="materials-page" style="padding: 15px; max-width: 650px; margin: 0 auto; min-height: 100vh; background: #050816; color: #fff;">
+        
+        <!-- Header -->
+        <header style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+            <a href="index.html" style="background:#0d1426; border:1px solid rgba(255,255,255,0.1); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; text-decoration:none;">←</a>
+            <div>
+                <h2 style="margin:0; font-size:18px;">Material Estimate</h2>
+                <small style="color:#00aaff;">Sandeep ElectroFix</small>
+            </div>
+        </header>
 
-<!-- =====================================================
-     BACKGROUND
-===================================================== -->
+        <!-- Client Info Card -->
+        <section style="background:#0d1426; border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:16px; margin-bottom:15px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; color:#00aaff; font-weight:700;">
+                <span>👤</span> <span>Client Information</span>
+            </div>
+            <div style="margin-bottom:10px;">
+                <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">Client's Name</label>
+                <input type="text" id="clientName" placeholder="Enter client name" style="width:100%; box-sizing:border-box; padding:10px 12px; background:#111a30; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff;">
+            </div>
+            <div>
+                <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">📞 Phone</label>
+                <input type="tel" id="clientPhone" placeholder="Enter phone number" style="width:100%; box-sizing:border-box; padding:10px 12px; background:#111a30; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff;">
+            </div>
+        </section>
 
-<div class="estimate-background"
-     aria-hidden="true"></div>
-
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<header class="estimate-header">
-
-    <a href="index.html"
-       class="back-button"
-       id="backButton"
-       aria-label="Back"
-       title="Back">
-
-        ←
-
-    </a>
-
-
-    <img src="assets/logo.png"
-         alt="Sandeep ElectroFix Logo"
-         class="estimate-logo">
-
-
-    <div class="header-content">
-
-        <h1>
-            Material Estimate
-        </h1>
-
-        <p>
-            Sandeep ElectroFix
-        </p>
-
-    </div>
-
-</header>
-
-
-<!-- =====================================================
-     CLIENT INFORMATION
-===================================================== -->
-
-<section class="client-section">
-
-    <div class="section-title">
-
-        <span>👤</span>
-
-        <h2>
-            Client Information
-        </h2>
-
-    </div>
-
-
-    <div class="client-grid">
-
-        <div class="form-group">
-
-            <label for="clientName">
-                Client's Name
-            </label>
-
-            <input
-                type="text"
-                id="clientName"
-                placeholder="Enter client name"
-                autocomplete="off">
-
+        <!-- Search Bar -->
+        <div style="position:relative; margin-bottom:15px;">
+            <input type="search" id="materialSearch" placeholder="🔍 Search material..." style="width:100%; box-sizing:border-box; padding:12px 15px; background:#0d1426; border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:#fff;">
         </div>
 
+        <!-- Material Sections -->
+        <section style="margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <div>
+                    <h3 style="margin:0; font-size:16px;">Material Sections</h3>
+                    <small style="color:#9ca3af;">Select a stage to view materials</small>
+                </div>
+                <span id="productCounter" style="background:rgba(0,170,255,0.1); color:#00ffff; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:700;">0 Materials</span>
+            </div>
 
-        <div class="form-group">
+            <!-- Stage Filter Buttons -->
+            <div class="stage-btn-group" id="categoryContainer"></div>
 
-            <label for="clientPhone">
-                📞 Phone
-            </label>
+            <!-- Products Grid -->
+            <div id="productsGrid" style="margin-top:12px;"></div>
+        </section>
 
-            <input
-                type="tel"
-                id="clientPhone"
-                placeholder="Enter phone number"
-                inputmode="tel"
-                autocomplete="off">
+        <!-- Estimate Summary Card -->
+        <section style="background:#0d1426; border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:16px; margin-bottom:80px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <strong style="color:#fff;">🧾 Estimate Summary</strong>
+                <span id="grandTotalItems" style="color:#00aaff; font-size:12px; font-weight:700;">0 Items</span>
+            </div>
 
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     SEARCH
-===================================================== -->
-
-<section class="estimate-search-section">
-
-    <div class="search-box">
-
-        <span class="search-icon">
-            🔍
-        </span>
-
-        <input
-            type="search"
-            id="materialSearch"
-            placeholder="Search material..."
-            autocomplete="off">
-
-        <button
-            type="button"
-            id="clearSearch"
-            class="clear-search"
-            aria-label="Clear search">
-
-            ×
-
-        </button>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
+                <span style="color:#9ca3af; font-size:14px;">Total Estimate</span>
+                <strong id="grandTotal" style="color:#ffd700; font-size:20px;">₹0</strong>
+            </div>
+        </section>
 
     </div>
 
-</section>
-
-
-<!-- =====================================================
-     STAGE / MENU NAVIGATION
-===================================================== -->
-
-<section class="stage-section">
-
-    <div class="section-heading-row">
-
-        <div>
-
-            <h2>
-                Material Sections
-            </h2>
-
-            <p>
-                Select a stage to view materials
-            </p>
-
-        </div>
-
-
-        <span id="materialCounter"
-              class="material-counter">
-
-            0 Materials
-
-        </span>
-
-    </div>
-
-
-    <div
-        class="stage-menu"
-        id="stageMenu"
-        aria-label="Material stages">
-
-        <!-- JavaScript will create menus -->
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     MATERIAL LIST
-===================================================== -->
-
-<main class="material-section">
-
-    <div
-        id="materialList"
-        class="material-list">
-
-        <!-- JavaScript will load materials -->
-
-    </div>
-
-
-    <!-- NO MATERIAL -->
-    <div
-        id="noMaterials"
-        class="no-materials">
-
-        <div class="no-materials-icon">
-            🔎
-        </div>
-
-        <h3>
-            No Material Found
-        </h3>
-
-        <p>
-            Try another material name or size.
-        </p>
-
-        <button
-            type="button"
-            id="resetFilters"
-            class="reset-button">
-
-            Reset
-
-        </button>
-
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     ESTIMATE SUMMARY
-===================================================== -->
-
-<section class="estimate-summary">
-
-    <div class="summary-header">
-
-        <div>
-
-            <span class="summary-icon">
-                🧾
-            </span>
-
-            <h2>
-                Estimate Summary
-            </h2>
-
-        </div>
-
-
-        <span
-            id="selectedMaterialCount"
-            class="selected-count">
-
-            0 Items
-
-        </span>
-
-    </div>
-
-
-    <div
-        id="estimateItems"
-        class="estimate-items">
-
-        <div class="empty-estimate">
-
-            <span>
-                🛒
-            </span>
-
-            <p>
-                Select material and enter quantity
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="estimate-total">
-
-        <span>
-            Total Estimate
-        </span>
-
-        <strong id="grandTotal">
-            ₹0
-        </strong>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     BOTTOM ACTIONS
-===================================================== -->
-
-<section class="estimate-actions">
-
-    <button
-        type="button"
-        id="clearEstimate"
-        class="action-button secondary">
-
-        🗑️ Clear
-
-    </button>
-
-
-    <button
-        type="button"
-        id="generatePdf"
-        class="action-button primary">
-
-        📄 Generate PDF
-
-    </button>
-
-</section>
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer class="estimate-footer">
-
-    <strong>
-        ⚡ SANDEEP ELECTROFIX
-    </strong>
-
-    <br>
-
-    <span>
-        Powering Your Trust
-    </span>
-
-    <br><br>
-
-    Lucknow, Uttar Pradesh
-
-    <br>
-
-    📞 +91 9026036445
-
-    <br>
-
-    📧 SandeepElectroFix@gmail.com
-
-    <br><br>
-
-    ©
-    <span id="currentYear"></span>
-    Sandeep ElectroFix
-
-</footer>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
-<script>
-
-    document.getElementById("currentYear").textContent =
-        new Date().getFullYear();
-
-</script>
-
-
-    <!-- 1. Master Config (Menus & Settings) -->
-    <script src="config.js?v=99"></script>
-
-    <!-- 2. Master Dataset (125 Materials) -->
-    <script src="materials-data.js?v=99"></script>
-
-    <!-- 3. Estimate Engine -->
-    <script src="material-estimate.js?v=999"></script>
-</body>
-</html>
-
-</body>
-</html>
-
-
-
+    <!-- Engine Script -->
+    <script src="material-estimate.js?v=9999"></script>
 </body>
 </html>
