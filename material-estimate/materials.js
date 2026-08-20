@@ -43,7 +43,7 @@ window.MATERIAL_ESTIMATE_CONFIG = {
 
         ownerName: "Sandeep Verma",
 
-        languageDefault: "hi",
+        languageDefault: "en",
 
         currency: "₹",
 
