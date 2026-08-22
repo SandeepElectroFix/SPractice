@@ -88,6 +88,25 @@
 
     </main>
 
+    <!-- MATERIAL MODAL POPUP -->
+    <div id="materialModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle" style="color: #f5c451; margin: 0;">Material Name</h3>
+                <button onclick="closeModal()" class="close-btn" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Data from JS will load here -->
+            </div>
+            <div class="modal-footer" style="margin-top: 20px;">
+                <button onclick="addToCart()" class="header-btn" style="width: 100%; background: rgba(14,165,233,0.15); border-color: #0ea5e9; color: #0ea5e9; font-weight: bold; font-size: 16px; padding: 12px;">+ Add to Estimate</button>
+            </div>
+        </div>
+    </div>
+    
+
+
+    
     <!-- NEW FOOTER -->
     <footer style="display: flex; justify-content: space-around; padding: 20px; background: #050914; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px;">
         <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">📞</span> <small style="text-align: left;">Need Help?<br>Call Us Now</small></div>
