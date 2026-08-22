@@ -1,448 +1,1182 @@
 /* =========================================================
    SANDEEP ELECTROFIX
-   ESTIMATE LIST APP ENGINE
+   ESTIMATE LIST
+   APP ENGINE
+   Version 4.0.0
+
+   WORKS WITH:
+   estimate-list.js
+
+   FEATURES
+   ---------------------------------------------------------
+   ✓ Default Language = English
+   ✓ English / Hindi
+   ✓ Category Show / Hide
+   ✓ Item Show / Hide
+   ✓ Type Show / Hide
+   ✓ Sub-Type Show / Hide
+   ✓ Size Show / Hide
+   ✓ Rating Show / Hide
+   ✓ Colour Show / Hide
+   ✓ Material Show / Hide
+   ✓ Variety Show / Hide
+   ✓ Wattage Show / Hide
+   ✓ Sensitivity Show / Hide
+   ✓ Curve Show / Hide
+   ✓ Cable Size Show / Hide
+   ✓ Unit Show / Hide
+   ✓ Brand Show / Hide
+   ✓ Show Everything
+   ✓ Hide Everything
+   ✓ Reset
+   ✓ LocalStorage
+   ✓ Search
+   ✓ Hierarchical Manage Panel
 ========================================================= */
 
 
 /* =========================================================
-   LANGUAGE
+   1. GLOBAL STATE
 ========================================================= */
 
-let currentLanguage =
-    localStorage.getItem(
-        "sandeep_estimate_language"
-    ) || "en";
+const ESTIMATE_APP = {
+
+    language:
+        window.ESTIMATE_LANGUAGE?.current ||
+        window.ESTIMATE_LIST_CONFIG?.languageDefault ||
+        "en",
+
+    searchQuery: "",
+
+    manageOpen: false,
+
+    expanded: {},
+
+    initialized: false
+
+};
 
 
 /* =========================================================
-   DOM
+   2. DOM HELPERS
 ========================================================= */
 
-const categoryContainer =
-    document.getElementById(
-        "categoryContainer"
-    );
+function $(id) {
 
-const manageSection =
-    document.getElementById(
-        "manageSection"
-    );
-
-const estimateSection =
-    document.getElementById(
-        "estimateSection"
-    );
-
-const manageTree =
-    document.getElementById(
-        "manageTree"
-    );
-
-const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
-
-
-/* =========================================================
-   TEXT
-========================================================= */
-
-function text(item) {
-
-    if (!item) return "";
-
-    return currentLanguage === "hi"
-
-        ? (
-            item.hi ||
-            item.en ||
-            ""
-        )
-
-        : (
-            item.en ||
-            item.hi ||
-            ""
-        );
+    return document.getElementById(id);
 
 }
 
 
-/* =========================================================
-   RENDER CATEGORIES
-========================================================= */
-
-function renderCategories(
-    data = window.ESTIMATE_LIST
+function createElement(
+    tag,
+    className = "",
+    html = ""
 ) {
 
-    categoryContainer.innerHTML = "";
+    const element =
+        document.createElement(tag);
 
-    data
-        .filter(
-            category =>
-                category.show !== false
+    if (className) {
+        element.className = className;
+    }
+
+    if (html) {
+        element.innerHTML = html;
+    }
+
+    return element;
+
+}
+
+
+/* =========================================================
+   3. LANGUAGE ENGINE
+========================================================= */
+
+function getLanguage() {
+
+    return ESTIMATE_APP.language === "hi"
+        ? "hi"
+        : "en";
+
+}
+
+
+function setLanguage(lang) {
+
+    if (
+        lang !== "en" &&
+        lang !== "hi"
+    ) {
+        return;
+    }
+
+    ESTIMATE_APP.language =
+        lang;
+
+    localStorage.setItem(
+        "sandeep_estimate_language",
+        lang
+    );
+
+    if (
+        window.ESTIMATE_LANGUAGE
+    ) {
+
+        window.ESTIMATE_LANGUAGE.current =
+            lang;
+
+    }
+
+    renderApplication();
+
+}
+
+
+function getText(item) {
+
+    if (!item) {
+        return "";
+    }
+
+    const lang =
+        getLanguage();
+
+    return (
+        item[lang] ||
+        item.en ||
+        item.hi ||
+        ""
+    );
+
+}
+
+
+function getNamedText(item) {
+
+    if (!item) {
+        return "";
+    }
+
+    const lang =
+        getLanguage();
+
+    if (lang === "hi") {
+
+        return (
+            item.name_hi ||
+            item.hi ||
+            item.name_en ||
+            item.en ||
+            item.id ||
+            ""
+        );
+
+    }
+
+    return (
+        item.name_en ||
+        item.en ||
+        item.name_hi ||
+        item.hi ||
+        item.id ||
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   4. LANGUAGE BUTTON
+========================================================= */
+
+function updateLanguageButton() {
+
+    const button =
+        $("languageBtn");
+
+    if (!button) {
+        return;
+    }
+
+    button.textContent =
+        getLanguage() === "en"
+            ? "हिंदी"
+            : "English";
+
+}
+
+
+/* =========================================================
+   5. DATABASE
+========================================================= */
+
+function getDatabase() {
+
+    if (
+        !Array.isArray(
+            window.ESTIMATE_LIST
         )
-        .forEach(
-            category => {
+    ) {
 
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "category-card";
-
-
-                const title =
-                    document.createElement(
-                        "div"
-                    );
-
-                title.className =
-                    "category-title";
-
-
-                title.innerHTML = `
-
-                    <div class="category-name">
-
-                        <span>
-                            ${category.icon || "📦"}
-                        </span>
-
-                        <span>
-                            ${text({
-                                en: category.name_en,
-                                hi: category.name_hi
-                            })}
-                        </span>
-
-                    </div>
-
-                    <span>
-                        ›
-                    </span>
-
-                `;
-
-
-                const items =
-                    document.createElement(
-                        "div"
-                    );
-
-                items.className =
-                    "category-items";
-
-
-                (
-                    category.items || []
-                )
-                    .filter(
-                        item =>
-                            item.show !== false
-                    )
-                    .forEach(
-                        item => {
-
-                            const material =
-                                document.createElement(
-                                    "div"
-                                );
-
-                            material.className =
-                                "material-card";
-
-
-                            material.innerHTML = `
-
-                                <h3>
-
-                                    ${text({
-                                        en: item.name_en,
-                                        hi: item.name_hi
-                                    })}
-
-                                </h3>
-
-                                <p>
-                                    Tap to continue
-                                </p>
-
-                            `;
-
-
-                            items.appendChild(
-                                material
-                            );
-
-                        }
-                    );
-
-
-                card.appendChild(title);
-
-                card.appendChild(items);
-
-                categoryContainer.appendChild(
-                    card
-                );
-
-            }
+        console.error(
+            "ESTIMATE_LIST not found."
         );
+
+        return [];
+
+    }
+
+    return window.ESTIMATE_LIST;
+
+}
+
+
+function getBrands() {
+
+    if (
+        !Array.isArray(
+            window.ESTIMATE_BRANDS
+        )
+    ) {
+
+        return [];
+
+    }
+
+    return window.ESTIMATE_BRANDS;
 
 }
 
 
 /* =========================================================
-   MANAGEMENT TREE
+   6. NESTED ARRAY TYPES
 ========================================================= */
 
-function renderManageTree() {
+const NESTED_ARRAY_KEYS = [
 
-    manageTree.innerHTML = "";
+    "types",
 
-    window.ESTIMATE_LIST
-        .forEach(
-            category => {
+    "subTypes",
 
-                const wrapper =
-                    document.createElement(
-                        "div"
-                    );
+    "sizes",
 
-                wrapper.className =
-                    "tree-category";
+    "ratings",
 
+    "colours",
 
-                /* CATEGORY */
+    "colors",
 
-                const categoryRow =
-                    createToggleRow(
+    "materials",
 
-                        category.name_en,
+    "varieties",
 
-                        category.name_hi,
+    "wattages",
 
-                        category.show !== false,
+    "sensitivities",
 
-                        value => {
+    "curves",
 
-                            category.show =
-                                value;
+    "cableSizes",
 
-                            EstimateVisibility.save();
+    "units",
 
-                            renderCategories();
+    "brands"
 
-                        }
-
-                    );
+];
 
 
-                wrapper.appendChild(
-                    categoryRow
-                );
+/* =========================================================
+   7. HUMAN LABELS
+========================================================= */
+
+const KEY_LABELS = {
+
+    types: {
+        en: "Type",
+        hi: "टाइप"
+    },
+
+    subTypes: {
+        en: "Sub-Type",
+        hi: "सब-टाइप"
+    },
+
+    sizes: {
+        en: "Size",
+        hi: "साइज़"
+    },
+
+    ratings: {
+        en: "Rating",
+        hi: "रेटिंग"
+    },
+
+    colours: {
+        en: "Colour",
+        hi: "रंग"
+    },
+
+    colors: {
+        en: "Colour",
+        hi: "रंग"
+    },
+
+    materials: {
+        en: "Material",
+        hi: "मटेरियल"
+    },
+
+    varieties: {
+        en: "Variety",
+        hi: "वैरायटी"
+    },
+
+    wattages: {
+        en: "Wattage",
+        hi: "वॉटेज"
+    },
+
+    sensitivities: {
+        en: "Sensitivity",
+        hi: "सेंसिटिविटी"
+    },
+
+    curves: {
+        en: "Curve",
+        hi: "कर्व"
+    },
+
+    cableSizes: {
+        en: "Cable Size",
+        hi: "केबल साइज़"
+    },
+
+    units: {
+        en: "Unit",
+        hi: "यूनिट"
+    },
+
+    brands: {
+        en: "Brand",
+        hi: "ब्रांड"
+    }
+
+};
 
 
-                /* MATERIALS */
+function getKeyLabel(key) {
 
-                const children =
-                    document.createElement(
-                        "div"
-                    );
+    const data =
+        KEY_LABELS[key];
 
-                children.className =
-                    "tree-children";
+    if (!data) {
+        return key;
+    }
 
-
-                (
-                    category.items || []
-                )
-                    .forEach(
-                        item => {
-
-                            const itemRow =
-                                createToggleRow(
-
-                                    item.name_en,
-
-                                    item.name_hi,
-
-                                    item.show !== false,
-
-                                    value => {
-
-                                        item.show =
-                                            value;
-
-                                        EstimateVisibility.save();
-
-                                        renderCategories();
-
-                                    }
-
-                                );
-
-
-                            children.appendChild(
-                                itemRow
-                            );
-
-
-                            /*
-                             * NESTED DATA
-                             */
-
-                            renderNestedControls(
-                                item,
-                                children
-                            );
-
-                        }
-                    );
-
-
-                wrapper.appendChild(
-                    children
-                );
-
-                manageTree.appendChild(
-                    wrapper
-                );
-
-            }
-        );
+    return getLanguage() === "hi"
+        ? data.hi
+        : data.en;
 
 }
 
 
 /* =========================================================
-   CREATE TOGGLE
+   8. ID GENERATOR
 ========================================================= */
 
-function createToggleRow(
-    english,
-    hindi,
-    checked,
-    callback
+function makePathId(
+    parentPath,
+    key,
+    item,
+    index
 ) {
 
-    const row =
-        document.createElement(
-            "div"
+    return [
+
+        parentPath || "root",
+
+        key,
+
+        item?.id ||
+        item?.name_en ||
+        item?.en ||
+        index
+
+    ].join("__");
+
+}
+
+
+/* =========================================================
+   9. VISIBILITY
+========================================================= */
+
+function isVisible(item) {
+
+    return (
+        !item ||
+        item.show !== false
+    );
+
+}
+
+
+function setVisible(
+    item,
+    value
+) {
+
+    if (!item) {
+        return;
+    }
+
+    item.show =
+        Boolean(value);
+
+}
+
+
+/* =========================================================
+   10. RECURSIVE SHOW
+========================================================= */
+
+function showNestedObject(
+    object
+) {
+
+    if (
+        !object ||
+        typeof object !== "object"
+    ) {
+        return;
+    }
+
+
+    Object.keys(object)
+        .forEach(key => {
+
+            const value =
+                object[key];
+
+            if (
+                !Array.isArray(value)
+            ) {
+                return;
+            }
+
+
+            value.forEach(item => {
+
+                if (
+                    !item ||
+                    typeof item !== "object"
+                ) {
+                    return;
+                }
+
+
+                item.show = true;
+
+                showNestedObject(
+                    item
+                );
+
+            });
+
+        });
+
+}
+
+
+/* =========================================================
+   11. RECURSIVE HIDE
+========================================================= */
+
+function hideNestedObject(
+    object
+) {
+
+    if (
+        !object ||
+        typeof object !== "object"
+    ) {
+        return;
+    }
+
+
+    Object.keys(object)
+        .forEach(key => {
+
+            const value =
+                object[key];
+
+            if (
+                !Array.isArray(value)
+            ) {
+                return;
+            }
+
+
+            value.forEach(item => {
+
+                if (
+                    !item ||
+                    typeof item !== "object"
+                ) {
+                    return;
+                }
+
+
+                item.show = false;
+
+                hideNestedObject(
+                    item
+                );
+
+            });
+
+        });
+
+}
+
+
+/* =========================================================
+   12. SAVE
+========================================================= */
+
+function saveSettings() {
+
+    if (
+        window.EstimateVisibility &&
+        typeof
+        window.EstimateVisibility.save ===
+        "function"
+    ) {
+
+        window.EstimateVisibility.save();
+
+    }
+
+    /*
+     * Save brands separately.
+     */
+
+    try {
+
+        localStorage.setItem(
+
+            "sandeep_estimate_brands",
+
+            JSON.stringify(
+                getBrands()
+            )
+
         );
 
-    row.className =
-        "tree-row";
+    } catch (error) {
 
-
-    const label =
-        document.createElement(
-            "div"
+        console.warn(
+            "Brand settings save error:",
+            error
         );
 
-    label.className =
-        "tree-label";
+    }
+
+}
 
 
-    label.innerHTML = `
+/* =========================================================
+   13. LOAD
+========================================================= */
 
-        <span>
-            ${currentLanguage === "hi"
-                ? hindi
-                : english}
-        </span>
+function loadSettings() {
 
-    `;
+    /*
+     * Main material settings
+     */
+
+    if (
+        window.EstimateVisibility &&
+        typeof
+        window.EstimateVisibility.load ===
+        "function"
+    ) {
+
+        window.EstimateVisibility.load();
+
+    }
 
 
-    const toggle =
-        document.createElement(
-            "label"
+    /*
+     * Brand settings
+     */
+
+    try {
+
+        const savedBrands =
+            localStorage.getItem(
+                "sandeep_estimate_brands"
+            );
+
+        if (savedBrands) {
+
+            const parsed =
+                JSON.parse(
+                    savedBrands
+                );
+
+            if (
+                Array.isArray(parsed)
+            ) {
+
+                window.ESTIMATE_BRANDS =
+                    parsed;
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Brand settings load error:",
+            error
         );
 
-    toggle.className =
-        "toggle";
+    }
+
+}
 
 
-    const input =
-        document.createElement(
-            "input"
-        );
+/* =========================================================
+   14. SHOW EVERYTHING
+========================================================= */
 
-    input.type =
-        "checkbox";
+function showEverything() {
 
-    input.checked =
-        checked;
+    const database =
+        getDatabase();
 
 
-    const slider =
-        document.createElement(
-            "span"
-        );
+    database.forEach(
+        category => {
 
-    slider.className =
-        "slider";
+            category.show =
+                true;
 
-
-    input.addEventListener(
-        "change",
-        () => {
-
-            callback(
-                input.checked
+            showNestedObject(
+                category
             );
 
         }
     );
 
 
-    toggle.appendChild(input);
+    getBrands()
+        .forEach(
+            brand => {
 
-    toggle.appendChild(slider);
+                brand.show =
+                    true;
 
-    row.appendChild(label);
+            }
+        );
 
-    row.appendChild(toggle);
 
-    return row;
+    saveSettings();
+
+    renderApplication();
 
 }
 
 
 /* =========================================================
-   NESTED CONTROLS
+   15. HIDE EVERYTHING
 ========================================================= */
 
-function renderNestedControls(
-    item,
-    container,
-    level = 1
+function hideEverything() {
+
+    const database =
+        getDatabase();
+
+
+    database.forEach(
+        category => {
+
+            category.show =
+                false;
+
+            hideNestedObject(
+                category
+            );
+
+        }
+    );
+
+
+    getBrands()
+        .forEach(
+            brand => {
+
+                brand.show =
+                    false;
+
+            }
+        );
+
+
+    saveSettings();
+
+    renderApplication();
+
+}
+
+
+/* =========================================================
+   16. RESET EVERYTHING
+========================================================= */
+
+function resetEverything() {
+
+    const message =
+        getLanguage() === "hi"
+
+            ? "क्या आप सभी Show / Hide settings reset करना चाहते हैं?"
+
+            : "Reset all Show / Hide settings?";
+
+
+    if (
+        !window.confirm(message)
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        window.EstimateVisibility &&
+        typeof
+        window.EstimateVisibility.reset ===
+        "function"
+    ) {
+
+        window.EstimateVisibility.reset();
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        window.ESTIMATE_LIST_CONFIG?.storageKey ||
+        "sandeep_estimate_list_settings"
+    );
+
+    localStorage.removeItem(
+        "sandeep_estimate_brands"
+    );
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   17. CATEGORY DISPLAY
+========================================================= */
+
+function renderCategories() {
+
+    const container =
+        $("categoryContainer");
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    const database =
+        getDatabase();
+
+
+    const query =
+        ESTIMATE_APP.searchQuery
+            .toLowerCase()
+            .trim();
+
+
+    let found =
+        false;
+
+
+    database.forEach(
+        (category, categoryIndex) => {
+
+            if (
+                !isVisible(category)
+            ) {
+
+                return;
+
+            }
+
+
+            const visibleItems =
+                getVisibleItemsForSearch(
+                    category,
+                    query
+                );
+
+
+            if (
+                query &&
+                visibleItems.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            found = true;
+
+
+            const categoryCard =
+                createElement(
+                    "div",
+                    "category-card"
+                );
+
+
+            const title =
+                createElement(
+                    "div",
+                    "category-title"
+                );
+
+
+            title.innerHTML = `
+
+                <div class="category-name">
+
+                    <span>
+                        ${category.icon || "📦"}
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            getNamedText(category)
+                        )}
+                    </span>
+
+                </div>
+
+                <span>
+                    ${isExpanded(
+                        "category",
+                        category.id
+                    )
+                        ? "⌄"
+                        : "›"}
+                </span>
+
+            `;
+
+
+            title.addEventListener(
+                "click",
+                () => {
+
+                    toggleExpanded(
+                        "category",
+                        category.id
+                    );
+
+                    renderCategories();
+
+                }
+            );
+
+
+            categoryCard.appendChild(
+                title
+            );
+
+
+            if (
+                isExpanded(
+                    "category",
+                    category.id
+                )
+            ) {
+
+                const itemsContainer =
+                    createElement(
+                        "div",
+                        "category-items"
+                    );
+
+
+                visibleItems.forEach(
+                    item => {
+
+                        if (
+                            !isVisible(item)
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const materialCard =
+                            createElement(
+                                "div",
+                                "material-card"
+                            );
+
+
+                        materialCard.innerHTML = `
+
+                            <h3>
+                                ${escapeHTML(
+                                    getNamedText(item)
+                                )}
+                            </h3>
+
+                            <p>
+                                ${getItemSummary(
+                                    item
+                                )}
+                            </p>
+
+                        `;
+
+
+                        itemsContainer.appendChild(
+                            materialCard
+                        );
+
+                    }
+                );
+
+
+                categoryCard.appendChild(
+                    itemsContainer
+                );
+
+            }
+
+
+            container.appendChild(
+                categoryCard
+            );
+
+        }
+    );
+
+
+    if (!found) {
+
+        const empty =
+            createElement(
+                "div",
+                "empty-state"
+            );
+
+
+        empty.innerHTML = `
+
+            <div style="
+                text-align:center;
+                padding:40px 20px;
+                color:#94a3b8;
+            ">
+
+                <div style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                ">
+                    🔍
+                </div>
+
+                <div>
+                    ${
+                        getLanguage() === "hi"
+                        ? "कोई सामग्री नहीं मिली"
+                        : "No material found"
+                    }
+                </div>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(
+            empty
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   18. SEARCH ITEMS
+========================================================= */
+
+function getVisibleItemsForSearch(
+    category,
+    query
 ) {
 
-    const nestedKeys = [
-
-        "types",
-        "subTypes",
-        "sizes",
-        "ratings",
-        "colours",
-        "materials",
-        "cableSizes",
-        "wattages",
-        "sensitivities",
-        "curves",
-        "units"
-
-    ];
+    const items =
+        Array.isArray(category.items)
+            ? category.items
+            : [];
 
 
-    nestedKeys.forEach(
+    if (!query) {
+
+        return items.filter(
+            item =>
+                isVisible(item)
+        );
+
+    }
+
+
+    return items.filter(
+        item => {
+
+            if (
+                !isVisible(item)
+            ) {
+
+                return false;
+
+            }
+
+
+            return objectContainsSearch(
+                item,
+                query
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   19. RECURSIVE SEARCH
+========================================================= */
+
+function objectContainsSearch(
+    object,
+    query
+) {
+
+    if (
+        !object ||
+        typeof object !== "object"
+    ) {
+
+        return false;
+
+    }
+
+
+    const ownText = [
+
+        object.id,
+
+        object.name_en,
+
+        object.name_hi,
+
+        object.en,
+
+        object.hi
+
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+
+    if (
+        ownText.includes(query)
+    ) {
+
+        return true;
+
+    }
+
+
+    for (
+        const key of Object.keys(object)
+    ) {
+
+        const value =
+            object[key];
+
+
+        if (
+            !Array.isArray(value)
+        ) {
+
+            continue;
+
+        }
+
+
+        for (
+            const child of value
+        ) {
+
+            if (
+                child &&
+                child.show !== false &&
+                objectContainsSearch(
+                    child,
+                    query
+                )
+            ) {
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   20. ITEM SUMMARY
+========================================================= */
+
+function getItemSummary(item) {
+
+    const groups = [];
+
+
+    NESTED_ARRAY_KEYS.forEach(
         key => {
 
             if (
@@ -456,329 +1190,1220 @@ function renderNestedControls(
             }
 
 
-            item[key]
-                .forEach(
-                    child => {
-
-                        const row =
-                            createToggleRow(
-
-                                child.en ||
-                                child.name_en ||
-                                child.id,
-
-                                child.hi ||
-                                child.name_hi ||
-                                child.id,
-
-                                child.show !== false,
-
-                                value => {
-
-                                    child.show =
-                                        value;
-
-                                    EstimateVisibility.save();
-
-                                    renderCategories();
-
-                                }
-
-                            );
-
-
-                        row.style.paddingLeft =
-                            `${12 + level * 14}px`;
-
-
-                        container.appendChild(
-                            row
-                        );
-
-
-                        renderNestedControls(
-                            child,
-                            container,
-                            level + 1
-                        );
-
-                    }
+            const visible =
+                item[key].filter(
+                    child =>
+                        isVisible(child)
                 );
+
+
+            if (
+                visible.length
+            ) {
+
+                groups.push(
+                    `${getKeyLabel(key)}: ${visible.length}`
+                );
+
+            }
 
         }
     );
 
-}
+
+    if (!groups.length) {
+
+        return getLanguage() === "hi"
+            ? "उपलब्ध"
+            : "Available";
+
+    }
 
 
-/* =========================================================
-   MANAGE OPEN
-========================================================= */
-
-function openManage() {
-
-    estimateSection.classList.add(
-        "hidden"
-    );
-
-    manageSection.classList.remove(
-        "hidden"
-    );
-
-    renderManageTree();
+    return groups.join(" • ");
 
 }
 
 
 /* =========================================================
-   MANAGE CLOSE
+   21. EXPAND / COLLAPSE
 ========================================================= */
 
-function closeManage() {
+function expandKey(
+    type,
+    id
+) {
 
-    manageSection.classList.add(
-        "hidden"
-    );
-
-    estimateSection.classList.remove(
-        "hidden"
-    );
-
-    renderCategories();
+    return `${type}__${id}`;
 
 }
 
 
-/* =========================================================
-   LANGUAGE
-========================================================= */
+function isExpanded(
+    type,
+    id
+) {
 
-function toggleLanguage() {
-
-    currentLanguage =
-        currentLanguage === "en"
-            ? "hi"
-            : "en";
-
-
-    localStorage.setItem(
-        "sandeep_estimate_language",
-        currentLanguage
-    );
-
-
-    renderCategories();
-
-    renderManageTree();
-
-
-    document.getElementById(
-        "languageBtn"
-    ).textContent =
-
-        currentLanguage === "en"
-            ? "हिंदी"
-            : "English";
-
-}
-
-
-/* =========================================================
-   SHOW ALL
-========================================================= */
-
-function showEverything() {
-
-    EstimateVisibility.showAll();
-
-    renderCategories();
-
-    renderManageTree();
-
-}
-
-
-/* =========================================================
-   HIDE ALL
-========================================================= */
-
-function hideEverything() {
-
-    EstimateVisibility.hideAll();
-
-    renderCategories();
-
-    renderManageTree();
-
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-function resetEverything() {
-
-    const confirmReset =
-        confirm(
-            "Reset all Show / Hide settings?"
+    const key =
+        expandKey(
+            type,
+            id
         );
 
 
-    if (!confirmReset) return;
+    return (
+        ESTIMATE_APP.expanded[key] !==
+        false
+    );
+
+}
 
 
-    EstimateVisibility.reset();
+function toggleExpanded(
+    type,
+    id
+) {
+
+    const key =
+        expandKey(
+            type,
+            id
+        );
+
+
+    ESTIMATE_APP.expanded[key] =
+        !isExpanded(
+            type,
+            id
+        );
 
 }
 
 
 /* =========================================================
-   SEARCH
+   22. MANAGE PANEL
 ========================================================= */
 
-searchInput.addEventListener(
-    "input",
-    function () {
+function openManagePanel() {
 
-        const query =
-            this.value
-                .toLowerCase()
-                .trim();
+    ESTIMATE_APP.manageOpen =
+        true;
 
 
-        if (!query) {
+    const estimateSection =
+        $("estimateSection");
 
-            renderCategories();
+    const manageSection =
+        $("manageSection");
 
-            return;
+
+    if (estimateSection) {
+
+        estimateSection.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (manageSection) {
+
+        manageSection.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    renderManagePanel();
+
+}
+
+
+function closeManagePanel() {
+
+    ESTIMATE_APP.manageOpen =
+        false;
+
+
+    const estimateSection =
+        $("estimateSection");
+
+    const manageSection =
+        $("manageSection");
+
+
+    if (manageSection) {
+
+        manageSection.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (estimateSection) {
+
+        estimateSection.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    renderCategories();
+
+}
+
+
+/* =========================================================
+   23. MANAGE PANEL RENDER
+========================================================= */
+
+function renderManagePanel() {
+
+    const tree =
+        $("manageTree");
+
+    if (!tree) {
+        return;
+    }
+
+
+    tree.innerHTML = "";
+
+
+    const database =
+        getDatabase();
+
+
+    /*
+     * CATEGORIES
+     */
+
+    database.forEach(
+        (category, index) => {
+
+            tree.appendChild(
+
+                createManageCategory(
+                    category,
+                    index
+                )
+
+            );
 
         }
+    );
 
 
-        const results =
-            EstimateSearch.search(
-                query
+    /*
+     * BRANDS
+     */
+
+    if (
+        window.ESTIMATE_LIST_CONFIG
+            ?.enableBrand
+    ) {
+
+        tree.appendChild(
+            createBrandSection()
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   24. CATEGORY MANAGE
+========================================================= */
+
+function createManageCategory(
+    category,
+    categoryIndex
+) {
+
+    const wrapper =
+        createElement(
+            "div",
+            "tree-category"
+        );
+
+
+    /*
+     * CATEGORY HEADER
+     */
+
+    const header =
+        createManageRow({
+
+            label:
+                getNamedText(category),
+
+            icon:
+                category.icon || "📦",
+
+            checked:
+                isVisible(category),
+
+            level: 0,
+
+            onChange:
+                value => {
+
+                    category.show =
+                        value;
+
+
+                    /*
+                     * Parent OFF
+                     * children also OFF
+                     */
+
+                    if (!value) {
+
+                        hideNestedObject(
+                            category
+                        );
+
+                    }
+
+
+                    saveSettings();
+
+                    renderCategories();
+
+                    renderManagePanel();
+
+                }
+
+        });
+
+
+    wrapper.appendChild(
+        header
+    );
+
+
+    /*
+     * ITEMS
+     */
+
+    const items =
+        Array.isArray(
+            category.items
+        )
+            ? category.items
+            : [];
+
+
+    const children =
+        createElement(
+            "div",
+            "tree-children"
+        );
+
+
+    items.forEach(
+        (item, itemIndex) => {
+
+            children.appendChild(
+
+                createManageItem(
+                    item,
+                    category,
+                    itemIndex,
+                    1
+                )
+
+            );
+
+        }
+    );
+
+
+    wrapper.appendChild(
+        children
+    );
+
+
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   25. ITEM MANAGE
+========================================================= */
+
+function createManageItem(
+    item,
+    parent,
+    itemIndex,
+    level
+) {
+
+    const wrapper =
+        createElement(
+            "div",
+            "manage-nested-wrapper"
+        );
+
+
+    /*
+     * ITEM ROW
+     */
+
+    const row =
+        createManageRow({
+
+            label:
+                getNamedText(item),
+
+            icon:
+                "▸",
+
+            checked:
+                isVisible(item),
+
+            level,
+
+            onChange:
+                value => {
+
+                    item.show =
+                        value;
+
+
+                    if (!value) {
+
+                        hideNestedObject(
+                            item
+                        );
+
+                    }
+
+
+                    saveSettings();
+
+                    renderCategories();
+
+                    renderManagePanel();
+
+                }
+
+        });
+
+
+    wrapper.appendChild(
+        row
+    );
+
+
+    /*
+     * ALL NESTED ARRAYS
+     */
+
+    NESTED_ARRAY_KEYS
+        .forEach(key => {
+
+            const array =
+                item[key];
+
+
+            if (
+                !Array.isArray(array) ||
+                !array.length
+            ) {
+
+                return;
+
+            }
+
+
+            const group =
+                createElement(
+                    "div",
+                    "tree-children"
+                );
+
+
+            /*
+             * GROUP TITLE
+             */
+
+            const groupTitle =
+                createElement(
+                    "div",
+                    "tree-group-title"
+                );
+
+
+            groupTitle.innerHTML = `
+
+                <span>
+                    ${escapeHTML(
+                        getKeyLabel(key)
+                    )}
+                </span>
+
+            `;
+
+
+            group.appendChild(
+                groupTitle
             );
 
 
-        categoryContainer.innerHTML = "";
+            /*
+             * CHILDREN
+             */
 
+            array.forEach(
+                (child, childIndex) => {
 
-        results.forEach(
-            result => {
+                    group.appendChild(
 
-                const card =
-                    document.createElement(
-                        "div"
+                        createNestedManageItem(
+                            child,
+                            item,
+                            key,
+                            childIndex,
+                            level + 1
+                        )
+
                     );
 
-                card.className =
-                    "material-card";
+                }
+            );
 
 
-                card.innerHTML = `
+            wrapper.appendChild(
+                group
+            );
 
-                    <h3>
-
-                        ${text({
-                            en:
-                                result.item.name_en,
-                            hi:
-                                result.item.name_hi
-                        })}
-
-                    </h3>
-
-                    <p>
-
-                        ${text({
-                            en:
-                                result.category.name_en,
-                            hi:
-                                result.category.name_hi
-                        })}
-
-                    </p>
-
-                `;
+        });
 
 
-                categoryContainer.appendChild(
-                    card
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   26. NESTED MANAGE ITEM
+========================================================= */
+
+function createNestedManageItem(
+    item,
+    parent,
+    parentKey,
+    index,
+    level
+) {
+
+    const wrapper =
+        createElement(
+            "div",
+            "nested-control"
+        );
+
+
+    const row =
+        createManageRow({
+
+            label:
+                getNamedText(item),
+
+            icon:
+                "•",
+
+            checked:
+                isVisible(item),
+
+            level,
+
+            onChange:
+                value => {
+
+                    item.show =
+                        value;
+
+
+                    if (!value) {
+
+                        hideNestedObject(
+                            item
+                        );
+
+                    }
+
+
+                    saveSettings();
+
+                    renderCategories();
+
+                    renderManagePanel();
+
+                }
+
+        });
+
+
+    wrapper.appendChild(
+        row
+    );
+
+
+    /*
+     * RECURSIVE CHILD ARRAYS
+     */
+
+    NESTED_ARRAY_KEYS
+        .forEach(key => {
+
+            const array =
+                item[key];
+
+
+            if (
+                !Array.isArray(array) ||
+                !array.length
+            ) {
+
+                return;
+
+            }
+
+
+            const group =
+                createElement(
+                    "div",
+                    "tree-children"
+                );
+
+
+            const groupTitle =
+                createElement(
+                    "div",
+                    "tree-group-title"
+                );
+
+
+            groupTitle.innerHTML = `
+
+                <span>
+                    ${escapeHTML(
+                        getKeyLabel(key)
+                    )}
+                </span>
+
+            `;
+
+
+            group.appendChild(
+                groupTitle
+            );
+
+
+            array.forEach(
+                (child, childIndex) => {
+
+                    group.appendChild(
+
+                        createNestedManageItem(
+                            child,
+                            item,
+                            key,
+                            childIndex,
+                            level + 1
+                        )
+
+                    );
+
+                }
+            );
+
+
+            wrapper.appendChild(
+                group
+            );
+
+        });
+
+
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   27. MANAGE ROW
+========================================================= */
+
+function createManageRow({
+    label,
+    icon,
+    checked,
+    level = 0,
+    onChange
+}) {
+
+    const row =
+        createElement(
+            "div",
+            "tree-row"
+        );
+
+
+    row.style.paddingLeft =
+        `${12 + (level * 16)}px`;
+
+
+    const labelBox =
+        createElement(
+            "div",
+            "tree-label"
+        );
+
+
+    labelBox.innerHTML = `
+
+        <span>
+            ${icon || "•"}
+        </span>
+
+        <span>
+            ${escapeHTML(
+                label
+            )}
+        </span>
+
+    `;
+
+
+    const toggle =
+        createElement(
+            "label",
+            "toggle"
+        );
+
+
+    const input =
+        createElement(
+            "input"
+        );
+
+
+    input.type =
+        "checkbox";
+
+    input.checked =
+        checked;
+
+
+    const slider =
+        createElement(
+            "span",
+            "slider"
+        );
+
+
+    input.addEventListener(
+        "change",
+        () => {
+
+            onChange(
+                input.checked
+            );
+
+        }
+    );
+
+
+    toggle.appendChild(
+        input
+    );
+
+    toggle.appendChild(
+        slider
+    );
+
+
+    row.appendChild(
+        labelBox
+    );
+
+    row.appendChild(
+        toggle
+    );
+
+
+    return row;
+
+}
+
+
+/* =========================================================
+   28. BRAND SECTION
+========================================================= */
+
+function createBrandSection() {
+
+    const wrapper =
+        createElement(
+            "div",
+            "tree-category"
+        );
+
+
+    const header =
+        createElement(
+            "div",
+            "tree-row"
+        );
+
+
+    header.innerHTML = `
+
+        <div class="tree-label">
+
+            <span>
+                🏷️
+            </span>
+
+            <strong>
+                ${
+                    getLanguage() === "hi"
+                    ? "ब्रांड"
+                    : "Brands"
+                }
+            </strong>
+
+        </div>
+
+    `;
+
+
+    wrapper.appendChild(
+        header
+    );
+
+
+    const children =
+        createElement(
+            "div",
+            "tree-children"
+        );
+
+
+    getBrands()
+        .forEach(
+            brand => {
+
+                const row =
+                    createManageRow({
+
+                        label:
+                            getNamedText(
+                                brand
+                            ),
+
+                        icon:
+                            "🏷️",
+
+                        checked:
+                            isVisible(
+                                brand
+                            ),
+
+                        level: 1,
+
+                        onChange:
+                            value => {
+
+                                brand.show =
+                                    value;
+
+                                saveSettings();
+
+                                renderManagePanel();
+
+                            }
+
+                    });
+
+
+                children.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+    wrapper.appendChild(
+        children
+    );
+
+
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   29. SEARCH
+========================================================= */
+
+function handleSearch(
+    value
+) {
+
+    ESTIMATE_APP.searchQuery =
+        String(
+            value || ""
+        );
+
+
+    renderCategories();
+
+}
+
+
+/* =========================================================
+   30. SEARCH INPUT
+========================================================= */
+
+function initializeSearch() {
+
+    const input =
+        $("searchInput");
+
+
+    if (!input) {
+        return;
+    }
+
+
+    input.addEventListener(
+        "input",
+        event => {
+
+            handleSearch(
+                event.target.value
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   31. MAIN BUTTONS
+========================================================= */
+
+function initializeButtons() {
+
+    const manageBtn =
+        $("manageBtn");
+
+    const closeManageBtn =
+        $("closeManageBtn");
+
+    const languageBtn =
+        $("languageBtn");
+
+    const showAllBtn =
+        $("showAllBtn");
+
+    const hideAllBtn =
+        $("hideAllBtn");
+
+    const resetBtn =
+        $("resetBtn");
+
+
+    if (manageBtn) {
+
+        manageBtn.addEventListener(
+            "click",
+            openManagePanel
+        );
+
+    }
+
+
+    if (closeManageBtn) {
+
+        closeManageBtn.addEventListener(
+            "click",
+            closeManagePanel
+        );
+
+    }
+
+
+    if (languageBtn) {
+
+        languageBtn.addEventListener(
+            "click",
+            () => {
+
+                setLanguage(
+                    getLanguage() === "en"
+                        ? "hi"
+                        : "en"
                 );
 
             }
         );
 
     }
-);
+
+
+    if (showAllBtn) {
+
+        showAllBtn.addEventListener(
+            "click",
+            showEverything
+        );
+
+    }
+
+
+    if (hideAllBtn) {
+
+        hideAllBtn.addEventListener(
+            "click",
+            hideEverything
+        );
+
+    }
+
+
+    if (resetBtn) {
+
+        resetBtn.addEventListener(
+            "click",
+            resetEverything
+        );
+
+    }
+
+}
 
 
 /* =========================================================
-   EVENTS
+   32. BACK BUTTON
 ========================================================= */
 
-document.getElementById(
-    "manageBtn"
-).addEventListener(
-    "click",
-    openManage
-);
+function initializeBackButton() {
 
+    window.addEventListener(
+        "popstate",
+        () => {
 
-document.getElementById(
-    "closeManageBtn"
-).addEventListener(
-    "click",
-    closeManage
-);
+            if (
+                ESTIMATE_APP.manageOpen
+            ) {
 
+                closeManagePanel();
 
-document.getElementById(
-    "languageBtn"
-).addEventListener(
-    "click",
-    toggleLanguage
-);
+            }
 
+        }
+    );
 
-document.getElementById(
-    "showAllBtn"
-).addEventListener(
-    "click",
-    showEverything
-);
-
-
-document.getElementById(
-    "hideAllBtn"
-).addEventListener(
-    "click",
-    hideEverything
-);
-
-
-document.getElementById(
-    "resetBtn"
-).addEventListener(
-    "click",
-    resetEverything
-);
+}
 
 
 /* =========================================================
-   YEAR
+   33. ESC KEY
 ========================================================= */
 
-document.getElementById(
-    "year"
-).textContent =
-    new Date().getFullYear();
+function initializeKeyboard() {
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape" &&
+                ESTIMATE_APP.manageOpen
+            ) {
+
+                closeManagePanel();
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
-   INITIALIZE
+   34. RENDER APPLICATION
 ========================================================= */
 
-renderCategories();
+function renderApplication() {
+
+    updateLanguageButton();
+
+    renderCategories();
+
+
+    if (
+        ESTIMATE_APP.manageOpen
+    ) {
+
+        renderManagePanel();
+
+    }
+
+}
+
+
+/* =========================================================
+   35. YEAR
+========================================================= */
+
+function initializeYear() {
+
+    const year =
+        $("year");
+
+
+    if (year) {
+
+        year.textContent =
+            new Date()
+                .getFullYear();
+
+    }
+
+}
+
+
+/* =========================================================
+   36. HTML ESCAPE
+========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   37. INITIALIZE
+========================================================= */
+
+function initializeEstimateApp() {
+
+    if (
+        ESTIMATE_APP.initialized
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Load saved settings
+     */
+
+    loadSettings();
+
+
+    /*
+     * Load saved language
+     */
+
+    ESTIMATE_APP.language =
+        localStorage.getItem(
+            "sandeep_estimate_language"
+        ) ||
+
+        window.ESTIMATE_LIST_CONFIG
+            ?.languageDefault ||
+
+        "en";
+
+
+    /*
+     * Initialize UI
+     */
+
+    initializeSearch();
+
+    initializeButtons();
+
+    initializeBackButton();
+
+    initializeKeyboard();
+
+    initializeYear();
+
+    renderApplication();
+
+
+    ESTIMATE_APP.initialized =
+        true;
+
+}
+
+
+/* =========================================================
+   38. DOM READY
+========================================================= */
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeEstimateApp
+    );
+
+} else {
+
+    initializeEstimateApp();
+
+}
+
+
+/* =========================================================
+   END OF APP.JS
+========================================================= */
