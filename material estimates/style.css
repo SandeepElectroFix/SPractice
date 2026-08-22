@@ -1300,3 +1300,38 @@ footer {
     }
 
 }
+
+
+/* =========================================================
+   Sandeep Electrofix - Neon Theme Overrides
+========================================================= */
+
+body {
+    background: #050914 !important; 
+}
+
+.category-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.category-card {
+    background: #0A1122 !important; 
+    border-radius: 12px !important;
+    padding: 20px 10px !important;
+    text-align: center;
+    border: 1px solid rgba(14, 165, 233, 0.4) !important;
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.15) !important;
+    transition: 0.3s ease;
+}
+
+.category-card::before {
+    display: none; /* Purane design ki line ko hide karne ke liye */
+}
+
+.category-card:hover {
+    border-color: rgba(14, 165, 233, 0.8) !important;
+    box-shadow: 0 0 25px rgba(14, 165, 233, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
