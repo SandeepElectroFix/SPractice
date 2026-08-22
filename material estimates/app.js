@@ -862,32 +862,17 @@ function renderCategories() {
                 );
 
 
-            title.innerHTML = `
-
-                <div class="category-name">
-
-                    <span>
-                        ${category.icon || "📦"}
-                    </span>
-
-                    <span>
-                        ${escapeHTML(
-                            getNamedText(category)
-                        )}
-                    </span>
-
+                        title.innerHTML = `
+                <div style="font-size: 35px; margin-bottom: 10px; text-shadow: 0 0 15px currentColor;">
+                    ${category.icon || "📦"}
                 </div>
-
-                <span>
-                    ${isExpanded(
-                        "category",
-                        category.id
-                    )
-                        ? "⌄"
-                        : "›"}
-                </span>
-
+                <div style="font-weight: 700; font-size: 14px; text-transform: uppercase;">
+                    ${escapeHTML(getNamedText(category))}
+                </div>
+                <div style="font-size: 10px; color: #0ea5e9; margin-top: 4px;">INSTALLATION</div>
+                <button style="margin-top: 15px; background: transparent; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 5px 15px; color: white;">Explore ➔</button>
             `;
+
 
 
             title.addEventListener(
