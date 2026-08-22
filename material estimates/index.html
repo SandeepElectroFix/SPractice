@@ -3,228 +3,100 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Estimate List - Sandeep ElectroFix
-    </title>
-
-    <link rel="stylesheet"
-          href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimate List - Sandeep ElectroFix</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =================================================
-         HEADER
-    ================================================== -->
-
     <header class="app-header">
-
         <div class="header-left">
-
-            <div class="logo-icon">
-                ⚡
-            </div>
-
+            <div class="logo-icon">⚡</div>
             <div>
-                <h1>
-                    Estimate List
-                </h1>
-
-                <p>
-                    SANDEEP ELECTROFIX
-                </p>
+                <h1>Estimate List</h1>
+                <p>SANDEEP ELECTROFIX</p>
             </div>
-
         </div>
-
 
         <div class="header-actions">
-
-            <button
-                id="languageBtn"
-                class="header-btn">
-                हिंदी
-            </button>
-
-            <button
-                id="manageBtn"
-                class="header-btn">
-                ⚙️ Manage
-            </button>
-
+            <button id="languageBtn" class="header-btn">हिंदी</button>
+            <button id="manageBtn" class="header-btn">⚙️ Manage</button>
         </div>
-
     </header>
-
-
-    <!-- =================================================
-         MAIN
-    ================================================== -->
 
     <main class="main-container">
 
-
-        <!-- SEARCH -->
-
         <div class="search-box">
-
-            <span>
-                🔍
-            </span>
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search material...">
-
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Search material...">
         </div>
-<!-- Catalogue Heading -->
-<div class="section-title text-center" style="margin-bottom: 20px;">
-    <h3 style="color: #f5c451; letter-spacing: 1px;">MATERIAL CATALOGUE</h3>
-    <p style="color: #94a3b8; font-size: 12px;">Select a category to continue</p>
-</div>
 
-<!-- Category Grid (Aapka existing div) -->
-<div id="categoryContainer" class="category-container neon-grid"></div>
+        <section id="estimateSection">
 
-<!-- Features Banner -->
-<div class="features-banner" style="display: flex; justify-content: space-between; background: #0A1122; padding: 15px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.1);">
-    <div class="feature">🛡️ 100% Accurate</div>
-    <div class="feature">⚡ Complete List</div>
-    <div class="feature">🧮 Smart Calc</div>
-    <div class="feature">✅ Pro Results</div>
-</div>
+            <!-- CATALOGUE HEADING -->
+            <div class="section-title" style="text-align: center; margin-bottom: 20px;">
+                <h3 style="color: #f5c451; letter-spacing: 1px; font-size: 16px;">MATERIAL CATALOGUE</h3>
+                <p style="color: #94a3b8; font-size: 12px; margin-top: 5px;">Select a category to continue</p>
+            </div>
 
-<!-- Final Estimate Box -->
-<div class="final-estimate-box" style="background: #0A1122; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(245, 196, 81, 0.4); text-align: center;">
-    <h4 style="color: #f5c451; margin-bottom: 15px;">FINAL ESTIMATE</h4>
-    <div class="empty-state">
-        <div style="font-size: 40px;">📋</div>
-        <p style="color: white; margin: 10px 0 5px;">No materials added yet</p>
-        <small style="color: #94a3b8;">Start adding materials to your estimate</small>
-    </div>
-</div>
-        
+            <!-- CATEGORY GRID -->
+            <div id="categoryContainer" class="category-container neon-grid"></div>
 
-        <!-- =================================================
-             NORMAL ESTIMATE LIST
-        ================================================== -->
+            <!-- FEATURES BANNER -->
+            <div class="features-banner" style="display: flex; justify-content: space-between; background: #0A1122; padding: 15px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: 12px;">
+                <div class="feature" style="text-align: center;">🛡️<br>100% Accurate</div>
+                <div class="feature" style="text-align: center;">⚡<br>Complete List</div>
+                <div class="feature" style="text-align: center;">🧮<br>Smart Calc</div>
+                <div class="feature" style="text-align: center;">✅<br>Pro Results</div>
+            </div>
 
-        <section
-            id="estimateSection">
-
-            <div
-                id="categoryContainer"
-                class="category-container">
+            <!-- FINAL ESTIMATE BOX -->
+            <div class="final-estimate-box" style="background: #0A1122; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(14, 165, 233, 0.4); text-align: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                    <span style="color: #0ea5e9; font-size: 12px;">Estimate List</span>
+                    <h4 style="color: #f5c451; margin: 0;">FINAL ESTIMATE</h4>
+                    <span style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px; font-size: 12px;">Items Added <strong style="color: #0ea5e9;">0</strong></span>
+                </div>
+                <div class="empty-state" style="padding: 20px 0;">
+                    <div style="font-size: 40px;">📋</div>
+                    <p style="color: white; margin: 10px 0 5px;">No materials added yet</p>
+                    <small style="color: #94a3b8;">Start adding materials to your estimate</small>
+                </div>
             </div>
 
         </section>
 
-
-        <!-- =================================================
-             MANAGE PANEL
-        ================================================== -->
-
-        <section
-            id="manageSection"
-            class="manage-section hidden">
-
-
+        <!-- MANAGE PANEL -->
+        <section id="manageSection" class="manage-section hidden">
             <div class="manage-header">
-
                 <div>
-
-                    <h2>
-                        Show / Hide Control
-                    </h2>
-
-                    <p>
-                        Control everything from here
-                    </p>
-
+                    <h2>Show / Hide Control</h2>
+                    <p>Control everything from here</p>
                 </div>
-
-
-                <button
-                    id="closeManageBtn"
-                    class="close-btn">
-
-                    ✕
-
-                </button>
-
+                <button id="closeManageBtn" class="close-btn">✕</button>
             </div>
-
-
-            <!-- GLOBAL CONTROLS -->
 
             <div class="global-controls">
-
-                <button
-                    id="showAllBtn"
-                    class="control-btn show-btn">
-
-                    ✓ Show All
-
-                </button>
-
-
-                <button
-                    id="hideAllBtn"
-                    class="control-btn hide-btn">
-
-                    ✕ Hide All
-
-                </button>
-
-
-                <button
-                    id="resetBtn"
-                    class="control-btn reset-btn">
-
-                    ↻ Reset
-
-                </button>
-
+                <button id="showAllBtn" class="control-btn show-btn">✓ Show All</button>
+                <button id="hideAllBtn" class="control-btn hide-btn">✕ Hide All</button>
+                <button id="resetBtn" class="control-btn reset-btn">↻ Reset</button>
             </div>
 
-
-            <!-- TREE -->
-
-            <div
-                id="manageTree"
-                class="manage-tree">
-            </div>
-
+            <div id="manageTree" class="manage-tree"></div>
         </section>
 
     </main>
 
-
-    <!-- =================================================
-         FOOTER
-    ================================================== -->
-
+    <!-- NEW FOOTER -->
     <footer style="display: flex; justify-content: space-around; padding: 20px; background: #050914; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px;">
-        <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">📞</span> <small>Need Help?<br>Call Us</small></div>
-        <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">🛡️</span> <small>Trusted by<br>Professionals</small></div>
-        <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">💬</span> <small>Quick Support<br>WhatsApp</small></div>
+        <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">📞</span> <small style="text-align: left;">Need Help?<br>Call Us Now</small></div>
+        <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">🛡️</span> <small style="text-align: left;">Trusted by<br>Professionals</small></div>
+        <div style="display: flex; gap: 10px; align-items: center;"><span style="font-size: 20px;">💬</span> <small style="text-align: left;">Quick Support<br>WhatsApp Us</small></div>
     </footer>
 
-
-
-    <!-- =================================================
-         JAVASCRIPT
-    ================================================== -->
-
     <script src="estimate-list.js"></script>
-
     <script src="app.js"></script>
 
 </body>
-
 </html>
