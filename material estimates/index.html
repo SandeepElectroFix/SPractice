@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Estimate List - Sandeep ElectroFix
+    </title>
+
+    <link rel="stylesheet"
+          href="style.css">
+</head>
+
+<body>
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+
+    <header class="app-header">
+
+        <div class="header-left">
+
+            <div class="logo-icon">
+                ⚡
+            </div>
+
+            <div>
+                <h1>
+                    Estimate List
+                </h1>
+
+                <p>
+                    SANDEEP ELECTROFIX
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <button
+                id="languageBtn"
+                class="header-btn">
+                हिंदी
+            </button>
+
+            <button
+                id="manageBtn"
+                class="header-btn">
+                ⚙️ Manage
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         MAIN
+    ================================================== -->
+
+    <main class="main-container">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search material...">
+
+        </div>
+
+
+        <!-- =================================================
+             NORMAL ESTIMATE LIST
+        ================================================== -->
+
+        <section
+            id="estimateSection">
+
+            <div
+                id="categoryContainer"
+                class="category-container">
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MANAGE PANEL
+        ================================================== -->
+
+        <section
+            id="manageSection"
+            class="manage-section hidden">
+
+
+            <div class="manage-header">
+
+                <div>
+
+                    <h2>
+                        Show / Hide Control
+                    </h2>
+
+                    <p>
+                        Control everything from here
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="closeManageBtn"
+                    class="close-btn">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- GLOBAL CONTROLS -->
+
+            <div class="global-controls">
+
+                <button
+                    id="showAllBtn"
+                    class="control-btn show-btn">
+
+                    ✓ Show All
+
+                </button>
+
+
+                <button
+                    id="hideAllBtn"
+                    class="control-btn hide-btn">
+
+                    ✕ Hide All
+
+                </button>
+
+
+                <button
+                    id="resetBtn"
+                    class="control-btn reset-btn">
+
+                    ↻ Reset
+
+                </button>
+
+            </div>
+
+
+            <!-- TREE -->
+
+            <div
+                id="manageTree"
+                class="manage-tree">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <footer>
+
+        <p>
+            © <span id="year"></span>
+            SANDEEP ELECTROFIX
+        </p>
+
+    </footer>
+
+
+    <!-- =================================================
+         JAVASCRIPT
+    ================================================== -->
+
+    <script src="estimate-list.js"></script>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
